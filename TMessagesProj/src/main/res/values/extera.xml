@@ -280,6 +280,8 @@
     <string name="StickerSavedHint">Sticker saved to gallery</string>
     <string name="Transfer">Transfer</string>
 
+    <string name="AutoLockInstant">Instant</string>
+
     <string name="SearchPhotoInfo">Services can use images following their privacy policies and terms of use.</string>
     <string name="PhotoUploadFailed">Failed to upload photo.</string>
     <string name="InstallGoogleLens">Install **Google Lens** to use this feature.</string>
