@@ -32129,6 +32129,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         } else if (url1.startsWith("tel:")) {
                             url1 = url1.substring(4);
                             tel = true;
+                        } else if (url1.startsWith("https://")) {
+                            url1 = url1.substring(8);
                         }
                         AndroidUtilities.addToClipboard(url1);
                         createUndoView();
