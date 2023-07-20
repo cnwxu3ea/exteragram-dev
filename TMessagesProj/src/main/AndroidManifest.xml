@@ -674,6 +674,10 @@
             android:exported="false"
             android:foregroundServiceType="location" />
         <service
+            android:name="org.telegram.ui.Stories.recorder.StoryUploadingService"
+            android:enabled="true"
+            android:exported="false"/>
+        <service
             android:name=".voip.VoIPService"
             android:enabled="true"
             android:foregroundServiceType="mediaProjection|camera|microphone|mediaPlayback" />

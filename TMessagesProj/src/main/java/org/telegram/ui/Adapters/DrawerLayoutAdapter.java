@@ -314,6 +314,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             } else {
                 items.add(new Item(15, LocaleController.getString("SetEmojiStatus", R.string.SetEmojiStatus), R.drawable.msg_status_set));
             }
+            items.add(new Item(16, LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), R.drawable.msg_menu_stories));
             items.add(null);
         }
         if (ExteraConfig.archivedChats && ChatUtils.hasArchivedChats()) {
@@ -330,7 +331,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
         if (ExteraConfig.scanQr) {
             items.add(null);
-            items.add(new Item(16, LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), scanQrIcon));
+            items.add(new Item(17, LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), scanQrIcon));
         }
 //      items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
 //      items.add(new Item(13, LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), helpIcon));
