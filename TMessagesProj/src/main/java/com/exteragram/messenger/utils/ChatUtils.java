@@ -65,23 +65,12 @@ public class ChatUtils {
     }
 
     public static String getDCName(int dc) {
-        switch (dc) {
-            case 1:
-            case 3:
-                return "Miami FL, USA";
-            case 2:
-            case 4:
-                return "Amsterdam, NL";
-            case 5:
-                return "Singapore, SG";
-            default:
-                return null;
-        }
-    }
-
-    public static boolean isSubscribedTo(long id) {
-        TLRPC.Chat chat = getMessagesController().getChat(id);
-        return chat != null && !chat.left && !chat.kicked;
+        return switch (dc) {
+            case 1, 3 -> "Miami FL, USA";
+            case 2, 4 -> "Amsterdam, NL";
+            case 5 -> "Singapore, SG";
+            default -> null;
+        };
     }
 
     public static String getName(long did) {

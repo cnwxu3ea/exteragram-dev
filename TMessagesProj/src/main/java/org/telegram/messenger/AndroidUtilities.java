@@ -1681,7 +1681,6 @@ public class AndroidUtilities {
                     if (nameEncoding != null && nameEncoding.equalsIgnoreCase("QUOTED-PRINTABLE")) {
                         byte[] bytes = decodeQuotedPrintable(getStringBytes(currentData.name));
                         if (bytes != null && bytes.length != 0) {
-                            assert nameCharset != null;
                             currentData.name = new String(bytes, nameCharset);
                         }
                     }

@@ -203,11 +203,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
             super(context);
         }
 
-        @Override
-        public int getItemCount() {
-            return rowCount;
-        }
-
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
@@ -240,10 +235,9 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean payload) {
             switch (holder.getItemViewType()) {
-                case 1:
-                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
-                case 3:
+                case 1 ->
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                case 3 -> {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == generalHeaderRow) {
                         headerCell.setText(LocaleController.getString("General", R.string.General));
@@ -256,8 +250,8 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                     } else if (position == cameraTypeHeaderRow) {
                         headerCell.setText(LocaleController.getString("CameraType", R.string.CameraType));
                     }
-                    break;
-                case 5:
+                }
+                case 5 -> {
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     textCheckCell.setEnabled(true, null);
                     if (position == disableNumberRoundingRow) {
@@ -275,8 +269,8 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                     } else if (position == cameraXOptimizeRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("PerformanceMode", R.string.PerformanceMode), LocaleController.getString("PerformanceModeInfo", R.string.PerformanceModeInfo), ExteraConfig.useCameraXOptimizedMode, true, true);
                     }
-                    break;
-                case 7:
+                }
+                case 7 -> {
                     TextSettingsCell textSettingsCell = (TextSettingsCell) holder.itemView;
                     if (position == cameraXQualityRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("CameraQuality", R.string.CameraQuality), ExteraConfig.cameraResolution + "p", payload, false);
@@ -285,23 +279,18 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                     } else if (position == showIdAndDcRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("ShowIdAndDc", R.string.ShowIdAndDc), id[ExteraConfig.showIdAndDc], payload, false);
                     }
-                    break;
-                case 8:
+                }
+                case 8 -> {
                     TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == cameraTypeDividerRow) {
-                        String advise;
-                        switch (ExteraConfig.cameraType) {
-                            case 0:
-                                advise = LocaleController.getString("DefaultCameraInfo", R.string.DefaultCameraInfo);
-                                break;
-                            case 1:
-                                advise = LocaleController.getString("CameraXInfo", R.string.CameraXInfo);
-                                break;
-                            case 2:
-                            default:
-                                advise = LocaleController.getString("SystemCameraInfo", R.string.SystemCameraInfo);
-                                break;
-                        }
+                        String advise = switch (ExteraConfig.cameraType) {
+                            case 0 ->
+                                    LocaleController.getString("DefaultCameraInfo", R.string.DefaultCameraInfo);
+                            case 1 ->
+                                    LocaleController.getString("CameraXInfo", R.string.CameraXInfo);
+                            default ->
+                                    LocaleController.getString("SystemCameraInfo", R.string.SystemCameraInfo);
+                        };
                         Spannable htmlParsed;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             htmlParsed = new SpannableString(Html.fromHtml(advise, Html.FROM_HTML_MODE_LEGACY));
@@ -316,15 +305,15 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                     } else if (position == archiveDividerRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("DisableUnarchiveSwipeInfo", R.string.DisableUnarchiveSwipeInfo));
                     }
-                    break;
-                case 13:
+                }
+                case 13 -> {
                     SlideChooseView slide = (SlideChooseView) holder.itemView;
                     if (position == downloadSpeedChooserRow) {
                         slide.setNeedDivider(true);
                         slide.setCallback(index -> ExteraConfig.editor.putInt("downloadSpeedBoost", ExteraConfig.downloadSpeedBoost = index).apply());
                         slide.setOptions(ExteraConfig.downloadSpeedBoost, LocaleController.getString("BlurOff", R.string.BlurOff), LocaleController.getString("SpeedFast", R.string.SpeedFast), LocaleController.getString("Ultra", R.string.Ultra));
                     }
-                    break;
+                }
             }
         }
 

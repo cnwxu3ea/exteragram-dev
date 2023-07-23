@@ -54,6 +54,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.util.Property;
 import android.util.TypedValue;
@@ -102,12 +103,12 @@ import androidx.recyclerview.widget.ChatListItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.gpt.core.Config;
+import com.exteragram.messenger.gpt.core.Client;
+import com.exteragram.messenger.gpt.ui.EditKeyActivity;
+import com.exteragram.messenger.gpt.ui.SetupActivity;
 import com.exteragram.messenger.components.ChatActivityEnterViewStaticIconView;
 import com.exteragram.messenger.components.TranslateBeforeSendWrapper;
-import com.exteragram.messenger.boost.BoostController;
-import com.exteragram.messenger.boost.encryption.EncryptionHelper;
-import com.exteragram.messenger.utils.ChatUtils;
-import com.exteragram.messenger.utils.PopupUtils;
 import com.exteragram.messenger.utils.TranslatorUtils;
 
 import org.telegram.messenger.AccountInstance;
@@ -2440,6 +2441,14 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         sendButtonContainer.addView(cancelBotButton, LayoutHelper.createFrame(48, 48));
         cancelBotButton.setOnClickListener(view -> {
             String text = messageEditText != null ? messageEditText.getText().toString() : "";
+            if (client != null && client.isGenerating()) {
+                client.stop();
+                AndroidUtilities.runOnUIThread(() -> {
+                    getEditField().setText(prompt);
+                    getEditField().setSelection(prompt.length());
+                }, 25);
+                return;
+            }
             int idx = text.indexOf(' ');
             if (idx == -1 || idx == text.length() - 1) {
                 setFieldText("");
@@ -3460,6 +3469,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         return false;
     }
 
+    private Client client;
+    private String prompt;
+
     private boolean onSendLongClick(View view) {
         if (isInScheduleMode()) {
             return false;
@@ -3494,6 +3506,99 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             });
             sendPopupLayout.setShownFromBottom(false);
 
+            if (!Config.isApiKeySet()) {
+                TextView textView = new LinkSpanDrawable.LinksTextView(getContext());
+                textView.setTag(R.id.fit_width_tag, 1);
+                textView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_REGULAR));
+                textView.setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(10), AndroidUtilities.dp(16), AndroidUtilities.dp(10));
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+                textView.setMovementMethod(LinkMovementMethod.getInstance());
+                textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+                textView.setOnClickListener(v -> {
+                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                        sendPopupWindow.dismiss();
+                        sendPopupLayout = null;
+                    }
+                    parentFragment.presentFragment(new EditKeyActivity());
+                });
+                textView.setMaxWidth(AndroidUtilities.dp(260));
+                textView.setText(LocaleController.getString(R.string.TapToAddApiKey));
+                sendPopupLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+            } else {
+                final ImageView[] buttons = new ImageView[3];
+                FrameLayout buttonsView = new FrameLayout(getContext()) {
+                    @Override
+                    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                        int dist = ((right - left) - AndroidUtilities.dp(40 + 48 * 3)) / 2;
+                        for (int a = 0; a < 3; a++) {
+                            int l = AndroidUtilities.dp(20 + 48 * a) + dist * a;
+                            int t = AndroidUtilities.dp(8);
+                            buttons[a].layout(l, t, l + buttons[a].getMeasuredWidth(), t + buttons[a].getMeasuredHeight());
+                        }
+                    }
+                };
+                sendPopupLayout.addView(buttonsView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+
+                for (int i = 0; i < 3; i++) {
+                    int icon = switch (i) {
+                        case 0 -> R.drawable.msg_bot;
+                        case 1 -> R.drawable.msg_settings;
+                        default -> R.drawable.msg_delete;
+                    };
+                    buttons[i] = new ImageView(getContext());
+                    buttons[i].setScaleType(ImageView.ScaleType.CENTER);
+                    buttons[i].setImageDrawable(getContext().getDrawable(icon));
+                    buttons[i].setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarDefaultSubmenuItemIcon), PorterDuff.Mode.MULTIPLY));
+                    buttons[i].setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_dialogButtonSelector), 1, AndroidUtilities.dp(24)));
+                    buttonsView.addView(buttons[i], LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
+                    int finalI = i;
+                    buttons[i].setOnClickListener(v -> {
+                        if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                            sendPopupWindow.dismiss();
+                        }
+                        client = new Client(parentFragment);
+                        if (finalI == 0) {
+                            final AlertDialog progressDialog = new AlertDialog(parentActivity, AlertDialog.ALERT_TYPE_SPINNER);
+                            prompt = String.valueOf(getEditField().getText());
+                            client.setOnStartFinishRunnable(() -> checkSendButton(true));
+                            client.getResponse(prompt, res -> {
+                                if (progressDialog.isShowing()) {
+                                    try {
+                                        progressDialog.dismiss();
+                                    } catch (Exception e) {
+                                        FileLog.e(e);
+                                    }
+                                }
+                                if (!TextUtils.isEmpty(res)) {
+                                    String finalResult = (Config.showResponseOnly ? "" : prompt + "\n\n————————\n\n") + res;
+                                    getEditField().setText(finalResult);
+                                    getEditField().setSelection(finalResult.length());
+                                }
+                            });
+                            progressDialog.setOnCancelListener(dialog -> client.stop());
+                            progressDialog.show();
+                            showContextProgress(true);
+                        } else if (finalI == 1) {
+                            if (keyboardVisible) {
+                                closeKeyboard();
+                            }
+                            AndroidUtilities.runOnUIThread(() -> {
+                                parentFragment.presentFragment(new SetupActivity());
+                                sendPopupLayout = null;
+                            }, 50);
+                        } else {
+                            client.clearHistory();
+                        }
+                    });
+                }
+            }
+            FrameLayout gapView = new FrameLayout(getContext());
+            ImageView frame = new ImageView(getContext());
+            frame.setBackgroundColor(getThemedColor(Theme.key_actionBarDefaultSubmenuSeparator));
+            gapView.addView(frame, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+            sendPopupLayout.addView(gapView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
+
             boolean scheduleButtonValue = parentFragment != null && parentFragment.canScheduleMessage();
             boolean sendWithoutSoundButtonValue = !(self || slowModeTimer > 0 && !isInScheduleMode());
             ActionBarMenuSubItem translateButton = new TranslateBeforeSendWrapper(getContext(), true, !scheduleButtonValue && !sendWithoutSoundButtonValue, resourcesProvider) {
@@ -3508,30 +3613,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
             };
             sendPopupLayout.addView(translateButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
-
-            if (BoostController.isUserBooster()) {
-                ActionBarMenuSubItem encryptButton = new ActionBarMenuSubItem(getContext(), false, !scheduleButtonValue && !sendWithoutSoundButtonValue, resourcesProvider);
-                encryptButton.setTextAndIcon(LocaleController.getString(R.string.Encrypt), R.drawable.msg_secret);
-                encryptButton.setMinimumWidth(AndroidUtilities.dp(196));
-                encryptButton.setItemHeight(56);
-                encryptButton.setSubtext(EncryptionHelper.getEncryptorBy(dialog_id).getName());
-                encryptButton.setRightIcon(R.drawable.msg_arrowright);
-                encryptButton.getRightIcon().setVisibility(VISIBLE);
-                encryptButton.getRightIcon().setOnClickListener(v -> PopupUtils.showDialog(EncryptionHelper.names, LocaleController.getString(R.string.Encryptors), EncryptionHelper.getEncryptorTypeFor(dialog_id), getContext(), i -> {
-                    EncryptionHelper.setEncryptorTypeFor(dialog_id, i);
-                    encryptButton.setSubtext(EncryptionHelper.getEncryptorBy(dialog_id).getName());
-                }));
-                encryptButton.setOnClickListener(v -> {
-                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                        sendPopupWindow.dismiss();
-                    }
-                    EncryptionHelper.encryptMessage(String.valueOf(getEditField().getText()), dialog_id, EncryptionHelper.getEncryptorTypeFor(dialog_id), message -> {
-                        getEditField().setText(message);
-                        sendMessage();
-                    });
-                });
-                sendPopupLayout.addView(encryptButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
-            }
             if (scheduleButtonValue) {
                 ActionBarMenuSubItem scheduleButton = new ActionBarMenuSubItem(getContext(), true, !sendWithoutSoundButtonValue, resourcesProvider);
                 if (self) {
@@ -5594,9 +5675,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (editingMessageObject == null || editingMessageObject.type != MessageObject.TYPE_EMOJIS) {
             text = AndroidUtilities.getTrimmedString(text);
         }
-        if (text != null && (editingMessageObject.originalText != null || editingMessageObject.isDecrypted)) {
-            text = EncryptionHelper.encryptMessage(text.toString(), dialog_id, editingMessageObject.currentEncryptor);
-        }
         CharSequence[] message = new CharSequence[]{text};
         ArrayList<TLRPC.MessageEntity> entities = MediaDataController.getInstance(currentAccount).getEntities(message, supportsSendingNewEntities());
         if (!TextUtils.equals(message[0], editingMessageObject.messageText) || entities != null && !entities.isEmpty() || !editingMessageObject.messageOwner.entities.isEmpty() || editingMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage) {
@@ -5874,10 +5952,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                 }
             }
-        } else if (message.length() > 0 || forceShowSendButton || audioToSend != null || videoToSendMessageObject != null || slowModeTimer == Integer.MAX_VALUE && !isInScheduleMode()) {
+        } else if (message.length() > 0 || forceShowSendButton || audioToSend != null || videoToSendMessageObject != null || slowModeTimer == Integer.MAX_VALUE && !isInScheduleMode() || client != null && client.isGenerating()) {
             final String caption = messageEditText == null ? null : messageEditText.getCaption();
-            boolean showBotButton = caption != null && (sendButton.getVisibility() == VISIBLE || expandStickersButton != null && expandStickersButton.getVisibility() == VISIBLE);
-            boolean showSendButton = caption == null && (cancelBotButton.getVisibility() == VISIBLE || expandStickersButton != null && expandStickersButton.getVisibility() == VISIBLE);
+            boolean showBotButton = caption != null && (sendButton.getVisibility() == VISIBLE || expandStickersButton != null && expandStickersButton.getVisibility() == VISIBLE) || client != null && client.isGenerating();
+            boolean showSendButton = caption == null && (cancelBotButton.getVisibility() == VISIBLE || expandStickersButton != null && expandStickersButton.getVisibility() == VISIBLE) || client != null && !client.isGenerating();
             int color;
             if (slowModeTimer == Integer.MAX_VALUE && !isInScheduleMode()) {
                 color = getThemedColor(Theme.key_chat_messagePanelIcons);
@@ -5979,7 +6057,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_Y, 0.1f));
                         animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.ALPHA, 0.0f));
                     }
-                    if (caption != null) {
+                    if (caption != null || client != null && client.isGenerating()) {
                         runningAnimationType = 3;
                         animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_X, 1.0f));
                         animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_Y, 1.0f));
@@ -5999,7 +6077,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             if (animation.equals(runningAnimation)) {
-                                if (caption != null) {
+                                if (caption != null || client != null && client.isGenerating()) {
                                     cancelBotButton.setVisibility(VISIBLE);
                                     sendButton.setVisibility(GONE);
                                 } else {
@@ -6035,7 +6113,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         slowModeButton.setAlpha(0.0f);
                         setSlowModeButtonVisible(false);
                     }
-                    if (caption != null) {
+                    if (caption != null || client != null && client.isGenerating()) {
                         sendButton.setScaleX(0.1f);
                         sendButton.setScaleY(0.1f);
                         sendButton.setAlpha(0.0f);
@@ -7266,9 +7344,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             } else {
                 currentLimit = accountInstance.getMessagesController().maxMessageLength;
                 editingText = editingMessageObject.messageText;
-            }
-            if (EncryptionHelper.isEncrypted(editingMessageObject, null)) {
-                editingText = ChatUtils.getMessageText(EncryptionHelper.decryptMessage(editingMessageObject), null);
             }
             if (editingText != null) {
                 final Paint.FontMetricsInt fontMetricsInt;

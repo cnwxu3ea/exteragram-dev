@@ -112,8 +112,6 @@ import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.components.MessageDetailsPopupWrapper;
 import com.exteragram.messenger.utils.ChatUtils;
 import com.exteragram.messenger.utils.SystemUtils;
-import com.exteragram.messenger.boost.BoostController;
-import com.exteragram.messenger.boost.encryption.EncryptionHelper;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.zxing.common.detector.MathUtils;
 
@@ -976,7 +974,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int OPTION_SAVE_MESSAGE = 200;
     private final static int OPTION_CLEAR_FROM_CACHE = 201;
     private final static int OPTION_COPY_PHOTO = 202;
-    private final static int OPTION_DECRYPT = 203;
     private final static int OPTION_DETAILS = 204;
     private final static int OPTION_HISTORY = 205;
 
@@ -1317,8 +1314,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int administrators = 101;
     private final static int members = 102;
     private final static int recent_actions = 103;
-    private final static int encryption_key = 104;
-    private final static int show_pinned = 105;
+    private final static int show_pinned = 104;
 
     private final static int id_chat_compose_panel = 1000;
 
@@ -3078,8 +3074,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     ChatUsersActivity fragment = new ChatUsersActivity(args);
                     fragment.setInfo(getMessagesController().getChatFull(currentChat.id));
                     presentFragment(fragment);
-                } else if (id == encryption_key) {
-                    //
                 } else if (id == report) {
                     AlertsCreator.createReportAlert(getParentActivity(), dialog_id, 0, ChatActivity.this, themeDelegate, null);
                 } else if (id == star) {
@@ -20753,11 +20747,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (ExteraConfig.bottomButton == 0 || ExteraConfig.bottomButton == 1 || ExteraConfig.bottomButton == 2 && !haveDiscussion()) {
                         if (!getMessagesController().isDialogMuted(dialog_id, getTopicId())) {
                             bottomOverlayChatText.setText(LocaleController.getString("ChannelMute", R.string.ChannelMute), false);
-                            bottomOverlayChatText.setEnabled(true);
                         } else {
                             bottomOverlayChatText.setText(LocaleController.getString("ChannelUnmute", R.string.ChannelUnmute), true);
-                            bottomOverlayChatText.setEnabled(true);
                         }
+                        bottomOverlayChatText.setEnabled(true);
                     } else if (ExteraConfig.bottomButton == 2) {
                         bottomOverlayChatText.setText(LocaleController.getString("ChannelDiscuss", R.string.ChannelDiscuss));
                     }
@@ -23569,11 +23562,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             icons.add(R.drawable.msg_pin);
                         }
                         if (selectedObject != null && selectedObject.contentType == 0) {
-                            if (BoostController.isUserBooster() && (EncryptionHelper.isEncrypted(selectedObject.messageOwner.message) || selectedObject.isDecrypted)) {
-                                items.add(LocaleController.getString(R.string.Decrypt));
-                                options.add(OPTION_DECRYPT);
-                                icons.add(R.drawable.msg_permissions);
-                            } else if (messageTextToTranslate != null && messageTextToTranslate.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice()) {
+                            if (messageTextToTranslate != null && messageTextToTranslate.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice()) {
                                 items.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
                                 options.add(OPTION_TRANSLATE);
                                 icons.add(R.drawable.msg_translate);
@@ -23894,11 +23883,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             icons.add(R.drawable.msg_stats);
                         }
                         if (selectedObject != null && selectedObject.contentType == 0) {
-                            if (BoostController.isUserBooster() && (EncryptionHelper.isEncrypted(selectedObject.messageOwner.message) || selectedObject.isDecrypted)) {
-                                items.add(LocaleController.getString(R.string.Decrypt));
-                                options.add(OPTION_DECRYPT);
-                                icons.add(R.drawable.msg_permissions);
-                            } else if (messageTextToTranslate != null && messageTextToTranslate.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice()) {
+                            if (messageTextToTranslate != null && messageTextToTranslate.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice()) {
                                 items.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
                                 options.add(OPTION_TRANSLATE);
                                 icons.add(R.drawable.msg_translate);
@@ -25602,21 +25587,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         updateVisibleRows();
                         if (chatMode == 0) {
                             moveScrollToLastMessage(false);
-                        }
-                    }
-                }
-                break;
-            }
-            case OPTION_DECRYPT: {
-                int count = chatListView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = chatListView.getChildAt(a);
-                    if (child instanceof ChatMessageCell) {
-                        ChatMessageCell cell = (ChatMessageCell) child;
-                        if (cell.getMessageObject() == selectedObject) {
-                            cell.setMessageObject(EncryptionHelper.decryptMessage(selectedObject, selectedObjectGroup), cell.getCurrentMessagesGroup(), cell.isPinnedBottom(), cell.isPinnedTop());
-                            chatAdapter.updateRowAtPosition(chatListView.getChildAdapterPosition(child));
-                            break;
                         }
                     }
                 }

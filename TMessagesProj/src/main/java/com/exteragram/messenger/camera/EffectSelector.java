@@ -14,7 +14,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class EffectSelector extends LinearLayout {
@@ -47,23 +46,20 @@ public class EffectSelector extends LinearLayout {
         }
     }
 
-    private static final String[] GOOGLE_FUCKUPS = {"raven", "bluejay", "panther", "cheetah", "lynx"};
-
     public void loadEffects(CameraXView cameraXView) {
         if (getChildCount() == 0) {
-            boolean fuckup = Arrays.asList(GOOGLE_FUCKUPS).contains(Build.DEVICE);
             ArrayList<Integer> list_effect = new ArrayList<>();
-            if (!fuckup && cameraXView.isNightModeSupported()) {
+            if (cameraXView.isNightModeSupported()) {
                 list_effect.add(CameraXController.CAMERA_NIGHT);
             }
-            if (!fuckup && cameraXView.isAutoModeSupported()) {
+            if (cameraXView.isAutoModeSupported()) {
                 list_effect.add(CameraXController.CAMERA_AUTO);
             }
             list_effect.add(CameraXController.CAMERA_NONE);
             if (cameraXView.isWideModeSupported()) {
                 list_effect.add(CameraXController.CAMERA_WIDE);
             }
-            if (!fuckup && cameraXView.isHdrModeSupported()) {
+            if (cameraXView.isHdrModeSupported()) {
                 list_effect.add(CameraXController.CAMERA_HDR);
             }
             if (list_effect.size() == 1) {

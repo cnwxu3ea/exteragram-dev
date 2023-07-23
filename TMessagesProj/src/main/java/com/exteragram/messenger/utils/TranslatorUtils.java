@@ -12,7 +12,6 @@
 package com.exteragram.messenger.utils;
 
 import android.net.Uri;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
 import org.json.JSONArray;
@@ -21,7 +20,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LanguageDetector;
-import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.Utilities;
 
 import java.io.BufferedReader;
@@ -57,10 +55,6 @@ public class TranslatorUtils {
 
     public interface OnTranslationFail {
         void run();
-    }
-
-    // todo
-    public static void translate(MessageObject messageObject) {
     }
 
     public static void translate(CharSequence text, String toLang, OnTranslationSuccess onSuccess, OnTranslationFail onFail) {

@@ -133,11 +133,6 @@
     <string name="PauseOnMinimizeInfo">إيقاف تشغيل الفيديو عندما يكون الجهاز مقفلاً، أو يتم تصغير ExteraGram.</string>
     <string name="DisablePlayback">تعطيل التشغيل في الخلفية</string>
     <string name="DisablePlaybackInfo">تعطيل التشغيل عند الضغط على زر الصوت.</string>
-    <!-- Boost -->
-    <string name="Encryptors">المشفرات</string>
-    <string name="Encrypt">تشفير</string>
-    <string name="Decrypt">فك التشفير</string>
-    <string name="EncryptionKeyInfo">سيتم استخدام هذا المفتاح لتشفير وفك تشفير الرسائل في غرفة المحادثة هذه.</string>
     <!-- Updates -->
     <string name="LastCheck">آخر تحقق</string>
     <string name="CurrentVersion">الإصدار الحالي</string>

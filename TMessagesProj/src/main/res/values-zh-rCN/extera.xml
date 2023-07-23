@@ -133,11 +133,6 @@
     <string name="PauseOnMinimizeInfo">当锁屏/切换到后台时暂停视频播放</string>
     <string name="DisablePlayback">禁用快捷播放</string>
     <string name="DisablePlaybackInfo">按动音量键时，禁止音频外放</string>
-    <!-- Boost -->
-    <string name="Encryptors">加密器</string>
-    <string name="Encrypt">加密</string>
-    <string name="Decrypt">解密</string>
-    <string name="EncryptionKeyInfo">该密钥将用于在此聊天室中加密和解密消息。</string>
     <!-- Updates -->
     <string name="LastCheck">最后检查</string>
     <string name="CurrentVersion">当前版本</string>

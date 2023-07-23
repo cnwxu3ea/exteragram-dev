@@ -254,17 +254,11 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
         }
 
         @Override
-        public int getItemCount() {
-            return rowCount;
-        }
-
-        @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
-                case 1:
-                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
-                case 2:
+                case 1 ->
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                case 2 -> {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == generalRow) {
                         textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.msg_media, true);
@@ -283,19 +277,19 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
                     } else if (position == sourceCodeRow) {
                         textCell.setTextAndValueAndIcon(LocaleController.getString("SourceCode", R.string.SourceCode), "GitHub", R.drawable.msg_delete, false);
                     }
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == categoryHeaderRow) {
                         headerCell.setText(LocaleController.getString("Categories", R.string.Categories));
                     } else if (position == infoHeaderRow) {
                         headerCell.setText(LocaleController.getString("Links", R.string.Links));
                     }
-                    break;
-                case 4:
+                }
+                case 4 -> {
                     headerSettingsCell = (HeaderSettingsCell) holder.itemView;
                     headerSettingsCell.setPadding(0, ActionBar.getCurrentActionBarHeight() + (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) - AndroidUtilities.dp(40), 0, 0);
-                    break;
+                }
             }
         }
 

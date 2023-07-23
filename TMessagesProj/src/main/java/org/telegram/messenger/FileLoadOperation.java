@@ -235,16 +235,13 @@ public class FileLoadOperation {
     private void updateParams() {
         if (ExteraConfig.downloadSpeedBoost == 2) {
             downloadChunkSizeBig = 1024 * 1024;
-            maxDownloadRequests = 16;
-            maxDownloadRequestsBig = 16;
+            maxDownloadRequests = maxDownloadRequestsBig = 14;
         } else if (ExteraConfig.downloadSpeedBoost == 1 || MessagesController.getInstance(currentAccount).getfileExperimentalParams) {
             downloadChunkSizeBig = 1024 * 512;
-            maxDownloadRequests = 8;
-            maxDownloadRequestsBig = 8;
+            maxDownloadRequests = maxDownloadRequestsBig = 8;
         } else {
             downloadChunkSizeBig = 1024 * 128;
-            maxDownloadRequests = 4;
-            maxDownloadRequestsBig = 4;
+            maxDownloadRequests = maxDownloadRequestsBig = 4;
         }
         maxCdnParts = (int) (FileLoader.DEFAULT_MAX_FILE_SIZE / downloadChunkSizeBig);
     }

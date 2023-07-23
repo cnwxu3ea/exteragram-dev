@@ -158,20 +158,13 @@ public class CameraXUtils {
     }
 
     private static int getSuggestedResolution(boolean isPreview) {
-        int suggestedRes;
-        switch (SharedConfig.getDevicePerformanceClass()) {
-            case SharedConfig.PERFORMANCE_CLASS_LOW:
-                suggestedRes = 720;
-                break;
-            case SharedConfig.PERFORMANCE_CLASS_AVERAGE:
-                suggestedRes = 1080;
-                break;
-            case SharedConfig.PERFORMANCE_CLASS_HIGH:
-            default:
-                suggestedRes = ExteraConfig.useCameraXOptimizedMode && isPreview ? 1080 : 2160;
-                break;
-        }
-        return suggestedRes;
+        return switch (SharedConfig.getDevicePerformanceClass()) {
+            case SharedConfig.PERFORMANCE_CLASS_LOW -> 720;
+            case SharedConfig.PERFORMANCE_CLASS_AVERAGE -> 1080;
+            case SharedConfig.PERFORMANCE_CLASS_HIGH -> ExteraConfig.useCameraXOptimizedMode && isPreview ? 1080 : 2160;
+            default ->
+                    throw new IllegalStateException("Unexpected value: " + SharedConfig.getDevicePerformanceClass());
+        };
     }
 
     @SuppressLint({"RestrictedApi", "UnsafeOptInUsageError"})
@@ -193,7 +186,7 @@ public class CameraXUtils {
                         foundWideAngleOnPrimaryCamera = true;
                     }
                     float[] listLensAngle = cameraCharacteristics.get(LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
-                    if (listLensAngle.length > 0) {
+                    if (listLensAngle != null && listLensAngle.length > 0) {
                         if (listLensAngle[0] < 3.0f && listLensAngle[0] < lowestAngledCamera) {
                             lowestAngledCamera = listLensAngle[0];
                             cameraId = id;

@@ -34,16 +34,12 @@ public class CrashlyticsUtils {
     }
 
     private static String getPerformanceClassString() {
-        switch (SharedConfig.getDevicePerformanceClass()) {
-            case SharedConfig.PERFORMANCE_CLASS_LOW:
-                return "Low";
-            case SharedConfig.PERFORMANCE_CLASS_AVERAGE:
-                return "Average";
-            case SharedConfig.PERFORMANCE_CLASS_HIGH:
-                return "High";
-            default:
-                return "N/A";
-        }
+        return switch (SharedConfig.getDevicePerformanceClass()) {
+            case SharedConfig.PERFORMANCE_CLASS_LOW -> "Low";
+            case SharedConfig.PERFORMANCE_CLASS_AVERAGE -> "Average";
+            case SharedConfig.PERFORMANCE_CLASS_HIGH -> "High";
+            default -> "N/A";
+        };
     }
 
     public static void logEvents(Context context) {

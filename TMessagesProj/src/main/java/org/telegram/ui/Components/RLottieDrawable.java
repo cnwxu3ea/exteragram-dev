@@ -719,7 +719,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
             if (path != null) {
                 inputStream = new FileInputStream(path);
             } else {
-                inputStream = ApplicationLoader.applicationContext.getResources().openRawResource(rawRes);
+                inputStream = ApplicationLoader.applicationContext.getResources().openRawResource(ExteraConfig.getIconPack().getIcon(rawRes));
             }
             int readLen;
             byte[] buffer = bufferLocal.get();

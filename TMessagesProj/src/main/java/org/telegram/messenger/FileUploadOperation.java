@@ -42,6 +42,7 @@ public class FileUploadOperation {
     private static final int minUploadChunkBoostSize = 512;
     private static final int minUploadChunkSlowNetworkSize = 32;
     private static final int initialRequestsCount = 8;
+    private static final int initialRequestsBoostCount = 14;
     private static final int initialRequestsSlowNetworkCount = 1;
     private static final int maxUploadingKBytes = 1024 * 2;
     private static final int maxUploadingSlowNetworkKBytes = 32;
@@ -120,7 +121,7 @@ public class FileUploadOperation {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("start upload on slow network = " + slowNetwork);
             }
-            for (int a = 0, count = (slowNetwork ? initialRequestsSlowNetworkCount : initialRequestsCount); a < count; a++) {
+            for (int a = 0, count = (slowNetwork ? initialRequestsSlowNetworkCount : ExteraConfig.uploadSpeedBoost ? initialRequestsBoostCount : initialRequestsCount); a < count; a++) {
                 startUploadRequest();
             }
         });
@@ -157,7 +158,7 @@ public class FileUploadOperation {
                 cachedResults.clear();
 
                 operationGuid++;
-                for (int a = 0, count = (slowNetwork ? initialRequestsSlowNetworkCount : initialRequestsCount); a < count; a++) {
+                for (int a = 0, count = (slowNetwork ? initialRequestsSlowNetworkCount : ExteraConfig.uploadSpeedBoost ? initialRequestsBoostCount : initialRequestsCount); a < count; a++) {
                     startUploadRequest();
                 }
             }

@@ -571,16 +571,11 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             super(context);
         }
 
-        @Override
-        public int getItemCount() {
-            return rowCount;
-        }
-
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
             switch (type) {
-                case 10:
+                case 10 -> {
                     StickerShapeCell stickerShapeCell = new StickerShapeCell(mContext) {
                         @Override
                         protected void updateStickerPreview() {
@@ -590,31 +585,35 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     };
                     stickerShapeCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(stickerShapeCell);
-                case 11:
+                }
+                case 11 -> {
                     stickerSizeCell = new StickerSizeCell(mContext);
                     stickerSizeCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(stickerSizeCell);
-                case 15:
+                }
+                case 15 -> {
                     doubleTapCell = new DoubleTapCell(mContext);
                     doubleTapCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(doubleTapCell);
-                case 16:
+                }
+                case 16 -> {
                     DoubleTapCell.SetReactionCell reactionCell = new DoubleTapCell.SetReactionCell(mContext);
                     reactionCell.update(false);
                     reactionCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(reactionCell);
-                default:
+                }
+                default -> {
                     return super.onCreateViewHolder(parent, type);
+                }
             }
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean payload) {
             switch (holder.getItemViewType()) {
-                case 1:
-                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
-                case 3:
+                case 1 ->
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                case 3 -> {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == stickersHeaderRow) {
                         headerCell.setText(LocaleController.getString(R.string.StickersName));
@@ -631,8 +630,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     } else if (position == photosHeaderRow) {
                         headerCell.setText(LocaleController.getString("AutoDownloadPhotos", R.string.AutoDownloadPhotos));
                     }
-                    break;
-                case 5:
+                }
+                case 5 -> {
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     textCheckCell.setEnabled(true, null);
                     if (position == hideStickerTimeRow) {
@@ -664,8 +663,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     } else if (position == hideCounterRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("HidePhotoCounter", R.string.HidePhotoCounter), LocaleController.getString("HidePhotoCounterInfo", R.string.HidePhotoCounterInfo), ExteraConfig.hidePhotoCounter, true, true);
                     }
-                    break;
-                case 7:
+                }
+                case 7 -> {
                     TextSettingsCell textSettingsCell = (TextSettingsCell) holder.itemView;
                     if (position == doubleTapActionOutOwnerRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("DoubleTapOutgoing", R.string.DoubleTapOutgoing), doubleTapActions[ExteraConfig.doubleTapActionOutOwner], payload, doubleTapReactionRow != -1);
@@ -678,8 +677,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     } else if (position == doubleTapSeekDurationRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("DoubleTapSeekDuration", R.string.DoubleTapSeekDuration), doubleTapSeekDuration[ExteraConfig.doubleTapSeekDuration], payload, true);
                     }
-                    break;
-                case 8:
+                }
+                case 8 -> {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == doubleTapDividerRow) {
                         cell.setText(LocaleController.getString("DoubleTapInfo", R.string.DoubleTapInfo));
@@ -699,16 +698,16 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                             value += " " + LocaleController.formatString("TodayAtFormatted", R.string.TodayAtFormatted, "12:34");
                         cell.setText(AndroidUtilities.replaceTags(value));
                     }
-                    break;
-                case 13:
+                }
+                case 13 -> {
                     SlideChooseView slide = (SlideChooseView) holder.itemView;
                     if (position == photosQualityChooserRow) {
                         slide.setNeedDivider(true);
                         slide.setCallback(index -> ExteraConfig.editor.putInt("sendPhotosQuality", ExteraConfig.sendPhotosQuality = index).apply());
                         slide.setOptions(ExteraConfig.sendPhotosQuality, "800px", "1280px", "2560px");
                     }
-                    break;
-                case 18:
+                }
+                case 18 -> {
                     TextCheckCell2 checkCell = (TextCheckCell2) holder.itemView;
                     if (position == adminShortcutsRow) {
                         int shortcutsSelectedCount = getShortcutsSelectedCount();
@@ -729,8 +728,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     }
                     checkCell.getCheckBox().setColors(Theme.key_switchTrack, Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
                     checkCell.getCheckBox().setDrawIconType(0);
-                    break;
-                case 19:
+                }
+                case 19 -> {
                     CheckBoxCell checkBoxCell = (CheckBoxCell) holder.itemView;
                     if (position == permissionsRow) {
                         checkBoxCell.setText(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), "", ExteraConfig.permissionsShortcut, true, true);
@@ -754,7 +753,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         checkBoxCell.setText(LocaleController.getString("Details", R.string.Details), "", ExteraConfig.showDetailsButton, true, true);
                     }
                     checkBoxCell.setPad(1);
-                    break;
+                }
             }
         }
 

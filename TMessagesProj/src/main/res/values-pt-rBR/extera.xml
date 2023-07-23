@@ -133,11 +133,6 @@
     <string name="PauseOnMinimizeInfo">Pausa uma reprodução de vídeo quando o dispositivo está bloqueado ou o exteraGram é minimizado.</string>
     <string name="DisablePlayback">Desativar a reprodução</string>
     <string name="DisablePlaybackInfo">Desativa a reprodução quando o botão de volume é pressionado.</string>
-    <!-- Boost -->
-    <string name="Encryptors">Encriptadores</string>
-    <string name="Encrypt">Criptografar</string>
-    <string name="Decrypt">Descriptografar</string>
-    <string name="EncryptionKeyInfo">Esta chave será usada para criptografar e descriptografar mensagens nesta sala de bate-papo.</string>
     <!-- Updates -->
     <string name="LastCheck">Última verificação</string>
     <string name="CurrentVersion">Versão atual</string>

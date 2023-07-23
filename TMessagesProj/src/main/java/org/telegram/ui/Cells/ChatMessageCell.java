@@ -12244,9 +12244,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else {
             timeString = LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         }
-        if (currentMessageObject.isDecrypted && currentMessageObject.currentEncryptor != null) {
-            timeString = currentMessageObject.currentEncryptor.getName() + " " + timeString;
-        }
         if (signString != null) {
             if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.imported) {
                 currentTimeString = " " + timeString;
@@ -12465,7 +12462,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 adminString = messageObject.messageOwner.post_author.replace("\n", "");
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
                 nameWidth -= adminWidth;
-            } else if (isMegagroup && currentChat != null && currentMessageObject.isForwardedChannelPost()) {
+            } else if (isMegagroup && currentChat != null && (currentMessageObject.isForwardedChannelPost() || currentMessageObject.messageOwner.peer_id != null && currentMessageObject.messageOwner.peer_id.channel_id != 0 && !currentMessageObject.isOutOwner())) {
                 adminString = LocaleController.getString("DiscussChannel", R.string.DiscussChannel);
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
                 nameWidth -= adminWidth;

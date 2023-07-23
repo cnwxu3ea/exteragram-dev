@@ -42,6 +42,7 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.ListView.AdapterWithDiffUtils;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SlideChooseView;
 
@@ -117,6 +118,7 @@ public abstract class BasePreferencesActivity extends BaseFragment {
 
         listView.setAdapter(listAdapter = createAdapter(context));
         listView.setOnItemClickListener(this::onItemClick);
+        listView.setOnItemLongClickListener(this::onItemLongClick);
 
         return fragmentView;
     }
@@ -145,8 +147,11 @@ public abstract class BasePreferencesActivity extends BaseFragment {
     protected abstract BaseListAdapter createAdapter(Context context);
 
     protected abstract void onItemClick(View view, int position, float x, float y);
+    protected boolean onItemLongClick(View view, int position, float x, float y) {
+        return false;
+    }
 
-    protected abstract class BaseListAdapter extends RecyclerListView.SelectionAdapter {
+    protected abstract class BaseListAdapter extends AdapterWithDiffUtils {
 
         protected final Context mContext;
 

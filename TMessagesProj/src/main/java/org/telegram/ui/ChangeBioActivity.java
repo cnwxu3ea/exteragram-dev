@@ -159,11 +159,11 @@ public class ChangeBioActivity extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                firstNameFieldContainer.setText(String.format("%s (%d)", LocaleController.getString("UserBio", R.string.UserBio), getMessagesController().getAboutLimit() - Character.codePointCount(s, 0, s.length())));
+                firstNameFieldContainer.setText(String.format("%s • %d", LocaleController.getString("UserBio", R.string.UserBio), getMessagesController().getAboutLimit() - Character.codePointCount(s, 0, s.length())));
             }
         });
 
-        firstNameFieldContainer.setText(String.format("%s (%d)", LocaleController.getString("UserBio", R.string.UserBio), getMessagesController().getAboutLimit()));
+        firstNameFieldContainer.setText(String.format("%s • %d", LocaleController.getString("UserBio", R.string.UserBio), getMessagesController().getAboutLimit()));
 
         helpTextView = new TextView(context);
         helpTextView.setFocusable(true);

@@ -354,20 +354,16 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             super(context);
         }
 
-        @Override
-        public int getItemCount() {
-            return rowCount;
-        }
-
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
             switch (type) {
-                case 9:
+                case 9 -> {
                     avatarCornersPreviewCell = new AvatarCornersPreviewCell(mContext, parentLayout);
                     avatarCornersPreviewCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(avatarCornersPreviewCell);
-                case 12:
+                }
+                case 12 -> {
                     FabShapeCell fabShapeCell = new FabShapeCell(mContext) {
                         @Override
                         protected void rebuildFragments() {
@@ -376,11 +372,13 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     };
                     fabShapeCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(fabShapeCell);
-                case 14:
+                }
+                case 14 -> {
                     foldersPreviewCell = new FoldersPreviewCell(mContext);
                     foldersPreviewCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(foldersPreviewCell);
-                case 15:
+                }
+                case 15 -> {
                     solarIconsPreview = new SolarIconsPreview(mContext) {
                         @Override
                         protected void reloadResources() {
@@ -391,22 +389,24 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     };
                     solarIconsPreview.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(solarIconsPreview);
-                case 17:
+                }
+                case 17 -> {
                     chatListPreviewCell = new ChatListPreviewCell(mContext);
                     chatListPreviewCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(chatListPreviewCell);
-                default:
+                }
+                default -> {
                     return super.onCreateViewHolder(parent, type);
+                }
             }
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean payload) {
             switch (holder.getItemViewType()) {
-                case 1:
-                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
-                case 3:
+                case 1 ->
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                case 3 -> {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == appearanceHeaderRow) {
                         headerCell.setText(LocaleController.getString("Appearance", R.string.Appearance));
@@ -421,8 +421,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     } else if (position == chatListHeaderRow) {
                         headerCell.setText(LocaleController.getString("ListOfChats", R.string.ListOfChats));
                     }
-                    break;
-                case 5:
+                }
+                case 5 -> {
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     textCheckCell.setEnabled(true, null);
                     if (position == useSystemFontsRow) {
@@ -452,8 +452,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     } else if (position == alternativeOpenAnimationRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DrawerAlternativeOpeningAnimation", R.string.DrawerAlternativeOpeningAnimation), ExteraConfig.alternativeOpenAnimation, false);
                     }
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     TextCell textCell = (TextCell) holder.itemView;
                     textCell.setEnabled(true);
                     int[] icons = AppUtils.getDrawerIconPack();
@@ -478,8 +478,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     } else if (position == scanQrRow) {
                         textCell.setTextAndCheckAndIcon(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), ExteraConfig.scanQr, R.drawable.msg_qrcode, false);
                     }
-                    break;
-                case 7:
+                }
+                case 7 -> {
                     TextSettingsCell textSettingsCell = (TextSettingsCell) holder.itemView;
                     if (position == eventChooserRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("DrawerIconSet", R.string.DrawerIconSet), events[ExteraConfig.eventType], payload, true);
@@ -490,8 +490,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     } else if (position == tabStyleRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("TabStyle", R.string.TabStyle), styles[ExteraConfig.tabStyle], payload, true);
                     }
-                    break;
-                case 8:
+                }
+                case 8 -> {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == appearanceDividerRow) {
                         cell.setText(LocaleController.getString("AlternativeNavigationInfo", R.string.AlternativeNavigationInfo));
@@ -502,7 +502,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     } else if (position == chatListDividerRow) {
                         cell.setText(LocaleController.getString("ListOfChatsInfo", R.string.ListOfChatsInfo));
                     }
-                    break;
+                }
             }
         }
 

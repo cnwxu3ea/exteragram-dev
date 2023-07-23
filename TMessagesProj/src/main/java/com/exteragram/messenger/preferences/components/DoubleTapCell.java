@@ -116,10 +116,10 @@ public class DoubleTapCell extends LinearLayout {
 
                 for (int i = 0; i < 2; i++) {
                     if (i == 0) {
-                        rect.set(stroke + AndroidUtilities.dp(8), stroke + AndroidUtilities.dp(10), getMeasuredWidth() / 2 - AndroidUtilities.dp(8) - stroke, AndroidUtilities.dp(75) - stroke);
+                        rect.set(stroke + AndroidUtilities.dp(8), stroke + AndroidUtilities.dp(10), getMeasuredWidth() / 2f - AndroidUtilities.dp(8) - stroke, AndroidUtilities.dp(75) - stroke);
                     } else {
                         canvas.translate(0, AndroidUtilities.dp(80));
-                        rect.set(stroke + getMeasuredWidth() / 2 + AndroidUtilities.dp(8), stroke + AndroidUtilities.dp(5), getMeasuredWidth() - AndroidUtilities.dp(8) - stroke, AndroidUtilities.dp(70) - stroke);
+                        rect.set(stroke + getMeasuredWidth() / 2f + AndroidUtilities.dp(8), stroke + AndroidUtilities.dp(5), getMeasuredWidth() - AndroidUtilities.dp(8) - stroke, AndroidUtilities.dp(70) - stroke);
                     }
                     rect.round(rect1);
                     messages[i].setBounds(rect1);
@@ -131,7 +131,7 @@ public class DoubleTapCell extends LinearLayout {
                         circleOutlinePaint[j].setStyle(Paint.Style.STROKE);
                         circleOutlinePaint[j].setColor(ColorUtils.blendARGB(0x00, Color.argb(76, r, g, b), circleProgress[i + 2 * j]));
                         circleOutlinePaint[j].setStrokeWidth(AndroidUtilities.dp(1.5f) * circleProgress[i + 2 * j] * circleProgress[i + 2 * j]);
-                        canvas.drawCircle((i == 0 ? 1 : 3) * getMeasuredWidth() / 4, getMeasuredHeight() / 4 + AndroidUtilities.dpf2(i == 0 ? 3f : -2f), AndroidUtilities.dp(25 - 6 * j) * circleSizeProgress[i + 2 * j], circleOutlinePaint[j]);
+                        canvas.drawCircle((i == 0 ? 1 : 3) * getMeasuredWidth() / 4f, getMeasuredHeight() / 4f + AndroidUtilities.dpf2(i == 0 ? 3f : -2f), AndroidUtilities.dp(25 - 6 * j) * circleSizeProgress[i + 2 * j], circleOutlinePaint[j]);
                     }
 
                     Drawable icon = ContextCompat.getDrawable(context, actionIcon[i]);

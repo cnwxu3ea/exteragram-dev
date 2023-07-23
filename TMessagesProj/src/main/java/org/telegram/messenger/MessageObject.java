@@ -27,12 +27,8 @@ import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Base64;
-import android.util.Log;
 
 import androidx.collection.LongSparseArray;
-
-import com.exteragram.messenger.boost.encryption.BaseEncryptor;
-import com.exteragram.messenger.boost.filter.ZalgoFilter;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.browser.Browser;
@@ -281,8 +277,6 @@ public class MessageObject {
     };
     public Drawable customAvatarDrawable;
 
-    public boolean isDecrypted;
-    public BaseEncryptor currentEncryptor;
     public String originalText;
 
     public void updateMessage(boolean reset) {

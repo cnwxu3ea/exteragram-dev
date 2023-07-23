@@ -35,16 +35,12 @@ public class LocaleUtils {
         String title;
         int actionBarTitle = ExteraConfig.titleText;
         switch (actionBarTitle) {
-            case 0:
-                title = LocaleController.getString("exteraAppName", R.string.exteraAppName);
-                break;
-            case 3:
-                title = LocaleController.getString(R.string.FilterChats);
-                break;
-            default:
+            case 0 -> title = LocaleController.getString("exteraAppName", R.string.exteraAppName);
+            case 3 -> title = LocaleController.getString(R.string.FilterChats);
+            default -> {
                 TLRPC.User user = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();
                 title = actionBarTitle == 1 && !TextUtils.isEmpty(UserObject.getPublicUsername(user)) ? UserObject.getPublicUsername(user) : UserObject.getFirstName(user);
-                break;
+            }
         }
         return title;
     }

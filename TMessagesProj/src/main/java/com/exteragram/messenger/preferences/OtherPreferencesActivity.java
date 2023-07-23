@@ -134,7 +134,7 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
                 new CountDownTimer(30000, 100) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        button.setText(String.format(Locale.getDefault(), "%s (%d)", buttonText, millisUntilFinished / 1000 + 1));
+                        button.setText(String.format(Locale.getDefault(), "%s • %d", buttonText, millisUntilFinished / 1000 + 1));
                     }
 
                     @Override
@@ -165,17 +165,11 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
         }
 
         @Override
-        public int getItemCount() {
-            return rowCount;
-        }
-
-        @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
-                case 1:
-                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
-                case 2:
+                case 1 ->
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                case 2 -> {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == crashlyticsRow) {
                         textCell.setTextAndCheckAndIcon("Crashlytics", ExteraConfig.useGoogleCrashlytics, R.drawable.msg_report, true);
@@ -187,19 +181,19 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
                     } else if (position == resetSettingsRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ResetSettings", R.string.ResetSettings), R.drawable.msg_reset, true);
                     }
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == analyticsHeaderRow) {
                         headerCell.setText("Google");
                     }
-                    break;
-                case 8:
+                }
+                case 8 -> {
                     TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == analyticsDividerRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("YandexAppMetricaInfo", R.string.AnalyticsInfo));
                     }
-                    break;
+                }
             }
         }
 

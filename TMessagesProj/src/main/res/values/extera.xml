@@ -160,12 +160,6 @@
     <string name="DisablePlayback">Disable Playback</string>
     <string name="DisablePlaybackInfo">Disables playback when volume button is pressed.</string>
 
-    <!-- Boost -->
-    <string name="Encryptors">Encryptors</string>
-    <string name="Encrypt">Encrypt</string>
-    <string name="Decrypt">Decrypt</string>
-    <string name="EncryptionKeyInfo">This key will be used to encrypt and decrypt messages in this chat room.</string>
-
     <!-- Updates -->
     <string name="LastCheck">Last Check</string>
     <string name="CurrentVersion">Current Version</string>
@@ -198,6 +192,37 @@
     <string name="Bitrate">Bitrate</string>
     <string name="MimeType">Mime Type</string>
     <string name="Datacenter">Datacenter</string>
+
+    <!-- GPT -->
+    <string name="ApiKey">API Key</string>
+    <string name="ApiKeyInfo">This API Key will be used to send requests to OpenAI servers. To generate an API Key, you can use the *official website*.</string>
+    <string name="Roles">Roles</string>
+    <string name="Suggestions">Suggestions</string>
+    <string name="RoleName">Name</string>
+    <string name="RolePrompt">Prompt</string>
+    <string name="PromptInfo">Prompt is a text that is provided to the model as a starting point for generating a response or continuing a dialogue.</string>
+    <string name="NewRole">New Role</string>
+    <string name="EditRole">Edit Role</string>
+    <string name="HistoryInfo">Conversation history allows AI to understand previous requests and responses and take them into account when generating subsequent responses.</string>
+    <string name="ResponseStreaming">Response Streaming</string>
+    <string name="ResponseStreamingInfo">Ensures smoother and faster display of responses.</string>
+    <string name="ShowResponseOnly">Show Response only</string>
+    <string name="Use16kModel">Use 16k Model</string>
+    <string name="Use16kModelInfo">The 16k model is a language model with a maximum limit of 16,384 tokens. By default, a model with 4,096 tokens is used.</string>
+    <string name="TapToAddApiKey">Tap to add an API Key to get started with AI features.</string>
+
+    <string name="GPTError400">Conversation history is full</string>
+    <string name="GPTError400Info">Try clearing the history or using the 16k model to increase the limit.</string>
+    <string name="GPTError401">Incorrect API key provided</string>
+    <string name="GPTError401Info">Make sure the API key you are using is correct or generate a new one.</string>
+    <string name="GPTError429Limit">Rate limit reached for requests</string>
+    <string name="GPTError429LimitInfo">You\'re sending requests too fast. Try again later.</string>
+    <string name="GPTError429Quota">You exceeded your current quota</string>
+    <string name="GPTError429QuotaInfo">You have hit your maximum monthly spend. Сheck your plan and billing details.</string>
+    <string name="GPTError503">The engine is currently overloaded</string>
+    <string name="GPTError503Info">Retry your request after a short wait.</string>
+    <string name="GPTError">The server had an error while processing your request</string>
+    <string name="GPTErrorInfo">Retry your request after a short wait and contact OpenAI support if the issue persists.</string>
 
     <!-- Other -->
     <string name="RestartRequired">Restart the App to take effect.</string>

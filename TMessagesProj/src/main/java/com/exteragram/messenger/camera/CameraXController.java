@@ -137,8 +137,8 @@ public class CameraXController {
         return isInitiated;
     }
 
-    public boolean setFrontFace(boolean isFrontFace) {
-        return this.isFrontface = isFrontFace;
+    public void setFrontFace(boolean isFrontFace) {
+        this.isFrontface = isFrontFace;
     }
 
     public boolean isFrontface() {
@@ -212,14 +212,11 @@ public class CameraXController {
     }
 
     private int getNextFlashMode(int legacyMode) {
-        switch (legacyMode) {
-            case ImageCapture.FLASH_MODE_AUTO:
-                return ImageCapture.FLASH_MODE_ON;
-            case ImageCapture.FLASH_MODE_ON:
-                return ImageCapture.FLASH_MODE_OFF;
-            default:
-                return ImageCapture.FLASH_MODE_AUTO;
-        }
+        return switch (legacyMode) {
+            case ImageCapture.FLASH_MODE_AUTO -> ImageCapture.FLASH_MODE_ON;
+            case ImageCapture.FLASH_MODE_ON -> ImageCapture.FLASH_MODE_OFF;
+            default -> ImageCapture.FLASH_MODE_AUTO;
+        };
     }
 
     public int setNextFlashMode() {
@@ -300,18 +297,14 @@ public class CameraXController {
 
         if (!isFrontface) {
             switch (selectedEffect) {
-                case CAMERA_NIGHT:
-                    cameraSelector = extensionsManager.getExtensionEnabledCameraSelector(cameraSelector, ExtensionMode.NIGHT);
-                    break;
-                case CAMERA_HDR:
-                    cameraSelector = extensionsManager.getExtensionEnabledCameraSelector(cameraSelector, ExtensionMode.HDR);
-                    break;
-                case CAMERA_AUTO:
-                    cameraSelector = extensionsManager.getExtensionEnabledCameraSelector(cameraSelector, ExtensionMode.AUTO);
-                    break;
-                default:
-                    cameraSelector = extensionsManager.getExtensionEnabledCameraSelector(cameraSelector, ExtensionMode.NONE);
-                    break;
+                case CAMERA_NIGHT ->
+                        cameraSelector = extensionsManager.getExtensionEnabledCameraSelector(cameraSelector, ExtensionMode.NIGHT);
+                case CAMERA_HDR ->
+                        cameraSelector = extensionsManager.getExtensionEnabledCameraSelector(cameraSelector, ExtensionMode.HDR);
+                case CAMERA_AUTO ->
+                        cameraSelector = extensionsManager.getExtensionEnabledCameraSelector(cameraSelector, ExtensionMode.AUTO);
+                default ->
+                        cameraSelector = extensionsManager.getExtensionEnabledCameraSelector(cameraSelector, ExtensionMode.NONE);
             }
         }
 
@@ -597,17 +590,13 @@ public class CameraXController {
     public int getDisplayOrientation() {
         WindowManager mgr = (WindowManager) ApplicationLoader.applicationContext.getSystemService(Context.WINDOW_SERVICE);
         int rotation = mgr.getDefaultDisplay().getRotation();
-        switch (rotation) {
-            case Surface.ROTATION_90:
-                return 90;
-            case Surface.ROTATION_180:
-                return 180;
-            case Surface.ROTATION_270:
-                return 270;
-            case Surface.ROTATION_0:
-            default:
-                return 0;
-        }
+        return switch (rotation) {
+            case Surface.ROTATION_0 -> 0;
+            case Surface.ROTATION_90 -> 90;
+            case Surface.ROTATION_180 -> 180;
+            case Surface.ROTATION_270 -> 270;
+            default -> throw new IllegalStateException("Unexpected value: " + rotation);
+        };
     }
 
     private int getDeviceDefaultOrientation() {

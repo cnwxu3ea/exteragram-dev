@@ -159,12 +159,6 @@
     <string name="DisablePlayback">Отключить авто-проигрывание</string>
     <string name="DisablePlaybackInfo">Отключает автоматическое проигрывание видео при нажатии на кнопку громкости.</string>
 
-    <!-- Boost -->
-    <string name="Encryptors">Методы шифрования</string>
-    <string name="Encrypt">Зашифровать</string>
-    <string name="Decrypt">Расшифровать</string>
-    <string name="EncryptionKeyInfo">Данный ключ будет использоваться для шифровки и расшифровки сообщений в этом чате.</string>
-
     <!-- Updates -->
     <string name="LastCheck">Последняя проверка</string>
     <string name="CurrentVersion">Текущая версия</string>
@@ -197,6 +191,37 @@
     <string name="Bitrate">Битрейт</string>
     <string name="MimeType">Тип медиа</string>
     <string name="Datacenter">Датацентр</string>
+
+    <!-- GPT -->
+    <string name="ApiKey">API-Ключ</string>
+    <string name="ApiKeyInfo">Этот API-ключ будет использоваться для отправки запросов на сервера OpenAI. Для генерации ключа API можно воспользоваться *официальным сайтом*.</string>
+    <string name="Roles">Роли</string>
+    <string name="Suggestions">Рекомендации</string>
+    <string name="RoleName">Имя</string>
+    <string name="RolePrompt">Запрос</string>
+    <string name="PromptInfo">Запрос, подсказка или инструкция - это текст, который предоставляется модели в качестве отправной точки для создания ответа или продолжения диалога.</string>
+    <string name="NewRole">Новая роль</string>
+    <string name="EditRole">Изменить роль</string>
+    <string name="HistoryInfo">История сообщений позволяет ИИ понимать предыдущие запросы и ответы и учитывать их при формировании последующих ответов.</string>
+    <string name="ResponseStreaming">Потоковая передача ответа</string>
+    <string name="ResponseStreamingInfo">Обеспечивает более плавное и быстрое отображение ответов.</string>
+    <string name="ShowResponseOnly">Показывать только ответ</string>
+    <string name="Use16kModel">Использовать модель 16k</string>
+    <string name="Use16kModelInfo">Модель 16k - это языковая модель с максимальным ограничением в 16,384 токена. По умолчанию используется модель с 4,096 токенами.</string>
+    <string name="TapToAddApiKey">Нажмите, чтобы добавить ключ API для начала работы с функциями ИИ.</string>
+
+    <string name="GPTError400">История разговора заполнена</string>
+    <string name="GPTError400Info">Попробуйте очистить историю или использовать модель 16k для увеличения лимита.</string>
+    <string name="GPTError401">Предоставлен неверный API-Ключ</string>
+    <string name="GPTError401Info">Убедитесь в правильности используемого API-Ключа или сгенерируйте новый.</string>
+    <string name="GPTError429Limit">Достигнут лимит скорости для запросов</string>
+    <string name="GPTError429LimitInfo">Вы отправляете запросы слишком быстро. Повторите попытку позже.</string>
+    <string name="GPTError429Quota">Вы превысили свою текущую квоту</string>
+    <string name="GPTError429QuotaInfo">Вы превысили максимальный месячный расход. Проверьте детали тарифного плана и биллинга.</string>
+    <string name="GPTError503">В настоящее время система перегружена</string>
+    <string name="GPTError503Info">Повторите запрос после короткого ожидания.</string>
+    <string name="GPTError">При обработке вашего запроса на сервере возникла ошибка</string>
+    <string name="GPTErrorInfo">Повторите запрос после короткого ожидания и обратитесь в службу поддержки OpenAI, если проблема сохраняется.</string>
 
     <!-- Other -->
     <string name="RestartRequired">Перезапустите приложение, чтобы изменения вступили в силу.</string>

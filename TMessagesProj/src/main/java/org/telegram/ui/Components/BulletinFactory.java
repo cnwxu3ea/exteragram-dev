@@ -14,13 +14,10 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
-
-import com.exteragram.messenger.ExteraConfig;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -44,6 +41,7 @@ import org.telegram.ui.PremiumPreviewFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public final class BulletinFactory {
 
@@ -156,6 +154,23 @@ public final class BulletinFactory {
         this.containerLayout = containerLayout;
         this.fragment = null;
         this.resourcesProvider = resourcesProvider;
+    }
+
+    public Bulletin createSimpleBulletin(CharSequence text, CharSequence subtext, int num) {
+        final Bulletin.TwoLineLottieLayout layout = new Bulletin.TwoLineLottieLayout(getContext(), resourcesProvider);
+        layout.setSticker(num);
+        layout.titleTextView.setText(text);
+        layout.subtitleTextView.setText(subtext);
+        return create(layout, Bulletin.DURATION_PROLONG);
+    }
+
+    public Bulletin createSimpleBulletin(CharSequence text, CharSequence subtext, int num, CharSequence button, Runnable onButtonClick) {
+        final Bulletin.TwoLineLottieLayout layout = new Bulletin.TwoLineLottieLayout(getContext(), resourcesProvider);
+        layout.setSticker(num);
+        layout.titleTextView.setText(text);
+        layout.subtitleTextView.setText(subtext);
+        layout.setButton(new Bulletin.UndoButton(getContext(), true, resourcesProvider).setText(button.toString().toUpperCase(Locale.ROOT)).setUndoAction(onButtonClick));
+        return create(layout, Bulletin.DURATION_PROLONG);
     }
 
     public Bulletin createSimpleBulletin(int iconRawId, CharSequence text) {

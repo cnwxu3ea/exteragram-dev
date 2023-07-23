@@ -136,11 +136,6 @@ CameraX падтрымліваецца толькі на
     <string name="PauseOnMinimizeInfo">Прыпыняе прайграванне відэа, калі прылада заблакавана або exteraGram згорнуты.</string>
     <string name="DisablePlayback">Адключыць прайграванне</string>
     <string name="DisablePlaybackInfo">Адключае прайграванне пры націску кнопкі гучнасці.</string>
-    <!--  Boost  -->
-    <string name="Encryptors">Шыфравальшчык</string>
-    <string name="Encrypt">Шыфраваць</string>
-    <string name="Decrypt">Расшыфроўваць</string>
-    <string name="EncryptionKeyInfo">Гэты ключ будзе выкарыстоўвацца для шыфравання і дэшыфраванні паведамленняў у гэтым чаце.</string>
     <!--  Updates  -->
     <string name="LastCheck">Апошняя праверка</string>
     <string name="CurrentVersion">Бягучая версія</string>

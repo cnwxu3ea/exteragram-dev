@@ -205,7 +205,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                             } else if (tag instanceof Integer) {
                                 fixWidth = Math.max((Integer) tag, view.getMeasuredWidth());
                                 gapStartY = view.getMeasuredHeight();
-                                gapEndY = gapStartY + AndroidUtilities.dp(6);
+                                gapEndY = gapStartY + AndroidUtilities.dp(8);
                             }
                             if (viewsToFix == null) {
                                 viewsToFix = new ArrayList<>();

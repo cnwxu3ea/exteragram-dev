@@ -275,18 +275,18 @@ public class UpdaterUtils {
             String symbol = "", font = AndroidUtilities.TYPEFACE_ROBOTO_REGULAR;
             for (int i = 0; i < 3; i++) {
                 switch (i) {
-                    case 0:
+                    case 0 -> {
                         symbol = "**";
                         font = AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM;
-                        break;
-                    case 1:
+                    }
+                    case 1 -> {
                         symbol = "_";
                         font = AndroidUtilities.TYPEFACE_ROBOTO_ITALIC;
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         symbol = "`";
                         font = AndroidUtilities.TYPEFACE_ROBOTO_MONO;
-                        break;
+                    }
                 }
                 while ((start = stringBuilder.indexOf(symbol)) != -1) {
                     stringBuilder.replace(start, start + symbol.length(), "");

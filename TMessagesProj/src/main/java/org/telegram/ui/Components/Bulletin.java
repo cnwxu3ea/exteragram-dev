@@ -56,6 +56,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -1168,6 +1169,7 @@ public class Bulletin {
 
     public static class TwoLineLottieLayout extends ButtonLayout {
 
+        public final StickerImageView stickerImageView;
         public final RLottieImageView imageView;
         public final LinkSpanDrawable.LinksTextView titleTextView;
         public final LinkSpanDrawable.LinksTextView subtitleTextView;
@@ -1179,6 +1181,12 @@ public class Bulletin {
             super(context, resourcesProvider);
             this.textColor = getThemedColor(Theme.key_undo_infoColor);
             setBackground(getThemedColor(Theme.key_undo_background));
+
+            stickerImageView = new StickerImageView(context, UserConfig.selectedAccount);
+            stickerImageView.setStickerPackName("exteraGramPlaceholders");
+            stickerImageView.setVisibility(GONE);
+            stickerImageView.setSize(AndroidUtilities.dp(32), AndroidUtilities.dp(32));
+            addView(stickerImageView, LayoutHelper.createFrameRelatively(56, 48, Gravity.START | Gravity.CENTER_VERTICAL));
 
             imageView = new RLottieImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -1212,6 +1220,12 @@ public class Bulletin {
         protected void onShow() {
             super.onShow();
             imageView.playAnimation();
+        }
+
+        public void setSticker(int num) {
+            stickerImageView.setStickerNum(num);
+            stickerImageView.setVisibility(VISIBLE);
+            imageView.setVisibility(GONE);
         }
 
         public void setAnimation(int resId, String... layers) {

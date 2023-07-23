@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import com.exteragram.messenger.camera.CameraXUtils;
+import com.exteragram.messenger.gpt.core.Config;
 import com.exteragram.messenger.icons.BaseIconSet;
 import com.exteragram.messenger.icons.EmptyIconSet;
 import com.exteragram.messenger.icons.SolarIconSet;
@@ -287,36 +288,16 @@ public class ExteraConfig {
 
     public static void toggleDrawerElements(int id) {
         switch (id) {
-            case 1:
-                editor.putBoolean("newGroup", newGroup ^= true).apply();
-                break;
-            case 2:
-                editor.putBoolean("newSecretChat", newSecretChat ^= true).apply();
-                break;
-            case 3:
-                editor.putBoolean("newChannel", newChannel ^= true).apply();
-                break;
-            case 4:
-                editor.putBoolean("contacts", contacts ^= true).apply();
-                break;
-            case 5:
-                editor.putBoolean("calls", calls ^= true).apply();
-                break;
-            case 6:
-                editor.putBoolean("peopleNearby", peopleNearby ^= true).apply();
-                break;
-            case 7:
-                editor.putBoolean("archivedChats", archivedChats ^= true).apply();
-                break;
-            case 8:
-                editor.putBoolean("savedMessages", savedMessages ^= true).apply();
-                break;
-            case 9:
-                editor.putBoolean("scanQr", scanQr ^= true).apply();
-                break;
-            case 10:
-                editor.putBoolean("changeStatus", changeStatus ^= true).apply();
-                break;
+            case 1 -> editor.putBoolean("newGroup", newGroup ^= true).apply();
+            case 2 -> editor.putBoolean("newSecretChat", newSecretChat ^= true).apply();
+            case 3 -> editor.putBoolean("newChannel", newChannel ^= true).apply();
+            case 4 -> editor.putBoolean("contacts", contacts ^= true).apply();
+            case 5 -> editor.putBoolean("calls", calls ^= true).apply();
+            case 6 -> editor.putBoolean("peopleNearby", peopleNearby ^= true).apply();
+            case 7 -> editor.putBoolean("archivedChats", archivedChats ^= true).apply();
+            case 8 -> editor.putBoolean("savedMessages", savedMessages ^= true).apply();
+            case 9 -> editor.putBoolean("scanQr", scanQr ^= true).apply();
+            case 10 -> editor.putBoolean("changeStatus", changeStatus ^= true).apply();
         }
         NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
     }
@@ -347,30 +328,23 @@ public class ExteraConfig {
     }
 
     public static int getPhotosQuality() {
-        switch (sendPhotosQuality) {
-            case 0:
-                return 800;
-            case 1:
-            default:
-                return 1280;
-            case 2:
-                return 2560;
-        }
+        return switch (sendPhotosQuality) {
+            case 0 -> 800;
+            default -> 1280;
+            case 2 -> 2560;
+        };
     }
 
     public static int getDoubleTapSeekDuration() {
-        switch(doubleTapSeekDuration) {
-            case 0:
-            case 1:
-            case 2:
-                return (doubleTapSeekDuration + 1) * 5000;
-            default:
-                return 30000;
-        }
+        return switch (doubleTapSeekDuration) {
+            case 0, 1, 2 -> (doubleTapSeekDuration + 1) * 5000;
+            default -> 30000;
+        };
     }
 
     public static void clearPreferences() {
         configLoaded = false;
+        Config.editor.clear().apply();
         ExteraConfig.editor.clear().apply();
         ExteraConfig.loadConfig();
     }

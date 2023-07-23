@@ -16,7 +16,6 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.LauncherIconController;
 
 import java.io.File;
 import java.util.LinkedHashMap;
