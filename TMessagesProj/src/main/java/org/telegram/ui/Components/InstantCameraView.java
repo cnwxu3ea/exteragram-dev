@@ -98,6 +98,7 @@ import org.telegram.messenger.camera.Size;
 import org.telegram.messenger.video.MP4Builder;
 import org.telegram.messenger.video.Mp4Movie;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
@@ -125,7 +126,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 public class InstantCameraView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
-    public boolean WRITE_TO_FILE_IN_BACKGROUND = true;
+    public boolean WRITE_TO_FILE_IN_BACKGROUND;
 
     private int currentAccount = UserConfig.selectedAccount;
     private InstantViewCameraContainer cameraContainer;
@@ -245,6 +246,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     @SuppressLint("ClickableViewAccessibility")
     public InstantCameraView(Context context, Delegate delegate, Theme.ResourcesProvider resourcesProvider) {
         super(context);
+        WRITE_TO_FILE_IN_BACKGROUND = SharedConfig.deviceIsAboveAverage();
         this.resourcesProvider = resourcesProvider;
         parentView = delegate.getFragmentView();
         setWillNotDraw(false);
@@ -1888,7 +1890,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
                     AudioBufferInfo buffer;
                     if (buffers.isEmpty()) {
-                        buffer = new AudioBufferInfo();
+                        try {
+                            buffer = new AudioBufferInfo();
+                        } catch (OutOfMemoryError error) {
+                            System.gc();
+                            buffer = new AudioBufferInfo();
+                        }
                     } else {
                         buffer = buffers.poll();
                     }
@@ -1986,6 +1993,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
 
             fileWriteQueue = new DispatchQueue("IVR_FileWriteQueue");
+            fileWriteQueue.setPriority(Thread.MAX_PRIORITY);
 
             keyframeThumbs.clear();
             frameCount = 0;
@@ -2746,7 +2754,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     if (encodedData == null) {
                         throw new RuntimeException("encoderOutputBuffer " + encoderStatus + " was null");
                     }
-                    boolean needReleaseBuffers = true;
                     if (videoBufferInfo.size > 1) {
                         if ((videoBufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) == 0) {
                             if (prependHeaderSize != 0 && (videoBufferInfo.flags & MediaCodec.BUFFER_FLAG_KEY_FRAME) != 0) {
@@ -2778,7 +2785,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                 bufferInfo.offset = videoBufferInfo.offset;
                                 bufferInfo.flags = videoBufferInfo.flags;
                                 bufferInfo.presentationTimeUs = videoBufferInfo.presentationTimeUs;
-                                ByteBuffer byteBuffer = encodedData.duplicate();
+                                ByteBuffer byteBuffer = AndroidUtilities.cloneByteBuffer(encodedData);
                                 fileWriteQueue.postRunnable(() -> {
                                     long availableSize = 0;
                                     try {
@@ -2825,9 +2832,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             videoTrackIndex = mediaMuxer.addTrack(newFormat, false);
                         }
                     }
-                    if (needReleaseBuffers) {
-                        videoEncoder.releaseOutputBuffer(encoderStatus, false);
-                    }
+                    videoEncoder.releaseOutputBuffer(encoderStatus, false);
                     if ((videoBufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
                         break;
                     }
@@ -2863,7 +2868,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             bufferInfo.offset = audioBufferInfo.offset;
                             bufferInfo.flags = audioBufferInfo.flags;
                             bufferInfo.presentationTimeUs = audioBufferInfo.presentationTimeUs;
-                            ByteBuffer byteBuffer = encodedData.duplicate();
+                            ByteBuffer byteBuffer = AndroidUtilities.cloneByteBuffer(encodedData);
                             fileWriteQueue.postRunnable(() -> {
                                 long availableSize = 0;
                                 try {
