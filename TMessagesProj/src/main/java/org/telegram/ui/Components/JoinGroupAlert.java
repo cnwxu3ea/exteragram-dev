@@ -132,10 +132,11 @@ public class JoinGroupAlert extends BottomSheet {
         textView.setTextColor(getThemedColor(Theme.key_dialogTextGray3));
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setText(isChannel
-                ? LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase()
-                : LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase()
-        );
+//        textView.setText(isChannel
+//                ? LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase()
+//                : LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase()
+//        );
+        textView.setText(LocaleController.formatPluralString(isChannel ? "Subscribers" : "Members", participants_count));
         linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 10, 0, 10, hasAbout ? 0 : 20));
 
         if (hasAbout) {

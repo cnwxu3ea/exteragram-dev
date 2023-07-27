@@ -361,13 +361,12 @@ public class AvatarDrawable extends Drawable {
         canvas.save();
         canvas.translate(bounds.left, bounds.top);
         AndroidUtilities.rectTmp.set(0, 0, size, size);
-        canvas.drawRoundRect(AndroidUtilities.rectTmp, ExteraConfig.getAvatarCorners(size, true), ExteraConfig.getAvatarCorners(size, true), Theme.avatar_backgroundPaint);
+        canvas.drawRoundRect(AndroidUtilities.rectTmp, ExteraConfig.getAvatarCorners(size + AndroidUtilities.dp(10), true), ExteraConfig.getAvatarCorners(size + AndroidUtilities.dp(10), true), Theme.avatar_backgroundPaint);
 
         if (avatarType == AVATAR_TYPE_ARCHIVED) {
             if (archivedAvatarProgress != 0) {
                 Theme.avatar_backgroundPaint.setColor(ColorUtils.setAlphaComponent(getThemedColor(Theme.key_avatar_backgroundArchived), alpha));
-                canvas.drawRoundRect(0, 0, size * archivedAvatarProgress, size * archivedAvatarProgress, ExteraConfig.getAvatarCorners(size * archivedAvatarProgress, true), ExteraConfig.getAvatarCorners(size * archivedAvatarProgress, true), Theme.avatar_backgroundPaint);
-
+                canvas.drawRoundRect(0, 0, size * archivedAvatarProgress, size * archivedAvatarProgress, ExteraConfig.getAvatarCorners(size + AndroidUtilities.dp(10), true) * archivedAvatarProgress, ExteraConfig.getAvatarCorners(size + AndroidUtilities.dp(10), true) * archivedAvatarProgress, Theme.avatar_backgroundPaint);
                 if (Theme.dialogs_archiveAvatarDrawableRecolored) {
                     Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
                     Theme.dialogs_archiveAvatarDrawable.setLayerColor("Arrow1.**", Theme.getNonAnimatedColor(Theme.key_avatar_backgroundArchived));

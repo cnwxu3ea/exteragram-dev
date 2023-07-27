@@ -89,6 +89,7 @@
 
     <string name="DisableNumberRounding">Отключить округление чисел</string>
     <string name="FormatTimeWithSeconds">Показывать время с секундами</string>
+    <string name="InAppVibration">Вибрация в приложении</string>
     <string name="TabletMode">Планшетный режим</string>
 
     <string name="Profile">Профиль</string>
@@ -196,6 +197,7 @@
     <string name="ApiKey">API-Ключ</string>
     <string name="ApiKeyInfo">Этот API-ключ будет использоваться для отправки запросов на сервера OpenAI. Для генерации ключа API можно воспользоваться *официальным сайтом*.</string>
     <string name="Roles">Роли</string>
+    <string name="RolesInfo">Создавайте роли для своих нужд!</string>
     <string name="Suggestions">Рекомендации</string>
     <string name="RoleName">Имя</string>
     <string name="RolePrompt">Запрос</string>

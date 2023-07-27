@@ -1085,7 +1085,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     searchViewPager.setTranslationY(searchViewPagerTranslationY);
                     int contentWidthSpec = View.MeasureSpec.makeMeasureSpec(widthSize, View.MeasureSpec.EXACTLY);
                     int h = View.MeasureSpec.getSize(heightMeasureSpec) + keyboardSize;
-                    int contentHeightSpec = View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), h - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect && initialDialogsType != DIALOGS_TYPE_FORWARD ? 0 : actionBar.getMeasuredHeight()) - topPadding) - (searchTabsView == null ? 0 : AndroidUtilities.dp(44)), View.MeasureSpec.EXACTLY);
+                    int contentHeightSpec = View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), h - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect && initialDialogsType != DIALOGS_TYPE_FORWARD ? 0 : actionBar.getMeasuredHeight()) - topPadding) - (searchTabsView == null ? 0 : AndroidUtilities.dp(48)), View.MeasureSpec.EXACTLY);
                     child.measure(contentWidthSpec, contentHeightSpec);
                     child.setPivotX(child.getMeasuredWidth() / 2);
                 } else if (commentView != null && commentView.isPopupView(child)) {
@@ -5192,7 +5192,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (anotherFragmentOpened != opened) {
                     anotherFragmentOpened = opened;
                 }
-                // need to check 48
                 filterTabsMoveFrom = getActionBarMoveFrom(canShowFilterTabsView);
                 filterTabsProgress = canShowFilterTabsView || hasStories ? 1f - progress : 0;
                 if (fragmentView != null) {
@@ -5318,7 +5317,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             h += AndroidUtilities.dp(DialogStoriesCell.HEIGHT_IN_DP);
         }
         if (showFilterTabs) {
-            h += AndroidUtilities.dp(44);
+            h += AndroidUtilities.dp(48);
         }
         if (dialogsHintCell != null && dialogsHintCell.getVisibility() == View.VISIBLE) {
             h += dialogsHintCell.getMeasuredHeight();
@@ -8062,7 +8061,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
         if (floatingButton2Container != null) {
-            floatingButton2Container.setTranslationY(floatingButtonTranslation - floatingButtonPanOffset - Math.max(additionalFloatingTranslation, additionalFloatingTranslation2) * (1f - floatingButtonHideProgress) + AndroidUtilities.dp(44) * floatingButtonHideProgress);
+            floatingButton2Container.setTranslationY(floatingButtonTranslation - floatingButtonPanOffset - Math.max(additionalFloatingTranslation, additionalFloatingTranslation2) * (1f - floatingButtonHideProgress) + AndroidUtilities.dp(48) * floatingButtonHideProgress);
         }
     }
 
@@ -11550,7 +11549,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (floatingButton2Container != null) {
-        // need to check
             drawable = Theme.createSimpleSelectorCircleDrawable(
                     AndroidUtilities.dp(36),
                     ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhite), Color.WHITE, 0.1f),
@@ -11676,11 +11674,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 filterTabsView.invalidate();
             }
             if (dialogStoriesCell != null) {
-                dialogStoriesCell.setTranslationX((isDrawerTransition ? 1 : -1) * AndroidUtilities.dp(slideAmplitudeDp) * (1f - slideFragmentProgress));
+                dialogStoriesCell.setTranslationX((isDrawerTransition ? 1 : -1) * getSlideAmplitude() * (1f - slideFragmentProgress));
             }
             if (floatingButtonContainer != null) {
                 floatingButtonContainer.setTranslationX((isDrawerTransition ? 1 : -1) * getSlideAmplitude() * (1f - slideFragmentProgress));
                 floatingButtonContainer.invalidate();
+            }
+            if (floatingButton2Container != null) {
+                floatingButton2Container.setTranslationX((isDrawerTransition ? 1 : -1) * getSlideAmplitude() * (1f - slideFragmentProgress));
+                floatingButton2Container.invalidate();
             }
             if (rightSlidingDialogContainer != null && rightSlidingDialogContainer.getFragmentView() != null) {
                 if (!rightFragmentTransitionInProgress) {
@@ -11702,13 +11704,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (dialogStoriesCell != null) {
                 dialogStoriesCell.setScaleX(s);
                 dialogStoriesCell.setScaleY(s);
-                dialogStoriesCell.setTranslationX((isDrawerTransition ? AndroidUtilities.dp(4) : -AndroidUtilities.dp(4)) * (1f - slideFragmentProgress));
+                dialogStoriesCell.setTranslationX(getSlideAmplitude() * (1f - slideFragmentProgress));
                 dialogStoriesCell.setPivotX(isDrawerTransition ? dialogStoriesCell.getMeasuredWidth() : 0);
                 dialogStoriesCell.setPivotY(0);
             }
             if (floatingButtonContainer != null) {
                 floatingButtonContainer.setTranslationX(getSlideAmplitude() * (1f - slideFragmentProgress));
                 floatingButtonContainer.invalidate();
+            }
+            if (floatingButton2Container != null) {
+                floatingButton2Container.setTranslationX(getSlideAmplitude() * (1f - slideFragmentProgress));
+                floatingButton2Container.invalidate();
             }
             if (rightSlidingDialogContainer != null && rightSlidingDialogContainer.getFragmentView() != null) {
                 if (!rightFragmentTransitionInProgress) {

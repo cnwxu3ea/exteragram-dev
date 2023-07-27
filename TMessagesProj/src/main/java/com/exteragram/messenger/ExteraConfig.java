@@ -59,7 +59,7 @@ public class ExteraConfig {
 
     public static int eventType;
     public static boolean alternativeOpenAnimation;
-    public static boolean changeStatus, newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr;
+    public static boolean changeStatus, myStories, newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr;
 
     // General
     public static int cameraType;
@@ -68,6 +68,7 @@ public class ExteraConfig {
 
     public static boolean disableNumberRounding;
     public static boolean formatTimeWithSeconds;
+    public static boolean inAppVibration;
     public static int tabletMode;
 
     public static int downloadSpeedBoost;
@@ -126,7 +127,7 @@ public class ExteraConfig {
 
     // Other
     private static final long[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027, 1172503281, 1877362358};
-    private static final long[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1972014627, 168769611, 480000401, 5307590670L, 639891381, 1773117711, 5330087923L, 666154369};
+    private static final long[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1972014627, 168769611, 480000401, 5307590670L, 639891381, 1773117711, 5330087923L, 666154369, 139303278};
     public static long channelToSave;
     public static String targetLanguage;
     public static final CharSequence[] supportedLanguages = new CharSequence[]{
@@ -166,6 +167,7 @@ public class ExteraConfig {
 
             disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
             formatTimeWithSeconds = preferences.getBoolean("formatTimeWithSeconds", false);
+            inAppVibration = preferences.getBoolean("inAppVibration", false);
             tabletMode = preferences.getInt("tabletMode", 0);
 
             downloadSpeedBoost = preferences.getInt("downloadSpeedBoost", 0);
@@ -178,7 +180,7 @@ public class ExteraConfig {
             disableUnarchiveSwipe = preferences.getBoolean("disableUnarchiveSwipe", true);
 
             // Appearance
-            avatarCorners = preferences.getFloat("avatarCorners", 30.0f);
+            avatarCorners = preferences.getFloat("avatarCorners", 28.0f);
             hideActionBarStatus = preferences.getBoolean("hideActionBarStatus", false);
             hideAllChats = preferences.getBoolean("hideAllChats", false);
             centerTitle = preferences.getBoolean("centerTitle", false);
@@ -201,6 +203,7 @@ public class ExteraConfig {
             alternativeOpenAnimation = preferences.getBoolean("alternativeOpenAnimation", true);
 
             changeStatus = preferences.getBoolean("changeStatus", true);
+            myStories = preferences.getBoolean("myStories", true);
             newGroup = preferences.getBoolean("newGroup", true);
             newSecretChat = preferences.getBoolean("newSecretChat", false);
             newChannel = preferences.getBoolean("newChannel", false);
@@ -276,14 +279,18 @@ public class ExteraConfig {
     }
 
     public static int getAvatarCorners(float size) {
-        return getAvatarCorners(size, false);
+        return getAvatarCorners(size, false, false);
     }
 
-    public static int getAvatarCorners(float size, boolean toPx) {
+    public static int getAvatarCorners(float size, boolean px) {
+        return getAvatarCorners(size, px, false);
+    }
+
+    public static int getAvatarCorners(float size, boolean px, boolean forum) {
         if (avatarCorners == 0) {
             return 0;
         }
-        return (int) (avatarCorners * (size / 56.0f) * (toPx ? 1 : AndroidUtilities.density));
+        return (int) (avatarCorners * (size * (forum ? 0.65f : 1) / 56.0f) * (px ? 1 : AndroidUtilities.density));
     }
 
     public static void toggleDrawerElements(int id) {
@@ -298,6 +305,7 @@ public class ExteraConfig {
             case 8 -> editor.putBoolean("savedMessages", savedMessages ^= true).apply();
             case 9 -> editor.putBoolean("scanQr", scanQr ^= true).apply();
             case 10 -> editor.putBoolean("changeStatus", changeStatus ^= true).apply();
+            case 11 -> editor.putBoolean("myStories", myStories ^= true).apply();
         }
         NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
     }

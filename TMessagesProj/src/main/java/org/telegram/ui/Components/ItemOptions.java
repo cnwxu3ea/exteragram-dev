@@ -362,7 +362,8 @@ public class ItemOptions {
             @Override
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
-                // need to check
+                canvas.drawColor(dim);
+
                 if (cachedBitmap != null && scrimView.getParent() instanceof View) {
                     canvas.save();
                     if (clipTop < 1) {
@@ -387,6 +388,8 @@ public class ItemOptions {
                         scrimViewBackground.setBounds( -viewAdditionalOffsets.left, -viewAdditionalOffsets.top, scrimView.getWidth() + viewAdditionalOffsets.right, scrimView.getHeight() + viewAdditionalOffsets.bottom);
                         scrimViewBackground.draw(canvas);
                     }
+                    scrimView.draw(canvas);
+                    canvas.restore();
                 }
             }
         };

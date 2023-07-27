@@ -3863,7 +3863,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             canvas.restore();
         }
 
-        if (useSeparator) {
+        if (useSeparator && !ExteraConfig.disableDividers) {
             int left;
             if (fullSeparator || currentDialogFolderId != 0 && archiveHidden && !fullSeparator2 || fullSeparator2 && !archiveHidden) {
                 left = 0;
@@ -4041,40 +4041,33 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             if (user != null && !MessagesController.isSupportUser(user) && !user.bot) {
                 boolean isOnline = isOnline();
                 if (isOnline || onlineProgress != 0) {
-                    int top = (int) (storyParams.originalAvatarRect.bottom - AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 6 : 8));
+                    int top = (int) (storyParams.originalAvatarRect.bottom - AndroidUtilities.dp(8));
                     int left;
                     if (LocaleController.isRTL) {
-                        left = (int) (storyParams.originalAvatarRect.left + AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6));
+                        left = (int) (storyParams.originalAvatarRect.left + AndroidUtilities.dp(6));
                     } else {
-                        left = (int) (storyParams.originalAvatarRect.right - AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6));
+                        left = (int) (storyParams.originalAvatarRect.right - AndroidUtilities.dp(6));
                     }
-                        //int top = (int) (avatarImage.getImageY2() - AndroidUtilities.dp(8));
-                        //int left;
-                        //if (LocaleController.isRTL) {
-                        //    left = (int) (avatarImage.getImageX() + AndroidUtilities.dp(6));
-                        //} else {
-                        //    left = (int) (avatarImage.getImageX2() - AndroidUtilities.dp(6));
-                        //}
-                        // need to check
 
                     Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
-                    canvas.drawCircle(left, top, AndroidUtilities.dp(7) * onlineProgress, Theme.dialogs_onlineCirclePaint);
+                    canvas.drawCircle(left, top, AndroidUtilities.dp(10) * onlineProgress, Theme.dialogs_onlineCirclePaint);
                     Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_chats_onlineCircle, resourcesProvider));
-                    canvas.drawCircle(left, top, AndroidUtilities.dp(5) * onlineProgress, Theme.dialogs_onlineCirclePaint);
+                    canvas.drawCircle(left, top, AndroidUtilities.dp(6) * onlineProgress, Theme.dialogs_onlineCirclePaint);
                     if (isOnline) {
                         if (onlineProgress < 1.0f) {
                             onlineProgress += 16f / 150.0f;
                             if (onlineProgress > 1.0f) {
                                 onlineProgress = 1.0f;
                             }
-                        } else {
-                            if (onlineProgress > 0.0f) {
-                                onlineProgress -= 16f / 150.0f;
-                                if (onlineProgress < 0.0f) {
-                                    onlineProgress = 0.0f;
-                                }
-                                needInvalidate = true;
+                            needInvalidate = true;
+                        }
+                    } else {
+                        if (onlineProgress > 0.0f) {
+                            onlineProgress -= 16f / 150.0f;
+                            if (onlineProgress < 0.0f) {
+                                onlineProgress = 0.0f;
                             }
+                            needInvalidate = true;
                         }
                     }
                 }
@@ -4090,112 +4083,111 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                         left = (int) (storyParams.originalAvatarRect.right - AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6));
                     }
 
-                        if (rightFragmentOpenedProgress != 0) {
-                            canvas.save();
-                            float scale = 1f - rightFragmentOpenedProgress;
-                            canvas.scale(scale, scale, left, top);
-                        }
-                        Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
-                        canvas.drawCircle(left, top, AndroidUtilities.dp(11) * chatCallProgress * checkProgress, Theme.dialogs_onlineCirclePaint);
-                        Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_chats_onlineCircle, resourcesProvider));
-                        canvas.drawCircle(left, top, AndroidUtilities.dp(9) * chatCallProgress * checkProgress, Theme.dialogs_onlineCirclePaint);
-                        Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
-
-                        float size1;
-                        float size2;
-                        if (!LiteMode.isEnabled(LiteMode.FLAGS_CHAT)) {
-                            innerProgress = 0.65f;
-                        }
-                        if (progressStage == 0) {
-                            size1 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
-                            size2 = AndroidUtilities.dp(3) - AndroidUtilities.dp(2) * innerProgress;
-                        } else if (progressStage == 1) {
-                            size1 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
-                            size2 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
-                        } else if (progressStage == 2) {
-                            size1 = AndroidUtilities.dp(1) + AndroidUtilities.dp(2) * innerProgress;
-                            size2 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
-                        } else if (progressStage == 3) {
-                            size1 = AndroidUtilities.dp(3) - AndroidUtilities.dp(2) * innerProgress;
-                            size2 = AndroidUtilities.dp(1) + AndroidUtilities.dp(2) * innerProgress;
-                        } else if (progressStage == 4) {
-                            size1 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
-                            size2 = AndroidUtilities.dp(3) - AndroidUtilities.dp(2) * innerProgress;
-                        } else if (progressStage == 5) {
-                            size1 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
-                            size2 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
-                        } else if (progressStage == 6) {
-                            size1 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
-                            size2 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
-                        } else {
-                            size1 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
-                            size2 = AndroidUtilities.dp(1) + AndroidUtilities.dp(2) * innerProgress;
-                        }
-
-                        if (chatCallProgress < 1.0f || checkProgress < 1.0f) {
-                            canvas.save();
-                            canvas.scale(chatCallProgress * checkProgress, chatCallProgress * checkProgress, left, top);
-                        }
-                        rect.set(left - AndroidUtilities.dp(1), top - size1, left + AndroidUtilities.dp(1), top + size1);
-                        canvas.drawRoundRect(rect, AndroidUtilities.dp(1), AndroidUtilities.dp(1), Theme.dialogs_onlineCirclePaint);
-
-                        rect.set(left - AndroidUtilities.dp(5), top - size2, left - AndroidUtilities.dp(3), top + size2);
-                        canvas.drawRoundRect(rect, AndroidUtilities.dp(1), AndroidUtilities.dp(1), Theme.dialogs_onlineCirclePaint);
-
-                        rect.set(left + AndroidUtilities.dp(3), top - size2, left + AndroidUtilities.dp(5), top + size2);
-                        canvas.drawRoundRect(rect, AndroidUtilities.dp(1), AndroidUtilities.dp(1), Theme.dialogs_onlineCirclePaint);
-                        if (chatCallProgress < 1.0f || checkProgress < 1.0f) {
-                            canvas.restore();
-                        }
-
-                        if (LiteMode.isEnabled(LiteMode.FLAGS_CHAT)) {
-                            innerProgress += 16f / 400.0f;
-                            if (innerProgress >= 1.0f) {
-                                innerProgress = 0.0f;
-                                progressStage++;
-                                if (progressStage >= 8) {
-                                    progressStage = 0;
-                                }
-                            }
-                            needInvalidate = true;
-                        }
-
-                        if (hasCall) {
-                            if (chatCallProgress < 1.0f) {
-                                chatCallProgress += 16f / 150.0f;
-                                if (chatCallProgress > 1.0f) {
-                                    chatCallProgress = 1.0f;
-                                }
-                            }
-                        } else {
-                            if (chatCallProgress > 0.0f) {
-                                chatCallProgress -= 16f / 150.0f;
-                                if (chatCallProgress < 0.0f) {
-                                    chatCallProgress = 0.0f;
-                                }
-                            }
-                        }
-
-
-                        if (rightFragmentOpenedProgress != 0) {
-                            canvas.restore();
-                        }
+                    if (rightFragmentOpenedProgress != 0) {
+                        canvas.save();
+                        float scale = 1f - rightFragmentOpenedProgress;
+                        canvas.scale(scale, scale, left, top);
                     }
-                }
+                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
+                    canvas.drawCircle(left, top, AndroidUtilities.dp(11) * chatCallProgress * checkProgress, Theme.dialogs_onlineCirclePaint);
+                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_chats_onlineCircle, resourcesProvider));
+                    canvas.drawCircle(left, top, AndroidUtilities.dp(9) * chatCallProgress * checkProgress, Theme.dialogs_onlineCirclePaint);
+                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
 
-                if (showTtl) {
-                    if (ttlProgress < 1.0f) {
-                        ttlProgress += 16f / 150.0f;
+                    float size1;
+                    float size2;
+                    if (!LiteMode.isEnabled(LiteMode.FLAGS_CHAT)) {
+                        innerProgress = 0.65f;
+                    }
+                    if (progressStage == 0) {
+                        size1 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
+                        size2 = AndroidUtilities.dp(3) - AndroidUtilities.dp(2) * innerProgress;
+                    } else if (progressStage == 1) {
+                        size1 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
+                        size2 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
+                    } else if (progressStage == 2) {
+                        size1 = AndroidUtilities.dp(1) + AndroidUtilities.dp(2) * innerProgress;
+                        size2 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
+                    } else if (progressStage == 3) {
+                        size1 = AndroidUtilities.dp(3) - AndroidUtilities.dp(2) * innerProgress;
+                        size2 = AndroidUtilities.dp(1) + AndroidUtilities.dp(2) * innerProgress;
+                    } else if (progressStage == 4) {
+                        size1 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
+                        size2 = AndroidUtilities.dp(3) - AndroidUtilities.dp(2) * innerProgress;
+                    } else if (progressStage == 5) {
+                        size1 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
+                        size2 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
+                    } else if (progressStage == 6) {
+                        size1 = AndroidUtilities.dp(1) + AndroidUtilities.dp(4) * innerProgress;
+                        size2 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
+                    } else {
+                        size1 = AndroidUtilities.dp(5) - AndroidUtilities.dp(4) * innerProgress;
+                        size2 = AndroidUtilities.dp(1) + AndroidUtilities.dp(2) * innerProgress;
+                    }
+
+                    if (chatCallProgress < 1.0f || checkProgress < 1.0f) {
+                        canvas.save();
+                        canvas.scale(chatCallProgress * checkProgress, chatCallProgress * checkProgress, left, top);
+                    }
+                    rect.set(left - AndroidUtilities.dp(1), top - size1, left + AndroidUtilities.dp(1), top + size1);
+                    canvas.drawRoundRect(rect, AndroidUtilities.dp(1), AndroidUtilities.dp(1), Theme.dialogs_onlineCirclePaint);
+
+                    rect.set(left - AndroidUtilities.dp(5), top - size2, left - AndroidUtilities.dp(3), top + size2);
+                    canvas.drawRoundRect(rect, AndroidUtilities.dp(1), AndroidUtilities.dp(1), Theme.dialogs_onlineCirclePaint);
+
+                    rect.set(left + AndroidUtilities.dp(3), top - size2, left + AndroidUtilities.dp(5), top + size2);
+                    canvas.drawRoundRect(rect, AndroidUtilities.dp(1), AndroidUtilities.dp(1), Theme.dialogs_onlineCirclePaint);
+                    if (chatCallProgress < 1.0f || checkProgress < 1.0f) {
+                        canvas.restore();
+                    }
+
+                    if (LiteMode.isEnabled(LiteMode.FLAGS_CHAT)) {
+                        innerProgress += 16f / 400.0f;
+                        if (innerProgress >= 1.0f) {
+                            innerProgress = 0.0f;
+                            progressStage++;
+                            if (progressStage >= 8) {
+                                progressStage = 0;
+                            }
+                        }
                         needInvalidate = true;
                     }
-                } else {
-                    if (ttlProgress > 0.0f) {
-                        ttlProgress -= 16f / 150.0f;
-                        needInvalidate = true;
+
+                    if (hasCall) {
+                        if (chatCallProgress < 1.0f) {
+                            chatCallProgress += 16f / 150.0f;
+                            if (chatCallProgress > 1.0f) {
+                                chatCallProgress = 1.0f;
+                            }
+                        }
+                    } else {
+                        if (chatCallProgress > 0.0f) {
+                            chatCallProgress -= 16f / 150.0f;
+                            if (chatCallProgress < 0.0f) {
+                                chatCallProgress = 0.0f;
+                            }
+                        }
+                    }
+
+
+                    if (rightFragmentOpenedProgress != 0) {
+                        canvas.restore();
                     }
                 }
-                ttlProgress = Utilities.clamp(ttlProgress, 1f, 0);
             }
+
+            if (showTtl) {
+                if (ttlProgress < 1.0f) {
+                    ttlProgress += 16f / 150.0f;
+                    needInvalidate = true;
+                }
+            } else {
+                if (ttlProgress > 0.0f) {
+                    ttlProgress -= 16f / 150.0f;
+                    needInvalidate = true;
+                }
+            }
+            ttlProgress = Utilities.clamp(ttlProgress, 1f, 0);
         }
         return needInvalidate;
     }

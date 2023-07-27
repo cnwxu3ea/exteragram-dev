@@ -77,6 +77,9 @@ import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
+import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.SystemUtils;
+
 import org.checkerframework.checker.units.qual.A;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
@@ -298,7 +301,7 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
             src.backgroundPaint.setColor(Theme.getColor(Theme.key_chats_actionBackground));
             src.iconDrawable = floatingButton.getContext().getResources().getDrawable(R.drawable.story_camera).mutate();
             src.iconSize = AndroidUtilities.dp(56);
-            src.rounding = Math.max(src.screenRect.width(), src.screenRect.height()) / 2f;
+            src.rounding = ExteraConfig.squareFab ? AndroidUtilities.dp(16) : Math.max(src.screenRect.width(), src.screenRect.height()) / 2f;
             return src;
         }
 
@@ -1390,28 +1393,24 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
         windowView = new WindowView(context);
         if (Build.VERSION.SDK_INT >= 21) {
             windowView.setFitsSystemWindows(true);
-            windowView.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-                @NonNull
-                @Override
-                public WindowInsets onApplyWindowInsets(@NonNull View v, @NonNull WindowInsets insets) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        Insets r = insets.getInsets(WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.systemBars());
-                        insetTop = r.top;
-                        insetBottom = r.bottom;
-                        insetLeft = r.left;
-                        insetRight = r.right;
-                    } else {
-                        insetTop = insets.getStableInsetTop();
-                        insetBottom = insets.getStableInsetBottom();
-                        insetLeft = insets.getStableInsetLeft();
-                        insetRight = insets.getStableInsetRight();
-                    }
-                    windowView.requestLayout();
-                    if (Build.VERSION.SDK_INT >= 30) {
-                        return WindowInsets.CONSUMED;
-                    } else {
-                        return insets.consumeSystemWindowInsets();
-                    }
+            windowView.setOnApplyWindowInsetsListener((v, insets) -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    Insets r = insets.getInsets(WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.systemBars());
+                    insetTop = r.top;
+                    insetBottom = r.bottom;
+                    insetLeft = r.left;
+                    insetRight = r.right;
+                } else {
+                    insetTop = insets.getStableInsetTop();
+                    insetBottom = insets.getStableInsetBottom();
+                    insetLeft = insets.getStableInsetLeft();
+                    insetRight = insets.getStableInsetRight();
+                }
+                windowView.requestLayout();
+                if (Build.VERSION.SDK_INT >= 30) {
+                    return WindowInsets.CONSUMED;
+                } else {
+                    return insets.consumeSystemWindowInsets();
                 }
             });
         }
@@ -1474,15 +1473,13 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
         previewContainer.addView(cameraViewThumb, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL));
 
         previewContainer.setBackgroundColor(openType == 1 ? 0 : 0xff1f1f1f);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            previewContainer.setOutlineProvider(new ViewOutlineProvider() {
-                @Override
-                public void getOutline(View view, Outline outline) {
-                    outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), dp(12));
-                }
-            });
-            previewContainer.setClipToOutline(true);
-        }
+        previewContainer.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), dp(12));
+            }
+        });
+        previewContainer.setClipToOutline(true);
         photoFilterEnhanceView = new PhotoFilterView.EnhanceView(context, this::createFilterPhotoView);
         previewView = new PreviewView(context) {
             @Override
@@ -3904,9 +3901,8 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
 //                }
 //            } else
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                noGalleryPermission = activity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED;
-                if (noGalleryPermission) {
-                    activity.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 114);
+                if (noGalleryPermission = !SystemUtils.isImagesAndVideoPermissionGranted()) {
+                    SystemUtils.requestImagesAndVideoPermission(activity);
                 }
             }
             return !noGalleryPermission;

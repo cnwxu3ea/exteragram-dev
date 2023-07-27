@@ -60,6 +60,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.exteragram.messenger.ExteraConfig;
 import com.google.zxing.common.detector.MathUtils;
 
 import org.checkerframework.checker.units.qual.A;
@@ -2335,10 +2336,10 @@ public class StoryPrivacyBottomSheet extends BottomSheet implements Notification
             super(context);
             this.resourcesProvider = resourcesProvider;
 
-            avatarDrawable.setRoundRadius(AndroidUtilities.dp(40));
+            avatarDrawable.setRoundRadius(ExteraConfig.getAvatarCorners(40));
 
             imageView = new BackupImageView(context);
-            imageView.setRoundRadius(AndroidUtilities.dp(40));
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(40));
             addView(imageView, LayoutHelper.createFrame(40, 40, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), 53, 0, 53, 0));
 
             titleTextView = new SimpleTextView(context);

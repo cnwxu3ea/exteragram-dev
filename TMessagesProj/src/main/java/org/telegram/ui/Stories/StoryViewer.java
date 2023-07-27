@@ -41,6 +41,7 @@ import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 import androidx.viewpager.widget.ViewPager;
 
+import com.exteragram.messenger.ExteraConfig;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
@@ -687,7 +688,8 @@ public class StoryViewer {
                                 boolean crossfade = transitionViewHolder != null && transitionViewHolder.crossfadeToAvatarImage != null;
                                 if (!crossfade || progressToOpen != 0) {
                                     headerView.backupImageView.getImageReceiver().setImageCoords(AndroidUtilities.rectTmp);
-                                    headerView.backupImageView.getImageReceiver().setRoundRadius((int) (AndroidUtilities.rectTmp.width() / 2f));
+                                    //headerView.backupImageView.getImageReceiver().setRoundRadius((int) (AndroidUtilities.rectTmp.width() / 2f));
+                                    headerView.backupImageView.getImageReceiver().setRoundRadius(ExteraConfig.getAvatarCorners(AndroidUtilities.rectTmp.width() + AndroidUtilities.dp(8), true));
                                     headerView.backupImageView.getImageReceiver().setVisible(true, false);
                                     headerView.backupImageView.getImageReceiver().setAlpha(crossfade ? progressToOpen : 1f);
                                     headerView.drawUploadingProgress(canvas, AndroidUtilities.rectTmp, !runOpenAnimationAfterLayout, progressToOpen);
@@ -704,7 +706,8 @@ public class StoryViewer {
                                     int oldRadius = transitionViewHolder.crossfadeToAvatarImage.getRoundRadius()[0];
                                     boolean isVisible = transitionViewHolder.crossfadeToAvatarImage.getVisible();
                                     transitionViewHolder.crossfadeToAvatarImage.setImageCoords(AndroidUtilities.rectTmp);
-                                    transitionViewHolder.crossfadeToAvatarImage.setRoundRadius((int) (AndroidUtilities.rectTmp.width() / 2f));
+                                    //transitionViewHolder.crossfadeToAvatarImage.setRoundRadius((int) (AndroidUtilities.rectTmp.width() / 2f));
+                                    transitionViewHolder.crossfadeToAvatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(AndroidUtilities.rectTmp.width() + AndroidUtilities.dp(8), true));
                                     transitionViewHolder.crossfadeToAvatarImage.setVisible(true, false);
                                     canvas.saveLayerAlpha(AndroidUtilities.rectTmp, (int) (255 * (1f - progressToOpen)), Canvas.ALL_SAVE_FLAG);
                                     transitionViewHolder.crossfadeToAvatarImage.draw(canvas);

@@ -431,7 +431,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             } else {
                 StoriesUtilities.setImage(imageReceiver, storyItem);
             }
-            imageReceiver.setRoundRadius((int) (stickerSize / 2f));
+            imageReceiver.setRoundRadius(ExteraConfig.getAvatarCorners(stickerSize * 0.7f, true));
         } else if (messageObject.type == MessageObject.TYPE_ACTION_WALLPAPER) {
             TLRPC.PhotoSize strippedPhotoSize = null;
             if (messageObject.strippedThumb == null) {
@@ -459,7 +459,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 radialProgress.setIcon(MediaActionDrawable.ICON_CANCEL, !messageIdChanged, !messageIdChanged);
             }
         } else if (messageObject.type == MessageObject.TYPE_SUGGEST_PHOTO) {
-            imageReceiver.setRoundRadius((int) (stickerSize / 2f));
+            imageReceiver.setRoundRadius(ExteraConfig.getAvatarCorners(stickerSize * 0.7f, true));
             imageReceiver.setAllowStartLottieAnimation(true);
             imageReceiver.setDelegate(null);
             TLRPC.TL_messageActionSuggestProfilePhoto action = (TLRPC.TL_messageActionSuggestProfilePhoto) messageObject.messageOwner.action;
@@ -975,7 +975,6 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             giftRectSize = Math.min((int) (AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() * 0.6f : AndroidUtilities.displaySize.x * 0.6f - AndroidUtilities.dp(34)), AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight() - AndroidUtilities.statusBarHeight - AndroidUtilities.dp(64));
             stickerSize = giftRectSize - AndroidUtilities.dp(106);
             if (isNewStyleButtonLayout()) {
-                // need to check
                 imageReceiver.setRoundRadius(ExteraConfig.getAvatarCorners(stickerSize * 0.7f, true));
             } else {
                 imageReceiver.setRoundRadius(0);
@@ -1240,6 +1239,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 }
                 avatarStoryParams.originalAvatarRect.set(x, y, x + imageSize, y + imageSize);
                 imageReceiver.setImageCoords(x, y, imageSize, imageSize);
+                imageReceiver.setRoundRadius(ExteraConfig.getAvatarCorners(imageSize, true));
             } else if (messageObject.type == MessageObject.TYPE_ACTION_PHOTO) {
                 imageReceiver.setImageCoords((previousWidth - stickerSize) / 2f, textY + textHeight + giftRectSize * 0.075f, stickerSize, stickerSize);
             } else {

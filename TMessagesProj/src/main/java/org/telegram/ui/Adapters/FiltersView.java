@@ -712,7 +712,7 @@ public class FiltersView extends RecyclerListView {
         }
 
         private void updateColors() {
-            setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(28), getThemedColor(Theme.key_groupcreate_spanBackground)));
+            setBackground(Theme.createRoundRectDrawable(ExteraConfig.getAvatarCorners(32), getThemedColor(Theme.key_groupcreate_spanBackground)));
             titleView.setTextColor(getThemedColor(Theme.key_windowBackgroundWhiteBlackText));
             if (thumbDrawable != null) {
                 if (data.filterType == FILTER_TYPE_ARCHIVE) {

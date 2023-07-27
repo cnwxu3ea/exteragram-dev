@@ -28,6 +28,7 @@ import android.view.animation.OvershootInterpolator;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 
+import com.exteragram.messenger.ExteraConfig;
 import com.google.zxing.common.detector.MathUtils;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -457,9 +458,14 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
         }
 
         final float segmentsAlpha = clamp(1f - expandProgress / 0.2f, 1, 0);
-        final float segmentsCount = segmentsCountAnimated.set(count);
-        final float segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount);
+        float segmentsCount = segmentsCountAnimated.set(count);
+        float segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount);
 
+        if (ExteraConfig.avatarCorners == 28) {
+            count = 1;
+            segmentsCount = segmentsCountAnimated.set(1);
+            segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount > 0 ? 1 : 0);
+        }
 //        float cy = lerp(rect1.centerY(), this.cy, expandProgress);
         float cy = lerp(rect1.centerY(), this.expandY, expandProgress);
         storiesGradientTools.setBounds(this.left, cy - dp(24), this.right, cy + dp(24));
@@ -590,13 +596,15 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
                 if (read < 1) {
                     storiesGradientTools.paint.setAlpha((int) (0xFF * (1f - read) * segmentsAlpha));
                     storiesGradientTools.paint.setStrokeWidth(dpf2(2.33f));
-                    canvas.drawArc(rect2, a, -widthAngle * appear, false, storiesGradientTools.paint);
+                    canvas.drawRoundRect(rect2, ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(2), true), ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(2), true), storiesGradientTools.paint);
+                    //canvas.drawArc(rect2, a, -widthAngle * appear, false, storiesGradientTools.paint);
                 }
 
                 if (read > 0) {
                     readPaint.setAlpha((int) (readPaintAlpha * read * segmentsAlpha));
                     readPaint.setStrokeWidth(dpf2(1.5f));
-                    canvas.drawArc(rect3, a, -widthAngle * appear, false, readPaint);
+                    canvas.drawRoundRect(rect3, ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(2), true), ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(2), true), readPaint);
+                    //canvas.drawArc(rect3, a, -widthAngle * appear, false, readPaint);
                 }
 
                 if (bounceScale != 1) {

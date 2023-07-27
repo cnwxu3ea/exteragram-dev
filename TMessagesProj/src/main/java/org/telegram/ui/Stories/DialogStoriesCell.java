@@ -30,6 +30,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.Emoji;
@@ -574,7 +576,7 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
         float progress = Math.min(collapsedProgress, collapsedProgress2);
         if (progress != 0) {
             float offset = (titleView.getMeasuredHeight() - titleView.getTextHeight()) / 2f;
-            titleView.setTranslationY(y + AndroidUtilities.dp(14) - offset);
+            titleView.setTranslationY(y + AndroidUtilities.dp(14 + 5) - offset);
             int cellWidth = AndroidUtilities.dp(72);
             lastViewRight += -cellWidth + getAvatarRight(cellWidth, collapsedProgress) + AndroidUtilities.dp(12);
             // float toX = AndroidUtilities.dp(28) * Math.min(1, animateToCount) + AndroidUtilities.dp(14) * Math.max(0, animateToCount - 1);
@@ -1014,8 +1016,8 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
             }
             createTextView();
             addView(textViewContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-            avatarImage.setRoundRadius(AndroidUtilities.dp(48) / 2);
-            crossfageToAvatarImage.setRoundRadius(AndroidUtilities.dp(48) / 2);
+            avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(56));
+            crossfageToAvatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(56));
         }
 
         private void createTextView() {
@@ -1029,8 +1031,8 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
             //textView.setSingleLine(true);
 
             textViewContainer.addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 2, 0, 2, 0));
-            avatarImage.setRoundRadius(AndroidUtilities.dp(48) / 2);
-            crossfageToAvatarImage.setRoundRadius(AndroidUtilities.dp(48) / 2);
+            avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(56));
+            crossfageToAvatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(56));
         }
 
         public void setDialogId(long dialogId) {
@@ -1174,7 +1176,8 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
             }
             params.originalAvatarRect.set(x, y, x + finalSize, y + finalSize);
             avatarImage.setAlpha(1f);
-            avatarImage.setRoundRadius((int) radius);
+            //avatarImage.setRoundRadius((int) radius);
+            avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(radius * 2 + AndroidUtilities.dp(8), true));
 
             cx = x + radius;
             cy = y + radius;
@@ -1184,7 +1187,9 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
                 backgroundPaint.setColor(Theme.getColor(Theme.key_actionBarDefaultArchived));
             }
             if (progressToCollapsed != 0) {
-                canvas.drawCircle(cx, cy, radius + AndroidUtilities.dp(3), backgroundPaint);
+                float r = radius + AndroidUtilities.dp(3);
+                canvas.drawRoundRect(cx - r, cy - r, cx + r, cy + r, ExteraConfig.getAvatarCorners(radius * 2 + AndroidUtilities.dp(22), true), ExteraConfig.getAvatarCorners(radius * 2 + AndroidUtilities.dp(22), true), backgroundPaint);
+                //canvas.drawCircle(cx, cy, radius + AndroidUtilities.dp(3), backgroundPaint);
             }
             if (isSelf) {
                 canvas.save();

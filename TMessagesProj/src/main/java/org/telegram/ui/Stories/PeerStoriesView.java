@@ -51,7 +51,7 @@ import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 import androidx.recyclerview.widget.ChatListItemAnimator;
 
-import com.google.android.exoplayer2.util.Log;
+import com.exteragram.messenger.ExteraConfig;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -3349,7 +3349,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                     super.onDraw(canvas);
                 }
             };
-            backupImageView.setRoundRadius(AndroidUtilities.dp(16));
+            backupImageView.setRoundRadius(ExteraConfig.getAvatarCorners(32));
             addView(backupImageView, LayoutHelper.createFrame(32, 32, 0, 12, 2, 0, 0));
             setClipChildren(false);
 

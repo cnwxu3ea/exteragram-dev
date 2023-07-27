@@ -186,22 +186,13 @@ public class PaintTextOptionsView extends FrameLayout implements NotificationCen
         }
         this.outlineType = type;
 
-        int res;
-        switch (type) {
-            default:
-            case 0:
-                res = R.drawable.msg_photo_text_framed;
-                break;
-            case 1:
-                res = R.drawable.msg_photo_text_framed2;
-                break;
-            case 2:
-                res = R.drawable.msg_photo_text_framed3;
-                break;
-            case 3:
-                res = R.drawable.msg_photo_text_regular;
-                break;
-        }
+        int res = switch (type) {
+            default -> R.drawable.msg_photo_text_framed;
+            case 1 -> R.drawable.msg_photo_text_framed2;
+            case 2 -> R.drawable.msg_photo_text_framed3;
+            case 3 -> R.drawable.msg_photo_text_regular;
+            case 4 -> R.drawable.msg_text_outlined;
+        };
         if (animate) {
             AndroidUtilities.updateImageViewImageAnimated(outlineView, res);
         } else {

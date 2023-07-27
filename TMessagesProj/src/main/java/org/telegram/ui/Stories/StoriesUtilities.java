@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import androidx.core.graphics.ColorUtils;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
@@ -46,7 +48,7 @@ import java.util.Collections;
 
 public class StoriesUtilities {
 
-    private final static int ANIMATION_SEGMENT_COUNT = 20;
+    private final static int ANIMATION_SEGMENT_COUNT = ExteraConfig.avatarCorners == 28 ? 20 : 1;
     public static final int STATE_EMPTY = 0;
     public static final int STATE_HAS_UNREAD = 1;
     public static final int STATE_READ = 2;
@@ -89,7 +91,8 @@ public class StoriesUtilities {
 
     public static void drawAvatarWithStory(long dialogId, Canvas canvas, ImageReceiver avatarImage, boolean hasStories, AvatarStoryParams params) {
         StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
-        boolean animated = params.animate;
+        boolean isCircle = ExteraConfig.avatarCorners == 28;
+        boolean animated = params.animate = params.drawSegments = isCircle;
         if (params.dialogId != dialogId) {
             params.dialogId = dialogId;
             params.reset();
@@ -413,8 +416,11 @@ public class StoriesUtilities {
             startAngle += segmentLen / 2f * (1f - params.alphas[i]);
             endAngle -= segmentLen / 2f * (1f - params.alphas[i]);
             paint.setStrokeWidth(originalStrokeWidth * params.alphas[i]);
-
-            canvas.drawArc(rectTmp, startAngle, endAngle - startAngle, false, paint);
+            if (ANIMATION_SEGMENT_COUNT == 1) {
+                canvas.drawRoundRect(rectTmp, ExteraConfig.getAvatarCorners(rectTmp.width() + AndroidUtilities.dp(12), true), ExteraConfig.getAvatarCorners(rectTmp.width() + AndroidUtilities.dp(12), true), paint);
+            } else {
+                canvas.drawArc(rectTmp, startAngle, endAngle - startAngle, false, paint);
+            }
         }
         paint.setStrokeWidth(originalStrokeWidth);
     }
@@ -469,8 +475,10 @@ public class StoriesUtilities {
     }
 
     private static void drawCircleInternal(Canvas canvas, View view, AvatarStoryParams params, Paint paint) {
-        if (params.progressToArc == 0) {
-            canvas.drawCircle(rectTmp.centerX(), rectTmp.centerY(), rectTmp.width() / 2f, paint);
+        if (params.progressToArc == 0 || ExteraConfig.avatarCorners != 28) {
+            //canvas.drawCircle(rectTmp.centerX(), rectTmp.centerY(), rectTmp.width() / 2f, paint);
+            float r = rectTmp.width() / 2f;
+            canvas.drawRoundRect(rectTmp.centerX() - r, rectTmp.centerY() - r, rectTmp.centerX() + r, rectTmp.centerY() + r, ExteraConfig.getAvatarCorners(r * 2 + AndroidUtilities.dp(12), true), ExteraConfig.getAvatarCorners(r * 2 + AndroidUtilities.dp(12), true), paint);
         } else {
             canvas.drawArc(rectTmp, 360 + params.progressToArc / 2f, 360 - params.progressToArc, false, paint);
         }

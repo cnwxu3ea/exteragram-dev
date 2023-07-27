@@ -179,7 +179,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     private void addTab(final int position, CharSequence text) {
-        // need to check
         TextTab tab = new TextTab(getContext(), position);
         tab.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         tab.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -295,14 +294,15 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             }
 
             if (indicatorHeight != 0) {
-            // need to check color
                 rectPaint.setColor(indicatorColor);
                 AndroidUtilities.rectTmp.set(lineLeft, height - indicatorHeight, lineRight, height);
                 if (ExteraConfig.tabStyle != 2) {
                     if (ExteraConfig.tabStyle >= 3) {
                         rectPaint.setAlpha(0x2F);
                         int sideBound = (ExteraConfig.tabStyle == 3 ? AndroidUtilities.dp(8) : ExteraConfig.tabStyle == 4 ? AndroidUtilities.dp(10) : 0);
-                        AndroidUtilities.rectTmp.set(lineLeft - sideBound, ExteraConfig.tabStyle >= 3 ? height / 2 - AndroidUtilities.dp(ExteraConfig.tabStyle == 3 ? 14 : 15) : (height - indicatorHeight), lineRight + sideBound, ExteraConfig.tabStyle >= 3 ? height / 2 + AndroidUtilities.dp(ExteraConfig.tabStyle == 3 ? 14 : 15) : height);
+                        AndroidUtilities.rectTmp.set(lineLeft - sideBound, ExteraConfig.tabStyle >= 3 ? height / 2f - AndroidUtilities.dp(ExteraConfig.tabStyle == 3 ? 14 : 15) : (height - indicatorHeight), lineRight + sideBound, ExteraConfig.tabStyle >= 3 ? height / 2f + AndroidUtilities.dp(ExteraConfig.tabStyle == 3 ? 14 : 15) : height);
+                    } else {
+                        rectPaint.setAlpha(0xFF);
                     }
                     float r = ExteraConfig.tabStyle == 3 ? AndroidUtilities.dp(8) : ExteraConfig.tabStyle == 4 ? AndroidUtilities.dp(30) : indicatorHeight / 2f;
                     canvas.drawRoundRect(AndroidUtilities.rectTmp, r, r, rectPaint);
@@ -464,7 +464,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         public void setSelected(boolean selected) {
             super.setSelected(selected);
             Drawable background = getBackground();
-            if (Build.VERSION.SDK_INT >= 21 && background != null) {
+            if (background != null) {
                 int color = getThemedColor(selected ? Theme.key_chat_emojiPanelIconSelected : Theme.key_chat_emojiBottomPanelIcon);
                 Theme.setSelectorDrawableColor(background, Color.argb(30, Color.red(color), Color.green(color), Color.blue(color)), true);
             }

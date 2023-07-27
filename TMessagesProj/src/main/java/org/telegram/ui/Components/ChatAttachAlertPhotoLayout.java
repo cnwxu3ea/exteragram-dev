@@ -1269,7 +1269,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     ((CameraView) cameraView).startTakePictureAnimation();
                 } else {
                     final boolean sameTakePictureOrientation = ((CameraXView) cameraView).isSameTakePictureOrientation();
-                    takingPhoto = CameraController.getInstance().takePicture(cameraFile, false, ((CameraView) cameraView).getCameraSession(), (orientation) -> {
+                    takingPhoto = CameraController.getInstance().takePicture(cameraFile, false, null, (orientation) -> {
                         takingPhoto = false;
                         if (cameraFile == null || parentAlert.destroyed) {
                             return;
@@ -2286,6 +2286,13 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (!cameraView.isInited() && LiteMode.isEnabled(LiteMode.FLAGS_CHAT) && !ExteraConfig.hideCameraTile) {
             return;
         }
+        BaseFragment fragment = parentAlert.baseFragment;
+        if (fragment == null) {
+            fragment = LaunchActivity.getLastFragment();
+        }
+        if (fragment == null || fragment.getParentActivity() == null) {
+            return;
+        }
         if (Build.VERSION.SDK_INT >= 23) {
             if (adapter.needCamera && selectedAlbumEntry == galleryAlbumEntry && noCameraPermissions) {
                 try {
@@ -2427,7 +2434,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     public void showCamera() {
-        if (parentAlert.paused || !mediaEnabled) {
+        if (parentAlert.paused || !mediaEnabled || parentAlert.baseFragment == null) {
             return;
         }
         if (cameraView == null) {
@@ -2698,7 +2705,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     public void onActivityResultFragment(int requestCode, Intent data, String currentPicturePath) {
-        if (parentAlert.destroyed) {
+        if (parentAlert.destroyed || parentAlert.baseFragment == null) {
             return;
         }
         mediaFromExternalCamera = true;

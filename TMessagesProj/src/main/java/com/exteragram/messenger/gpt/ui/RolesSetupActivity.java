@@ -329,8 +329,8 @@ public class RolesSetupActivity extends BasePreferencesActivity implements Notif
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                 }
                 case VIEW_TYPE_HINT -> {
-                    view = new HintInnerCell(mContext, AndroidUtilities.replaceTags("Create roles for your needs!"));
-                    view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundGrayShadow));
+                    view = new HintInnerCell(mContext, LocaleController.getString(R.string.RolesInfo));
+                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 }
                 case VIEW_TYPE_BUTTON -> {
                     view = new TextCell(mContext);
@@ -360,9 +360,7 @@ public class RolesSetupActivity extends BasePreferencesActivity implements Notif
                 }
                 case VIEW_TYPE_BUTTON -> {
                     TextCell textCell = (TextCell) holder.itemView;
-
                     textCell.getTextView().setTextColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueText2));
-
                     Drawable drawable1 = mContext.getResources().getDrawable(R.drawable.poll_add_circle);
                     Drawable drawable2 = mContext.getResources().getDrawable(R.drawable.poll_add_plus);
                     drawable1.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_switchTrackChecked), PorterDuff.Mode.MULTIPLY));
@@ -372,7 +370,7 @@ public class RolesSetupActivity extends BasePreferencesActivity implements Notif
                     textCell.setTextAndIcon(String.valueOf(item.text), combinedDrawable, true);
                 }
                 case VIEW_TYPE_SHADOW ->
-                        holder.itemView.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
             }
         }
 

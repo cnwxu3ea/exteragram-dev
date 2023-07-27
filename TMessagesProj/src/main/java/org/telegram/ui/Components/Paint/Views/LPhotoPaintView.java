@@ -2142,7 +2142,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
 
     @Override
     public void onTextOutlineSelected(View v) {
-        setTextType((selectedTextType + 1) % 4);
+        setTextType((selectedTextType + 1) % 5);
     }
 
     private PopupButton buttonForPopup(String text, int icon, boolean selected, Runnable onClick) {
@@ -2327,37 +2327,20 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
     private void setTextAlignment(TextPaintView textPaintView, int align) {
         textPaintView.setAlign(align);
 
-        int gravity;
-        switch (align) {
-            default:
-            case PaintTextOptionsView.ALIGN_LEFT:
-                gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-                break;
-            case PaintTextOptionsView.ALIGN_CENTER:
-                gravity = Gravity.CENTER;
-                break;
-            case PaintTextOptionsView.ALIGN_RIGHT:
-                gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-                break;
-        }
+        int gravity = switch (align) {
+            default -> Gravity.LEFT | Gravity.CENTER_VERTICAL;
+            case PaintTextOptionsView.ALIGN_CENTER -> Gravity.CENTER;
+            case PaintTextOptionsView.ALIGN_RIGHT -> Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+        };
 
         textPaintView.getEditText().setGravity(gravity);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            int textAlign;
-            switch (align) {
-                default:
-                case PaintTextOptionsView.ALIGN_LEFT:
-                    textAlign = LocaleController.isRTL ? TEXT_ALIGNMENT_TEXT_END : TEXT_ALIGNMENT_TEXT_START;
-                    break;
-                case PaintTextOptionsView.ALIGN_CENTER:
-                    textAlign = TEXT_ALIGNMENT_CENTER;
-                    break;
-                case PaintTextOptionsView.ALIGN_RIGHT:
-                    textAlign = LocaleController.isRTL ? TEXT_ALIGNMENT_TEXT_START : TEXT_ALIGNMENT_TEXT_END;
-                    break;
-            }
-            textPaintView.getEditText().setTextAlignment(textAlign);
-        }
+        int textAlign = switch (align) {
+            default -> LocaleController.isRTL ? TEXT_ALIGNMENT_TEXT_END : TEXT_ALIGNMENT_TEXT_START;
+            case PaintTextOptionsView.ALIGN_CENTER -> TEXT_ALIGNMENT_CENTER;
+            case PaintTextOptionsView.ALIGN_RIGHT ->
+                    LocaleController.isRTL ? TEXT_ALIGNMENT_TEXT_START : TEXT_ALIGNMENT_TEXT_END;
+        };
+        textPaintView.getEditText().setTextAlignment(textAlign);
     }
 
     @Override

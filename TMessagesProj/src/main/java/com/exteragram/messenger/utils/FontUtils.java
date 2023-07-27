@@ -6,8 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Build;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 
@@ -123,6 +125,23 @@ public class FontUtils {
             }
         }
         return systemEmojiTypeface;
+    }
+
+    public static Typeface getFontFromAssets(String assetPath) {
+        Typeface t;
+        if (Build.VERSION.SDK_INT >= 26) {
+            Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
+            if (assetPath.contains("medium")) {
+                builder.setWeight(700);
+            }
+            if (assetPath.contains("italic")) {
+                builder.setItalic(true);
+            }
+            t = builder.build();
+        } else {
+            t = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath);
+        }
+        return t;
     }
 }
 

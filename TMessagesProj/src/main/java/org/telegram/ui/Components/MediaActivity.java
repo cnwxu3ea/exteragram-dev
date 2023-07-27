@@ -47,6 +47,7 @@ import androidx.core.graphics.ColorUtils;
 
 import org.checkerframework.checker.units.qual.Angle;
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.CanvasUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BotWebViewVibrationEffect;
@@ -521,23 +522,9 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
 //                });
 //            }
             Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
-            if (Build.VERSION.SDK_INT < 21) {
-                Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
-                shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
-                CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
-                combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
-                drawable = combinedDrawable;
-            }
             floatingButtonContainer.addView(floatingButton, LayoutHelper.createFrame(56, 56, Gravity.CENTER));
             if (floatingButtonContainer != null) {
-                drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
-                if (Build.VERSION.SDK_INT < 21) {
-                    Drawable shadowDrawable = ContextCompat.getDrawable(getParentActivity(), R.drawable.floating_shadow).mutate();
-                    shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
-                    CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
-                    combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
-                    drawable = combinedDrawable;
-                }
+                drawable = CanvasUtils.createFabBackground();
                 floatingButtonContainer.setBackground(drawable);
             }
 
@@ -1378,5 +1365,10 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
             }
             return super.verifyDrawable(who);
         }
+    }
+
+    @Override
+    public int getNavigationBarColor() {
+        return getThemedColor(Theme.key_windowBackgroundWhite);
     }
 }

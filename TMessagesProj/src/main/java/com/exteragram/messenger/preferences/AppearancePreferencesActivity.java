@@ -37,6 +37,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCell;
@@ -119,6 +120,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
     private int drawerHeaderRow;
     private int statusRow;
+    private int myStoriesRow;
     private int newGroupRow;
     private int newSecretChatRow;
     private int newChannelRow;
@@ -175,6 +177,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
         drawerHeaderRow = newRow();
         statusRow = getUserConfig().isPremium() ? newRow() : -1;
+        myStoriesRow = MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled() ? newRow() : -1;
         archivedChatsRow = ChatUtils.hasArchivedChats() ? newRow() : -1;
         newGroupRow = newRow();
         newSecretChatRow = newRow();
@@ -252,6 +255,9 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         } else if (position == statusRow) {
             ExteraConfig.toggleDrawerElements(10);
             ((TextCell) view).setChecked(ExteraConfig.changeStatus);
+        } else if (position == myStoriesRow) {
+            ExteraConfig.toggleDrawerElements(11);
+            ((TextCell) view).setChecked(ExteraConfig.myStories);
         } else if (position == newGroupRow) {
             ExteraConfig.toggleDrawerElements(1);
             ((TextCell) view).setChecked(ExteraConfig.newGroup);
@@ -293,7 +299,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             }, LocaleController.getString("DrawerIconSet", R.string.DrawerIconSet), ExteraConfig.eventType, getContext(), which -> {
                 ExteraConfig.editor.putInt("eventType", ExteraConfig.eventType = which).apply();
                 listAdapter.notifyItemChanged(eventChooserRow, payload);
-                listAdapter.notifyItemRangeChanged(statusRow, 10);
+                listAdapter.notifyItemRangeChanged(newGroupRow, 8);
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
             });
         } else if (position == hideActionBarStatusRow) {
@@ -459,6 +465,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     int[] icons = AppUtils.getDrawerIconPack();
                     if (position == statusRow) {
                         textCell.setTextAndCheckAndIcon(LocaleController.getString("ChangeEmojiStatus", R.string.ChangeEmojiStatus), ExteraConfig.changeStatus, R.drawable.msg_status_set, true);
+                    } else if (position == myStoriesRow) {
+                        textCell.setTextAndCheckAndIcon(LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), ExteraConfig.myStories, R.drawable.msg_menu_stories, true);
                     } else if (position == newGroupRow) {
                         textCell.setTextAndCheckAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), ExteraConfig.newGroup, icons[0], true);
                     } else if (position == newSecretChatRow) {
@@ -510,7 +518,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         public int getItemViewType(int position) {
             if (position == drawerDividerRow || position == drawerOptionsDividerRow || position == avatarCornersDividerRow) {
                 return 1;
-            } else if (position == statusRow || position == archivedChatsRow || position >= newGroupRow && position <= scanQrRow) {
+            } else if (position == statusRow || position == myStoriesRow || position == archivedChatsRow || position >= newGroupRow && position <= scanQrRow) {
                 return 2;
             } else if (position == appearanceHeaderRow || position == drawerHeaderRow || position == drawerOptionsHeaderRow || position == solarIconsHeaderRow || position == foldersHeaderRow || position == chatListHeaderRow) {
                 return 3;

@@ -56,7 +56,7 @@ public class AvatarCornersPreviewCell extends FrameLayout {
         setWillNotDraw(false);
         setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
 
-        int startCornersSize = 0, endCornersSize = 30;
+        int startCornersSize = 0, endCornersSize = 28;
         seekBar = new AltSeekbar(context, (float p) -> {
             ExteraConfig.editor.putFloat("avatarCorners", ExteraConfig.avatarCorners = p).apply();
             invalidate();

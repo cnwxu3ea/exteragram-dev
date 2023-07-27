@@ -1795,50 +1795,32 @@ public class AndroidUtilities {
     public static Typeface getTypeface(String assetPath) {
         synchronized (typefaceCache) {
             if (!typefaceCache.containsKey(assetPath)) {
-                Typeface t = null;
+                Typeface t;
                 try {
                     if (ExteraConfig.useSystemFonts) {
-                        switch (assetPath) {
-                            case TYPEFACE_ROBOTO_MONO:
-                                t = Typeface.MONOSPACE;
-                                break;
-                            case TYPEFACE_ROBOTO_CONDENSED_BOLD:
-                                t = Typeface.create("sans-serif-condensed", Typeface.BOLD);
-                                break;
-                            case TYPEFACE_ROBOTO_MEDIUM_ITALIC:
+                        t = switch (assetPath) {
+                            case TYPEFACE_ROBOTO_MONO -> Typeface.MONOSPACE;
+                            case TYPEFACE_ROBOTO_CONDENSED_BOLD -> Typeface.create("sans-serif-condensed", Typeface.BOLD);
+                            case TYPEFACE_ROBOTO_MEDIUM_ITALIC -> {
                                 if (FontUtils.isMediumWeightSupported()) {
-                                    t = Typeface.create("sans-serif-medium", Typeface.ITALIC);
+                                    yield Typeface.create("sans-serif-medium", Typeface.ITALIC);
                                 } else {
-                                    t = Typeface.create("sans-serif", Typeface.BOLD_ITALIC);
+                                    yield Typeface.create("sans-serif", Typeface.BOLD_ITALIC);
                                 }
-                                break;
-                            case TYPEFACE_ROBOTO_MEDIUM:
+                            }
+                            case TYPEFACE_ROBOTO_MEDIUM -> {
                                 if (FontUtils.isMediumWeightSupported()) {
-                                    t = Typeface.create("sans-serif-medium", Typeface.NORMAL);
+                                    yield Typeface.create("sans-serif-medium", Typeface.NORMAL);
                                 } else {
-                                    t = Typeface.create("sans-serif", Typeface.BOLD);
+                                    yield Typeface.create("sans-serif", Typeface.BOLD);
                                 }
-                                break;
-                            case TYPEFACE_ROBOTO_ITALIC:
-                                t = Build.VERSION.SDK_INT >= 28 ? Typeface.create(Typeface.SANS_SERIF, 400, true) : Typeface.create("sans-serif", Typeface.ITALIC);
-                                break;
-                            default:
-                                t = Build.VERSION.SDK_INT >= 28 ? Typeface.create(Typeface.SANS_SERIF, 400, false) : Typeface.create("sans-serif", Typeface.NORMAL);
-                                break;
-                        }
+                            }
+                            case TYPEFACE_ROBOTO_ITALIC -> Build.VERSION.SDK_INT >= 28 ? Typeface.create(Typeface.SANS_SERIF, 400, true) : Typeface.create("sans-serif", Typeface.ITALIC);
+                            case TYPEFACE_ROBOTO_REGULAR -> Build.VERSION.SDK_INT >= 28 ? Typeface.create(Typeface.SANS_SERIF, 400, false) : Typeface.create("sans-serif", Typeface.NORMAL);
+                            default -> FontUtils.getFontFromAssets(assetPath);
+                        };
                     } else {
-                        if (Build.VERSION.SDK_INT >= 26) {
-                            Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
-                            if (assetPath.contains("medium")) {
-                                builder.setWeight(700);
-                            }
-                            if (assetPath.contains("italic")) {
-                                builder.setItalic(true);
-                            }
-                            t = builder.build();
-                        } else {
-                            t = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath);
-                        }
+                        t = FontUtils.getFontFromAssets(assetPath);
                     }
                 } catch (Exception e) {
                     if (BuildVars.LOGS_ENABLED) {
@@ -1847,7 +1829,6 @@ public class AndroidUtilities {
                     return null;
                 }
                 typefaceCache.put(assetPath, t);
-                return t;
             }
             return typefaceCache.get(assetPath);
         }

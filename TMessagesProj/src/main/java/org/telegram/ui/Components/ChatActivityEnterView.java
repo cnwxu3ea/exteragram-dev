@@ -3584,16 +3584,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     private float composeShadowAlpha = 1f;
     @Override
     protected void onDraw(Canvas canvas) {
-        int top = animatedTop;
-        top += Theme.chat_composeShadowDrawable.getIntrinsicHeight() * (1f - composeShadowAlpha);
-        if (topView != null && topView.getVisibility() == View.VISIBLE) {
-            top += (1f - topViewEnterProgress) * topView.getLayoutParams().height;
-        }
-        int bottom = top + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
-
-        bottom += chatSearchExpandOffset;
-
         if (shouldDrawBackground) {
+            int top = animatedTop;
+            top += Theme.chat_composeShadowDrawable.getIntrinsicHeight() * (1f - composeShadowAlpha);
+            if (topView != null && topView.getVisibility() == View.VISIBLE) {
+                top += (1f - topViewEnterProgress) * topView.getLayoutParams().height;
+            }
+            int bottom = top + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
+
+            Theme.chat_composeShadowDrawable.setAlpha((int) (composeShadowAlpha * 0xFF));
+            Theme.chat_composeShadowDrawable.setBounds(0, top, getMeasuredWidth(), bottom);
+            //Theme.chat_composeShadowDrawable.draw(canvas);
+            bottom += chatSearchExpandOffset;
+
             if (allowBlur) {
                 backgroundPaint.setColor(getThemedColor(Theme.key_chat_messagePanelBackground));
                 if (SharedConfig.chatBlurEnabled() && sizeNotifierLayout != null) {
@@ -3605,9 +3608,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             } else {
                 canvas.drawRect(0, bottom, getWidth(), getHeight(), getThemedPaint(Theme.key_paint_chatComposeBackground));
             }
+            if (!ExteraConfig.disableDividers)
+                canvas.drawLine(0, bottom, getWidth(), bottom, Theme.dividerPaint);
         }
-        if (!ExteraConfig.disableDividers)
-            canvas.drawLine(0, bottom, getWidth(), bottom, Theme.dividerPaint);
     }
 
     @Override
@@ -3652,98 +3655,101 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             });
             sendPopupLayout.setShownFromBottom(false);
 
-            if (!Config.isApiKeySet()) {
-                TextView textView = new LinkSpanDrawable.LinksTextView(getContext());
-                textView.setTag(R.id.fit_width_tag, 1);
-                textView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_REGULAR));
-                textView.setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(10), AndroidUtilities.dp(16), AndroidUtilities.dp(10));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-                textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
-                textView.setMovementMethod(LinkMovementMethod.getInstance());
-                textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
-                textView.setOnClickListener(v -> {
-                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                        sendPopupWindow.dismiss();
-                        sendPopupLayout = null;
-                    }
-                    parentFragment.presentFragment(new EditKeyActivity());
-                });
-                textView.setMaxWidth(AndroidUtilities.dp(260));
-                textView.setText(LocaleController.getString(R.string.TapToAddApiKey));
-                sendPopupLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
-            } else {
-                final ImageView[] buttons = new ImageView[3];
-                FrameLayout buttonsView = new FrameLayout(getContext()) {
-                    @Override
-                    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                        int dist = ((right - left) - AndroidUtilities.dp(40 + 48 * 3)) / 2;
-                        for (int a = 0; a < 3; a++) {
-                            int l = AndroidUtilities.dp(20 + 48 * a) + dist * a;
-                            int t = AndroidUtilities.dp(8);
-                            buttons[a].layout(l, t, l + buttons[a].getMeasuredWidth(), t + buttons[a].getMeasuredHeight());
-                        }
-                    }
-                };
-                sendPopupLayout.addView(buttonsView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+            if (ExteraConfig.isExteraDev(UserConfig.getInstance(currentAccount).getCurrentUser())) {
 
-                for (int i = 0; i < 3; i++) {
-                    int icon = switch (i) {
-                        case 0 -> R.drawable.msg_bot;
-                        case 1 -> R.drawable.msg_settings;
-                        default -> R.drawable.msg_delete;
-                    };
-                    buttons[i] = new ImageView(getContext());
-                    buttons[i].setScaleType(ImageView.ScaleType.CENTER);
-                    buttons[i].setImageDrawable(getContext().getDrawable(icon));
-                    buttons[i].setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarDefaultSubmenuItemIcon), PorterDuff.Mode.MULTIPLY));
-                    buttons[i].setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_dialogButtonSelector), 1, AndroidUtilities.dp(24)));
-                    buttonsView.addView(buttons[i], LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
-                    int finalI = i;
-                    buttons[i].setOnClickListener(v -> {
+                if (!Config.isApiKeySet()) {
+                    TextView textView = new LinkSpanDrawable.LinksTextView(getContext());
+                    textView.setTag(R.id.fit_width_tag, 1);
+                    textView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_REGULAR));
+                    textView.setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(10), AndroidUtilities.dp(16), AndroidUtilities.dp(10));
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                    textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+                    textView.setMovementMethod(LinkMovementMethod.getInstance());
+                    textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+                    textView.setOnClickListener(v -> {
                         if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                             sendPopupWindow.dismiss();
+                            sendPopupLayout = null;
                         }
-                        client = new Client(parentFragment);
-                        if (finalI == 0) {
-                            final AlertDialog progressDialog = new AlertDialog(parentActivity, AlertDialog.ALERT_TYPE_SPINNER);
-                            prompt = String.valueOf(getEditField().getText());
-                            client.setOnStartFinishRunnable(() -> checkSendButton(true));
-                            client.getResponse(prompt, res -> {
-                                if (progressDialog.isShowing()) {
-                                    try {
-                                        progressDialog.dismiss();
-                                    } catch (Exception e) {
-                                        FileLog.e(e);
-                                    }
-                                }
-                                if (!TextUtils.isEmpty(res)) {
-                                    String finalResult = (Config.showResponseOnly ? "" : prompt + "\n\n————————\n\n") + res;
-                                    getEditField().setText(finalResult);
-                                    getEditField().setSelection(finalResult.length());
-                                }
-                            });
-                            progressDialog.setOnCancelListener(dialog -> client.stop());
-                            progressDialog.show();
-                            showContextProgress(true);
-                        } else if (finalI == 1) {
-                            if (keyboardVisible) {
-                                closeKeyboard();
-                            }
-                            AndroidUtilities.runOnUIThread(() -> {
-                                parentFragment.presentFragment(new SetupActivity());
-                                sendPopupLayout = null;
-                            }, 50);
-                        } else {
-                            client.clearHistory();
-                        }
+                        parentFragment.presentFragment(new EditKeyActivity());
                     });
+                    textView.setMaxWidth(AndroidUtilities.dp(260));
+                    textView.setText(LocaleController.getString(R.string.TapToAddApiKey));
+                    sendPopupLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+                } else {
+                    final ImageView[] buttons = new ImageView[3];
+                    FrameLayout buttonsView = new FrameLayout(getContext()) {
+                        @Override
+                        protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+                            int dist = ((right - left) - AndroidUtilities.dp(40 + 48 * 3)) / 2;
+                            for (int a = 0; a < 3; a++) {
+                                int l = AndroidUtilities.dp(20 + 48 * a) + dist * a;
+                                int t = AndroidUtilities.dp(8);
+                                buttons[a].layout(l, t, l + buttons[a].getMeasuredWidth(), t + buttons[a].getMeasuredHeight());
+                            }
+                        }
+                    };
+                    sendPopupLayout.addView(buttonsView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
+
+                    for (int i = 0; i < 3; i++) {
+                        int icon = switch (i) {
+                            case 0 -> R.drawable.msg_bot;
+                            case 1 -> R.drawable.msg_settings;
+                            default -> R.drawable.msg_delete;
+                        };
+                        buttons[i] = new ImageView(getContext());
+                        buttons[i].setScaleType(ImageView.ScaleType.CENTER);
+                        buttons[i].setImageDrawable(getContext().getDrawable(icon));
+                        buttons[i].setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarDefaultSubmenuItemIcon), PorterDuff.Mode.MULTIPLY));
+                        buttons[i].setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_dialogButtonSelector), 1, AndroidUtilities.dp(24)));
+                        buttonsView.addView(buttons[i], LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
+                        int finalI = i;
+                        buttons[i].setOnClickListener(v -> {
+                            if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                                sendPopupWindow.dismiss();
+                            }
+                            client = new Client(parentFragment);
+                            if (finalI == 0) {
+                                final AlertDialog progressDialog = new AlertDialog(parentActivity, AlertDialog.ALERT_TYPE_SPINNER);
+                                prompt = String.valueOf(getEditField().getText());
+                                client.setOnStartFinishRunnable(() -> checkSendButton(true));
+                                client.getResponse(prompt, res -> {
+                                    if (progressDialog.isShowing()) {
+                                        try {
+                                            progressDialog.dismiss();
+                                        } catch (Exception e) {
+                                            FileLog.e(e);
+                                        }
+                                    }
+                                    if (!TextUtils.isEmpty(res)) {
+                                        String finalResult = (Config.showResponseOnly ? "" : prompt + "\n\n————————\n\n") + res;
+                                        getEditField().setText(finalResult);
+                                        getEditField().setSelection(finalResult.length());
+                                    }
+                                });
+                                progressDialog.setOnCancelListener(dialog -> client.stop());
+                                progressDialog.show();
+                                showContextProgress(true);
+                            } else if (finalI == 1) {
+                                if (keyboardVisible) {
+                                    closeKeyboard();
+                                }
+                                AndroidUtilities.runOnUIThread(() -> {
+                                    parentFragment.presentFragment(new SetupActivity());
+                                    sendPopupLayout = null;
+                                }, 50);
+                            } else {
+                                client.clearHistory();
+                            }
+                        });
+                    }
                 }
+                FrameLayout gapView = new FrameLayout(getContext());
+                ImageView frame = new ImageView(getContext());
+                frame.setBackgroundColor(getThemedColor(Theme.key_actionBarDefaultSubmenuSeparator));
+                gapView.addView(frame, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+                sendPopupLayout.addView(gapView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
             }
-            FrameLayout gapView = new FrameLayout(getContext());
-            ImageView frame = new ImageView(getContext());
-            frame.setBackgroundColor(getThemedColor(Theme.key_actionBarDefaultSubmenuSeparator));
-            gapView.addView(frame, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-            sendPopupLayout.addView(gapView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
 
             boolean scheduleButtonValue = parentFragment != null && parentFragment.canScheduleMessage();
             boolean sendWithoutSoundButtonValue = !(self || slowModeTimer > 0 && !isInScheduleMode());

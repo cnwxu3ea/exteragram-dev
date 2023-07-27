@@ -2835,7 +2835,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             calcMandatoryInsets = chatActivity.isKeyboardVisible();
         }
         openTransitionFinished = false;
-        if (Build.VERSION.SDK_INT >= 30) {
+        if (Build.VERSION.SDK_INT >= 30 && baseFragment != null) {
             navBarColor = baseFragment.getNavigationBarColor();
             navBarColorKey = -1;
             //navBarColorKey = -1;
@@ -3531,7 +3531,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 //                ChatAttachAlert.this.delegate.needEnterComment();
 //            }
 //        }, 75);
-        AndroidUtilities.setNavigationBarColor(getWindow(), baseFragment.getNavigationBarColor(), false);
+        if (baseFragment != null) {
+            AndroidUtilities.setNavigationBarColor(getWindow(), baseFragment.getNavigationBarColor(), false);
+        }
 
         ValueAnimator navigationBarAnimator = ValueAnimator.ofFloat(0, 1);
         navigationBarAnimator.addUpdateListener(a -> setNavBarAlpha((float) a.getAnimatedValue()));
@@ -4545,12 +4547,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         }
         //AndroidUtilities.setNavigationBarColor(getWindow(), ColorUtils.setAlphaComponent(getThemedColor(Theme.key_windowBackgroundGray), 0), true, tcolor -> {
         //    navBarColorKey = -1;
-        AndroidUtilities.setNavigationBarColor(getWindow(), ColorUtils.setAlphaComponent(baseFragment.getNavigationBarColor(), 0), true, tcolor -> {
-            navBarColorKey = -1;
-            navBarColor = tcolor;
-            containerView.invalidate();
-        });
         if (baseFragment != null) {
+            AndroidUtilities.setNavigationBarColor(getWindow(), ColorUtils.setAlphaComponent(baseFragment.getNavigationBarColor(), 0), true, tcolor -> {
+                navBarColorKey = -1;
+                navBarColor = tcolor;
+                containerView.invalidate();
+            });
             AndroidUtilities.setLightStatusBar(getWindow(), baseFragment.isLightStatusBar());
         }
         captionLimitBulletinShown = false;

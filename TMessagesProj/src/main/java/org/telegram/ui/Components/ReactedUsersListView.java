@@ -380,7 +380,6 @@ public class ReactedUsersListView extends FrameLayout {
         return filter == null ? 100 : 50;
     }
 
-// need to check avatarView.setRoundRadius(ExteraConfig.getAvatarCorners(34));
     public ReactedUsersListView setOnProfileSelectedListener(OnProfileSelectedListener onProfileSelectedListener) {
         this.onProfileSelectedListener = onProfileSelectedListener;
         return this;

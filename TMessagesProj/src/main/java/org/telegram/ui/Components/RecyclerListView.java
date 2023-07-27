@@ -23,7 +23,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
 import android.os.SystemClock;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
@@ -69,6 +68,7 @@ import java.util.HashSet;
 import java.util.Objects;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.VibratorUtils;
 
 @SuppressWarnings("JavaReflectionMemberAccess")
 public class RecyclerListView extends RecyclerView {
@@ -487,6 +487,9 @@ public class RecyclerListView extends RecyclerView {
 
         public Holder(View itemView) {
             super(itemView);
+            if (!ExteraConfig.inAppVibration) {
+                VibratorUtils.disableHapticFeedback(itemView);
+            }
         }
     }
 
