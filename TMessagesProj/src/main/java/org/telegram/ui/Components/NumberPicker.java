@@ -40,6 +40,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -879,7 +880,7 @@ public class NumberPicker extends LinearLayout {
         updateInputTextView();
         if (Math.abs(previous - current) > 0.9f && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             try {
-                performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
             } catch (Exception ignore) {}
         }
         if (notifyChange) {

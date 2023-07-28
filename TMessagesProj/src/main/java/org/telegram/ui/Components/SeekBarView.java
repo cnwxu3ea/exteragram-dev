@@ -33,6 +33,7 @@ import android.widget.FrameLayout;
 
 import androidx.core.graphics.ColorUtils;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -309,7 +310,7 @@ public class SeekBarView extends FrameLayout {
             int value = Math.round((separatorsCount - 1) * progress);
             if (!stop && value != lastValue) {
                 try {
-                    performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                    performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
             }
             lastValue = value;
@@ -698,7 +699,7 @@ public class SeekBarView extends FrameLayout {
             timestampLabel[1] = timestampLabel[0];
             if (pressed) {
                 try {
-                    performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                    performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
             }
             if (timestampIndex >= 0 && timestampIndex < timestamps.size()) {

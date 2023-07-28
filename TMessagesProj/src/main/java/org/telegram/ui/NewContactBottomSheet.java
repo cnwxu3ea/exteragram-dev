@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -638,26 +639,17 @@ public class NewContactBottomSheet extends BottomSheet implements AdapterView.On
             return;
         }
         if (firstNameField.getEditText().length() == 0) {
-            Vibrator v = (Vibrator) parentFragment.getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-            if (v != null) {
-                v.vibrate(200);
-            }
+            VibratorUtils.vibrate();
             AndroidUtilities.shakeView(firstNameField);
             return;
         }
         if (codeField.length() == 0) {
-            Vibrator v = (Vibrator) parentFragment.getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-            if (v != null) {
-                v.vibrate(200);
-            }
+            VibratorUtils.vibrate();
             AndroidUtilities.shakeView(codeField);
             return;
         }
         if (phoneField.length() == 0) {
-            Vibrator v = (Vibrator) parentFragment.getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-            if (v != null) {
-                v.vibrate(200);
-            }
+            VibratorUtils.vibrate();
             AndroidUtilities.shakeView(phoneField);
             return;
         }

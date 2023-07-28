@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
@@ -517,10 +518,7 @@ public class LinkEditActivity extends BaseFragment {
         int timeIndex = timeChooseView.getSelectedIndex();
         if (timeIndex < dispalyedDates.size() && dispalyedDates.get(timeIndex) < 0) {
             AndroidUtilities.shakeView(timeEditText);
-            Vibrator vibrator = (Vibrator) timeEditText.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-            if (vibrator != null) {
-                vibrator.vibrate(200);
-            }
+            VibratorUtils.vibrate();
             return;
         }
 

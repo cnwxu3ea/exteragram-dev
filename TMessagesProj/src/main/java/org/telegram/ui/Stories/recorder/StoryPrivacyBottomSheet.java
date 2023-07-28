@@ -64,6 +64,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.zxing.common.detector.MathUtils;
 
 import org.checkerframework.checker.units.qual.A;
@@ -371,7 +372,7 @@ public class StoryPrivacyBottomSheet extends BottomSheet implements Notification
 //                            AndroidUtilities.shakeViewSpring(view, shiftDp = -shiftDp);
 //                            BotWebViewVibrationEffect.APP_ERROR.vibrate();
                             try {
-                                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.KEYBOARD_TAP), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                             } catch (Throwable ignore) {}
                             new AlertDialog.Builder(getContext(), resourcesProvider)
                                 .setTitle(LocaleController.getString("GroupTooLarge", R.string.GroupTooLarge))

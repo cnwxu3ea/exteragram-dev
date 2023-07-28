@@ -17,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.zxing.common.detector.MathUtils;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -98,7 +99,7 @@ public class EmojiColorPickerWindow extends PopupWindow {
         int newSelection = Math.max(0, Math.min(5, x / (emojiSize + dp(4))));
         if (getSelection() != newSelection) {
             try {
-                pickerView.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                pickerView.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
             } catch (Exception ignore) {}
             setSelection(newSelection);
         }
@@ -288,7 +289,7 @@ public class EmojiColorPickerWindow extends PopupWindow {
                 if (lastSelection[0] != selection[0] || lastSelection[1] != selection[1]) {
                     try {
                         try {
-                            performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                            performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                         } catch (Exception ignore) {}
                     } catch (Exception ignore) {}
                     if (onSelectionUpdate != null) {

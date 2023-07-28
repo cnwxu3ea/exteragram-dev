@@ -41,6 +41,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
@@ -1395,12 +1396,12 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
                         int newValueInt = Math.round(newValue * 100), lastValueInt = Math.round(value * 100), lastVibrateValueInt = Math.round(lastVibrateValue * 100);
                         if (newValueInt != lastValueInt && (newValueInt == 100 || newValueInt == 0)) {
                             try {
-                                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.KEYBOARD_PRESS), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                             } catch (Exception ignore) {}
                             lastVibrateValue = newValue;
                         } else if (Math.abs(newValueInt - lastVibrateValueInt) > (SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_HIGH ? 5 : 10)) {
                             try {
-                                performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                             } catch (Exception ignore) {}
                             lastVibrateValue = newValue;
                         }

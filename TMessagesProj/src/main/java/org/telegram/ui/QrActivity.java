@@ -56,6 +56,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.components.VerticalImageSpan;
+import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -1045,16 +1046,7 @@ public class QrActivity extends BaseFragment {
                             return;
                         }
                         if (linkExpires != 0 && linkExpires < token.expires) {
-                            try {
-                                Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-                                if (vibrator != null) {
-                                    vibrator.vibrate(100);
-                                }
-                            } catch (Exception ignore) {
-                                try {
-                                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                } catch (Exception ignore2) {}
-                            }
+                            VibratorUtils.vibrate(100);
                         }
                         linkExpires = token.expires;
                         setData(token.url, null, false, true);

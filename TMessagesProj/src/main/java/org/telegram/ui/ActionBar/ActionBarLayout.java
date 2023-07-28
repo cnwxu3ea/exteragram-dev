@@ -45,6 +45,7 @@ import androidx.core.math.MathUtils;
 
 import com.exteragram.messenger.ExteraConfig;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
 import org.telegram.messenger.BuildVars;
@@ -101,6 +102,12 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
 
         @Override
         protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+            if (!ExteraConfig.inAppVibration) {
+                VibratorUtils.disableHapticFeedback(child);
+                VibratorUtils.disableHapticFeedback(this);
+                VibratorUtils.disableHapticFeedback(ActionBarLayout.this);
+            }
+
             BaseFragment lastFragment = null;
             if (!fragmentsStack.isEmpty()) {
                 lastFragment = fragmentsStack.get(fragmentsStack.size() - 1);
@@ -265,7 +272,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                                         ripple.setState(shouldBeEnabled ? new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled} : new int[]{});
                                         if (shouldBeEnabled) {
                                             try {
-                                                button.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                                button.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                                             } catch (Exception ignore) {}
                                         }
                                     }

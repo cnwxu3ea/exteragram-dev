@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.view.PreviewView;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.NotificationCenter;
@@ -555,10 +556,8 @@ public class CameraXView extends BaseCameraView {
     public void runHaptic() {
         long[] vibrationWaveFormDurationPattern = {0, 1};
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
             VibrationEffect vibrationEffect = VibrationEffect.createWaveform(vibrationWaveFormDurationPattern, -1);
-            vibrator.cancel();
-            vibrator.vibrate(vibrationEffect);
+            VibratorUtils.vibrateEffect(vibrationEffect);
         } else {
             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }

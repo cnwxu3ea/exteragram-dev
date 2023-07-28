@@ -487,6 +487,7 @@ public class RecyclerListView extends RecyclerView {
 
         public Holder(View itemView) {
             super(itemView);
+
             if (!ExteraConfig.inAppVibration) {
                 VibratorUtils.disableHapticFeedback(itemView);
             }
@@ -1466,6 +1467,11 @@ public class RecyclerListView extends RecyclerView {
             }
         });
         addOnItemTouchListener(new RecyclerListViewItemClickListener(context));
+
+        if (!ExteraConfig.inAppVibration) {
+            // disable for nested, e.g. premium emojis preview
+            VibratorUtils.disableHapticFeedback(this);
+        }
     }
 
     private Paint backgroundPaint;
@@ -2399,6 +2405,11 @@ public class RecyclerListView extends RecyclerView {
             }
             parent = (ViewGroup) getParent();
             parent.addView(fastScroll);
+        }
+
+        if (!ExteraConfig.inAppVibration) {
+            // disable for Instant View
+            VibratorUtils.disableHapticFeedback(getRootView());
         }
     }
 

@@ -23,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
 import org.telegram.messenger.LocaleController;
@@ -124,10 +125,7 @@ public class TopicCreateFragment extends BaseFragment {
                 if (id == CREATE_ID) {
                     String topicName = editTextBoldCursor.getText() == null ? null : editTextBoldCursor.getText().toString();
                     if (TextUtils.isEmpty(topicName)) {
-                        Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                        if (v != null) {
-                            v.vibrate(200);
-                        }
+                        VibratorUtils.vibrate();
                         AndroidUtilities.shakeView(editTextBoldCursor);
                         return;
                     }
@@ -206,10 +204,7 @@ public class TopicCreateFragment extends BaseFragment {
 
                     String topicName = editTextBoldCursor.getText() == null ? null : editTextBoldCursor.getText().toString();
                     if (TextUtils.isEmpty(topicName)) {
-                        Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                        if (v != null) {
-                            v.vibrate(200);
-                        }
+                        VibratorUtils.vibrate();
                         AndroidUtilities.shakeView(editTextBoldCursor);
                         return;
                     }

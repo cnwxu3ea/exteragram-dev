@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.android.exoplayer2.C;
 import com.google.zxing.common.detector.MathUtils;
 
@@ -886,7 +887,7 @@ public class PreviewView extends FrameLayout {
                     }
                     if (!snappedRotation) {
                         try {
-                            performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                            performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                         } catch (Exception ignore) {}
                         snappedRotation = true;
                     }
@@ -917,7 +918,7 @@ public class PreviewView extends FrameLayout {
                     finalMatrix.postRotate(rotDiff, cx, cy);
                     if (!snappedRotation) {
                         try {
-                            performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                            performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                         } catch (Exception ignore) {}
                         snappedRotation = true;
                     }

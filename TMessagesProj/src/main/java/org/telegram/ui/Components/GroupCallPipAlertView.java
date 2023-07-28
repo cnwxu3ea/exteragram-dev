@@ -23,6 +23,7 @@ import androidx.core.graphics.ColorUtils;
 
 import com.exteragram.messenger.ExteraConfig;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
@@ -137,14 +138,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPService.S
             if (VoIPService.getSharedInstance() != null) {
                 if (VoIPService.getSharedInstance().mutedByAdmin()) {
                     muteButton.shakeView();
-                    try {
-                        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-                        if (vibrator != null) {
-                            vibrator.vibrate(200);
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
+                    VibratorUtils.vibrate();
                 } else {
                     VoIPService.getSharedInstance().setMicMute(!VoIPService.getSharedInstance().isMicMute(), false, true);
                 }

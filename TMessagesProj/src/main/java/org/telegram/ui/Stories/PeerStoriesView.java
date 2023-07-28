@@ -53,6 +53,7 @@ import androidx.recyclerview.widget.ChatListItemAnimator;
 
 import com.exteragram.messenger.ExteraConfig;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
@@ -733,7 +734,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                     FileLog.e(e);
                 }
                 try {
-                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                    performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.LONG_PRESS), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
                 BottomSheet.Builder builder = new BottomSheet.Builder(getContext(), false, resourcesProvider);
                 builder.setTitle(formattedUrl);

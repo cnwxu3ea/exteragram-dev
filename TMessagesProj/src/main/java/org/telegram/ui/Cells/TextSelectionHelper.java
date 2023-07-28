@@ -40,6 +40,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
@@ -260,7 +261,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 textY = maybeTextY;
 
                 selectedView = newView;
-                textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                textSelectionOverlay.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.LONG_PRESS), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 showActions();
                 invalidate();
 
@@ -875,7 +876,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                     if (viewChanged || layoutOld != layoutNew || newSelectionLine != layoutNew.getLineForOffset(selectionStart) && newSelectionLine == nextWhitespaceLine) {
                                         jumpToLine(newSelection, nextWhitespace, viewChanged, layoutBlock.yOffset, oldYoffset, oldSelectedView);
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                                            textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                            textSelectionOverlay.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                                         }
                                         TextSelectionHelper.this.invalidate();
                                     } else if (Layout.DIR_RIGHT_TO_LEFT == layoutNew.getParagraphDirection(layoutNew.getLineForOffset(newSelection)) || layoutNew.isRtlCharAt(newSelection) || nextWhitespaceLine != currentLine || newSelectionLine != nextWhitespaceLine) {
@@ -887,7 +888,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                             movingHandleStart = false;
                                         }
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                                            textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                            textSelectionOverlay.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                                         }
                                         TextSelectionHelper.this.invalidate();
                                     } else {
@@ -938,7 +939,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                                 movingHandleStart = false;
                                             }
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                                                textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                                textSelectionOverlay.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                                             }
                                             TextSelectionHelper.this.invalidate();
                                         }
@@ -976,7 +977,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                     if (viewChanged || layoutOld != layoutNew || newSelectionLine != layoutNew.getLineForOffset(selectionEnd) && newSelectionLine == nextWhitespaceLine) {
                                         jumpToLine(newSelection, nextWhitespace, viewChanged, layoutBlock.yOffset, oldYoffset, oldSelectedView);
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                                            textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                            textSelectionOverlay.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                                         }
                                         TextSelectionHelper.this.invalidate();
                                     } else if (Layout.DIR_RIGHT_TO_LEFT == layoutNew.getParagraphDirection(layoutNew.getLineForOffset(newSelection)) || layoutNew.isRtlCharAt(newSelection) || currentLine != nextWhitespaceLine || newSelectionLine != nextWhitespaceLine) {
@@ -988,7 +989,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                             movingHandleStart = true;
                                         }
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                                            textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                            textSelectionOverlay.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                                         }
                                         TextSelectionHelper.this.invalidate();
                                     } else {
@@ -1020,7 +1021,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                                 movingHandleStart = true;
                                             }
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                                                textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                                textSelectionOverlay.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                                             }
                                             TextSelectionHelper.this.invalidate();
                                         }

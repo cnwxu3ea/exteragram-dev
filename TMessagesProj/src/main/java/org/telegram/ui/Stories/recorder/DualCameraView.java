@@ -15,6 +15,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.common.primitives.Floats;
 import com.google.zxing.common.detector.MathUtils;
 
@@ -215,7 +216,7 @@ public class DualCameraView extends CameraView implements CameraController.Error
                 AndroidUtilities.runOnUIThread(longpressRunnable = () -> {
                     if (tapTime > 0) {
                         this.dualToggleShape();
-                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                        performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.LONG_PRESS), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     }
                 }, ViewConfiguration.getLongPressTimeout());
             }
@@ -322,7 +323,7 @@ public class DualCameraView extends CameraView implements CameraController.Error
                         }
                         if (!snappedRotation) {
                             try {
-                                performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                             } catch (Exception ignore) {
                             }
                             snappedRotation = true;
@@ -341,7 +342,7 @@ public class DualCameraView extends CameraView implements CameraController.Error
                         finalMatrix.postRotate(rotDiff, cx, cy);
                         if (!snappedRotation) {
                             try {
-                                performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                             } catch (Exception ignore) {
                             }
                             snappedRotation = true;

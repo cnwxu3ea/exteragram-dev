@@ -56,6 +56,7 @@ import androidx.dynamicanimation.animation.SpringForce;
 
 import com.exteragram.messenger.utils.SystemUtils;
 
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -1065,10 +1066,8 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
     }
 
     private void onPasscodeError() {
-        Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-        if (v != null) {
-            v.vibrate(200);
-        }        shakeTextView(2, 0);
+        VibratorUtils.vibrate();
+        shakeTextView(2, 0);
     }
 
     public void onResume() {

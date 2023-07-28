@@ -112,6 +112,7 @@ import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.components.MessageDetailsPopupWrapper;
 import com.exteragram.messenger.utils.ChatUtils;
 import com.exteragram.messenger.utils.SystemUtils;
+import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.zxing.common.detector.MathUtils;
 
@@ -29711,7 +29712,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (button instanceof TLRPC.TL_keyboardButtonUrl) {
                 openClickableLink(null, button.url, true, cell, cell.getMessageObject());
                 try {
-                    cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                    cell.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.LONG_PRESS), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
             }
         }

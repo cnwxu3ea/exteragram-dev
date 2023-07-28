@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.VibrationEffect;
 
 import androidx.annotation.RequiresApi;
+import com.exteragram.messenger.ExteraConfig;
 
 public enum BotWebViewVibrationEffect {
     IMPACT_LIGHT(new long[] {7}, new int[] {65}, new long[] {60}),
@@ -42,6 +43,10 @@ public enum BotWebViewVibrationEffect {
     }
 
     public void vibrate() {
+        if (!ExteraConfig.inAppVibration) {
+            return;
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             AndroidUtilities.getVibrator().vibrate(getVibrationEffectForOreo());
         } else {

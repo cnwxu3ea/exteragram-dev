@@ -17,7 +17,6 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.text.TextPaint;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -26,8 +25,7 @@ import android.view.ViewConfiguration;
 
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
-import com.exteragram.messenger.ExteraConfig;
-
+import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Charts.data.ChartData;
@@ -1078,13 +1076,11 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
 
     protected void runSmoothHaptic() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
             if (vibrationEffect == null) {
                 long[] vibrationWaveFormDurationPattern = {0, 2};
                 vibrationEffect = VibrationEffect.createWaveform(vibrationWaveFormDurationPattern, -1);
             }
-            vibrator.cancel();
-            vibrator.vibrate(vibrationEffect);
+            VibratorUtils.vibrateEffect(vibrationEffect);
         }
     }
 
