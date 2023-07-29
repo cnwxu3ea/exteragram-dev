@@ -11,6 +11,8 @@
 
 package com.exteragram.messenger;
 
+import static org.telegram.messenger.AndroidUtilities.dp;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 
@@ -167,7 +169,7 @@ public class ExteraConfig {
 
             disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
             formatTimeWithSeconds = preferences.getBoolean("formatTimeWithSeconds", false);
-            inAppVibration = preferences.getBoolean("inAppVibration", false);
+            inAppVibration = preferences.getBoolean("inAppVibration", true);
             tabletMode = preferences.getInt("tabletMode", 0);
 
             downloadSpeedBoost = preferences.getInt("downloadSpeedBoost", 0);
@@ -279,18 +281,33 @@ public class ExteraConfig {
     }
 
     public static int getAvatarCorners(float size) {
-        return getAvatarCorners(size, false, false);
+        return getAvatarCorners(size, 0, false, false);
     }
 
     public static int getAvatarCorners(float size, boolean px) {
-        return getAvatarCorners(size, px, false);
+        return getAvatarCorners(size, 0, px, false);
     }
 
     public static int getAvatarCorners(float size, boolean px, boolean forum) {
+        return getAvatarCorners(size, 0, px, forum);
+    }
+
+    public static int getAvatarCorners(float size, float fix, boolean px, boolean forum) {
         if (avatarCorners == 0) {
             return 0;
         }
-        return (int) (avatarCorners * (size * (forum ? 0.65f : 1) / 56.0f) * (px ? 1 : AndroidUtilities.density));
+
+        float radius = avatarCorners * (size + size / 56 * dp(fix)) / 56;
+
+        if (!px) {
+            radius = dp(radius);
+        }
+
+        if (forum) {
+            radius *= 0.65f;
+        }
+
+        return (int) Math.ceil(radius);
     }
 
     public static void toggleDrawerElements(int id) {

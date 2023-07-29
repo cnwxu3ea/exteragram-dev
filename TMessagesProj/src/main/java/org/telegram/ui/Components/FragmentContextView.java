@@ -357,7 +357,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         divider.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(6), ColorUtils.setAlphaComponent(divColor, (int) ((Color.alpha(divColor) / 255f) * 76))));
         addView(divider, LayoutHelper.createFrame(2, 32, Gravity.TOP | Gravity.LEFT, 8, 8, 0, 8));
         
-        coverContainer = new CoverContainer(context) {};
+        coverContainer = new CoverContainer(context);
         addView(coverContainer, LayoutHelper.createFrame(36, 36, Gravity.TOP | Gravity.LEFT, 6, 6, 0, 6));
 
         playButton = new ImageView(context);
@@ -742,11 +742,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         setOnTouchListener((v, event) -> {
             if (currentStyle == STYLE_AUDIO_PLAYER) {
                 switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_DOWN -> {
                         firstX = event.getRawX();
                         firstY = event.getRawY();
-                        break;
-                    case MotionEvent.ACTION_UP:
+                    }
+                    case MotionEvent.ACTION_UP -> {
                         secondX = event.getRawX();
                         secondY = event.getRawY();
                         dx = Math.abs(firstX - secondX);
@@ -754,7 +754,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         if (firstY > secondY && dy > AndroidUtilities.dp(getStyleHeight()) && dx < dy) {
                             MediaController.getInstance().cleanupPlayer(true, true);
                         }
-                        break;
+                    }
                 }
             }
             return false;
@@ -1473,6 +1473,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 checkCall(false);
             } else if (currentStyle == STYLE_AUDIO_PLAYER && id != NotificationCenter.messagePlayingDidReset) {
                 updateButtonsVisibility(true);
+                if (lastMessageObject != null) {
+                    updateCover(lastMessageObject);
+                }
             }
             checkPlayer(false);
         } else if (id == NotificationCenter.fileLoaded) {
@@ -2565,11 +2568,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             } else {
                 imageView.setImageResource(R.drawable.nocover, Theme.getColor(Theme.key_player_button));
             }
-            imageView.invalidate();
         }
+        imageView.invalidate();
     }
 
-    private static abstract class CoverContainer extends FrameLayout {
+    private static class CoverContainer extends FrameLayout {
 
         private final BackupImageView imageView;
 
@@ -2646,6 +2649,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         if (prevButton != null && !isPlayingVoice() && !isPlayingRoundVideo()) {
             AndroidUtilities.updateViewVisibilityAnimated(prevButton, !paused, 0.5f, animated);
+        }
+        if (playbackSpeedButton != null && playbackSpeedButton.getVisibility() == VISIBLE && !isPlayingVoice() && !isPlayingRoundVideo()) {
+            playbackSpeedButton.animate().setDuration(250).translationX(AndroidUtilities.dp(paused ? 36 : 0)).setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT).start();
         }
     }
 }

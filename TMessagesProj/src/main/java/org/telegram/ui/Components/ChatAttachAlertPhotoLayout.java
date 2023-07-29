@@ -1269,12 +1269,13 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     ((CameraView) cameraView).startTakePictureAnimation();
                 } else {
                     final boolean sameTakePictureOrientation = ((CameraXView) cameraView).isSameTakePictureOrientation();
-                    takingPhoto = CameraController.getInstance().takePicture(cameraFile, false, null, (orientation) -> {
+                    takingPhoto = true;
+                    ((CameraXView) cameraView).takePicture(cameraFile, () -> {
                         takingPhoto = false;
-                        if (cameraFile == null || parentAlert.destroyed) {
+                        if (cameraFile == null || parentAlert.destroyed || parentAlert.baseFragment == null) {
                             return;
                         }
-//                    Pair<Integer, Integer> orientation = AndroidUtilities.getImageOrientation(cameraFile);
+                        Pair<Integer, Integer> orientation = AndroidUtilities.getImageOrientation(cameraFile);
                         mediaFromExternalCamera = false;
                         int width = 0, height = 0;
                         try {
@@ -1284,9 +1285,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                             width = options.outWidth;
                             height = options.outHeight;
                         } catch (Exception ignore) {}
-                            MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, lastImageId--, 0, cameraFile.getAbsolutePath(), orientation == -1 ? 0 : orientation, false, width, height, 0);
+                            MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, lastImageId--, 0, cameraFile.getAbsolutePath(), orientation.first, false, width, height, 0);
                         photoEntry.canDeleteAfter = true;
                         openPhotoViewer(photoEntry, sameTakePictureOrientation, false);
+                        effectSelector.setEnabledButtons(false);
                     });
                 }
                 initialEVState = 0.5f;

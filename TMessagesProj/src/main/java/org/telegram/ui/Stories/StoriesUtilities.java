@@ -388,18 +388,21 @@ public class StoriesUtilities {
         params.updateProgressParams();
         view.invalidate();
 
-        if (params.inc) {
-            canvas.drawArc(rectTmp, params.globalAngle, 360 * params.sweepAngle, false, paint);
-        } else {
-            canvas.drawArc(rectTmp, params.globalAngle + 360, -360 * (params.sweepAngle), false, paint);
+        if (ANIMATION_SEGMENT_COUNT != 1) {
+            if (params.inc) {
+                canvas.drawArc(rectTmp, params.globalAngle, 360 * params.sweepAngle, false, paint);
+            } else {
+                canvas.drawArc(rectTmp, params.globalAngle + 360, -360 * (params.sweepAngle), false, paint);
+            }
         }
-
         for (int i = 0; i < ANIMATION_SEGMENT_COUNT; i++) {
             float startAngle = i * len + 10;
             float endAngle = startAngle + len - 10;
             float segmentLen = endAngle - startAngle;
             if (ANIMATION_SEGMENT_COUNT == 1) {
-                canvas.drawRoundRect(rectTmp, ExteraConfig.getAvatarCorners(rectTmp.width() + AndroidUtilities.dp(12), true), ExteraConfig.getAvatarCorners(rectTmp.width() + AndroidUtilities.dp(12), true), paint);
+                Paint mPaint = new Paint(paint);
+                mPaint.setStrokeWidth(paint.getStrokeWidth() * params.sweepAngle);
+                canvas.drawRoundRect(rectTmp, ExteraConfig.getAvatarCorners(rectTmp.width() + AndroidUtilities.dp(12), true), ExteraConfig.getAvatarCorners(rectTmp.width() + AndroidUtilities.dp(12), true), mPaint);
             } else {
                 canvas.drawArc(rectTmp, params.globalAngle + startAngle, segmentLen, false, paint);
             }
