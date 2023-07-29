@@ -95,7 +95,7 @@
     <string name="Profile">Профиль</string>
     <string name="HidePhoneNumber">Скрыть номер телефона</string>
     <string name="ShowIdAndDc">Показывать ID и DC</string>
-    <string name="ShowIdAndDcInfo">APl Telegram показывает ID таким, какой он есть, а Bot API добавляет знак минус для групп и -100 для супергрупп, мегагрупп и каналов.</string>
+    <string name="ShowIdAndDcInfo">API Telegram показывает ID таким, какой он есть, а Bot API добавляет знак минус для групп и -100 для супергрупп, мегагрупп и каналов.</string>
 
     <string name="ArchiveOnPull">Открывать архив при вытягивании</string>
     <string name="DisableUnarchiveSwipe">Отключить жест \"Вернуть\"</string>

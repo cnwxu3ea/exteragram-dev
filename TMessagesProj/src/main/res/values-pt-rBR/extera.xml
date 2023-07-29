@@ -80,7 +80,7 @@
     <string name="Profile">Perfil</string>
     <string name="HidePhoneNumber">Ocultar número do telefone</string>
     <string name="ShowIdAndDc">Mostrar ID e DC</string>
-    <string name="ShowIdAndDcInfo">O Telegram APl mostra os IDs como eles são, enquanto o Bot API adiciona um sinal de menos para grupos e -100 para supergrupos, grupos de transmissão e canais.</string>
+    <string name="ShowIdAndDcInfo">O Telegram API mostra os IDs como eles são, enquanto o Bot API adiciona um sinal de menos para grupos e -100 para supergrupos, grupos de transmissão e canais.</string>
     <string name="ArchiveOnPull">Abrir Conversas Arquivadas ao deslizar pra cima</string>
     <string name="DisableUnarchiveSwipe">Desativar \"Desarquivar\" ao deslizar</string>
     <string name="DisableUnarchiveSwipeInfo">Deslizar para a esquerda não removerá as conversas arquivadas.</string>

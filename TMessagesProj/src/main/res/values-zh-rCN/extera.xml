@@ -80,7 +80,7 @@
     <string name="Profile">个人资料</string>
     <string name="HidePhoneNumber">隐藏手机号码</string>
     <string name="ShowIdAndDc">显示用户ID和DC(数据中心)</string>
-    <string name="ShowIdAndDcInfo">按照Telegram APl的返回表示ID，而Bot API为群组的ID之前添加负号，为超级群组、广播群组和频道的ID之前添加-100。</string>
+    <string name="ShowIdAndDcInfo">按照Telegram API的返回表示ID，而Bot API为群组的ID之前添加负号，为超级群组、广播群组和频道的ID之前添加-100。</string>
     <string name="ArchiveOnPull">下拉打开已归档对话</string>
     <string name="DisableUnarchiveSwipe">禁用\"取消存档\"滑动动作</string>
     <string name="DisableUnarchiveSwipeInfo">向左滑动不会删除归档中的聊天。</string>

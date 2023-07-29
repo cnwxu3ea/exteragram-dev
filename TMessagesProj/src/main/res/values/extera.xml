@@ -98,7 +98,7 @@
     <string name="Profile">Profile</string>
     <string name="HidePhoneNumber">Hide Phone Number</string>
     <string name="ShowIdAndDc">Show ID and DC</string>
-    <string name="ShowIdAndDcInfo">Telegram APl shows IDs as they are, while the Bot API adds a minus sign for groups and -100 for supergroups, broadcast groups and channels.</string>
+    <string name="ShowIdAndDcInfo">Telegram API shows IDs as they are, while the Bot API adds a minus sign for groups and -100 for supergroups, broadcast groups and channels.</string>
 
     <string name="ArchiveOnPull">Open Archive on Pull-down</string>
     <string name="DisableUnarchiveSwipe">Disable \"Unarchive\" swipe</string>

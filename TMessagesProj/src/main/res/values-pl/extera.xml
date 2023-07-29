@@ -75,7 +75,7 @@ CameraX wspierana jest tylko na
     <string name="Profile">Profil</string>
     <string name="HidePhoneNumber">Ukryj numer telefonu</string>
     <string name="ShowIdAndDc">Pokaż ID i DC</string>
-    <string name="ShowIdAndDcInfo">Telegram APl pokazuje ID w oryginalnej postaci, a Bot API dodaje znak minus dla grup i -100 dla supergrup, grup rozgłoszeniowychi kanałów.</string>
+    <string name="ShowIdAndDcInfo">Telegram API pokazuje ID w oryginalnej postaci, a Bot API dodaje znak minus dla grup i -100 dla supergrup, grup rozgłoszeniowychi kanałów.</string>
     <string name="ArchiveOnPull">Otwórz Archiwum przy pociągnięciu</string>
     <string name="DisableUnarchiveSwipe">Wyłącz przesunięcie „Przywróć”</string>
     <string name="DisableUnarchiveSwipeInfo">Przesunięcie w lewo nie usunie czatów z archiwum.</string>
