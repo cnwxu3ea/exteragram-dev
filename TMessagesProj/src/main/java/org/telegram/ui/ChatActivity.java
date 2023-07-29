@@ -3356,7 +3356,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         if (chatMode == 0 && (threadMessageId == 0 || isTopic) && !UserObject.isReplyUser(currentUser) && reportType < 0) {
             TLRPC.UserFull userFull = null;
-            if (currentUser != null) {
+            if (currentUser != null && false) { // exteraGram: hide call button
                 audioCallIconItem = menu.lazilyAddItem(call, R.drawable.ic_call, themeDelegate);
                 audioCallIconItem.setContentDescription(LocaleController.getString("Call", R.string.Call));
                 userFull = getMessagesController().getUserFull(currentUser.id);
@@ -18172,7 +18172,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     chatActivityEnterView.updateGiftButton(true);
                 }
                 if (headerItem != null) {
-                    showAudioCallAsIcon = userInfo.phone_calls_available && !inPreviewMode;
+                    showAudioCallAsIcon = false; // exteraGram: hide call button
                     if (avatarContainer != null) {
                         avatarContainer.setTitleExpand(showAudioCallAsIcon);
                     }
