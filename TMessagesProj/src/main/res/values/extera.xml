@@ -226,6 +226,12 @@
     <string name="GPTError">The server had an error while processing your request</string>
     <string name="GPTErrorInfo">Retry your request after a short wait and contact OpenAI support if the issue persists.</string>
 
+    <!-- Bot Button information -->
+    <string name="CopyTitle">Copy Title</string>
+    <string name="CopyCallback">Copy Callback Data</string>
+    <string name="CopyInlineQuery">Copy Inline Query</string>
+    <string name="CopyID">Copy user ID</string>
+
     <!-- Other -->
     <string name="RestartRequired">Restart the App to take effect.</string>
     <string name="ResetSettingsBulletin">**exteraGram** Preferences have been reset.</string>

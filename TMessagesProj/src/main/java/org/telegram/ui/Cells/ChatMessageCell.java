@@ -8173,6 +8173,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
         resetPressedLink(-1);
+
+        if (pressedBotButton != -1) {
+            var button = botButtons.get(pressedBotButton);
+            if (button != null && button.button != null) {
+                if (button.selectorDrawable != null) {
+                    button.selectorDrawable.setState(StateSet.NOTHING);
+                }
+                button.setPressed(false);
+                delegate.didLongPressBotButton(this, button.button);
+                return true;
+            }
+        }
+
         if (buttonPressed != 0 || miniButtonPressed != 0 || videoButtonPressed != 0 || pressedBotButton != -1) {
             buttonPressed = 0;
             miniButtonPressed = 0;

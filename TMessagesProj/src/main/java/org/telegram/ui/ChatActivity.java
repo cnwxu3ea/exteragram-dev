@@ -29709,8 +29709,37 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     !(button instanceof TLRPC.TL_keyboardButtonUserProfile)) {
                 return;
             }
-            if (button instanceof TLRPC.TL_keyboardButtonUrl) {
+
+            if (!TextUtils.isEmpty(button.url)) {
                 openClickableLink(null, button.url, true, cell, cell.getMessageObject());
+            } else {
+                BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity(), false, themeDelegate);
+                builder.setTitle(button.text);
+                builder.setItems(new CharSequence[]{
+                        LocaleController.getString("CopyTitle", R.string.CopyTitle),
+                        button.data != null ? LocaleController.getString("CopyCallback", R.string.CopyCallback) : null,
+                        button.query != null ? LocaleController.getString("CopyInlineQuery", R.string.CopyInlineQuery) : null,
+                        button.user_id != 0 ? LocaleController.getString("CopyID", R.string.CopyID) : null
+                }, (dialog, which) -> {
+                    if (which == 0) {
+                        AndroidUtilities.addToClipboard(button.text);
+                    } else if (which == 1) {
+                        AndroidUtilities.addToClipboard(ChatUtils.getTextFromCallback(button.data));
+                    } else if (which == 2) {
+                        AndroidUtilities.addToClipboard(button.query);
+                    } else if (which == 3) {
+                        AndroidUtilities.addToClipboard(String.valueOf(button.user_id));
+                    }
+
+                    createUndoView();
+                    if (undoView != null) {
+                        undoView.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null);
+                    }
+                });
+
+                showDialog(builder.create());
+
+                // todo: use here VibratorUtils.getType after merging
                 try {
                     cell.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.LONG_PRESS), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}

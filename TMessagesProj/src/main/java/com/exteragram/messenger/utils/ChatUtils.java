@@ -14,6 +14,7 @@ package com.exteragram.messenger.utils;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
+import android.util.Base64;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
@@ -33,10 +34,15 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.TranscribeButton;
 
 import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 public class ChatUtils {
     private static boolean useFallback;
+    private static final CharsetDecoder textDecoder = StandardCharsets.UTF_8.newDecoder();
 
     public static String getDC(TLRPC.User user) {
         return getDC(user, null);
@@ -341,5 +347,13 @@ public class ChatUtils {
             str.append(messageObject.messageText);
         }
         return str.toString();
+    }
+
+    public static String getTextFromCallback(byte[] data) {
+        try {
+            return textDecoder.decode(ByteBuffer.wrap(data)).toString();
+        } catch (CharacterCodingException e) {
+            return Base64.encodeToString(data, Base64.NO_PADDING | Base64.NO_WRAP);
+        }
     }
 }

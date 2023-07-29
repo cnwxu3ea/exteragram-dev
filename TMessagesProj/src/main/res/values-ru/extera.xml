@@ -225,6 +225,12 @@
     <string name="GPTError">При обработке вашего запроса на сервере возникла ошибка</string>
     <string name="GPTErrorInfo">Повторите запрос после короткого ожидания и обратитесь в службу поддержки OpenAI, если проблема сохраняется.</string>
 
+    <!-- Bot Button information -->
+    <string name="CopyTitle">Скопировать название</string>
+    <string name="CopyCallback">Скопировать callback</string>
+    <string name="CopyInlineQuery">Скопировать inline запрос</string>
+    <string name="CopyID">Скопировать ID пользователя</string>
+
     <!-- Other -->
     <string name="RestartRequired">Перезапустите приложение, чтобы изменения вступили в силу.</string>
     <string name="ResetSettingsBulletin">Настройки **exteraGram** сброшены.</string>
