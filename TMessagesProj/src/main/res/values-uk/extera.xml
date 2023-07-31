@@ -170,7 +170,6 @@ CameraX підтримується тільки на
     <string name="ResetSettingsBulletin">**exteraGram** Налаштування були скинуті.</string>
     <string name="UserNotFound">Користувача з таким **ID** не знайдено.</string>
     <string name="PhotoCopied">Фото скопійовано до буфера обміну.</string>
-    <string name="MutualContact">взаємний контакт</string>
     <string name="ToBeginning">На початок</string>
     <string name="MessageHistory">Історія повідомлень</string>
     <string name="BoldItalic">Жирний курсив</string>

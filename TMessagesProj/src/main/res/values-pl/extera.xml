@@ -131,7 +131,6 @@ CameraX wspierana jest tylko na
     <string name="Changelog">Lista zmian:</string>
     <!--  Other  -->
     <string name="RestartRequired">Zrestartuj aplikację, aby zastosować zmiany.</string>
-    <string name="MutualContact">wzajemny kontakt</string>
     <string name="ToBeginning">Do początku</string>
     <string name="MessageHistory">Historia wiadomości</string>
     <string name="BoldItalic">Pogrubiona kursywa</string>

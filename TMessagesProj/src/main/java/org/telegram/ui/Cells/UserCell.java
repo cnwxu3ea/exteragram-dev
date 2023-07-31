@@ -41,6 +41,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.CheckBox;
 import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
@@ -63,7 +64,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     private TextView adminTextView;
     private TextView addButton;
     private Drawable premiumDrawable;
-    private Drawable exteraArrow;
+    private final ImageView mutualContactView;
     private AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable emojiStatus;
     private Theme.ResourcesProvider resourcesProvider;
 
@@ -78,7 +79,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     private int currentDrawable;
 
     private boolean selfAsSavedMessages;
-    private boolean needMutualContact;
+    private boolean mutual;
 
     private String lastName;
     private int lastStatus;
@@ -204,6 +205,15 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             adminTextView.setTextColor(Theme.getColor(Theme.key_profile_creatorIcon, resourcesProvider));
             addView(adminTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, LocaleController.isRTL ? 23 : 0, 10, LocaleController.isRTL ? 0 : 23, 0));
         }
+
+        mutualContactView = new ImageView(context);
+        mutualContactView.setImageResource(R.drawable.msg_switch);
+        mutualContactView.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_player_actionBarSelector)));
+        mutualContactView.setScaleType(ImageView.ScaleType.CENTER);
+        mutualContactView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
+        mutualContactView.setVisibility(GONE);
+        mutualContactView.setOnClickListener(v -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString(R.string.MutualContactInfo)));
+        addView(mutualContactView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, LocaleController.isRTL ? 10 : 0, 0, LocaleController.isRTL ? 0 : 10, 0));
 
         setFocusable(true);
     }
@@ -629,16 +639,16 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             adminTextView.setTextColor(Theme.getColor(Theme.key_profile_creatorIcon, resourcesProvider));
         }
 
-        // TODO: rework
-        if (needMutualContact) statusTextView.setText(statusTextView.getText() + " (" + LocaleController.getString("MutualContact", R.string.MutualContact) + ")");
+        mutualContactView.setVisibility(mutual ? VISIBLE : GONE);
+        nameTextView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(mutual ? 33 : 6) : 0, 0, !LocaleController.isRTL ? AndroidUtilities.dp(mutual ? 33 : 6) : 0, 0);
     }
 
     public void setSelfAsSavedMessages(boolean value) {
         selfAsSavedMessages = value;
     }
 
-    public void setNeedMutualContact(boolean value) {
-        needMutualContact = value;
+    public void setMutual(boolean value) {
+        mutual = value;
     }
 
     @Override

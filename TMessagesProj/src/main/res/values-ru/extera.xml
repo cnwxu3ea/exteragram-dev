@@ -237,7 +237,7 @@
     <string name="UserNotFound">Пользователь с этим **ID** не найден.</string>
     <string name="PhotoCopied">Фото скопировано в буфер обмена.</string>
 
-    <string name="MutualContact">взаимный контакт</string>
+    <string name="MutualContactInfo">Этот контакт является взаимным.</string>
     <string name="ToBeginning">В начало</string>
     <string name="MessageHistory">История сообщений</string>
     <string name="BoldItalic">Жирный курсив</string>

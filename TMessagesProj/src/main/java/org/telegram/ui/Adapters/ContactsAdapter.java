@@ -11,7 +11,6 @@ package org.telegram.ui.Adapters;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -555,7 +554,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                     arr = usersSectionsDict.get(sortedUsersSectionsArray.get(section - (onlyUsers != 0 && !isAdmin ? 0 : 1)));
                 }
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(arr.get(position).user_id);
-                userCell.setNeedMutualContact(user.mutual_contact && user.id != UserConfig.getInstance(currentAccount).getClientUserId());
+                userCell.setMutual(user.mutual_contact);
                 userCell.setData(user, null, null, 0);
                 if (checkedMap != null) {
                     userCell.setChecked(checkedMap.indexOfKey(user.id) >= 0, !scrolling);

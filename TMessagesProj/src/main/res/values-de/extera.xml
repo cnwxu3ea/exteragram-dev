@@ -131,7 +131,6 @@ CameraX wird nur auf
     <string name="Changelog">Neuerungen:</string>
     <!--  Other  -->
     <string name="RestartRequired">Starten Sie die App neu, um Änderungen anzuwenden.</string>
-    <string name="MutualContact">gemeinsamer Kontakt</string>
     <string name="ToBeginning">Zum Anfang</string>
     <string name="MessageHistory">Nachrichtenverlauf</string>
     <string name="BoldItalic">Fett Kursiv</string>
