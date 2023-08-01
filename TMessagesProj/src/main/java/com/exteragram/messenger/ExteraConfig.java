@@ -266,7 +266,7 @@ public class ExteraConfig {
             targetLanguage = preferences.getString("targetLanguage", (String) supportedLanguages[8]);
             voiceHintShowcases = preferences.getInt("voiceHintShowcases", 0);
             useGoogleCrashlytics = preferences.getBoolean("useGoogleCrashlytics", BuildVars.isBetaApp());
-            useGoogleAnalytics = preferences.getBoolean("useGoogleAnalytics", BuildVars.isBetaApp());
+            useGoogleAnalytics = preferences.getBoolean("useGoogleAnalytics", false);
 
             configLoaded = true;
         }

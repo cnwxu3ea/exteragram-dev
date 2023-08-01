@@ -2996,7 +2996,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 reactionsMentionsAnimator.start();
             }
 
-            avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(chat != null && chat.forum && currentDialogFolderId == 0 && !useFromUserAsAvatar ? 56 * 0.65f : 56));
+            avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(56, false, chat != null && chat.forum && currentDialogFolderId == 0 && !useFromUserAsAvatar));
         }
         if (!isTopic && (getMeasuredWidth() != 0 || getMeasuredHeight() != 0)) {
             rebuildLayout = true;

@@ -192,6 +192,7 @@
     <string name="Bitrate">Битрейт</string>
     <string name="MimeType">Тип медиа</string>
     <string name="Datacenter">Датацентр</string>
+    <string name="CopyAsJson">Копировать JSON</string>
 
     <!-- GPT -->
     <string name="ApiKey">API-Ключ</string>

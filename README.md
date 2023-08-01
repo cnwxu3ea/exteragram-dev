@@ -17,7 +17,7 @@ Experimental **third-party** Telegram client based on [official sources](https:/
 The file content should look like this:
 ```
 APP_ID = 123456
-APP_HASH = abcdef0123456789 (32 chars)
+APP_HASH = "abcdef0123456789" (32 chars)
 MAPS_V2_API = abcdef01234567-abcdef012345678910111213
 
 SIGNING_KEY_PASSWORD = A1BcDEFHJ2KLMn3oP

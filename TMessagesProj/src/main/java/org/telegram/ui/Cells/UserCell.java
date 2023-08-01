@@ -632,7 +632,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             avatarImageView.setImageDrawable(avatarDrawable);
         }
 
-        avatarImageView.setRoundRadius(ExteraConfig.getAvatarCorners(currentChat != null && currentChat.forum ? 46 * 0.65f : 46));
+        avatarImageView.setRoundRadius(ExteraConfig.getAvatarCorners(46, false, currentChat != null && currentChat.forum));
 
         nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
         if (adminTextView != null) {
@@ -640,7 +640,9 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
         }
 
         mutualContactView.setVisibility(mutual ? VISIBLE : GONE);
-        nameTextView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(mutual ? 33 : 6) : 0, 0, !LocaleController.isRTL ? AndroidUtilities.dp(mutual ? 33 : 6) : 0, 0);
+        if (mutual) {
+            nameTextView.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(33) : 0, 0, !LocaleController.isRTL ? AndroidUtilities.dp(33) : 0, 0);
+        }
     }
 
     public void setSelfAsSavedMessages(boolean value) {

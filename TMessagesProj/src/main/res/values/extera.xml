@@ -193,6 +193,7 @@
     <string name="Bitrate">Bitrate</string>
     <string name="MimeType">Mime Type</string>
     <string name="Datacenter">Datacenter</string>
+    <string name="CopyAsJson">Copy as JSON</string>
 
     <!-- GPT -->
     <string name="ApiKey">API Key</string>

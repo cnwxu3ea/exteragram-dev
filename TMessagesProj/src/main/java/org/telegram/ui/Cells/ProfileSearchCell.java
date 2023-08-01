@@ -622,7 +622,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             avatarImage.setImage(null, null, avatarDrawable, null, null, 0);
         }
 
-        avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(chat != null && chat.forum ? 46 * 0.65f : 46));
+        avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(46, false, chat != null && chat.forum));
         if (mask != 0) {
             boolean continueUpdate = false;
             if ((mask & MessagesController.UPDATE_MASK_AVATAR) != 0 && user != null || (mask & MessagesController.UPDATE_MASK_CHAT_AVATAR) != 0 && chat != null) {

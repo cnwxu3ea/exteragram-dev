@@ -8739,7 +8739,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (aspectRatioFrameLayout != null && aspectRatioFrameLayout.getVisibility() != View.VISIBLE) {
                 aspectRatioFrameLayout.setVisibility(View.VISIBLE);
             }
-            if (!pipItem.isEnabled() && (pipItem.getVisibility() == View.VISIBLE || menuItem.isSubItemVisible(gallery_menu_pip2))) {
+            if (!pipItem.isEnabled() && pipItem.getVisibility() == View.VISIBLE || menuItem.isSubItemVisible(gallery_menu_pip2)) {
                 if (ExteraConfig.centerTitle) {
                     menuItem.showSubItem(gallery_menu_pip2);
                 }
@@ -12214,7 +12214,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     } else {
                         setItemVisible(pipItem, true, !masksItemVisible && editItem.getAlpha() <= 0);
                     }
-                    if (ExteraConfig.centerTitle) {
+                    if (ExteraConfig.centerTitle && pipAvailable) {
                         menuItem.showSubItem(gallery_menu_pip2);
                     }
                     setItemVisible(editItem, false, false);
@@ -12695,7 +12695,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } else {
                     setItemVisible(pipItem, true, true);
                 }
-                if (ExteraConfig.centerTitle) {
+                if (ExteraConfig.centerTitle && pipAvailable) {
                     menuItem.showSubItem(gallery_menu_pip2, true);
                 }
             } else {
@@ -14855,6 +14855,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
               //  gestureDetector.onTouchEvent(event);
             }
         };
+        photoViewerWebView.setMenuItem(menuItem);
         photoViewerWebView.init(embedSeekTime, MessageObject.getMedia(currentMessageObject.messageOwner).webpage);
         photoViewerWebView.setPlaybackSpeed(currentVideoSpeed);
         containerView.addView(photoViewerWebView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));

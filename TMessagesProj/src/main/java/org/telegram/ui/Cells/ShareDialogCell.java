@@ -165,7 +165,7 @@ public class ShareDialogCell extends FrameLayout {
             }
             avatarDrawable.setInfo(chat);
             imageView.setForUserOrChat(chat, avatarDrawable);
-            imageView.setRoundRadius(ExteraConfig.getAvatarCorners((isForum = chat != null && chat.forum) ? 56 * 0.65f : 56));
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(56, false, isForum = (chat != null && chat.forum)));
         }
         currentDialog = uid;
         checkBox.setChecked(checked, false);
@@ -286,7 +286,7 @@ public class ShareDialogCell extends FrameLayout {
         int radius = currentType == TYPE_CREATE ? 24 : 28;
         int radiusDp = AndroidUtilities.dp(radius);
         AndroidUtilities.rectTmp.set(cx - radiusDp, cy - radiusDp, cx + radiusDp, cy + radiusDp);
-        canvas.drawRoundRect(AndroidUtilities.rectTmp, ExteraConfig.getAvatarCorners((isForum ? radius * 2 * 0.65f : radius * 2) + 4), ExteraConfig.getAvatarCorners((isForum ? radius * 2 * 0.65f : radius * 2) + 4), Theme.checkboxSquare_checkPaint);
+        canvas.drawRoundRect(AndroidUtilities.rectTmp, ExteraConfig.getAvatarCorners(radius * 2 + 4, false, isForum), ExteraConfig.getAvatarCorners(radius * 2 + 4, false, isForum), Theme.checkboxSquare_checkPaint);
         super.onDraw(canvas);
     }
 

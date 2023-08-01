@@ -7484,11 +7484,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         CameraScanActivity.showAsSheet(this, false, CameraScanActivity.TYPE_QR_LOGIN, new CameraScanActivity.CameraScanActivityDelegate() {
 
             @Override
-            public void didFindQr(String link) {
-
-            }
-
-            @Override
             public boolean processQr(String link, Runnable onLoadEnd) {
                 AndroidUtilities.runOnUIThread(() -> {
                     try {
