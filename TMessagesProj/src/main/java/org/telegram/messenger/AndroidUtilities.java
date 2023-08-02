@@ -1804,6 +1804,8 @@ public class AndroidUtilities {
                             case TYPEFACE_ROBOTO_CONDENSED_BOLD -> Typeface.create("sans-serif-condensed", Typeface.BOLD);
                             case TYPEFACE_ROBOTO_MEDIUM_ITALIC -> {
                                 if (FontUtils.isMediumWeightSupported()) {
+                                    if (Build.VERSION.SDK_INT >= 28)
+                                        yield Typeface.create(Typeface.DEFAULT, 500, true);
                                     yield Typeface.create("sans-serif-medium", Typeface.ITALIC);
                                 } else {
                                     yield Typeface.create("sans-serif", Typeface.BOLD_ITALIC);
@@ -1811,22 +1813,30 @@ public class AndroidUtilities {
                             }
                             case TYPEFACE_ROBOTO_MEDIUM -> {
                                 if (FontUtils.isMediumWeightSupported()) {
+                                    if (Build.VERSION.SDK_INT >= 28)
+                                        yield Typeface.create(Typeface.DEFAULT, 500, false);
                                     yield Typeface.create("sans-serif-medium", Typeface.NORMAL);
                                 } else {
                                     yield Typeface.create("sans-serif", Typeface.BOLD);
                                 }
                             }
-                            case TYPEFACE_ROBOTO_ITALIC -> Build.VERSION.SDK_INT >= 28 ? Typeface.create(Typeface.SANS_SERIF, 400, true) : Typeface.create("sans-serif", Typeface.ITALIC);
-                            case TYPEFACE_ROBOTO_REGULAR -> Build.VERSION.SDK_INT >= 28 ? Typeface.create(Typeface.SANS_SERIF, 400, false) : Typeface.create("sans-serif", Typeface.NORMAL);
+                            case TYPEFACE_ROBOTO_ITALIC -> {
+                                if (Build.VERSION.SDK_INT >= 28)
+                                    yield Typeface.create(Typeface.DEFAULT, 400, true);
+                                yield Typeface.create("sans-serif", Typeface.ITALIC);
+                            }
+                            case TYPEFACE_ROBOTO_REGULAR -> {
+                                if (Build.VERSION.SDK_INT >= 28)
+                                    yield Typeface.create(Typeface.DEFAULT, 400, false);
+                                yield Typeface.create("sans-serif", Typeface.NORMAL);
+                            }
                             default -> FontUtils.getFontFromAssets(assetPath);
                         };
                     } else {
                         t = FontUtils.getFontFromAssets(assetPath);
                     }
                 } catch (Exception e) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
-                    }
+                    FileLog.e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
                     return null;
                 }
                 typefaceCache.put(assetPath, t);

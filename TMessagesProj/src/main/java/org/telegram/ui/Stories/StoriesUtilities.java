@@ -162,7 +162,7 @@ public class StoriesUtilities {
             params.inc = false;
         }
         params.showProgress = showProgress;
-        if (params.currentState == STATE_EMPTY && params.progressToSate == 1f) {
+        if (params.currentState == STATE_EMPTY && params.progressToSate == 1f || ExteraConfig.hideStories) {
             avatarImage.setImageCoords(params.originalAvatarRect);
             avatarImage.draw(canvas);
             return;
@@ -806,6 +806,9 @@ public class StoriesUtilities {
         Runnable longPressRunnable;
 
         public boolean checkOnTouchEvent(MotionEvent event, View view) {
+            if (ExteraConfig.hideStories) {
+                return false;
+            }
             StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
             if (event.getAction() == MotionEvent.ACTION_DOWN && originalAvatarRect.contains(event.getX(), event.getY())) {
                 TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(dialogId);

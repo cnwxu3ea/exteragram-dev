@@ -41,7 +41,10 @@ public class ExteraConfig {
 
     // Appearance
     public static float avatarCorners;
+    public static boolean singleCornerRadius;
+
     public static boolean hideActionBarStatus;
+    public static boolean hideStories;
     public static boolean hideAllChats;
     public static boolean tabCounter;
     public static boolean centerTitle;
@@ -183,13 +186,17 @@ public class ExteraConfig {
 
             // Appearance
             avatarCorners = preferences.getFloat("avatarCorners", 28.0f);
+            singleCornerRadius = preferences.getBoolean("singleCornerRadius", false);
+
             hideActionBarStatus = preferences.getBoolean("hideActionBarStatus", false);
-            hideAllChats = preferences.getBoolean("hideAllChats", false);
+            hideStories = preferences.getBoolean("hideStories", false);
             centerTitle = preferences.getBoolean("centerTitle", false);
+            titleText = preferences.getInt("titleText", 0);
+
             tabCounter = preferences.getBoolean("tabCounter", true);
             tabIcons = preferences.getInt("tabIcons", 1);
             tabStyle = preferences.getInt("tabStyle", 1);
-            titleText = preferences.getInt("titleText", 0);
+            hideAllChats = preferences.getBoolean("hideAllChats", false);
 
             useSolarIcons = preferences.getBoolean("useSolarIcons", true);
 
@@ -303,7 +310,7 @@ public class ExteraConfig {
             radius = dp(radius);
         }
 
-        if (forum) {
+        if (forum && !singleCornerRadius) {
             radius *= 0.65f;
         }
 

@@ -27,11 +27,14 @@
     <string name="AvatarCorners">Avatar Corners</string>
     <string name="AvatarCornersLeft">Square</string>
     <string name="AvatarCornersRight">Circle</string>
+    <string name="SingleCornerRadius">Single Corner Radius</string>
+    <string name="SingleCornerRadiusInfo">Forums will have the same shape as chats.</string>
 
     <string name="ListOfChats">Chat List</string>
     <string name="ActionBarTitle">Title Text</string>
     <string name="ActionBarTitleUsername">Username</string>
     <string name="ActionBarTitleName">First Name</string>
+    <string name="HideStories">Hide Stories</string>
     <string name="HideActionBarStatus">Hide Status</string>
     <string name="CenterTitle">Center Title</string>
     <string name="ListOfChatsInfo">The title text will change depending on the folder name when only icons are enabled.</string>
@@ -193,7 +196,6 @@
     <string name="Bitrate">Bitrate</string>
     <string name="MimeType">Mime Type</string>
     <string name="Datacenter">Datacenter</string>
-    <string name="CopyAsJson">Copy as JSON</string>
 
     <!-- GPT -->
     <string name="ApiKey">API Key</string>

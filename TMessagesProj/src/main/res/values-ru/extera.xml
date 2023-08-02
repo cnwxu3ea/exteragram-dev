@@ -26,11 +26,14 @@
     <string name="AvatarCorners">Закругление аватарок</string>
     <string name="AvatarCornersLeft">Квадрат</string>
     <string name="AvatarCornersRight">Круг</string>
+    <string name="SingleCornerRadius">Единое закругление</string>
+    <string name="SingleCornerRadiusInfo">Форумы будут иметь ту же форму, что и чаты.</string>
 
     <string name="ListOfChats">Список чатов</string>
     <string name="ActionBarTitle">Текст заголовка</string>
     <string name="ActionBarTitleUsername">Короткая ссылка</string>
     <string name="ActionBarTitleName">Имя</string>
+    <string name="HideStories">Скрыть истории</string>
     <string name="HideActionBarStatus">Скрыть статус</string>
     <string name="CenterTitle">Заголовок по центру</string>
     <string name="ListOfChatsInfo">Текст заголовка будет меняться в зависимости от имени папки, когда включены только иконки.</string>
@@ -192,7 +195,6 @@
     <string name="Bitrate">Битрейт</string>
     <string name="MimeType">Тип медиа</string>
     <string name="Datacenter">Датацентр</string>
-    <string name="CopyAsJson">Копировать JSON</string>
 
     <!-- GPT -->
     <string name="ApiKey">API-Ключ</string>

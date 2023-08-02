@@ -62,7 +62,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             LocaleController.getString("Forward", R.string.Forward),
             LocaleController.getString("Edit", R.string.Edit),
             LocaleController.getString("Save", R.string.Save),
-            LocaleController.getString("Delete", R.string.Delete)
+            LocaleController.getString("Delete", R.string.Delete),
+            LocaleController.getString("TranslateMessage", R.string.TranslateMessage)
     }, bottomButton = new CharSequence[]{
             LocaleController.getString("Hide", R.string.Hide),
             LocaleUtils.capitalize(LocaleController.getString("ChannelMute", R.string.ChannelMute)),
@@ -86,7 +87,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             R.drawable.msg_forward,
             R.drawable.msg_edit,
             R.drawable.msg_saved,
-            R.drawable.msg_delete
+            R.drawable.msg_delete,
+            R.drawable.msg_translate
     };
 
     private int stickerSizeRow;

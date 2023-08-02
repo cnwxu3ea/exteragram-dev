@@ -13,6 +13,7 @@ package com.exteragram.messenger.utils;
 
 import android.net.Uri;
 import android.text.TextUtils;
+import android.text.style.URLSpan;
 
 import org.json.JSONArray;
 import org.json.JSONTokener;
@@ -20,7 +21,15 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LanguageDetector;
+import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.TranslateAlert2;
+import org.telegram.ui.RestrictedLanguagesSelectActivity;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,6 +37,7 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class TranslatorUtils {
 
@@ -55,6 +65,29 @@ public class TranslatorUtils {
 
     public interface OnTranslationFail {
         void run();
+    }
+
+    public static void translateWithAlert(MessageObject selectedObject, MessageObject.GroupedMessages selectedObjectGroup, BaseFragment fragment) {
+        if (selectedObject == null) {
+            return;
+        }
+
+        ChatActivity chatActivity = (ChatActivity) fragment;
+
+        Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress = (link) -> {
+            chatActivity.didPressMessageUrl(link, false, selectedObject, null);
+            return true;
+        };
+
+        ArrayList<TLRPC.MessageEntity> entities = selectedObject.messageOwner != null ? selectedObject.messageOwner.entities : null;
+        final CharSequence text = ChatUtils.getMessageText(selectedObject, selectedObjectGroup);
+        LanguageDetector.detectLanguage(text == null ? "" : text.toString(), lang -> {
+            String toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
+            if (lang != null && (!lang.equals(toLang) || lang.equals("und")) && !RestrictedLanguagesSelectActivity.getRestrictedLanguages().contains(lang)) {
+                TranslateAlert2.showAlert(fragment.getContext(), fragment, UserConfig.selectedAccount, lang, toLang, text, entities, false, onLinkPress, () -> chatActivity.dimBehindView(false));
+            }
+        }, err -> {
+        });
     }
 
     public static void translate(CharSequence text, String toLang, OnTranslationSuccess onSuccess, OnTranslationFail onFail) {

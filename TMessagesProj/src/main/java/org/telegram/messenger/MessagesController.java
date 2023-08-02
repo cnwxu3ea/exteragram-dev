@@ -37,6 +37,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.util.Consumer;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLiteException;
@@ -18208,14 +18210,13 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean storiesEnabled() {
-        switch (storiesPosting) {
-            case "premium":
-                return getUserConfig().isPremium();
-            case "enabled":
-                return true;
-            default:
-            case "disabled":
-                return false;
+        if (ExteraConfig.hideStories) {
+            return false;
         }
+        return switch (storiesPosting) {
+            case "premium" -> getUserConfig().isPremium();
+            case "enabled" -> true;
+            default -> false;
+        };
     }
 }

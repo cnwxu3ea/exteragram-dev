@@ -112,6 +112,7 @@ import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.components.MessageDetailsPopupWrapper;
 import com.exteragram.messenger.utils.ChatUtils;
 import com.exteragram.messenger.utils.SystemUtils;
+import com.exteragram.messenger.utils.TranslatorUtils;
 import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.zxing.common.detector.MathUtils;
@@ -1550,22 +1551,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             message.type != MessageObject.TYPE_GIFT_PREMIUM && message.type != MessageObject.TYPE_SUGGEST_PHOTO;
                 boolean allowSave = allowForward && !UserObject.isUserSelf(currentUser);
                 int action = isOutOwner ? ExteraConfig.doubleTapActionOutOwner : ExteraConfig.doubleTapAction;
-                switch (action) {
-                    case 2: // reply
-                        return message.getId() > 0 && allowChatActions;
-                    case 3: // copy
-                        return (message.type == MessageObject.TYPE_TEXT || message.isAnimatedEmoji() || message.isAnimatedEmojiStickers() || getMessageCaption(message, messageGroup) != null) && !noForwards;
-                    case 4: // forward
-                        return allowForward;
-                    case 5: // edit
-                        return allowEdit;
-                    case 6: // save
-                        return allowSave;
-                    case 7: // delete
-                        return message.canDeleteMessage(chatMode == MODE_SCHEDULED, currentChat) && (threadMessageObjects == null || !threadMessageObjects.contains(message)) &&
-                                !(message != null && message.messageOwner != null && message.messageOwner.action instanceof TLRPC.TL_messageActionTopicCreate);
-                }
-                return false;
+                return switch (action) {
+                    case 2 -> message.getId() > 0 && allowChatActions; // reply
+                    case 3 -> (message.type == MessageObject.TYPE_TEXT || message.isAnimatedEmoji() || message.isAnimatedEmojiStickers() || getMessageCaption(message, messageGroup) != null) && !noForwards; // copy
+                    case 4 -> allowForward; // forward
+                    case 5 -> allowEdit; // edit
+                    case 6 -> allowSave; // save
+                    case 7 -> message.canDeleteMessage(chatMode == MODE_SCHEDULED, currentChat) && (threadMessageObjects == null || !threadMessageObjects.contains(message)) && !(message.messageOwner != null && message.messageOwner.action instanceof TLRPC.TL_messageActionTopicCreate); // delete
+                    case 8 -> ChatUtils.getMessageText(message, messageGroup) != null && !message.isAnimatedEmoji() && !message.isDice(); // translate
+                    default -> false;
+                };
             }
         }
 
@@ -1622,24 +1617,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 int action = isOutOwner ? ExteraConfig.doubleTapActionOutOwner : ExteraConfig.doubleTapAction;
                 switch (action) {
-                    case 2: // reply
-                        processSelectedOption(OPTION_REPLY);
-                        break;
-                    case 3: // copy
-                        processSelectedOption(OPTION_COPY);
-                        break;
-                    case 4: // forward
-                        processSelectedOption(OPTION_FORWARD);
-                        break;
-                    case 5: // edit
-                        processSelectedOption(OPTION_EDIT);
-                        break;
-                    case 6: // save
-                        processSelectedOption(OPTION_SAVE_MESSAGE);
-                        break;
-                    case 7: // delete
-                        processSelectedOption(OPTION_DELETE);
-                        break;
+                    case 2 -> processSelectedOption(OPTION_REPLY); // reply
+                    case 3 -> processSelectedOption(OPTION_COPY); // copy
+                    case 4 -> processSelectedOption(OPTION_FORWARD); // forward
+                    case 5 -> processSelectedOption(OPTION_EDIT); // edit
+                    case 6 -> processSelectedOption(OPTION_SAVE_MESSAGE); // save
+                    case 7 -> processSelectedOption(OPTION_DELETE); // delete
+                    case 8 -> TranslatorUtils.translateWithAlert(selectedObject, selectedObjectGroup, ChatActivity.this);
                 }
             }
         }
@@ -27695,7 +27679,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         getConnectionsManager().sendRequest(req, null);
     }
 
-    private void didPressMessageUrl(CharacterStyle url, boolean longPress, MessageObject messageObject, ChatMessageCell cell) {
+    public void didPressMessageUrl(CharacterStyle url, boolean longPress, MessageObject messageObject, ChatMessageCell cell) {
         if (url == null || getParentActivity() == null) {
             return;
         }

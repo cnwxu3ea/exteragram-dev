@@ -73,7 +73,8 @@ public class DoubleTapCell extends LinearLayout {
             R.drawable.msg_forward,
             R.drawable.msg_edit,
             R.drawable.msg_saved,
-            R.drawable.msg_delete
+            R.drawable.msg_delete,
+            R.drawable.msg_translate
     };
 
     private static final int[] ICON_WIDTH = new int[]{AndroidUtilities.dp(12), AndroidUtilities.dp(12)};

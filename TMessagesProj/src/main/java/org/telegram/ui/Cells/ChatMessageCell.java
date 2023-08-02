@@ -4276,9 +4276,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             sideButtonPressed = false;
             hasNewLineForTime = false;
             flipImage = false;
-            isThreadPost = isThreadChat && messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.channel_post != 0 && messageObject.messageOwner.reply_to == null;
-            isAvatarVisible = isChat && !messageObject.isOutOwner() && messageObject.needDrawAvatar() && (currentPosition == null || currentPosition.edge);
-            boolean drawAvatar = isChat && !messageObject.isOutOwner() && messageObject.needDrawAvatar();
+            isThreadPost = false; //isThreadChat && messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.channel_post != 0 && messageObject.messageOwner.reply_to == null;
+            isAvatarVisible = isChat && !isThreadPost && !messageObject.isOutOwner() && messageObject.needDrawAvatar() && (currentPosition == null || currentPosition.edge);
+            boolean drawAvatar = isChat && !isThreadPost && !messageObject.isOutOwner() && messageObject.needDrawAvatar();
             if (messageObject.customAvatarDrawable != null) {
                 isAvatarVisible = true;
                 drawAvatar = true;

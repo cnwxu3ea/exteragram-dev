@@ -9,6 +9,7 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
 
+import com.exteragram.messenger.ExteraConfig;
 import com.google.android.exoplayer2.util.Consumer;
 
 import org.telegram.SQLite.SQLiteCursor;
@@ -188,11 +189,11 @@ public class StoriesController {
 
     public boolean hasStories(long dialogId) {
         TLRPC.TL_userStories stories = allStoriesMap.get(dialogId);
-        return stories != null && !stories.stories.isEmpty();
+        return stories != null && !stories.stories.isEmpty() && !ExteraConfig.hideStories;
     }
 
     public boolean hasStories() {
-        return (dialogListStories != null && dialogListStories.size() > 0) || hasSelfStories();
+        return (dialogListStories != null && dialogListStories.size() > 0) && !ExteraConfig.hideStories || hasSelfStories();
     }
 
     public void loadStories() {
@@ -751,6 +752,9 @@ public class StoriesController {
     }
 
     public boolean hasSelfStories() {
+        if (ExteraConfig.hideStories) {
+            return false;
+        }
         TLRPC.TL_userStories storyItem = allStoriesMap.get(UserConfig.getInstance(currentAccount).clientUserId);
         if (storyItem != null && !storyItem.stories.isEmpty()) {
             return true;
@@ -1107,6 +1111,9 @@ public class StoriesController {
     }
 
     public ArrayList<TLRPC.TL_userStories> getHiddenList() {
+        if (ExteraConfig.hideStories) {
+            hiddenListStories.clear();
+        }
         return hiddenListStories;
     }
 
@@ -1172,7 +1179,7 @@ public class StoriesController {
     }
 
     public boolean hasHiddenStories() {
-        return !hiddenListStories.isEmpty();
+        return !hiddenListStories.isEmpty() && !ExteraConfig.hideStories;
     }
 
     public void checkExpiredStories() {
