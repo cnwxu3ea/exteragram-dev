@@ -70,8 +70,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.components.TranslateBeforeSendWrapper;
 import com.exteragram.messenger.utils.CanvasUtils;
-import com.exteragram.messenger.utils.PopupUtils;
 import com.exteragram.messenger.utils.SystemUtils;
 import com.exteragram.messenger.utils.TranslatorUtils;
 
@@ -117,7 +117,6 @@ import org.telegram.ui.PhotoPickerSearchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -2568,7 +2567,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             }
             ChatActivity chatActivity = null;
             TLRPC.User user = null;
-            long dialogId = this.dialogId;
+            long dialogId;
             if (baseFragment instanceof ChatActivity) {
                 chatActivity = (ChatActivity) baseFragment;
                 TLRPC.Chat chat = chatActivity.getCurrentChat();
@@ -2578,6 +2577,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 }
                 dialogId = chatActivity.getDialogId();
             } else {
+                dialogId = this.dialogId;
                 user = MessagesController.getInstance(currentAccount).getUser(dialogId);
             }
 
@@ -2608,10 +2608,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             sendPopupLayout.setShownFromBottom(false);
 
             itemCells = new ActionBarMenuSubItem[3];
-            int i = 0;
             for (int a = 0; a < 3; a++) {
                 if (a == 0) {
-                    if (TextUtils.isEmpty(getCommentTextView().getText())) {
+                    if (TextUtils.isEmpty(getCommentTextView().getText())){
                         continue;
                     }
                 } else if (a == 1) {
@@ -2621,61 +2620,56 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 } else if (UserObject.isUserSelf(user)) {
                     continue;
                 }
-                int num = a;
-                itemCells[a] = new ActionBarMenuSubItem(getContext(), a == 0, a == 2, resourcesProvider);
-                if (num == 0) {
-                    itemCells[a].setTextAndIcon(LocaleController.getString("TranslateTo", R.string.TranslateTo), R.drawable.msg_translate);
-                    itemCells[a].setSubtext(ExteraConfig.getCurrentLangName());
-                    itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
-                    itemCells[a].setItemHeight(56);
-                    itemCells[a].setRightIcon(R.drawable.msg_arrowright);
-                    itemCells[a].getRightIcon().setOnClickListener(v -> PopupUtils.showDialog(ExteraConfig.supportedLanguages, LocaleController.getString("Language", R.string.Language), Arrays.asList(ExteraConfig.supportedLanguages).indexOf(ExteraConfig.targetLanguage), context, j -> {
-                        ExteraConfig.editor.putString("targetLanguage", ExteraConfig.targetLanguage = (String) ExteraConfig.supportedLanguages[j]).apply();
-                        itemCells[num].setSubtext(ExteraConfig.getCurrentLangName());
-                    }));
-                } else if (num == 1) {
-                    if (UserObject.isUserSelf(user)) {
-                        itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_calendar2);
-                    } else {
-                        itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_calendar2);
-                    }
+                if (a == 0) {
+                    itemCells[a] = new TranslateBeforeSendWrapper(context, true, false, resourcesProvider) {
+                        @Override
+                        protected void onClick() {
+                            if (sendPopupWindow != null && sendPopupWindow.isShowing())
+                                sendPopupWindow.dismiss();
+                            TranslatorUtils.translate(getCommentTextView().getText(), ExteraConfig.targetLang, translated -> {
+                                getCommentTextView().setText(translated);
+                                applyCaption();
+                                getCommentTextView().setSelection(translated.length());
+                            }, null);
+                        }
+                    };
                 } else {
-                    itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
-                }
-                itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
-
-                sendPopupLayout.addView(itemCells[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
-                long finalDialogId = dialogId;
-                itemCells[a].setOnClickListener(v -> {
-                    if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                        sendPopupWindow.dismiss();
+                    itemCells[a] = new ActionBarMenuSubItem(getContext(), false, a == 2, resourcesProvider);
+                    if (a == 1) {
+                        if (UserObject.isUserSelf(user)) {
+                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_calendar2);
+                        } else {
+                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_calendar2);
+                        }
+                    } else {
+                        itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                     }
-                    if (num == 0) {
-                        TranslatorUtils.translate(getCommentTextView().getText(), ExteraConfig.getCurrentLangCode(), translated -> {
-                            getCommentTextView().setText(translated);
-                            applyCaption();
-                            getCommentTextView().setSelection(translated.length());
-                        }, () -> {
-                        });
-                    } else if (num == 1) {
-                        AlertsCreator.createScheduleDatePickerDialog(getContext(), finalDialogId, (notify, scheduleDate) -> {
+                    itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
+                    int finalA = a;
+                    itemCells[a].setOnClickListener(v -> {
+                        if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                            sendPopupWindow.dismiss();
+                        }
+                        if (finalA == 1) {
+                            AlertsCreator.createScheduleDatePickerDialog(getContext(), dialogId, (notify, scheduleDate) -> {
+                                if (currentAttachLayout == photoLayout || currentAttachLayout == photoPreviewLayout) {
+                                    sendPressed(notify, scheduleDate);
+                                } else {
+                                    currentAttachLayout.sendSelectedItems(notify, scheduleDate);
+                                    dismiss();
+                                }
+                            }, resourcesProvider);
+                        } else {
                             if (currentAttachLayout == photoLayout || currentAttachLayout == photoPreviewLayout) {
-                                sendPressed(notify, scheduleDate);
+                                sendPressed(false, 0);
                             } else {
-                                currentAttachLayout.sendSelectedItems(notify, scheduleDate);
+                                currentAttachLayout.sendSelectedItems(false, 0);
                                 dismiss();
                             }
-                        }, resourcesProvider);
-                    } else {
-                        if (currentAttachLayout == photoLayout || currentAttachLayout == photoPreviewLayout) {
-                            sendPressed(false, 0);
-                        } else {
-                            currentAttachLayout.sendSelectedItems(false, 0);
-                            dismiss();
                         }
-                    }
-                });
-                i++;
+                    });
+                }
+                sendPopupLayout.addView(itemCells[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
             }
             sendPopupLayout.setupRadialSelectors(getThemedColor(Theme.key_dialogButtonSelector));
 

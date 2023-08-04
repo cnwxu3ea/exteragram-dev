@@ -23,6 +23,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LanguageDetector;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.TranslateController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
@@ -38,8 +39,11 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 public class TranslatorUtils {
+
+    private static final ArrayList<TranslateController.Language> languages = new ArrayList<>(TranslateController.getLanguages());
 
     public static final DispatchQueue translateQueue = new DispatchQueue("translateQueue", false);
 
@@ -65,6 +69,40 @@ public class TranslatorUtils {
 
     public interface OnTranslationFail {
         void run();
+    }
+
+    public static String getLanguageTitleSystem(String isoCode) {
+        TranslateController.Language language = languages.stream()
+                .filter(lang -> lang.code.equals(isoCode))
+                .findFirst()
+                .orElse(null);
+
+        return language != null ? language.displayName : null;
+    }
+
+    public static boolean isLanguageSupported(String isoCode) {
+        return languages.stream().anyMatch(lang -> lang.code.equals(isoCode));
+    }
+
+    public static String getLangCodeByIndex(int idx) {
+        if (idx >= 0 && idx < languages.size()) {
+            return languages.get(idx).code;
+        }
+        return null;
+    }
+
+    public static int getLanguageIndexByIso(String iso) {
+        return IntStream.range(0, languages.size())
+                .filter(idx -> languages.get(idx).code.equals(iso))
+                .findFirst()
+                .orElse(-1);
+    }
+
+    public static String[] getLanguageTitles() {
+        return languages
+                .stream()
+                .map(lang -> lang.displayName + (lang.ownDisplayName == null ? "" : " – " + lang.ownDisplayName))
+                .toArray(String[]::new);
     }
 
     public static void translateWithAlert(MessageObject selectedObject, MessageObject.GroupedMessages selectedObjectGroup, BaseFragment fragment) {

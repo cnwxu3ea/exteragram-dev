@@ -1897,7 +1897,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 protected void onClick() {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing())
                         sendPopupWindow.dismiss();
-                    TranslatorUtils.translate(commentTextView.getText(), ExteraConfig.getCurrentLangCode(), translated -> {
+                    TranslatorUtils.translate(commentTextView.getText(), ExteraConfig.targetLang, translated -> {
                         commentTextView.setText(translated);
                         commentTextView.setSelection(translated.length());
                     }, null);

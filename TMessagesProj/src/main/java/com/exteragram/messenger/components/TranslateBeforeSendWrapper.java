@@ -13,17 +13,14 @@ package com.exteragram.messenger.components;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.utils.PopupUtils;
-
+import com.exteragram.messenger.utils.TranslatorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.Theme;
-
-import java.util.Arrays;
 
 @SuppressLint("ViewConstructor")
 public class TranslateBeforeSendWrapper extends ActionBarMenuSubItem {
@@ -35,13 +32,19 @@ public class TranslateBeforeSendWrapper extends ActionBarMenuSubItem {
         setMinimumWidth(AndroidUtilities.dp(196));
         setItemHeight(56);
         setOnClickListener(v -> onClick());
+        setOnLongClickListener(v -> showDialog(context));
         setRightIcon(R.drawable.msg_arrowright);
-        getRightIcon().setOnClickListener(v -> PopupUtils.showDialog(ExteraConfig.supportedLanguages, LocaleController.getString("Language", R.string.Language), Arrays.asList(ExteraConfig.supportedLanguages).indexOf(ExteraConfig.targetLanguage), context, i -> {
-            ExteraConfig.editor.putString("targetLanguage", ExteraConfig.targetLanguage = (String) ExteraConfig.supportedLanguages[i]).apply();
-            setSubtext(ExteraConfig.getCurrentLangName());
-        }));
+        getRightIcon().setOnClickListener(v -> showDialog(context));
     }
 
     protected void onClick() {
+    }
+
+    private boolean showDialog(Context context) {
+        PopupUtils.showDialog(TranslatorUtils.getLanguageTitles(), LocaleController.getString("Language", R.string.Language), TranslatorUtils.getLanguageIndexByIso(ExteraConfig.targetLang), context, i -> {
+            ExteraConfig.editor.putString("targetLang", ExteraConfig.targetLang = TranslatorUtils.getLangCodeByIndex(i)).apply();
+            setSubtext(ExteraConfig.getCurrentLangName());
+        });
+        return true;
     }
 }

@@ -23,6 +23,7 @@ import com.exteragram.messenger.gpt.core.Config;
 import com.exteragram.messenger.icons.BaseIconSet;
 import com.exteragram.messenger.icons.EmptyIconSet;
 import com.exteragram.messenger.icons.SolarIconSet;
+import com.exteragram.messenger.utils.TranslatorUtils;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -130,18 +131,33 @@ public class ExteraConfig {
     public static boolean checkUpdatesOnLaunch;
 
     // Other
-    private static final long[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027, 1172503281, 1877362358};
-    private static final long[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1972014627, 168769611, 480000401, 5307590670L, 639891381, 1773117711, 5330087923L, 666154369, 139303278};
-    public static long channelToSave;
-    public static String targetLanguage;
-    public static final CharSequence[] supportedLanguages = new CharSequence[]{
-            "Arabic (AR)", "Azerbaijani (AZ)", "Belarusian (BE)", "Catalan (CA)", "Chinese (ZH)",
-            "Croatian (HR)", "Czech (CS)", "Dutch (NL)", "English (EN)", "Finnish (FI)",
-            "French (FR)", "German (DE)", "Hungarian (HU)", "Indonesian (IN)", "Italian (IT)", "Japanese (JA)",
-            "Korean (KO)", "Malay (MS)", "Norwegian (NO)", "Persian (FA)", "Polish (PL)",
-            "Portuguese (PT)", "Russian (RU)", "Serbian (SR)", "Slovak (SK)",
-            "Spanish (ES)", "Swedish (SV)", "Turkish (TR)", "Ukrainian (UK)", "Uzbek (UZ)"
+    private static final long[] OFFICIAL_CHANNELS = {
+            1233768168,
+            1524581881,
+            1571726392,
+            1632728092,
+            1638754701,
+            1779596027,
+            1172503281,
+            1877362358
     };
+    private static final long[] DEVS = {
+            963080346,
+            1282540315,
+            1374434073,
+            388099852,
+            1972014627,
+            168769611,
+            480000401,
+            5307590670L,
+            639891381,
+            1773117711,
+            5330087923L,
+            666154369,
+            139303278
+    };
+    public static long channelToSave;
+    public static String targetLang;
     public static int voiceHintShowcases;
     public static boolean useGoogleCrashlytics;
     public static boolean useGoogleAnalytics;
@@ -269,7 +285,7 @@ public class ExteraConfig {
 
             // Other
             channelToSave = preferences.getLong("channelToSave", 0);
-            targetLanguage = preferences.getString("targetLanguage", (String) supportedLanguages[8]);
+            targetLang = preferences.getString("targetLang", "en");
             voiceHintShowcases = preferences.getInt("voiceHintShowcases", 0);
             useGoogleCrashlytics = preferences.getBoolean("useGoogleCrashlytics", BuildVars.isBetaApp());
             useGoogleAnalytics = preferences.getBoolean("useGoogleAnalytics", false);
@@ -347,11 +363,7 @@ public class ExteraConfig {
     }
 
     public static String getCurrentLangName() {
-        return targetLanguage.substring(0, targetLanguage.indexOf("(") - 1);
-    }
-
-    public static String getCurrentLangCode() {
-        return targetLanguage.substring(targetLanguage.indexOf("(") + 1, targetLanguage.indexOf(")"));
+        return TranslatorUtils.getLanguageTitleSystem(targetLang);
     }
 
     public static BaseIconSet getIconPack() {

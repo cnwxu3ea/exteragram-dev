@@ -88,7 +88,6 @@ import com.exteragram.messenger.utils.CanvasUtils;
 import com.exteragram.messenger.utils.LocaleUtils;
 import com.exteragram.messenger.utils.TranslatorUtils;
 import com.exteragram.messenger.utils.VibratorUtils;
-import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -10944,7 +10943,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 protected void onClick() {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing())
                         sendPopupWindow.dismiss();
-                    TranslatorUtils.translate(commentView.getFieldText(), ExteraConfig.getCurrentLangCode(), translated -> {
+                    TranslatorUtils.translate(commentView.getFieldText(), ExteraConfig.targetLang, translated -> {
                         commentView.setFieldText(translated);
                         commentView.setSelection(translated.length());
                     }, null);

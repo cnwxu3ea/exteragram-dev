@@ -56,7 +56,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.ActionMode;
@@ -3758,7 +3757,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 protected void onClick() {
                     if (sendPopupWindow != null && sendPopupWindow.isShowing())
                         sendPopupWindow.dismiss();
-                    TranslatorUtils.translate(getEditField().getText(), ExteraConfig.getCurrentLangCode(), translated -> {
+                    TranslatorUtils.translate(getEditField().getText(), ExteraConfig.targetLang, translated -> {
                         getEditField().setText(translated);
                         getEditField().setSelection(translated.length());
                     }, null);

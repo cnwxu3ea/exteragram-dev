@@ -6141,8 +6141,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     cell.setSubtext(ExteraConfig.getCurrentLangName());
                     cell.setItemHeight(56);
                     cell.setRightIcon(R.drawable.msg_arrowright);
-                    cell.getRightIcon().setOnClickListener(v -> PopupUtils.showDialog(ExteraConfig.supportedLanguages, LocaleController.getString("Language", R.string.Language), Arrays.asList(ExteraConfig.supportedLanguages).indexOf(ExteraConfig.targetLanguage), parentActivity, i2 -> {
-                        ExteraConfig.editor.putString("targetLanguage", ExteraConfig.targetLanguage = (String) ExteraConfig.supportedLanguages[i2]).apply();
+                    cell.getRightIcon().setOnClickListener(v -> PopupUtils.showDialog(TranslatorUtils.getLanguageTitles(), LocaleController.getString("Language", R.string.Language), TranslatorUtils.getLanguageIndexByIso(ExteraConfig.targetLang), parentActivity, i2 -> {
+                        ExteraConfig.editor.putString("targetLang", ExteraConfig.targetLang = TranslatorUtils.getLangCodeByIndex(i2)).apply();
                         cell.setSubtext(ExteraConfig.getCurrentLangName());
                     }));
                 }
@@ -6164,7 +6164,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     } else if (a == 4) {
                         sendPressed(true, 0, false, true, false);
                     } else if (a == 5) {
-                        TranslatorUtils.translate(captionEditText.getFieldCharSequence(), ExteraConfig.getCurrentLangCode(), translated -> {
+                        TranslatorUtils.translate(captionEditText.getFieldCharSequence(), ExteraConfig.targetLang, translated -> {
                             captionEditText.setFieldText(translated);
                             setCaption(translated);
                         }, () -> {});

@@ -990,7 +990,7 @@ public class Theme {
                 lastRect.set(bounds);
                 return invalidate;
             }
-            
+
             public Path getPath() {
                 return path;
             }
@@ -6016,13 +6016,11 @@ public class Theme {
                         if (mode != null) {
                             mode = mode.toLowerCase();
                             String[] modes = mode.split(" ");
-                            if (modes.length > 0) {
-                                for (String s : modes) {
-                                    if ("blur".equals(s)) {
-                                        themeInfo.isBlured = true;
-                                    } else if ("motion".equals(s)) {
-                                        themeInfo.isMotion = true;
-                                    }
+                            for (String s : modes) {
+                                if ("blur".equals(s)) {
+                                    themeInfo.isBlured = true;
+                                } else if ("motion".equals(s)) {
+                                    themeInfo.isMotion = true;
                                 }
                             }
                         }
@@ -6139,13 +6137,11 @@ public class Theme {
                                 if (mode != null) {
                                     mode = mode.toLowerCase();
                                     String[] modes = mode.split(" ");
-                                    if (modes.length > 0) {
-                                        for (String s : modes) {
-                                            if ("blur".equals(s)) {
-                                                themeInfo.isBlured = true;
-                                            } else if ("motion".equals(s)) {
-                                                themeInfo.isMotion = true;
-                                            }
+                                    for (String s : modes) {
+                                        if ("blur".equals(s)) {
+                                            themeInfo.isBlured = true;
+                                        } else if ("motion".equals(s)) {
+                                            themeInfo.isMotion = true;
                                         }
                                     }
                                 }
