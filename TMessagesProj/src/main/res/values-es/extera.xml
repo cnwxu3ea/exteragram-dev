@@ -99,8 +99,6 @@
     <string name="StickerShapeRoundedMsg">Mensaje</string>
     <string name="StickerTime">Ocultar tiempo en los stickers</string>
     <string name="UnlimitedRecentStickers">Stickers recientes ilimitados</string>
-    <string name="HideCategories">Ocultar categorías</string>
-    <string name="HideCategoriesInfo">Las categorías desaparecerán de la barra de búsqueda en el diálogo de selección de reacciones y el panel de emojis.</string>
     <string name="DoubleTap">Doble toque</string>
     <string name="DoubleTapIncoming">Mensajes entrantes</string>
     <string name="DoubleTapOutgoing">Mensajes salientes</string>
@@ -164,7 +162,7 @@
     <string name="Datacenter">Centro de datos</string>
     <!-- Other -->
     <string name="RestartRequired">Reinicie la app para que tenga efecto.</string>
-    <string name="ResetSettingsBulletin">Las preferencias de **exteraGram** han sido restablecidas.</string>
+    <string name="ResetPreferences">Las preferencias de **exteraGram** han sido restablecidas.</string>
     <string name="UserNotFound">Usuario con este ** ID ** no encontrado.</string>
     <string name="PhotoCopied">Foto copiada al portapapeles.</string>
     <string name="ToBeginning">Saltar al inicio</string>

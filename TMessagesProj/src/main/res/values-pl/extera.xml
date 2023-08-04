@@ -90,8 +90,6 @@ CameraX wspierana jest tylko na
     <string name="StickerShapeRoundedMsg">Wiadomość</string>
     <string name="StickerTime">Ukryj czas na naklejkach</string>
     <string name="UnlimitedRecentStickers">Nieograniczona liczba ostatnich naklejek</string>
-    <string name="HideCategories">Ukryj kategorie</string>
-    <string name="HideCategoriesInfo">Kategorie znikną z paska wyszukiwania w oknie wyboru reakcji i panelu emoji.</string>
     <string name="DoubleTap">Podwójne dotknięcie</string>
     <string name="DoubleTapIncoming">Wiadomości przychodzące</string>
     <string name="DoubleTapOutgoing">Wiadomości wychodzące</string>

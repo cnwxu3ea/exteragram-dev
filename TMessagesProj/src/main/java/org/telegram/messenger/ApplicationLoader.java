@@ -339,7 +339,7 @@ public class ApplicationLoader extends Application {
             firebaseCrashlytics = FirebaseCrashlytics.getInstance();
             firebaseAnalytics.setAnalyticsCollectionEnabled(ExteraConfig.useGoogleAnalytics);
             firebaseCrashlytics.setCrashlyticsCollectionEnabled(ExteraConfig.useGoogleCrashlytics);
-            CrashlyticsUtils.logEvents(applicationContext);
+            CrashlyticsUtils.logEvents();
         });
     }
 

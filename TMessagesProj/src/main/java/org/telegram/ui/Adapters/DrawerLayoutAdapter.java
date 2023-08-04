@@ -204,7 +204,10 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             }
             i -= getAccountRowsCount();
         }
-        if (i < 0 || i >= items.size() || items.get(i) == null) {
+        if (i >= items.size() - 1) {
+            return 1;
+        }
+        if (i < 0 || items.get(i) == null) {
             return 2;
         }
         return 3;
@@ -317,12 +320,11 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         }
         if (ExteraConfig.myStories && MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled()) {
             items.add(new Item(16, LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), R.drawable.msg_menu_stories));
-            items.add(null); // divider
-        } else if (me != null && me.isPremium() && ExteraConfig.changeStatus) {
-            items.add(null); // divider
         }
         if (ExteraConfig.archivedChats && ChatUtils.hasArchivedChats()) {
             items.add(new Item(14, LocaleController.getString("ArchivedChats", R.string.ArchivedChats), archiveIcon));
+        }
+        if (items.size() > 0) {
             items.add(null);
         }
         if (ExteraConfig.newGroup) items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), newGroupIcon));
@@ -337,6 +339,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             items.add(null);
             items.add(new Item(17, LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), scanQrIcon));
         }
+        items.add(null);
 //      items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
 //      items.add(new Item(13, LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), helpIcon));
     }

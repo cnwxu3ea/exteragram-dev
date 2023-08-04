@@ -4296,6 +4296,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (isPinnedChat || drawSideButton == 1 && messageObject.messageOwner.fwd_from != null && !messageObject.isOutOwner() && messageObject.messageOwner.fwd_from.saved_from_peer != null && messageObject.getDialogId() == UserConfig.getInstance(currentAccount).getClientUserId()) {
                     drawSideButton = 2;
                 }
+                if (drawSideButton == 1 && ExteraConfig.hideShareButton) {
+                    drawSideButton = 0;
+                }
             }
             replyNameLayout = null;
             adminLayout = null;
@@ -12609,7 +12612,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private boolean checkNeedDrawShareButton(MessageObject messageObject) {
-        if (currentMessageObject.deleted || currentMessageObject.isSponsored() || ExteraConfig.hideShareButton) {
+        if (currentMessageObject.deleted || currentMessageObject.isSponsored()) {
             return false;
         }
         if (currentPosition != null) {

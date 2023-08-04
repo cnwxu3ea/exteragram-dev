@@ -99,8 +99,6 @@
     <string name="StickerShapeRoundedMsg">رسالة</string>
     <string name="StickerTime">إخفاء الوقت على الملصقات</string>
     <string name="UnlimitedRecentStickers">الملصقات الأخيرة غير المحدودة</string>
-    <string name="HideCategories">إخفاء الفئات</string>
-    <string name="HideCategoriesInfo">ستختفي الفئات من شريط البحث في مربع حوار اختيار التفاعلات ولوحة الرموز التعبيرية.</string>
     <string name="DoubleTap">نقر مزدوج</string>
     <string name="DoubleTapIncoming">الرسائل الواردة</string>
     <string name="DoubleTapOutgoing">الرسائل المرسلة</string>
@@ -164,7 +162,7 @@
     <string name="Datacenter">قاعدة البيانات</string>
     <!-- Other -->
     <string name="RestartRequired">إعادة تشغيل التطبيق، لتطبيق الميزات.</string>
-    <string name="ResetSettingsBulletin">تمت إعادة تعيين تفضيلات **exteraGram**.</string>
+    <string name="ResetPreferences">تمت إعادة تعيين تفضيلات **exteraGram**.</string>
     <string name="UserNotFound">لم يتم العثور على مستخدم مع هذا **المعرف**.</string>
     <string name="PhotoCopied">تم نسخ الصورة إلى الحافظة.</string>
     <string name="ToBeginning">إلى البداية</string>

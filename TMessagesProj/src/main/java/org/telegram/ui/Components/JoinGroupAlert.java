@@ -52,6 +52,7 @@ public class JoinGroupAlert extends BottomSheet {
         super(context, false, resourcesProvider);
         setApplyBottomPadding(false);
         setApplyTopPadding(false);
+        fixNavigationBar();
 
         fragment = parentFragment;
         if (obj instanceof TLRPC.ChatInvite) {
@@ -60,8 +61,6 @@ public class JoinGroupAlert extends BottomSheet {
             currentChat = (TLRPC.Chat) obj;
         }
         hash = group;
-
-        fixNavigationBar(chatInvite == null || chatInvite.request_needed ? getThemedColor(Theme.key_dialogBackground) : getThemedColor(Theme.key_windowBackgroundWhite));
 
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);

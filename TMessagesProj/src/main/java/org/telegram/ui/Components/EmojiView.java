@@ -854,7 +854,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             });
             box.addView(clear, LayoutHelper.createFrame(36, 36, Gravity.RIGHT | Gravity.TOP));
 
-            if ((type != 1 || allowAnimatedEmoji && UserConfig.getInstance(UserConfig.selectedAccount).isPremium()) && !ExteraConfig.hideCategories) {
+            if (type != 1 || allowAnimatedEmoji && UserConfig.getInstance(UserConfig.selectedAccount).isPremium()) {
                 categoriesListView = new StickerCategoriesListView(context, null, StickerCategoriesListView.CategoriesType.DEFAULT, resourcesProvider) {
                     @Override
                     public void selectCategory(int categoryIndex) {

@@ -1218,7 +1218,7 @@ public class ViewPagerFixed extends FrameLayout {
             } else {
                 selectorDrawable.setCornerRadii(new float[]{rad, rad, rad, rad, 0, 0, 0, 0});
             }
-            selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x2F : 0xFF));
+            selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF));
 
             setHorizontalScrollBarEnabled(false);
             listView = new RecyclerListView(context) {
@@ -1575,7 +1575,7 @@ public class ViewPagerFixed extends FrameLayout {
         }
 
         public void updateColors() {
-            selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x2F : 0xFF));
+            selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF));
             listView.invalidateViews();
             listView.invalidate();
             invalidate();

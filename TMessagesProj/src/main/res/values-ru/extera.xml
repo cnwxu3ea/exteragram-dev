@@ -122,13 +122,13 @@
 
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
-    <string name="HideCategories">Скрыть категории</string>
-    <string name="HideCategoriesInfo">Категории исчезнут из строки поиска в диалоговом окне выбора реакций и панели эмодзи.</string>
+    <string name="HideReactions">Скрыть реакции</string>
+    <string name="HideReactionsInfo">Реакции полностью пропадут из интерфейса.</string>
 
     <string name="DoubleTap">Двойное нажатие</string>
     <string name="DoubleTapIncoming">Входящие сообщения</string>
     <string name="DoubleTapOutgoing">Исходящие сообщения</string>
-    <string name="DoubleTapInfo">Некоторые действия требуют наличия прав администратора в чате или канале.</string>
+    <string name="DoubleTapInfo">Некоторые действия требуют наличия прав администратора в группе или канале.</string>
 
     <string name="BottomButton">Нижняя кнопка</string>
     <string name="HideKeyboardOnScroll">Скрывать клавиатуру при скролле</string>
@@ -230,13 +230,14 @@
 
     <!-- Bot Button information -->
     <string name="CopyTitle">Скопировать название</string>
-    <string name="CopyCallback">Скопировать callback</string>
-    <string name="CopyInlineQuery">Скопировать inline запрос</string>
+    <string name="CopyCallback">Скопировать Callback</string>
+    <string name="CopyInlineQuery">Скопировать Inline запрос</string>
     <string name="CopyID">Скопировать ID пользователя</string>
 
     <!-- Other -->
     <string name="RestartRequired">Перезапустите приложение, чтобы изменения вступили в силу.</string>
-    <string name="ResetSettingsBulletin">Настройки **exteraGram** сброшены.</string>
+    <string name="ResetPreferences">Настройки **exteraGram** сброшены.</string>
+    <string name="ResetPreferencesInfo">Вы точно хотите сбросить **все** настройки exteraGram?</string>
     <string name="UserNotFound">Пользователь с этим **ID** не найден.</string>
     <string name="PhotoCopied">Фото скопировано в буфер обмена.</string>
 

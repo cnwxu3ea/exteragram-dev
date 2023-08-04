@@ -1518,10 +1518,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (!available && chatInfo != null) {
                     available = ChatObject.reactionIsAvailable(chatInfo, reaction == null ? reactionStringSetting : reaction.reaction);
                 }
-                if (!available || !(view instanceof ChatMessageCell)) {
+                if (!available) {
                     return false;
                 }
-                return !cell.getMessageObject().isSending() && !cell.getMessageObject().isEditing() && cell.getMessageObject().type != MessageObject.TYPE_PHONE_CALL && !actionBar.isActionModeShowed() && !isSecretChat() && !isInScheduleMode() && !cell.getMessageObject().isSponsored();
+                return !cell.getMessageObject().isSending() && !cell.getMessageObject().isEditing() && cell.getMessageObject().type != MessageObject.TYPE_PHONE_CALL && !actionBar.isActionModeShowed() && !isSecretChat() && !isInScheduleMode() && !cell.getMessageObject().isSponsored() && !ExteraConfig.hideReactions;
             } else {
                 MessageObject message = cell.getMessageObject();
                 MessageObject.GroupedMessages messageGroup = getValidGroupedMessage(message);
@@ -8030,7 +8030,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (reactionsMentiondownButtonCounter == null || getParentActivity() == null) {
             return;
         }
-        boolean visible = reactionsMentionCount > 0 && chatMode == 0;
+        boolean visible = reactionsMentionCount > 0 && chatMode == 0 && !ExteraConfig.hideReactions;
         reactionsMentiondownButtonCounter.setCount(reactionsMentionCount, animated);
         if (visible && reactionsMentiondownButton.getTag() == null) {
             reactionsMentiondownButton.setTag(1);
@@ -17494,7 +17494,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             });
         } else if (id == NotificationCenter.didUpdateReactions) {
-            if (isInScheduleMode()) {
+            if (isInScheduleMode() || ExteraConfig.hideReactions) {
                 return;
             }
             long did = (Long) args[0];
@@ -24069,7 +24069,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             Rect rect = new Rect();
 
             List<TLRPC.TL_availableReaction> availableReacts = getMediaDataController().getEnabledReactionsList();
-            boolean isReactionsViewAvailable = !isSecretChat() && !isInScheduleMode() && currentUser == null && message.hasReactions() && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && !availableReacts.isEmpty() && message.messageOwner.reactions.can_see_list && !message.isSecretMedia();
+            boolean isReactionsViewAvailable = !isSecretChat() && !isInScheduleMode() && currentUser == null && message.hasReactions() && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && !availableReacts.isEmpty() && message.messageOwner.reactions.can_see_list && !message.isSecretMedia() && !ExteraConfig.hideReactions;
             boolean isReactionsAvailable;
             if (message.isForwardedChannelPost()) {
                 TLRPC.ChatFull chatInfo = getMessagesController().getChatFull(-message.getFromChatId());
@@ -24081,6 +24081,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 isReactionsAvailable = !message.isSecretMedia() && !isSecretChat() && !isInScheduleMode() && message.isReactionsAvailable() && (chatInfo != null && !(chatInfo.available_reactions instanceof TLRPC.TL_chatReactionsNone) || (chatInfo == null && !ChatObject.isChannel(currentChat)) || currentUser != null) && !availableReacts.isEmpty();
             }
+            isReactionsAvailable &= !ExteraConfig.hideReactions;
             boolean showMessageSeen = !isReactionsViewAvailable && !isInScheduleMode() && currentChat != null && message.isOutOwner() && message.isSent() && !message.isEditing() && !message.isSending() && !message.isSendError() && !message.isContentUnread() && !message.isUnread() && (ConnectionsManager.getInstance(currentAccount).getCurrentTime() - message.messageOwner.date < getMessagesController().chatReadMarkExpirePeriod)  && (ChatObject.isMegagroup(currentChat) || !ChatObject.isChannel(currentChat)) && chatInfo != null && chatInfo.participants_count <= getMessagesController().chatReadMarkSizeThreshold && !(message.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByRequest) && (v instanceof ChatMessageCell);
             boolean showSponsorInfo = selectedObject != null && selectedObject.isSponsored() && (selectedObject.sponsoredInfo != null || selectedObject.sponsoredAdditionalInfo != null || selectedObject.sponsoredWebPage != null || selectedObject.sponsoredWebPage != null);
 
@@ -25119,12 +25120,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             final int finalPopupY = popupY;
             scrimPopupContainerLayout.setMaxHeight(totalHeight - popupY);
             ReactionsContainerLayout finalReactionsLayout = reactionsLayout;
+            boolean finalIsReactionsAvailable = isReactionsAvailable;
             Runnable showMenu = () -> {
                 if (scrimPopupWindow == null || fragmentView == null || scrimPopupWindow.isShowing() || !AndroidUtilities.isActivityRunning(getParentActivity())) {
                     return;
                 }
                 scrimPopupWindow.showAtLocation(chatListView, Gravity.LEFT | Gravity.TOP, finalPopupX, finalPopupY);
-                if (isReactionsAvailable && finalReactionsLayout != null) {
+                if (finalIsReactionsAvailable && finalReactionsLayout != null) {
                     finalReactionsLayout.startEnterAnimation(true);
                 }
                 AndroidUtilities.runOnUIThread(() -> {

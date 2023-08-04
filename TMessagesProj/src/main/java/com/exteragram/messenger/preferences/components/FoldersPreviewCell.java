@@ -121,7 +121,7 @@ public class FoldersPreviewCell extends FrameLayout {
                     if (i == 0) {
                         textPaint.setColor(ColorUtils.blendARGB(0x00, Theme.getColor(Theme.key_windowBackgroundWhiteValueText), hideAllChatsProgress));
                         textPaint.setTextScaleX(hideAllChatsProgress * titleProgress);
-                        Theme.dialogs_onlineCirclePaint.setColor(ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhiteValueText), ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_windowBackgroundWhiteValueText), 0x2F), chipsStyleProgress));
+                        Theme.dialogs_onlineCirclePaint.setColor(ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhiteValueText), ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_windowBackgroundWhiteValueText), 0x1F), chipsStyleProgress));
                         Theme.dialogs_onlineCirclePaint.setColor(ColorUtils.blendARGB(0x00, Theme.dialogs_onlineCirclePaint.getColor(), hideAllChatsProgress));
                     } else {
                         textPaint.setColor(ColorUtils.blendARGB(0x00, color, titleProgress));

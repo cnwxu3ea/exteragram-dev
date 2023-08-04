@@ -3936,7 +3936,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         };
         avatarImage.getImageReceiver().setAllowDecodeSingleFrame(true);
-        avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(getSmallAvatarRoundRadius()));
+        avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(42, false, isForum()));
         avatarImage.setPivotX(0);
         avatarImage.setPivotY(0);
         avatarContainer.addView(avatarImage, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
@@ -4413,7 +4413,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarContainer.setScaleY(avatarScale);
         avatarContainer.setTranslationX(AndroidUtilities.lerp(avatarX, 0f, value));
         avatarContainer.setTranslationY(AndroidUtilities.lerp((float) Math.ceil(avatarY), 0f, value));
-        avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(getSmallAvatarRoundRadius(), false, isForum()), 0f, value));
+        avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(42, false, isForum()), 0f, value));
         if (storyView != null) {
             storyView.setExpandProgress(value);
         }
@@ -4514,10 +4514,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return ChatObject.isForum(chatLocal);
         }
         return false;
-    }
-
-    private float getSmallAvatarRoundRadius() {
-        return 42;
     }
 
     private void updateTtlIcon() {
@@ -5978,7 +5974,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     storyView.setExpandProgress(1f);
                 }
 
-                avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(getSmallAvatarRoundRadius(), false, isForum()), 0f, avatarAnimationProgress));
+                avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(42, false, isForum()), 0f, avatarAnimationProgress));
                 avatarContainer.setTranslationX(AndroidUtilities.lerp(avX, 0, avatarAnimationProgress));
                 avatarContainer.setTranslationY(AndroidUtilities.lerp((float) Math.ceil(avY), 0f, avatarAnimationProgress));
                 float extra = (avatarContainer.getMeasuredWidth() - AndroidUtilities.dp(42)) * avatarScale;

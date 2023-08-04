@@ -90,8 +90,6 @@ CameraX wird nur auf
     <string name="StickerShapeRoundedMsg">Nachricht</string>
     <string name="StickerTime">Zeit auf Stickern ausblenden</string>
     <string name="UnlimitedRecentStickers">Unbegrenzte zuletzt verwendete Sticker</string>
-    <string name="HideCategories">Kategorien ausblenden</string>
-    <string name="HideCategoriesInfo">Die Kategorien verschwinden aus der Suchleiste im Reaktionsauswahldialog und dem Emoji-Panel.</string>
     <string name="DoubleTap">Doppeltipp</string>
     <string name="DoubleTapIncoming">Eingehende Nachrichten</string>
     <string name="DoubleTapOutgoing">Ausgehende Nachrichten</string>

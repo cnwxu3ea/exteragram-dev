@@ -232,7 +232,7 @@ public class ReactionsLayoutInBubble {
         for (int i = 0; i < oldButtons.size(); i++) {
             oldButtons.get(i).detach();
         }
-        isEmpty = reactionButtons.isEmpty();
+        isEmpty = ExteraConfig.hideReactions || reactionButtons.isEmpty();
     }
 
     public void measure(int availableWidth, int gravity) {

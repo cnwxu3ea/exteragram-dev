@@ -907,7 +907,7 @@ public class FilterTabsView extends FrameLayout {
 
             int color1 = Theme.getColor(tabLineColorKey);
             int color2 = Theme.getColor(aTabLineColorKey);
-            selectorDrawable.setColor(ColorUtils.setAlphaComponent(ColorUtils.blendARGB(color1, color2, value), ExteraConfig.tabStyle >= 3 ? 0x2F : 0xFF));
+            selectorDrawable.setColor(ColorUtils.setAlphaComponent(ColorUtils.blendARGB(color1, color2, value), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF));
 
             listView.invalidateViews();
             listView.invalidate();
@@ -1951,7 +1951,7 @@ public class FilterTabsView extends FrameLayout {
     }
 
     public void updateSelector() {
-        selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey), ExteraConfig.tabStyle >= 3 ? 0x2F : 0xFF));
+        selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF));
         float rad = AndroidUtilities.dpf2(ExteraConfig.tabStyle == 3 ? 8 : ExteraConfig.tabStyle == 4 ? 30 : 3);
         if (ExteraConfig.tabStyle == 1 || ExteraConfig.tabStyle >= 3) {
             selectorDrawable.setCornerRadii(new float[]{rad, rad, rad, rad, rad, rad, rad, rad});

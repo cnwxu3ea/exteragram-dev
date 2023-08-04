@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -100,21 +101,28 @@ public class MonetUtils {
     }
 
     public static int getColor(String color) {
+        int alpha = 100;
+
         try {
-            int alpha = 100;
             if (color.matches(".*\\(.*\\).*")) {
-                alpha = Integer.parseInt(color.substring(color.indexOf("(") + 1, color.indexOf(")")));
-                color = color.substring(0, color.indexOf("("));
+                int startIndex = color.indexOf("(") + 1;
+                int endIndex = color.indexOf(")");
+                String alphaStr = color.substring(startIndex, endIndex);
+                alpha = Integer.parseInt(alphaStr);
+                color = color.substring(0, startIndex - 1);
             }
-            int id = ids.getOrDefault(color, 0);
-            int c = ApplicationLoader.applicationContext.getColor(id);
-            return ColorUtils.setAlphaComponent(c, (int) (alpha * 2.55f));
+
+            int colorId = ids.getOrDefault(color, 0);
+            int colorValue = ApplicationLoader.applicationContext.getColor(colorId);
+            float alphaFactor = alpha * 2.55f;
+
+            return ColorUtils.setAlphaComponent(colorValue, (int) alphaFactor);
         } catch (Exception e) {
-            Log.e("Theme", "Error loading color " + color);
-            e.printStackTrace();
-            return 0;
+            FileLog.e(e);
         }
+        return 0;
     }
+
 
     private static class OverlayChangeReceiver extends BroadcastReceiver {
 

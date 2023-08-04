@@ -12,6 +12,7 @@
 package com.exteragram.messenger.preferences;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.TextView;
@@ -82,14 +83,26 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
                 }
             }
         } else if (position == resetSettingsRow) {
-            ExteraConfig.clearPreferences();
-            parentLayout.rebuildAllFragmentViews(false, false);
-            getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-            getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
-            LocaleController.getInstance().recreateFormatters();
-            ((LaunchActivity) getParentActivity()).reloadIcons();
-            Theme.reloadAllResources(getParentActivity());
-            BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("ResetSettingsBulletin", R.string.ResetSettingsBulletin), resourcesProvider).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString(R.string.ResetPreferencesInfo)));
+            builder.setTitle(LocaleController.getString("ResetSettings", R.string.ResetSettings));
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), (dialog, which) -> {
+                ExteraConfig.clearPreferences();
+                parentLayout.rebuildAllFragmentViews(false, false);
+                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+                getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
+                LocaleController.getInstance().recreateFormatters();
+                ((LaunchActivity) getParentActivity()).reloadIcons();
+                Theme.reloadAllResources(getParentActivity());
+                BulletinFactory.of(this).createErrorBulletin(LocaleController.getString(R.string.ResetPreferences), resourcesProvider).show();
+            });
+            AlertDialog dialog = builder.create();
+            showDialog(dialog);
+            TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            if (button != null) {
+                button.setTextColor(Theme.getColor(Theme.key_text_RedBold));
+            }
         } else if (position == deleteAccountRow) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));

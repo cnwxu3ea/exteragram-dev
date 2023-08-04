@@ -4930,7 +4930,7 @@ public class Theme {
     }
 
     public static boolean canStartHolidayAnimation() {
-        return canStartHolidayAnimation;
+        return canStartHolidayAnimation || ExteraConfig.forceSnow;
     }
 
     public static int getEventType() {

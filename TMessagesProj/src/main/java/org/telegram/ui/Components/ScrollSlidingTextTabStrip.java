@@ -139,7 +139,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         } else {
             selectorDrawable.setCornerRadii(new float[]{rad, rad, rad, rad, 0, 0, 0, 0});
         }
-        selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x2F : 0xFF));
+        selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF));
 
 
         setFillViewport(true);
@@ -364,7 +364,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         activeTextColorKey = active;
         unactiveTextColorKey = unactive;
         selectorColorKey = selector;
-        selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x2F : 0xFF));
+        selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF));
     }
 
     public int getCurrentTabId() {

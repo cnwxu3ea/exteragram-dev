@@ -99,8 +99,6 @@
     <string name="StickerShapeRoundedMsg">椭圆形</string>
     <string name="StickerTime">隐藏贴纸发送时间</string>
     <string name="UnlimitedRecentStickers">无限的最近贴纸</string>
-    <string name="HideCategories">隐藏类别</string>
-    <string name="HideCategoriesInfo">类别将从回应选择对话框和表情面板中的搜索栏中消失。</string>
     <string name="DoubleTap">双击</string>
     <string name="DoubleTapIncoming">收到的消息</string>
     <string name="DoubleTapOutgoing">发送的消息</string>
@@ -164,7 +162,7 @@
     <string name="Datacenter">数据中心</string>
     <!-- Other -->
     <string name="RestartRequired">重启应用以保证设置生效.</string>
-    <string name="ResetSettingsBulletin">**exteraGram** 设置已被重置。</string>
+    <string name="ResetPreferences">**exteraGram** 设置已被重置。</string>
     <string name="UserNotFound">未找到 **ID** 的用户。</string>
     <string name="PhotoCopied">图片已复制到剪贴板</string>
     <string name="ToBeginning">首条消息</string>

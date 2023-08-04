@@ -3099,7 +3099,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
 
                 if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
-                    cameraSession.setZoom(cameraZoom);
+                    if (cameraSession != null) {
+                        cameraSession.setZoom(cameraZoom);
+                    }
                 } else {
                     cameraXController.setZoom(cameraZoom);
                 }
@@ -3123,7 +3125,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             finishZoomTransition.addUpdateListener(valueAnimator -> {
                 cameraZoom = (float) valueAnimator.getAnimatedValue();
                 if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
-                    cameraSession.setZoom(cameraZoom);
+                    if (cameraSession != null) {
+                        cameraSession.setZoom(cameraZoom);
+                    }
                 } else {
                     cameraXController.setZoom(cameraZoom);
                 }

@@ -24,7 +24,6 @@ import com.exteragram.messenger.icons.BaseIconSet;
 import com.exteragram.messenger.icons.EmptyIconSet;
 import com.exteragram.messenger.icons.SolarIconSet;
 
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
@@ -92,7 +91,7 @@ public class ExteraConfig {
 
     public static boolean hideStickerTime;
     public static boolean unlimitedRecentStickers;
-    public static boolean hideCategories;
+    public static boolean hideReactions;
 
     public static int doubleTapAction;
     public static int doubleTapActionOutOwner;
@@ -229,7 +228,7 @@ public class ExteraConfig {
 
             hideStickerTime = preferences.getBoolean("hideStickerTime", false);
             unlimitedRecentStickers = preferences.getBoolean("unlimitedRecentStickers", false);
-            hideCategories = preferences.getBoolean("hideCategories", true);
+            hideReactions = preferences.getBoolean("hideReactions", false);
 
             doubleTapAction = preferences.getInt("doubleTapAction", 1);
             doubleTapActionOutOwner = preferences.getInt("doubleTapActionOutOwner", 1);

@@ -8739,7 +8739,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (aspectRatioFrameLayout != null && aspectRatioFrameLayout.getVisibility() != View.VISIBLE) {
                 aspectRatioFrameLayout.setVisibility(View.VISIBLE);
             }
-            if (!pipItem.isEnabled() && pipItem.getVisibility() == View.VISIBLE || menuItem.isSubItemVisible(gallery_menu_pip2)) {
+            if (!pipItem.isEnabled() && (pipItem.getVisibility() == View.VISIBLE || !menuItem.isSubItemVisible(gallery_menu_pip2))) {
                 if (ExteraConfig.centerTitle) {
                     menuItem.showSubItem(gallery_menu_pip2);
                 }
@@ -12190,12 +12190,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean canPaint = (newMessageObject.getDocument() == null || newMessageObject.canPreviewDocument() || newMessageObject.getMimeType().startsWith("video/")) && !(isEmbedVideo || newMessageObject.messageOwner.ttl != 0 && newMessageObject.messageOwner.ttl < 60 * 60 || noforwards) && canSendMediaToParentChatActivity() && !opennedFromMedia;
                 if (isEmbedVideo) {
                     menuItem.showSubItem(gallery_menu_openin);
-                    if (ExteraConfig.centerTitle) {
-                        menuItem.showSubItem(gallery_menu_pip2);
-                    }
                     setItemVisible(editItem, false, false);
                     menuItem.hideSubItem(gallery_menu_paint2);
                     setItemVisible(pipItem, true, false);
+                    if (ExteraConfig.centerTitle) {
+                        menuItem.showSubItem(gallery_menu_pip2);
+                    }
                 } else if (isVideo) {
                     if (!noforwards || (slideshowMessageId == 0 ? MessageObject.getMedia(newMessageObject.messageOwner).webpage != null && MessageObject.getMedia(newMessageObject.messageOwner).webpage.url != null :
                             MessageObject.getMedia(imagesArr.get(0).messageOwner).webpage != null && MessageObject.getMedia(imagesArr.get(0).messageOwner).webpage.url != null)) {
@@ -12211,11 +12211,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     if (!pipAvailable) {
                         pipItem.setEnabled(false);
                         setItemVisible(pipItem, true, !masksItemVisible && editItem.getAlpha() <= 0, 0.5f);
+                        menuItem.hideSubItem(gallery_menu_pip2);
                     } else {
                         setItemVisible(pipItem, true, !masksItemVisible && editItem.getAlpha() <= 0);
-                    }
-                    if (ExteraConfig.centerTitle && pipAvailable) {
-                        menuItem.showSubItem(gallery_menu_pip2);
+                        if (ExteraConfig.centerTitle) {
+                            menuItem.showSubItem(gallery_menu_pip2);
+                        }
                     }
                     setItemVisible(editItem, false, false);
                     menuItem.hideSubItem(gallery_menu_paint2);
@@ -12692,11 +12693,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (!pipAvailable) {
                     pipItem.setEnabled(false);
                     setItemVisible(pipItem, true, true, 0.5f);
+                    menuItem.hideSubItem(gallery_menu_pip2);
                 } else {
                     setItemVisible(pipItem, true, true);
-                }
-                if (ExteraConfig.centerTitle && pipAvailable) {
-                    menuItem.showSubItem(gallery_menu_pip2, true);
+                    if (ExteraConfig.centerTitle) {
+                        menuItem.showSubItem(gallery_menu_pip2, true);
+                    }
                 }
             } else {
                 menuItem.hideSubItem(gallery_menu_openin);

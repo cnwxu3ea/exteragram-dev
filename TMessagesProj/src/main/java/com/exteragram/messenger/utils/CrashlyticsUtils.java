@@ -27,12 +27,6 @@ import org.telegram.messenger.SharedConfig;
 
 public class CrashlyticsUtils {
 
-    public static boolean isGooglePlayServicesAvailable(Context context) {
-        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
-        return resultCode == ConnectionResult.SUCCESS;
-    }
-
     private static String getPerformanceClassString() {
         return switch (SharedConfig.getDevicePerformanceClass()) {
             case SharedConfig.PERFORMANCE_CLASS_LOW -> "Low";
@@ -42,7 +36,7 @@ public class CrashlyticsUtils {
         };
     }
 
-    public static void logEvents(Context context) {
+    public static void logEvents() {
         if (ApplicationLoader.getFirebaseAnalytics() == null) {
             return;
         }
@@ -50,7 +44,6 @@ public class CrashlyticsUtils {
         params.putString("android_version", Build.VERSION.RELEASE);
         params.putString("version", BuildConfig.VERSION_NAME);
         params.putInt("version_code", BuildConfig.VERSION_CODE);
-        params.putBoolean("has_play_services", isGooglePlayServicesAvailable(context));
         params.putString("device", LocaleUtils.capitalize(Build.MANUFACTURER) + " " + Build.MODEL);
         params.putString("performance_class", getPerformanceClassString());
         params.putString("locale", LocaleController.getSystemLocaleStringIso639());

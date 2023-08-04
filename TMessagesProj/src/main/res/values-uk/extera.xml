@@ -102,8 +102,6 @@ CameraX підтримується тільки на
     <string name="StickerShapeRoundedMsg">Повідомлення</string>
     <string name="StickerTime">Ховати час наліпок</string>
     <string name="UnlimitedRecentStickers">Необмежені улюблені Наклейки</string>
-    <string name="HideCategories">Приховати категорії</string>
-    <string name="HideCategoriesInfo">Категорії зникнуть з панелі пошуку на панелі вибору реакцій та панелі емоції.</string>
     <string name="DoubleTap">Подвійне натискання</string>
     <string name="DoubleTapIncoming">Вхідні повідомлення</string>
     <string name="DoubleTapOutgoing">Вихідні повідомлення</string>
@@ -167,7 +165,7 @@ CameraX підтримується тільки на
     <string name="Datacenter">Дата-центр</string>
     <!--  Other  -->
     <string name="RestartRequired">Перезапустіть програму, щоб зміни вступили в силу.</string>
-    <string name="ResetSettingsBulletin">**exteraGram** Налаштування були скинуті.</string>
+    <string name="ResetPreferences">**exteraGram** Налаштування були скинуті.</string>
     <string name="UserNotFound">Користувача з таким **ID** не знайдено.</string>
     <string name="PhotoCopied">Фото скопійовано до буфера обміну.</string>
     <string name="ToBeginning">На початок</string>

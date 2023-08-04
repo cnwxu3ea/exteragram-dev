@@ -125,8 +125,8 @@
 
     <string name="StickerTime">Hide Time on Stickers</string>
     <string name="UnlimitedRecentStickers">Unlimited Recent Stickers</string>
-    <string name="HideCategories">Hide Categories</string>
-    <string name="HideCategoriesInfo">The categories will disappear from the search bar in the reactions selection dialog and emoji panel.</string>
+    <string name="HideReactions">Hide Reactions</string>
+    <string name="HideReactionsInfo">Reactions will completely disappear from the interface.</string>
 
     <string name="DoubleTap">Double Tap</string>
     <string name="DoubleTapIncoming">Incoming Messages</string>
@@ -233,11 +233,12 @@
     <string name="CopyTitle">Copy Title</string>
     <string name="CopyCallback">Copy Callback Data</string>
     <string name="CopyInlineQuery">Copy Inline Query</string>
-    <string name="CopyID">Copy user ID</string>
+    <string name="CopyID">Copy User ID</string>
 
     <!-- Other -->
     <string name="RestartRequired">Restart the App to take effect.</string>
-    <string name="ResetSettingsBulletin">**exteraGram** Preferences have been reset.</string>
+    <string name="ResetPreferences">**exteraGram** Preferences have been reset.</string>
+    <string name="ResetPreferencesInfo">Are you sure you want to reset **all** exteraGram Preferences to default?</string>
     <string name="UserNotFound">User with this **ID** not found.</string>
     <string name="PhotoCopied">Photo copied to clipboard.</string>
 

@@ -297,12 +297,11 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 rectPaint.setColor(indicatorColor);
                 AndroidUtilities.rectTmp.set(lineLeft, height - indicatorHeight, lineRight, height);
                 if (ExteraConfig.tabStyle != 2) {
+                    rectPaint.setAlpha(0xFF);
                     if (ExteraConfig.tabStyle >= 3) {
-                        rectPaint.setAlpha(0x2F);
+                        rectPaint.setAlpha(0x1F);
                         int sideBound = (ExteraConfig.tabStyle == 3 ? AndroidUtilities.dp(8) : ExteraConfig.tabStyle == 4 ? AndroidUtilities.dp(10) : 0);
-                        AndroidUtilities.rectTmp.set(lineLeft - sideBound, ExteraConfig.tabStyle >= 3 ? height / 2f - AndroidUtilities.dp(ExteraConfig.tabStyle == 3 ? 14 : 15) : (height - indicatorHeight), lineRight + sideBound, ExteraConfig.tabStyle >= 3 ? height / 2f + AndroidUtilities.dp(ExteraConfig.tabStyle == 3 ? 14 : 15) : height);
-                    } else {
-                        rectPaint.setAlpha(0xFF);
+                        AndroidUtilities.rectTmp.set(lineLeft - sideBound, ExteraConfig.tabStyle >= 3 ? height / 2f - AndroidUtilities.dp(14) : (height - indicatorHeight), lineRight + sideBound, ExteraConfig.tabStyle >= 3 ? height / 2f + AndroidUtilities.dp(14) : height);
                     }
                     float r = ExteraConfig.tabStyle == 3 ? AndroidUtilities.dp(8) : ExteraConfig.tabStyle == 4 ? AndroidUtilities.dp(30) : indicatorHeight / 2f;
                     canvas.drawRoundRect(AndroidUtilities.rectTmp, r, r, rectPaint);

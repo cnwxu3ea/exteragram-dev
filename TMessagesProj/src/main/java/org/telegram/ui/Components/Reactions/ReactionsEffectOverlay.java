@@ -722,7 +722,7 @@ public class ReactionsEffectOverlay {
     }
 
     public static void show(BaseFragment baseFragment, ReactionsContainerLayout reactionsLayout, ChatMessageCell cell, View fromAnimationView, float x, float y, ReactionsLayoutInBubble.VisibleReaction visibleReaction, int currentAccount, int animationType) {
-        if (cell == null || visibleReaction == null || baseFragment == null || baseFragment.getParentActivity() == null) {
+        if (cell == null || visibleReaction == null || baseFragment == null || baseFragment.getParentActivity() == null || ExteraConfig.hideReactions) {
             return;
         }
         boolean animationEnabled = MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);

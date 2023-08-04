@@ -100,7 +100,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private int stickersHeaderRow;
     private int hideStickerTimeRow;
     private int unlimitedRecentStickersRow;
-    private int hideCategoriesRow;
+    private int hideReactionsRow;
     private int stickersDividerRow;
 
     private int doubleTapHeaderRow;
@@ -255,7 +255,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         stickersHeaderRow = newRow();
         hideStickerTimeRow = newRow();
         unlimitedRecentStickersRow = newRow();
-        hideCategoriesRow = newRow();
+        hideReactionsRow = newRow();
         stickersDividerRow = newRow();
 
         doubleTapHeaderRow = newRow();
@@ -330,9 +330,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         } else if (position == unlimitedRecentStickersRow) {
             ExteraConfig.editor.putBoolean("unlimitedRecentStickers", ExteraConfig.unlimitedRecentStickers ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.unlimitedRecentStickers);
-        } else if (position == hideCategoriesRow) {
-            ExteraConfig.editor.putBoolean("hideCategories", ExteraConfig.hideCategories ^= true).apply();
-            ((TextCheckCell) view).setChecked(ExteraConfig.hideCategories);
+        } else if (position == hideReactionsRow) {
+            ExteraConfig.editor.putBoolean("hideReactions", ExteraConfig.hideReactions ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.hideReactions);
         } else if (position == addCommaAfterMentionRow) {
             ExteraConfig.editor.putBoolean("addCommaAfterMention", ExteraConfig.addCommaAfterMention ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.addCommaAfterMention);
@@ -640,8 +640,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         textCheckCell.setTextAndCheck(LocaleController.getString("StickerTime", R.string.StickerTime), ExteraConfig.hideStickerTime, true);
                     } else if (position == unlimitedRecentStickersRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("UnlimitedRecentStickers", R.string.UnlimitedRecentStickers), ExteraConfig.unlimitedRecentStickers, true);
-                    } else if (position == hideCategoriesRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("HideCategories", R.string.HideCategories), ExteraConfig.hideCategories, false);
+                    } else if (position == hideReactionsRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("HideReactions", R.string.HideReactions), ExteraConfig.hideReactions, false);
                     } else if (position == addCommaAfterMentionRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("AddCommaAfterMention", R.string.AddCommaAfterMention), ExteraConfig.addCommaAfterMention, false);
                     } else if (position == hideKeyboardOnScrollRow) {
@@ -689,7 +689,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     } else if (position == chatsDividerRow) {
                         cell.setText(LocaleUtils.formatWithUsernames(LocaleController.getString("AddCommaAfterMentionInfo", R.string.AddCommaAfterMentionInfo), ChatsPreferencesActivity.this));
                     } else if (position == stickersDividerRow) {
-                        cell.setText(LocaleController.getString("HideCategoriesInfo", R.string.HideCategoriesInfo));
+                        cell.setText(LocaleController.getString("HideReactionsInfo", R.string.HideReactionsInfo));
                     } else if (position == videosDividerRow) {
                         cell.setText(LocaleController.getString("DisablePlaybackInfo", R.string.DisablePlaybackInfo));
                     } else if (position == messagesDividerRow) {

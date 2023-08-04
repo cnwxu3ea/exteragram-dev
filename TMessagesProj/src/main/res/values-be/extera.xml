@@ -102,8 +102,6 @@ CameraX падтрымліваецца толькі на
     <string name="StickerShapeRoundedMsg">Паведамленне</string>
     <string name="StickerTime">Схаваць час на стыкерах</string>
     <string name="UnlimitedRecentStickers">Безлімітныя нядаўнія стыкеры</string>
-    <string name="HideCategories">Схаваць катэгорыі</string>
-    <string name="HideCategoriesInfo">Катэгорыі знікнуць з радка пошуку ў дыялогавым акне выбару рэакцый і панэлі эмодзи.</string>
     <string name="DoubleTap">Двайны дотык</string>
     <string name="DoubleTapIncoming">Уваходныя паведамленні</string>
     <string name="DoubleTapOutgoing">Выходныя паведамленні</string>
@@ -167,7 +165,7 @@ CameraX падтрымліваецца толькі на
     <string name="Datacenter">Дата-цэнтр</string>
     <!--  Other  -->
     <string name="RestartRequired">Перапусціце прыкладанне каб захаваць змены.</string>
-    <string name="ResetSettingsBulletin">**exteraGram** Налады былі скінуты.</string>
+    <string name="ResetPreferences">**exteraGram** Налады былі скінуты.</string>
     <string name="UserNotFound">Карыстальнік з гэтым **ID** не знойдзены.</string>
     <string name="PhotoCopied">Фота скапіравана ў буфер абмену.</string>
     <string name="ToBeginning">У пачатак</string>
