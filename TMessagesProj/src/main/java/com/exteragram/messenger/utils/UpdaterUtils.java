@@ -208,7 +208,7 @@ public class UpdaterUtils {
 
     public static String getOtaDirSize() {
         checkDirs();
-        return AndroidUtilities.formatFileSize(Utilities.getDirSize(otaPath.getAbsolutePath(), 5, true), true);
+        return AndroidUtilities.formatFileSize(Utilities.getDirSize(otaPath.getAbsolutePath(), 5, true), true, true);
     }
 
     public static String getInstalledApkType() {

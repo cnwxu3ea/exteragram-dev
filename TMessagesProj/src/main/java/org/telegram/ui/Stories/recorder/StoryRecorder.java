@@ -247,7 +247,7 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
             SourceView src = new SourceView() {
                 @Override
                 protected void show() {
-                    PeerStoriesView peerView = storyViewer.getCurrentPeerView();
+                    final PeerStoriesView peerView = storyViewer.getCurrentPeerView();
                     if (peerView != null) {
                         peerView.animateOut(false);
                     }
@@ -259,7 +259,7 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
 
                 @Override
                 protected void hide() {
-                    PeerStoriesView peerView = storyViewer.getCurrentPeerView();
+                    final PeerStoriesView peerView = storyViewer.getCurrentPeerView();
                     if (peerView != null) {
                         peerView.animateOut(true);
                     }
@@ -270,7 +270,7 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
             }
             src.type = 1;
             src.rounding = dp(8);
-            PeerStoriesView peerView = storyViewer.getCurrentPeerView();
+            final PeerStoriesView peerView = storyViewer.getCurrentPeerView();
             if (peerView != null) {
                 src.view = peerView.storyContainer;
             }
@@ -3431,7 +3431,7 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
         captionEdit.keyboardNotifier.ignore(toMode != EDIT_MODE_NONE);
 //        privacySelectorHint.hide();
         Bulletin.hideVisible();
-        if (photoFilterView != null && toMode == EDIT_MODE_FILTER) {
+        if (photoFilterView != null && fromMode == EDIT_MODE_FILTER) {
             applyFilter(null);
         }
         if (photoFilterEnhanceView != null) {
@@ -3515,8 +3515,19 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
             return;
         }
 
-        Bitmap photoBitmap = previewView.getPhotoBitmap();
-        if (photoBitmap == null) {
+        Bitmap photoBitmap = null;
+        if (!outputEntry.isVideo) {
+            if (outputEntry.filterFile == null) {
+                photoBitmap = previewView.getPhotoBitmap();
+            } else {
+                if (photoFilterBitmap != null) {
+                    photoFilterBitmap.recycle();
+                    photoFilterBitmap = null;
+                }
+                photoBitmap = photoFilterBitmap = StoryEntry.getScaledBitmap(opts -> BitmapFactory.decodeFile(outputEntry.file.getAbsolutePath(), opts), AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y, true);
+            }
+        }
+        if (photoBitmap == null && !outputEntry.isVideo) {
             return;
         }
 

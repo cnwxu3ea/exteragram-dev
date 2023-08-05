@@ -35,6 +35,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedTextView;
@@ -42,6 +43,7 @@ import org.telegram.ui.Components.ButtonBounce;
 import org.telegram.ui.Components.ColoredImageSpan;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.GradientTools;
+import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.LaunchActivity;
 
 import java.util.Collections;
@@ -250,7 +252,13 @@ public class StoriesUtilities {
             if (params.drawSegments) {
                 checkGrayPaint();
                 checkStoryCellGrayPaint(params.isArchive);
-                int globalState = storiesController.getUnreadState(dialogId);
+                int globalState;
+                if (params.crossfadeToDialog != 0) {
+                    globalState = storiesController.getUnreadState(params.crossfadeToDialog);
+                } else {
+                    globalState = storiesController.getUnreadState(dialogId);
+                }
+
                 params.globalState = globalState == StoriesController.STATE_READ ? STATE_READ : STATE_HAS_UNREAD;
                 TLRPC.TL_userStories userStories = storiesController.getStories(params.dialogId);
                 int storiesCount;
@@ -258,6 +266,16 @@ public class StoriesUtilities {
                     storiesCount = storiesController.getHiddenList().size();
                 } else {
                     storiesCount = userStories == null || userStories.stories.size() == 1 ? 1 : userStories.stories.size();
+                }
+                Paint globalPaint;
+                if (globalState == StoriesController.STATE_UNREAD_CLOSE_FRIEND) {
+                    getCloseFriendsPaint(avatarImage);
+                    globalPaint = closeFriendsGradientTools.paint;
+                } else if (globalState == StoriesController.STATE_UNREAD) {
+                    getActiveCirclePaint(avatarImage, params.isStoryCell);
+                    globalPaint = storiesGradientTools[params.isStoryCell ? 1 : 0].paint;
+                } else {
+                    globalPaint = params.isStoryCell ? storyCellGreyPaint[params.isArchive ? 1 : 0] : grayPaint;
                 }
                 if (storiesCount == 1) {
                     Paint localPaint = paint;
@@ -270,6 +288,17 @@ public class StoriesUtilities {
                     startAngle = 90;
                     endAngle = 270;
                     drawSegment(canvas, rectTmp, localPaint, startAngle, endAngle, params);
+
+                    if (params.progressToSegments != 1 && localPaint != globalPaint) {
+                        globalPaint.setAlpha((int) (255 * (1f - params.progressToSegments)));
+                        startAngle = -90;
+                        endAngle = 90;
+                        drawSegment(canvas, rectTmp, globalPaint, startAngle, endAngle, params);
+                        startAngle = 90;
+                        endAngle = 270;
+                        drawSegment(canvas, rectTmp, globalPaint, startAngle, endAngle, params);
+                        globalPaint.setAlpha(255);
+                    }
                     // canvas.drawCircle(rectTmp.centerX(), rectTmp.centerY(), rectTmp.width() / 2f, localPaint);
                 } else {
                     float step = 360 / (float) storiesCount;
@@ -278,16 +307,7 @@ public class StoriesUtilities {
                     if (gapLen > step) {
                         gapLen = 0;//step * 0.4f;
                     }
-                    Paint globalPaint;
-                    if (globalState == StoriesController.STATE_UNREAD_CLOSE_FRIEND) {
-                        getCloseFriendsPaint(avatarImage);
-                        globalPaint = closeFriendsGradientTools.paint;
-                    } else if (globalState == StoriesController.STATE_UNREAD) {
-                        getActiveCirclePaint(avatarImage, params.isStoryCell);
-                        globalPaint = storiesGradientTools[params.isStoryCell ? 1 : 0].paint;
-                    } else {
-                        globalPaint = params.isStoryCell ? storyCellGreyPaint[params.isArchive ? 1 : 0] : grayPaint;
-                    }
+
 
                     int maxUnread = params.drawHiddenStoriesAsSegments ? 0 : Math.max(userStories.max_read_id, storiesController.dialogIdToMaxReadId.get(dialogId, 0));
                     for (int i = 0; i < storiesCount; i++) {
@@ -763,6 +783,8 @@ public class StoriesUtilities {
         public int unreadState;
         public int animateFromUnreadState;
         public boolean drawHiddenStoriesAsSegments;
+        public long crossfadeToDialog;
+        public float crossfadeToDialogProgress;
 
         private long dialogId;
         public int currentState;
@@ -804,11 +826,13 @@ public class StoriesUtilities {
 
         float startX, startY;
         Runnable longPressRunnable;
+        public View child;
 
         public boolean checkOnTouchEvent(MotionEvent event, View view) {
             if (ExteraConfig.hideStories) {
                 return false;
             }
+            child = view;
             StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
             if (event.getAction() == MotionEvent.ACTION_DOWN && originalAvatarRect.contains(event.getX(), event.getY())) {
                 TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(dialogId);
@@ -906,6 +930,11 @@ public class StoriesUtilities {
         }
 
         public void openStory(long dialogId, Runnable onDone) {
+            BaseFragment fragment = LaunchActivity.getLastFragment();
+            if (fragment != null && child != null) {
+                fragment.getOrCreateStoryViewer().doOnAnimationReady(onDone);
+                fragment.getOrCreateStoryViewer().open(fragment.getContext(), dialogId, StoriesListPlaceProvider.of((RecyclerListView) child.getParent()));
+            }
         }
 
         public float getScale() {
