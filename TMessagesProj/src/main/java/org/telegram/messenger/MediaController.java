@@ -1768,8 +1768,32 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (raisedToBack == minCount || accelerometerVertical) {
             lastAccelerometerDetected = System.currentTimeMillis();
         }
-        if (proximityTouched && (raisedToBack == minCount || accelerometerVertical || System.currentTimeMillis() - lastAccelerometerDetected < 60) && !VoIPService.isAnyKindOfCallActive() && !manualRecording && !forbidRaiseToListen()) {
-            if (SharedConfig.enabledRaiseTo(true) && playingMessageObject == null && recordStartRunnable == null && recordingAudio == null && !PhotoViewer.getInstance().isVisible() && ApplicationLoader.isScreenOn && !inputFieldHasText && allowStartRecord && raiseChat != null && !callInProgress) {
+        final boolean allowRecording = !manualRecording && playingMessageObject == null && SharedConfig.enabledRaiseTo(true) && ApplicationLoader.isScreenOn && !inputFieldHasText && allowStartRecord && raiseChat != null && !callInProgress;
+        final boolean allowListening = SharedConfig.enabledRaiseTo(false) && playingMessageObject != null && (playingMessageObject.isVoice() || playingMessageObject.isRoundVideo());
+        final boolean proximityDetected = proximityTouched;
+        final boolean accelerometerDetected = raisedToBack == minCount || accelerometerVertical || System.currentTimeMillis() - lastAccelerometerDetected < 60;
+        final boolean alreadyPlaying = useFrontSpeaker || raiseToEarRecord;
+        final boolean wakelockAllowed = (
+//            proximityDetected ||
+            accelerometerDetected ||
+            alreadyPlaying
+        ) && !forbidRaiseToListen() && !VoIPService.isAnyKindOfCallActive() && (allowRecording || allowListening) && !PhotoViewer.getInstance().isVisible();
+        if (proximityWakeLock != null) {
+            final boolean held = proximityWakeLock.isHeld();
+            if (held && !wakelockAllowed) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("wake lock releasing (proximityDetected=" + proximityDetected + ", accelerometerDetected=" + accelerometerDetected + ", alreadyPlaying=" + alreadyPlaying + ")");
+                }
+                proximityWakeLock.release();
+            } else if (!held && wakelockAllowed) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("wake lock acquiring (proximityDetected=" + proximityDetected + ", accelerometerDetected=" + accelerometerDetected + ", alreadyPlaying=" + alreadyPlaying + ")");
+                }
+                proximityWakeLock.acquire();
+            }
+        }
+        if (proximityTouched && wakelockAllowed) {
+            if (allowRecording && recordStartRunnable == null && recordingAudio == null) {
                 if (!raiseToEarRecord) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.d("start record");
@@ -1783,40 +1807,40 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     if (useFrontSpeaker) {
                         setUseFrontSpeaker(true);
                     }
-                    ignoreOnPause = true;
-                    if (proximityHasDifferentValues && proximityWakeLock != null && !proximityWakeLock.isHeld()) {
-                        proximityWakeLock.acquire();
-                    }
+//                    ignoreOnPause = true;
+//                    if (proximityHasDifferentValues && proximityWakeLock != null && !proximityWakeLock.isHeld()) {
+//                        proximityWakeLock.acquire();
+//                    }
                 }
-            } else if (SharedConfig.enabledRaiseTo(false) && playingMessageObject != null && (playingMessageObject.isVoice() || playingMessageObject.isRoundVideo())) {
+            } else if (allowListening) {
                 if (!useFrontSpeaker) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.d("start listen");
                     }
-                    if (proximityHasDifferentValues && proximityWakeLock != null && !proximityWakeLock.isHeld()) {
-                        proximityWakeLock.acquire();
-                    }
+//                    if (proximityHasDifferentValues && proximityWakeLock != null && !proximityWakeLock.isHeld()) {
+//                        proximityWakeLock.acquire();
+//                    }
                     setUseFrontSpeaker(true);
                     startAudioAgain(false);
-                    ignoreOnPause = true;
+//                    ignoreOnPause = true;
                 }
             }
             raisedToBack = 0;
             raisedToTop = 0;
             raisedToTopSign = 0;
             countLess = 0;
-        } else if (proximityTouched && ((accelerometerSensor == null || linearSensor == null) && gravitySensor == null || ignoreAccelerometerGestures()) && !VoIPService.isAnyKindOfCallActive()) {
-            if (playingMessageObject != null && !ApplicationLoader.mainInterfacePaused && (playingMessageObject.isVoice() || playingMessageObject.isRoundVideo()) && SharedConfig.enabledRaiseTo(false)) {
+        } else if (proximityTouched && ((accelerometerSensor == null || linearSensor == null) && gravitySensor == null) && !VoIPService.isAnyKindOfCallActive()) {
+            if (playingMessageObject != null && !ApplicationLoader.mainInterfacePaused && allowListening) {
                 if (!useFrontSpeaker && !manualRecording && !forbidRaiseToListen()) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.d("start listen by proximity only");
                     }
-                    if (proximityHasDifferentValues && proximityWakeLock != null && !proximityWakeLock.isHeld()) {
-                        proximityWakeLock.acquire();
-                    }
+//                    if (proximityHasDifferentValues && proximityWakeLock != null && !proximityWakeLock.isHeld()) {
+//                        proximityWakeLock.acquire();
+//                    }
                     setUseFrontSpeaker(true);
                     startAudioAgain(false);
-                    ignoreOnPause = true;
+//                    ignoreOnPause = true;
                 }
             }
         } else if (!proximityTouched && !manualRecording) {
@@ -1827,9 +1851,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 stopRecording(2, false, 0);
                 raiseToEarRecord = false;
                 ignoreOnPause = false;
-                if (proximityHasDifferentValues && proximityWakeLock != null && proximityWakeLock.isHeld()) {
-                    proximityWakeLock.release();
-                }
+//                if (!ignoreAccelerometerGestures() && proximityHasDifferentValues && proximityWakeLock != null && proximityWakeLock.isHeld()) {
+//                    proximityWakeLock.release();
+//                }
             } else if (useFrontSpeaker) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("stop listen");
@@ -1837,9 +1861,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 useFrontSpeaker = false;
                 startAudioAgain(true);
                 ignoreOnPause = false;
-                if (proximityHasDifferentValues && proximityWakeLock != null && proximityWakeLock.isHeld()) {
-                    proximityWakeLock.release();
-                }
+//                if (!ignoreAccelerometerGestures() && proximityHasDifferentValues && proximityWakeLock != null && proximityWakeLock.isHeld()) {
+//                    proximityWakeLock.release();
+//                }
             }
         }
         if (timeSinceRaise != 0 && raisedToBack == minCount && Math.abs(System.currentTimeMillis() - timeSinceRaise) > 1000) {
@@ -1985,7 +2009,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
             sensorManager.unregisterListener(MediaController.this, proximitySensor);
         });
-        if (proximityHasDifferentValues && proximityWakeLock != null && proximityWakeLock.isHeld()) {
+        if (proximityWakeLock != null && proximityWakeLock.isHeld()) {
             proximityWakeLock.release();
         }
     }
@@ -2067,14 +2091,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         stopProgressTimer();
         lastProgress = 0;
         isPaused = false;
-        if (!useFrontSpeaker && !SharedConfig.enabledRaiseTo(true)) {
-            ChatActivity chat = raiseChat;
-            stopRaiseToEarSensors(raiseChat, false, false);
-            raiseChat = chat;
-        }
-        if (proximityWakeLock != null && proximityWakeLock.isHeld() && !proximityTouched) {
-            proximityWakeLock.release();
-        }
+        boolean playingNext = false;
         if (playingMessageObject != null) {
             if (downloadingCurrentMessage) {
                 FileLoader.getInstance(playingMessageObject.currentAccount).cancelLoadFile(playingMessageObject.getDocument());
@@ -2103,10 +2120,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         voiceMessagesPlaylistMap = null;
                     }
                 }
-                boolean next = false;
                 if (voiceMessagesPlaylist != null && index < voiceMessagesPlaylist.size()) {
                     MessageObject nextVoiceMessage = voiceMessagesPlaylist.get(index);
                     playMessage(nextVoiceMessage);
+                    playingNext = true;
                     if (!nextVoiceMessage.isRoundVideo() && pipRoundVideoView != null) {
                         pipRoundVideoView.close(true);
                         pipRoundVideoView = null;
@@ -2127,6 +2144,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 Intent intent = new Intent(ApplicationLoader.applicationContext, MusicPlayerService.class);
                 ApplicationLoader.applicationContext.stopService(intent);
             }
+        }
+        if (!playingNext && byVoiceEnd && !SharedConfig.enabledRaiseTo(true)) {
+            ChatActivity chat = raiseChat;
+            stopRaiseToEarSensors(raiseChat, false, false);
+            raiseChat = chat;
         }
     }
 
@@ -3478,9 +3500,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             startRaiseToEarSensors(raiseChat);
         }
         if (!ApplicationLoader.mainInterfacePaused && proximityWakeLock != null && !proximityWakeLock.isHeld() && (playingMessageObject.isVoice() || playingMessageObject.isRoundVideo()) && SharedConfig.enabledRaiseTo(false)) {
-            if (ignoreAccelerometerGestures()) {
-                proximityWakeLock.acquire();
-            }
+//            proximityWakeLock.acquire();
         }
         startProgressTimer(playingMessageObject);
         NotificationCenter.getInstance(messageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingDidStart, messageObject, oldMessageObject);
@@ -3540,10 +3560,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
 
         return true;
-    }
-
-    public static boolean ignoreAccelerometerGestures() {
-        return Build.MANUFACTURER.equalsIgnoreCase("samsung");
     }
     
     public void updateSilent(boolean value) {

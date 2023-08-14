@@ -1126,7 +1126,6 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
     private void openGalleryForBackground() {
         chatAttachAlert = new ChatAttachAlert(chatActivity.getParentActivity(), chatActivity, false, false, false, chatActivity.getResourceProvider());
         chatAttachAlert.drawNavigationBar = true;
-        chatAttachAlert.floatingButton.setVisibility(View.GONE);
         chatAttachAlert.setupPhotoPicker(LocaleController.getString("ChooseBackground", R.string.ChooseBackground));
         chatAttachAlert.setDelegate(new ChatAttachAlert.ChatAttachViewDelegate() {
             @Override
@@ -1200,7 +1199,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
         chatAttachButtonText.setGravity(Gravity.CENTER);
         chatAttachButtonText.setTextColor(getThemedColor(Theme.key_featuredStickers_addButton));
         chatAttachButton.addView(chatAttachButtonText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
-        chatAttachButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(0), getThemedColor(Theme.key_windowBackgroundWhite), ColorUtils.setAlphaComponent(getThemedColor(Theme.key_featuredStickers_addButton), (int) (0.3f * 255))));
+        chatAttachButton.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(0), getThemedColor(Theme.key_dialogBackground), ColorUtils.setAlphaComponent(getThemedColor(Theme.key_featuredStickers_addButton), (int) (0.3f * 255))));
         chatAttachButton.setOnClickListener(v -> {
             if (chatAttachAlert.getCurrentAttachLayout() == chatAttachAlert.getPhotoLayout()) {
                 chatAttachButtonText.setText(LocaleController.getString("ChooseBackgroundFromGallery", R.string.ChooseBackgroundFromGallery));

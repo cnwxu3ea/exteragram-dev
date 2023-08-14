@@ -90,6 +90,9 @@ android {
         // Google Console: https://console.cloud.google.com/google/maps-apis/credentials
         resValue 'string', 'MAPS_V2_API', localProperties.getProperty("MAPS_V2_API")
 
+        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
+        multiDexEnabled true
+
         externalNativeBuild {
             cmake {
                 version '3.10.2'
