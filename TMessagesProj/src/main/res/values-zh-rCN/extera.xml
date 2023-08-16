@@ -111,7 +111,6 @@
     <string name="HideShareButton">隐藏消息右侧的“%1$s”按钮</string>
     <string name="MessageMenu">消息菜单</string>
     <string name="AddCommaAfterMention">选定@ 后自动添加逗号后缀</string>
-    <string name="AddCommaAfterMentionInfo">点击您想要提及的用户后，将自动放置一个逗号。</string>
     <string name="HidePhotoCounter">隐藏图片计数器</string>
     <string name="HidePhotoCounterInfo">屏幕上方烦人的照片计数器将从你的视野中消失。</string>
     <string name="HideCameraTile">隐藏即时相机</string>

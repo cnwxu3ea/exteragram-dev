@@ -141,7 +141,8 @@
     <string name="HideShareButton">Hide Side \"%1$s\" Button</string>
     <string name="MessageMenu">Message Menu</string>
     <string name="AddCommaAfterMention">Add Comma after Mention</string>
-    <string name="AddCommaAfterMentionInfo">A comma will be placed automatically after tapping on the user you want to mention.</string>
+    <string name="HideSendAsPeer">Hide \"Send as…\" Button</string>
+    <string name="HideSendAsPeerInfo">You can still access the \"Send as…\" menu by long pressing the Emojis/Stickers/GIFs button.</string>
 
     <string name="HidePhotoCounter">Hide Photo Counter</string>
     <string name="HidePhotoCounterInfo">The annoying photo counter at the top of the screen will disappear from your view.</string>

@@ -138,7 +138,8 @@
     <string name="HideShareButton">Скрыть боковую кнопку \"%1$s\"</string>
     <string name="MessageMenu">Меню сообщения</string>
     <string name="AddCommaAfterMention">Запятая после упоминания</string>
-    <string name="AddCommaAfterMentionInfo">Запятая будет ставиться автоматически после нажатия на пользователя, которого вы хотите упомянуть.</string>
+    <string name="HideSendAsPeer">Скрыть \"Отправить как…\"</string>
+    <string name="HideSendAsPeerInfo">Вы всё ещё сможете открыть меню выбора отправителя длительным нажатием по кнопке Эмодзи/Стикеров/GIF.</string>
 
     <string name="HidePhotoCounter">Скрыть счетчик фотографий</string>
     <string name="HidePhotoCounterInfo">Надоедливый счетчик фотографий в верхней части экрана исчезнет из вашего поля зрения.</string>

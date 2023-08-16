@@ -2095,6 +2095,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
             }
         });
+        if (ExteraConfig.hideSendAsPeer) {
+            emojiButton.setLongClickable(true);
+            emojiButton.setOnLongClickListener(x -> {
+                updateSendAsButton(true, true);
+
+                if (senderSelectView != null) {
+                    senderSelectView.callOnClick();
+                }
+
+                // false to prevent vibration
+                return false;
+            });
+        }
         messageEditTextContainer.addView(emojiButton, LayoutHelper.createFrame(48, 48, Gravity.BOTTOM | Gravity.LEFT, 3, 0, 0, 0));
         setEmojiButtonImage(false, false);
 
@@ -3133,12 +3146,21 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
                 senderSelectPopupWindow = new SenderSelectPopup(getContext(), parentFragment, controller, chatFull, delegate.getSendAsPeers(), (recyclerView, senderView, peer) -> {
                     if (senderSelectPopupWindow == null) return;
-                    if (chatFull != null) {
-                        chatFull.default_send_as = peer;
-                        updateSendAsButton();
-                    }
+
+                    ignoreSendAsButtonUpdates = ExteraConfig.hideSendAsPeer;
+
+                    chatFull.default_send_as = peer;
+                    updateSendAsButton();
 
                     parentFragment.getMessagesController().setDefaultSendAs(dialog_id, peer.user_id != 0 ? peer.user_id : -peer.channel_id);
+
+                    if (ExteraConfig.hideSendAsPeer) {
+                        AndroidUtilities.runOnUIThread(() -> {
+                            ignoreSendAsButtonUpdates = false;
+                            updateSendAsButton(true, false);
+                        }, 850);
+                        updateSendAsButton(true, true);
+                    }
 
                     int[] loc = new int[2];
                     boolean wasSelected = senderView.avatar.isSelected();
@@ -3327,6 +3349,14 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         }
 
                         senderSelectPopupWindow = null;
+
+                        if (ExteraConfig.hideSendAsPeer) {
+                            AndroidUtilities.runOnUIThread(() -> {
+                                if (senderSelectPopupWindow == null) {
+                                    updateSendAsButton(true, false);
+                                }
+                            }, 600);
+                        }
 
                         if (!runningCustomSprings) {
                             startDismissAnimation();
@@ -8148,11 +8178,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
     }
 
+    private boolean ignoreSendAsButtonUpdates;
+
     public void updateSendAsButton() {
         updateSendAsButton(true);
     }
 
     public void updateSendAsButton(boolean animated) {
+        if (!ignoreSendAsButtonUpdates) {
+            updateSendAsButton(animated, false);
+        }
+    }
+
+    public void updateSendAsButton(boolean animated, boolean forceVisible) {
         if (parentFragment == null || delegate == null) {
             return;
         }
@@ -8162,7 +8200,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (defPeer == null && delegate.getSendAsPeers() != null && !delegate.getSendAsPeers().peers.isEmpty()) {
             defPeer = delegate.getSendAsPeers().peers.get(0).peer;
         }
-        boolean isVisible = defPeer != null && (delegate.getSendAsPeers() == null || delegate.getSendAsPeers().peers.size() > 1) &&
+        boolean isVisible = (forceVisible || !ExteraConfig.hideSendAsPeer) && defPeer != null && (delegate.getSendAsPeers() == null || delegate.getSendAsPeers().peers.size() > 1) &&
             !isEditingMessage() && !isRecordingAudioVideo() && (recordedAudioPanel == null || recordedAudioPanel.getVisibility() != View.VISIBLE);
         if (isVisible) {
             createSenderSelectView();

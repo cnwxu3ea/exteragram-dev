@@ -111,7 +111,6 @@
     <string name="HideShareButton">Ocultar botão \"%1$s\"</string>
     <string name="MessageMenu">Menu da mensagem</string>
     <string name="AddCommaAfterMention">Adicionar vírgula após a menção</string>
-    <string name="AddCommaAfterMentionInfo">Uma vírgula será colocada automaticamente após tocar no usuário que você deseja mencionar.</string>
     <string name="HidePhotoCounter">Ocultar Contador de Fotos</string>
     <string name="HidePhotoCounterInfo">O irritante contador de fotos na parte superior da tela desaparecerá da sua vista.</string>
     <string name="HideCameraTile">Ocultar Título de Câmera Instantânea</string>

@@ -40,6 +40,7 @@ import com.exteragram.messenger.ExteraConfig;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
@@ -299,6 +300,30 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             }
             clicked = true;
             selectCallback.onPeerSelected(recyclerView, (SenderView) view, peerObj.peer);
+        });
+        recyclerView.setOnItemLongClickListener((view, position) -> {
+            TLRPC.TL_sendAsPeer peerObj = peers.get(position);
+            var peerId = MessageObject.getPeerId(peerObj.peer);
+
+            if (peerId > 0) {
+                TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(peerId);
+                if (user != null) {
+                    AndroidUtilities.runOnUIThread(() -> {
+                        MessagesController.openChatOrProfileWith(user, null, parentFragment, 0, false);
+                    }, 500);
+                }
+            } else {
+                TLRPC.Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(-peerId);
+                if (chat != null) {
+                    AndroidUtilities.runOnUIThread(() -> {
+                        MessagesController.openChatOrProfileWith(null, chat, parentFragment, 0, false);
+                    }, 500);
+                }
+            }
+
+            startDismissAnimation();
+
+            return true;
         });
         recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 

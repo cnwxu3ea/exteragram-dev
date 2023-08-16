@@ -99,7 +99,6 @@ CameraX wspierana jest tylko na
     <string name="ShowActionTimestamps">Pokaż czas na działaniach</string>
     <string name="HideShareButton">Ukryj boczny przycisk „%1$s”</string>
     <string name="AddCommaAfterMention">Dodaj przecinek po wzmiance</string>
-    <string name="AddCommaAfterMentionInfo">Przecinek zostanie dodany automatycznie po wybraniu użytkownika.</string>
     <string name="HideCameraTile">Ukryj kafelek błyskawicznego aparatu</string>
     <string name="HideCameraTileInfo">Nadal możesz otworzyć aparat systemowy przez długie naciśnięcie przycisku załącznika w panelu wiadomości.</string>
     <string name="StaticZoom">Statyczne powiększenie</string>

@@ -114,7 +114,6 @@ CameraX підтримується тільки на
     <string name="HideShareButton">Приховати бокову кнопку %1$s</string>
     <string name="MessageMenu">Меню повідомлення</string>
     <string name="AddCommaAfterMention">Додати кому після згадування</string>
-    <string name="AddCommaAfterMentionInfo">Кома буде розміщуватися автоматично після натискання на користувача, якого ви хочете згадати.</string>
     <string name="HidePhotoCounter">Приховати лічильник фотографій</string>
     <string name="HidePhotoCounterInfo">Набридливий лічильник фотографій у верхній частині екрана зникне з вашого перегляду.</string>
     <string name="HideCameraTile">Приховати плитку миттєвої камери</string>

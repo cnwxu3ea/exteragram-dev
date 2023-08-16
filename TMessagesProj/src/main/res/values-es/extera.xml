@@ -111,7 +111,6 @@
     <string name="HideShareButton">Ocultar botón \"%1$s\"</string>
     <string name="MessageMenu">Menú del mensaje</string>
     <string name="AddCommaAfterMention">Añadir coma después de mencionar</string>
-    <string name="AddCommaAfterMentionInfo">Una coma se colocará automáticamente después de tocar en el usuario que desea mencionar.</string>
     <string name="HidePhotoCounter">Ocultar contador de fotos</string>
     <string name="HidePhotoCounterInfo">El molesto contador de fotos en la parte superior de la pantalla desaparecerá de su vista.</string>
     <string name="HideCameraTile">Ocultar mosaico de cámara instantánea</string>

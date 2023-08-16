@@ -92,6 +92,7 @@ public class ExteraConfig {
 
     public static boolean hideStickerTime;
     public static boolean unlimitedRecentStickers;
+    public static boolean hideSendAsPeer;
     public static boolean hideReactions;
 
     public static int doubleTapAction;
@@ -242,6 +243,7 @@ public class ExteraConfig {
 
             hideStickerTime = preferences.getBoolean("hideStickerTime", false);
             unlimitedRecentStickers = preferences.getBoolean("unlimitedRecentStickers", false);
+            hideSendAsPeer = preferences.getBoolean("hideSendAsPeer", false);
             hideReactions = preferences.getBoolean("hideReactions", false);
 
             doubleTapAction = preferences.getInt("doubleTapAction", 1);

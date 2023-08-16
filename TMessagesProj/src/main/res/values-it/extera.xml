@@ -111,7 +111,6 @@
     <string name="HideShareButton">Nascondi il pulsante \"%1$s\"</string>
     <string name="MessageMenu">Menu del messaggio</string>
     <string name="AddCommaAfterMention">Aggiungi una virgola dopo il tag</string>
-    <string name="AddCommaAfterMentionInfo">Una virgola sarà posizionata automaticamente dopo aver toccato l\'utente che vuoi taggare.</string>
     <string name="HidePhotoCounter">Nascondi contatore foto</string>
     <string name="HidePhotoCounterInfo">Il fastidioso contatore delle foto nella parte superiore dello schermo sparirà dalla tua vista.</string>
     <string name="HideCameraTile">Nascondi fotocamera istantanea</string>

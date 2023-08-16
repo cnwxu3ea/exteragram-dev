@@ -111,7 +111,6 @@
     <string name="HideShareButton">إخفاء الزر%1$s\" الجانبي</string>
     <string name="MessageMenu">قائمة الرسائل</string>
     <string name="AddCommaAfterMention">إضافة فاصلة بعد الإشارة</string>
-    <string name="AddCommaAfterMentionInfo">سيتم وضع فاصلة تلقائيًا بعد النقر على المستخدم الذي تريد ذكره.</string>
     <string name="HidePhotoCounter">إخفاء عدد الصور</string>
     <string name="HidePhotoCounterInfo">سوف يختفي عداد الصور المزعج في الجزء العلوي من الشاشة من منظورك.</string>
     <string name="HideCameraTile">إخفاء شريط الكاميرا الفوري</string>
