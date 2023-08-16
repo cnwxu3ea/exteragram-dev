@@ -41,6 +41,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.AppUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -491,11 +492,11 @@ public class DrawerLayoutContainer extends FrameLayout {
                     if (startedTracking || drawerPosition != 0 && drawerPosition != drawerLayout.getMeasuredWidth()) {
                         float velX = velocityTracker.getXVelocity();
                         float velY = velocityTracker.getYVelocity();
-                        boolean backAnimation = drawerPosition < drawerLayout.getMeasuredWidth() / 2f && (velX < 3500 || Math.abs(velX) < Math.abs(velY)) || velX < 0 && Math.abs(velX) >= 3500;
+                        boolean backAnimation = drawerPosition < drawerLayout.getMeasuredWidth() / (drawerOpened ? 1.25f : 5f) && (velX < AppUtils.getSwipeVelocity() || Math.abs(velX) < Math.abs(velY)) || velX < 0 && Math.abs(velX) >= AppUtils.getSwipeVelocity();
                         if (!backAnimation) {
-                            openDrawer(!drawerOpened && Math.abs(velX) >= 3500);
+                            openDrawer(!drawerOpened && Math.abs(velX) >= AppUtils.getSwipeVelocity());
                         } else {
-                            closeDrawer(drawerOpened && Math.abs(velX) >= 3500);
+                            closeDrawer(drawerOpened && Math.abs(velX) >= AppUtils.getSwipeVelocity());
                         }
                     }
                     startedTracking = false;

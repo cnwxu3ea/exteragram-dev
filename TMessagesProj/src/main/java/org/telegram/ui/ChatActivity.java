@@ -31672,7 +31672,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     @Override
     public int getNavigationBarColor() {
-        return getThemedColor(chatActivityEnterView != null && chatActivityEnterView.isPopupShowing() ? Theme.key_chat_emojiPanelBackground : Theme.key_chat_messagePanelBackground);
+        int color = getThemedColor(chatActivityEnterView != null && chatActivityEnterView.isPopupShowing() ? Theme.key_chat_emojiPanelBackground : Theme.key_chat_messagePanelBackground);
+        if (storyViewer != null && storyViewer.attachedToParent()) {
+            return storyViewer.getNavigationBarColor(color);
+        }
+        return color;
     }
 
     @Override

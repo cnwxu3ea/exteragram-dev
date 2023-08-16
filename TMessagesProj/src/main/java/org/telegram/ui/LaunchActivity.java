@@ -7278,7 +7278,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         actionBarLayout.presentFragment(params.setNoAnimation(forceWithoutAnimation).setCheckPresentFromDelegate(false));
                     }
                     return result;
-                } else if (!tabletFullSize && layout != rightActionBarLayout) {
+                } else if (!tabletFullSize && rightActionBarLayout != null) {
                     rightActionBarLayout.getView().setVisibility(View.VISIBLE);
                     backgroundTablet.setVisibility(View.GONE);
                     rightActionBarLayout.removeAllFragments();
@@ -7291,7 +7291,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         layersActionBarLayout.closeLastFragment(!forceWithoutAnimation);
                     }
                     return false;
-                } else if (tabletFullSize && layout != actionBarLayout) {
+                } else if (tabletFullSize) {
                     actionBarLayout.presentFragment(params.setRemoveLast(actionBarLayout.getFragmentStack().size() > 1).setNoAnimation(forceWithoutAnimation).setCheckPresentFromDelegate(false));
                     if (!layersActionBarLayout.getFragmentStack().isEmpty()) {
                         for (int a = 0; a < layersActionBarLayout.getFragmentStack().size() - 1; a++) {
@@ -7312,7 +7312,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     actionBarLayout.presentFragment(params.setRemoveLast(actionBarLayout.getFragmentStack().size() > 1).setNoAnimation(forceWithoutAnimation).setCheckPresentFromDelegate(false));
                     return false;
                 }
-            } else if (layout != layersActionBarLayout) {
+            } else if (layersActionBarLayout != null && layout != layersActionBarLayout) {
                 layersActionBarLayout.getView().setVisibility(View.VISIBLE);
                 drawerLayoutContainer.setAllowOpenDrawer(false, true);
 

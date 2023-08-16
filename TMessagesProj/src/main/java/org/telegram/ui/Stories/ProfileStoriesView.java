@@ -9,6 +9,7 @@ import static org.telegram.messenger.Utilities.clamp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -16,9 +17,8 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
-import android.graphics.Region;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.os.Handler;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,7 +39,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedFloat;
@@ -888,9 +887,21 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
 
     }
 
+    protected void onLongTap() {
+
+    }
+
     private long tapTime;
     private float tapX, tapY;
 
+    private final Handler longPressHandler = new Handler();
+    private final Runnable longPressRunnable = () -> {
+        if (expandProgress == 0f) {
+            onLongTap();
+        }
+    };
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean hit;
@@ -904,13 +915,16 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
             tapTime = System.currentTimeMillis();
             tapX = event.getX();
             tapY = event.getY();
+            longPressHandler.postDelayed(longPressRunnable, ViewConfiguration.getLongPressTimeout());
             return true;
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            longPressHandler.removeCallbacks(longPressRunnable);
             if (hit && System.currentTimeMillis() - tapTime <= ViewConfiguration.getTapTimeout() && MathUtils.distance(tapX, tapY, event.getX(), event.getY()) <= AndroidUtilities.dp(12) && !circles.isEmpty()) {
                 onTap(provider);
                 return true;
             }
         } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+            longPressHandler.removeCallbacks(longPressRunnable);
             tapTime = -1;
         }
         return super.onTouchEvent(event);

@@ -3976,9 +3976,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 return;
             }
-            if (expandAvatar()) {
-                return;
-            }
             openAvatar();
         });
 
@@ -3986,26 +3983,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (avatarBig != null || isTopic) {
                 return false;
             }
-            if (!AndroidUtilities.isTablet() && !isInLandscapeMode && avatarImage.getImageReceiver().hasNotThumb() && !AndroidUtilities.isAccessibilityScreenReaderEnabled()) {
-                openingAvatar = true;
-                allowPullingDown = true;
-                View child = null;
-                for (int i = 0; i < listView.getChildCount(); i++) {
-                    if (listView.getChildAdapterPosition(listView.getChildAt(i)) == 0) {
-                        child = listView.getChildAt(i);
-                        break;
-                    }
-                }
-                if (child != null) {
-                    RecyclerView.ViewHolder holder = listView.findContainingViewHolder(child);
-                    if (holder != null) {
-                        Integer offset = positionToOffset.get(holder.getAdapterPosition());
-                        if (offset != null) {
-                            listView.smoothScrollBy(0, -(offset + (listView.getPaddingTop() - child.getTop() - actionBar.getMeasuredHeight())), CubicBezierInterpolator.EASE_OUT_QUINT);
-                            return true;
-                        }
-                    }
-                }
+            if (expandAvatar()) {
+                return true;
             }
             openAvatar();
             return false;
@@ -4206,8 +4185,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (userInfo != null && userInfo.stories != null && !userInfo.stories.stories.isEmpty() && userId != getUserConfig().clientUserId) {
                     getOrCreateStoryViewer().open(context, userInfo.stories, provider);
                 } else {
-                    expandAvatar();
+                    openAvatar();
                 }
+            }
+
+            @Override
+            protected void onLongTap() {
+                openAvatar();
             }
         };
         updateStoriesViewBounds(false);

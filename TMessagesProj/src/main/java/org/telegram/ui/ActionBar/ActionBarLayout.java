@@ -45,6 +45,7 @@ import androidx.core.math.MathUtils;
 
 import com.exteragram.messenger.ExteraConfig;
 
+import com.exteragram.messenger.utils.AppUtils;
 import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
@@ -60,6 +61,9 @@ import org.telegram.ui.Components.FloatingDebug.FloatingDebugController;
 import org.telegram.ui.Components.FloatingDebug.FloatingDebugProvider;
 import org.telegram.ui.Components.GroupCallPip;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.SeekBar;
+import org.telegram.ui.Components.SeekBarView;
+import org.telegram.ui.Components.SlideChooseView;
 import org.telegram.ui.Stories.StoryViewer;
 
 import java.util.ArrayList;
@@ -830,7 +834,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                     int dx = Math.max(0, (int) (ev.getX() - startedTrackingX));
                     int dy = Math.abs((int) ev.getY() - startedTrackingY);
                     velocityTracker.addMovement(ev);
-                    if (!transitionAnimationInProgress && !inPreviewMode && maybeStartTracking && !startedTracking && dx >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
+                    if (!transitionAnimationInProgress && !inPreviewMode && maybeStartTracking && !startedTracking && dx >= AndroidUtilities.getPixelsInCM(.15f, true) && Math.abs(dx) / 3 > dy) {
                         BaseFragment currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
                         if (currentFragment.canBeginSlide() && findScrollingChild(this, ev.getX(), ev.getY()) == null) {
                             prepareForMoving(ev);
@@ -858,7 +862,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                     if (!inPreviewMode && !transitionAnimationPreviewMode && !startedTracking && currentFragment.isSwipeBackEnabled(ev)) {
                         float velX = velocityTracker.getXVelocity();
                         float velY = velocityTracker.getYVelocity();
-                        if (velX >= 3500 && velX > Math.abs(velY) && currentFragment.canBeginSlide()) {
+                        if (containerView.getX() > AndroidUtilities.getPixelsInCM(.15f, true) && velX >= AppUtils.getSwipeVelocity() && velX > Math.abs(velY) && currentFragment.canBeginSlide()) {
                             prepareForMoving(ev);
                             if (!beginTrackingSent) {
                                 if (((Activity) getContext()).getCurrentFocus() != null) {
@@ -873,13 +877,13 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                         AnimatorSet animatorSet = new AnimatorSet();
                         float velX = velocityTracker.getXVelocity();
                         float velY = velocityTracker.getYVelocity();
-                        final boolean backAnimation = x < containerView.getMeasuredWidth() / 3.0f && (velX < 3500 || velX < velY);
+                        final boolean backAnimation = x < containerView.getMeasuredWidth() / 4.0f && (velX < AppUtils.getSwipeVelocity() || velX < velY);
                         float distToMove;
                         boolean overrideTransition = currentFragment.shouldOverrideSlideTransition(false, backAnimation);
 
                         if (!backAnimation) {
                             distToMove = containerView.getMeasuredWidth() - x;
-                            int duration = Math.max((int) (200.0f / containerView.getMeasuredWidth() * distToMove), 50);
+                            int duration = Math.max((int) (200.0f / containerView.getMeasuredWidth() * distToMove), 150);
                             if (!overrideTransition) {
                                 animatorSet.playTogether(
                                         ObjectAnimator.ofFloat(containerView, View.TRANSLATION_X, containerView.getMeasuredWidth()).setDuration(duration),
@@ -888,7 +892,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                             }
                         } else {
                             distToMove = x;
-                            int duration = Math.max((int) (200.0f / containerView.getMeasuredWidth() * distToMove), 50);
+                            int duration = Math.max((int) (200.0f / containerView.getMeasuredWidth() * distToMove), 150);
                             if (!overrideTransition) {
                                 animatorSet.playTogether(
                                         ObjectAnimator.ofFloat(containerView, View.TRANSLATION_X, 0).setDuration(duration),
@@ -921,7 +925,6 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                         layoutToIgnore = containerViewBack;
                     } else {
                         maybeStartTracking = false;
-                        startedTracking = false;
                         layoutToIgnore = null;
                     }
                     if (velocityTracker != null) {
@@ -2442,7 +2445,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             }
             child.getHitRect(AndroidUtilities.rectTmp2);
             if (AndroidUtilities.rectTmp2.contains((int) x, (int) y)) {
-                if (child.canScrollHorizontally(-1)) {
+                if (child.canScrollHorizontally(-1) || (child instanceof SeekBarView) || (child instanceof SlideChooseView)) {
                     return child;
                 } else if (child instanceof ViewGroup) {
                     View v = findScrollingChild((ViewGroup) child, x - AndroidUtilities.rectTmp2.left, y - AndroidUtilities.rectTmp2.top);

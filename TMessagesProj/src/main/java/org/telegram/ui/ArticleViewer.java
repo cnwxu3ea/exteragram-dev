@@ -102,6 +102,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.exteragram.messenger.utils.AppUtils;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
 import org.json.JSONObject;
@@ -939,13 +940,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     tracker.computeCurrentVelocity(1000);
                     float velX = tracker.getXVelocity();
                     float velY = tracker.getYVelocity();
-                    if (!startedTracking && velX >= 3500 && velX > Math.abs(velY)) {
+                    if (!startedTracking && velX >= AppUtils.getSwipeVelocity() && velX > Math.abs(velY)) {
                         prepareForMoving(event);
                     }
                     if (startedTracking) {
                         View movingView = movingPage ? listView[0] : containerView;
                         float x = movingView.getX();
-                        final boolean backAnimation = x < movingView.getMeasuredWidth() / 3.0f && (velX < 3500 || velX < velY);
+                        final boolean backAnimation = x < movingView.getMeasuredWidth() / 3.0f && (velX < AppUtils.getSwipeVelocity() || velX < velY);
                         float distToMove;
                         AnimatorSet animatorSet = new AnimatorSet();
                         if (!backAnimation) {

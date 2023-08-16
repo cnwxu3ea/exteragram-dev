@@ -136,8 +136,6 @@ public class ExteraConfig {
             1524581881,
             1571726392,
             1632728092,
-            1638754701,
-            1779596027,
             1172503281,
             1877362358
     };
@@ -386,9 +384,13 @@ public class ExteraConfig {
     }
 
     public static void clearPreferences() {
-        configLoaded = false;
         Config.editor.clear().apply();
         ExteraConfig.editor.clear().apply();
-        ExteraConfig.loadConfig();
+        reloadConfig();
+    }
+
+    public static void reloadConfig() {
+        configLoaded = false;
+        loadConfig();
     }
 }

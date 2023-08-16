@@ -129,6 +129,7 @@ import androidx.recyclerview.widget.LinearSmoothScrollerEnd;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.AppUtils;
 import com.exteragram.messenger.utils.CanvasUtils;
 import com.exteragram.messenger.utils.PopupUtils;
 import com.exteragram.messenger.utils.SystemUtils;
@@ -16191,7 +16192,16 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 zooming = false;
                 moving = false;
             } else if (draggingDown) {
-                if (Math.abs(dragY - ev.getY()) > getContainerViewHeight() / 6.0f) {
+                if (velocityTracker == null) {
+                    velocityTracker = VelocityTracker.obtain();
+                }
+
+                velocityTracker.computeCurrentVelocity(1000);
+
+                float velY = velocityTracker.getYVelocity();
+                float dy = Math.abs(dragY - ev.getY());
+
+                if (dy > getContainerViewHeight() / 6.0f || dy > AndroidUtilities.getPixelsInCM(0.4f, false) && Math.abs(velY) >= AppUtils.getSwipeVelocity()) {
                     if (enableSwipeToPiP() && (dragY - ev.getY() > 0)) {
                         switchToPip(true);
                     } else {
@@ -16218,11 +16228,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
 
                 if (currentEditMode == EDIT_MODE_NONE && sendPhotoType != SELECT_TYPE_AVATAR) {
-                    if ((translationX < minX - getContainerViewWidth() / 3 || velocity < -AndroidUtilities.dp(650)) && rightImage.hasImageSet()) {
+                    if ((translationX < minX - getContainerViewWidth() / 3 || velocity < -AppUtils.getSwipeVelocity()) && rightImage.hasImageSet()) {
                         goToNext();
                         return true;
                     }
-                    if ((translationX > maxX + getContainerViewWidth() / 3 || velocity > AndroidUtilities.dp(650)) && leftImage.hasImageSet()) {
+                    if ((translationX > maxX + getContainerViewWidth() / 3 || velocity > AppUtils.getSwipeVelocity()) && leftImage.hasImageSet()) {
                         goToPrev();
                         return true;
                     }

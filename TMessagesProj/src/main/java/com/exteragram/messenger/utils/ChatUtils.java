@@ -254,6 +254,9 @@ public class ChatUtils {
     }
 
     public static String getPathToMessage(MessageObject messageObject) {
+        if (messageObject == null) {
+            return null;
+        }
         String path = messageObject.messageOwner.attachPath;
         if (!TextUtils.isEmpty(path)) {
             File temp = new File(path);

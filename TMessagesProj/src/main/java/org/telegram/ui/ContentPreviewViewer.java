@@ -1164,7 +1164,7 @@ public class ContentPreviewViewer {
                 }
                 if ((newSet != null || contentType == CONTENT_TYPE_EMOJI) && (delegate == null || delegate.needMenu())) {
                     AndroidUtilities.cancelRunOnUIThread(showSheetRunnable);
-                    AndroidUtilities.runOnUIThread(showSheetRunnable, 350);
+                    AndroidUtilities.runOnUIThread(showSheetRunnable, 800);
                 }
                 currentStickerSet = newSet;
                 TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
@@ -1200,7 +1200,7 @@ public class ContentPreviewViewer {
                 }
                 if (delegate.needMenu()) {
                     AndroidUtilities.cancelRunOnUIThread(showSheetRunnable);
-                    AndroidUtilities.runOnUIThread(showSheetRunnable, 350);
+                    AndroidUtilities.runOnUIThread(showSheetRunnable, 800);
                 }
             }
         } else {
@@ -1227,7 +1227,7 @@ public class ContentPreviewViewer {
                 return;
             }
             AndroidUtilities.cancelRunOnUIThread(showSheetRunnable);
-            AndroidUtilities.runOnUIThread(showSheetRunnable, 500);
+            AndroidUtilities.runOnUIThread(showSheetRunnable, 800);
         }
 
         if (centerImage.getLottieAnimation() != null) {

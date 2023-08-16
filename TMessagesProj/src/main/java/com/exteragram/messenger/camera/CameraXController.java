@@ -240,35 +240,47 @@ public class CameraXController {
     }
 
     public boolean isAvailableHdrMode() {
-        if (extensionsManager != null) {
-            return extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR);
-        } else {
-            return false;
+        try {
+            if (extensionsManager != null) {
+                return extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.HDR);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
         }
+        return false;
     }
 
     public boolean isAvailableNightMode() {
-        if (extensionsManager != null) {
-            return extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT);
-        } else {
-            return false;
+        try {
+            if (extensionsManager != null) {
+                return extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.NIGHT);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
         }
+        return false;
     }
 
     public boolean isAvailableWideMode() {
-        if (provider != null) {
-            return CameraXUtils.isWideAngleAvailable(provider);
-        } else {
-            return false;
+        try {
+            if (provider != null) {
+                return CameraXUtils.isWideAngleAvailable(provider);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
         }
+        return false;
     }
 
     public boolean isAvailableAutoMode() {
-        if (extensionsManager != null) {
-            return extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.AUTO);
-        } else {
-            return false;
+        try {
+            if (extensionsManager != null) {
+                return extensionsManager.isExtensionAvailable(cameraSelector, ExtensionMode.AUTO);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
         }
+        return false;
     }
 
     public android.util.Size getVideoBestSize() {

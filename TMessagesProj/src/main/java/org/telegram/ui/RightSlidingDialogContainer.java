@@ -18,6 +18,8 @@ import androidx.dynamicanimation.animation.FloatValueHolder;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 
+import com.exteragram.messenger.utils.AppUtils;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
 import org.telegram.messenger.NotificationCenter;
@@ -354,7 +356,7 @@ public abstract class RightSlidingDialogContainer extends FrameLayout {
                 int dx = Math.max(0, (int) (ev.getX() - startedTrackingX));
                 int dy = Math.abs((int) ev.getY() - startedTrackingY);
                 velocityTracker.addMovement(ev);
-                if (maybeStartTracking && !startedTracking && dx >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(dx) / 3 > dy) {
+                if (maybeStartTracking && !startedTracking && dx >= AndroidUtilities.getPixelsInCM(.15f, true) && Math.abs(dx) / 3 > dy) {
 //                    BaseFragment currentFragment = fragmentsStack.get(fragmentsStack.size() - 1);
                     if (findScrollingChild(this, ev.getX(), ev.getY()) == null) {
                         prepareForMoving(ev);
@@ -386,7 +388,7 @@ public abstract class RightSlidingDialogContainer extends FrameLayout {
                     float x = swipeBackX;
                     float velX = velocityTracker.getXVelocity();
                     float velY = velocityTracker.getYVelocity();
-                    final boolean backAnimation = x < getMeasuredWidth() / 3.0f && (velX < 3500 || velX < velY);
+                    final boolean backAnimation = x < getMeasuredWidth() / 3.0f && (velX < AppUtils.getSwipeVelocity() || velX < velY);
 
                     if (!backAnimation) {
                         finishPreviewInernal();

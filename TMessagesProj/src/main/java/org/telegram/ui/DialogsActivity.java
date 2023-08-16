@@ -84,6 +84,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.components.TranslateBeforeSendWrapper;
+import com.exteragram.messenger.utils.AppUtils;
 import com.exteragram.messenger.utils.CanvasUtils;
 import com.exteragram.messenger.utils.LocaleUtils;
 import com.exteragram.messenger.utils.TranslatorUtils;
@@ -1369,7 +1370,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         velX = velocityTracker.getXVelocity();
                         velY = velocityTracker.getYVelocity();
                         if (!startedTracking) {
-                            if (Math.abs(velX) >= 3000 && Math.abs(velX) > Math.abs(velY)) {
+                            if (Math.abs(velX) >= AppUtils.getSwipeVelocity() && Math.abs(velX) > Math.abs(velY)) {
                                 prepareForMoving(ev, velX < 0);
                             }
                         }
@@ -1394,7 +1395,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                     }
                                 }
                             } else {
-                                backAnimation = Math.abs(x) < viewPages[0].getMeasuredWidth() / 3.0f && (Math.abs(velX) < 3500 || Math.abs(velX) < Math.abs(velY));
+                                backAnimation = Math.abs(x) < viewPages[0].getMeasuredWidth() / 3.0f && (Math.abs(velX) < AppUtils.getSwipeVelocity() || Math.abs(velX) < Math.abs(velY));
                             }
                         }
                         float dx;
@@ -2524,7 +2525,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         @Override
         public float getSwipeEscapeVelocity(float defaultValue) {
-            return 3500;
+            return AppUtils.getSwipeVelocity();
         }
 
         @Override
@@ -11665,13 +11666,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 fragmentView.requestLayout();
             }
         } else {
-            for (int i = 0; i < viewPages.length; i++) {
-                ViewPage page = viewPages[i];
-                if (page != null) {
-                    page.setLayerType(View.LAYER_TYPE_NONE, null);
-                    page.setClipChildren(true);
-                    page.setClipToPadding(true);
-                    page.listView.setClipChildren(true);
+            if (viewPages != null) {
+                for (ViewPage page : viewPages) {
+                    if (page != null) {
+                        page.setLayerType(View.LAYER_TYPE_NONE, null);
+                        page.setClipChildren(true);
+                        page.setClipToPadding(true);
+                        page.listView.setClipChildren(true);
+                    }
                 }
             }
             if (actionBar != null) {

@@ -190,7 +190,7 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
                         textCell.setTextAndCheckAndIcon("Analytics", ExteraConfig.useGoogleAnalytics, R.drawable.msg_data, false);
                     } else if (position == deleteAccountRow) {
                         textCell.setTextAndIcon(LocaleController.getString("DeleteAccount", R.string.DeleteAccount), R.drawable.msg_clearcache, false);
-                        textCell.setColors(Theme.key_text_RedBold, Theme.key_text_RedBold);
+                        textCell.setColors(Theme.key_text_RedBold, Theme.key_text_RedRegular);
                     } else if (position == resetSettingsRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ResetSettings", R.string.ResetSettings), R.drawable.msg_reset, true);
                     }
@@ -204,7 +204,7 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
                 case 8 -> {
                     TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == analyticsDividerRow) {
-                        textInfoPrivacyCell.setText(LocaleController.getString("YandexAppMetricaInfo", R.string.AnalyticsInfo));
+                        textInfoPrivacyCell.setText(LocaleController.getString(R.string.AnalyticsInfo));
                     }
                 }
             }

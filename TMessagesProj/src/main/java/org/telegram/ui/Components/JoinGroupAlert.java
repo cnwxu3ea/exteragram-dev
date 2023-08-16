@@ -131,10 +131,6 @@ public class JoinGroupAlert extends BottomSheet {
         textView.setTextColor(getThemedColor(Theme.key_dialogTextGray3));
         textView.setSingleLine(true);
         textView.setEllipsize(TextUtils.TruncateAt.END);
-//        textView.setText(isChannel
-//                ? LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase()
-//                : LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase()
-//        );
         textView.setText(LocaleController.formatPluralString(isChannel ? "Subscribers" : "Members", participants_count));
         linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 10, 0, 10, hasAbout ? 0 : 20));
 
@@ -218,8 +214,12 @@ public class JoinGroupAlert extends BottomSheet {
             descriptionTextView.setText(isChannel ? LocaleController.getString("RequestToJoinChannelDescription", R.string.RequestToJoinChannelDescription) : LocaleController.getString("RequestToJoinGroupDescription", R.string.RequestToJoinGroupDescription));
             descriptionTextView.setTextColor(getThemedColor(Theme.key_dialogTextGray3));
             linearLayout.addView(descriptionTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, 24, 17, 24, 15));
-        } else if (chatInvite != null) {
+        } else {
             if (!chatInvite.participants.isEmpty()) {
+                textView.setText(isChannel
+                        ? LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate).toLowerCase()
+                        : LocaleController.getString("MegaPrivate", R.string.MegaPrivate).toLowerCase()
+                );
                 int participantsCount = chatInvite.participants.size();
                 int visibleAvatarsCount = Math.min(participantsCount, 3);
                 float factor = 0.65f;

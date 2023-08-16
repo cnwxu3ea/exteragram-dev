@@ -4302,7 +4302,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (isPinnedChat || drawSideButton == 1 && messageObject.messageOwner.fwd_from != null && !messageObject.isOutOwner() && messageObject.messageOwner.fwd_from.saved_from_peer != null && messageObject.getDialogId() == UserConfig.getInstance(currentAccount).getClientUserId()) {
                     drawSideButton = 2;
                 }
-                if (drawSideButton == 1 && ExteraConfig.hideShareButton) {
+                if (drawSideButton == 1 && (ExteraConfig.hideShareButton || drawAvatar)) {
                     drawSideButton = 0;
                 }
             }

@@ -17,18 +17,35 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.util.Base64;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
+import org.telegram.ui.ActionBar.Theme;
 
 import java.security.MessageDigest;
 import java.util.Calendar;
 
 public class AppUtils {
 
-    public static int getNotificationIconColor() {
-        return BuildVars.isBetaApp() ? 0xff747f9f : 0xfff54142;
+    public static int getNotificationColor() {
+        if (true) { // force for now
+            int color = 0;
+            if (Theme.getActiveTheme().hasAccentColors()) {
+                color = Theme.getActiveTheme().getAccentColor(Theme.getActiveTheme().currentAccentId);
+            }
+            if (color == 0) {
+                color = Theme.getColor(Theme.key_actionBarDefault) | 0xff000000;
+            }
+            float brightness = AndroidUtilities.computePerceivedBrightness(color);
+            if (brightness >= 0.721f || brightness <= 0.279f) {
+                color = Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader) | 0xff000000;
+            }
+            return color;
+        } else {
+            return BuildVars.isBetaApp() ? 0xff747f9f : 0xfff54142;
+        }
     }
 
     public static int[] getDrawerIconPack() {
@@ -76,6 +93,10 @@ public class AppUtils {
         Calendar calendar = Calendar.getInstance();
         int currentMonth = calendar.get(Calendar.MONTH);
         return currentMonth == Calendar.DECEMBER || currentMonth == Calendar.JANUARY || currentMonth == Calendar.FEBRUARY;
+    }
+
+    public static int getSwipeVelocity() {
+        return AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? 1500 : 800;
     }
 
     // do not change or remove this part of the code if you're making public fork

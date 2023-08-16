@@ -263,7 +263,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
                         .setMediaSession(mediaSession.getSessionToken())
                         .setShowActionsInCompactView(0, 1, 2));
         if (Build.VERSION.SDK_INT < 31)
-            bldr.setColor(AppUtils.getNotificationIconColor());
+            bldr.setColor(AppUtils.getNotificationColor());
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationsController.checkOtherNotificationsChannel();
             bldr.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
