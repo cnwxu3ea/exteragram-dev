@@ -7,13 +7,13 @@ actionBarDefault=mWhite
 actionBarDefaultArchived=n1_50
 actionBarDefaultArchivedIcon=n1_900
 actionBarDefaultArchivedSearch=a2_200
-actionBarDefaultArchivedSelector=n1_200(80)
+actionBarDefaultArchivedSelector=n1_200 (a=80)
 actionBarDefaultArchivedTitle=n1_900
 actionBarDefaultIcon=n1_900
 actionBarDefaultSearch=n1_900
 actionBarDefaultSearchArchivedPlaceholder=n1_700
 actionBarDefaultSearchPlaceholder=n1_400
-actionBarDefaultSelector=n1_200(80)
+actionBarDefaultSelector=n1_200 (a=80)
 actionBarDefaultSubmenuBackground=a1_10
 actionBarDefaultSubmenuItem=n1_900
 actionBarDefaultSubmenuItemIcon=a2_600
@@ -22,12 +22,12 @@ actionBarDefaultSubtitle=n1_600
 actionBarDefaultTitle=n1_900
 actionBarTabActiveText=a1_600
 actionBarTabLine=a1_600
-actionBarTabSelector=n2_200(50)
+actionBarTabSelector=n2_200 (a=50)
 actionBarTabUnactiveText=n1_500
 actionBarTipBackground=n1_100
-actionBarWhiteSelector=n1_200(80)
+actionBarWhiteSelector=n1_200 (a=80)
 avatar_actionBarIconBlue=n1_900
-avatar_actionBarSelectorBlue=n1_200(80)
+avatar_actionBarSelectorBlue=n1_200 (a=80)
 avatar_background2Saved=a1_600
 avatar_backgroundActionBarBlue=mWhite
 avatar_backgroundArchived=a1_600
@@ -124,7 +124,7 @@ chat_goDownButtonCounter=a3_100
 chat_goDownButtonCounterBackground=a3_600
 chat_goDownButtonIcon=a1_900
 chat_goDownButtonShadow=0
-chat_inAudioCacheSeekbar=a1_600(50)
+chat_inAudioCacheSeekbar=a1_600 (a=50)
 chat_inAudioDurationSelectedText=mBlack
 chat_inAudioDurationText=n1_400
 chat_inAudioPerfomerSelectedText=mBlack
@@ -181,8 +181,8 @@ chat_inRedCall=mRed500
 chat_inReplyLine=a1_600
 chat_inReplyMediaMessageSelectedText=mBlack
 chat_inReplyMediaMessageText=mBlack
-chat_inReplyMessageText=n1_900(80)
-chat_inReplyNameText=a1_600(80)
+chat_inReplyMessageText=n1_900 (a=80)
+chat_inReplyNameText=a1_600 (a=80)
 chat_inSentClock=n1_200
 chat_inSentClockSelected=mBlack
 chat_inSiteNameText=mBlack
@@ -257,7 +257,7 @@ chat_outFileBackground=n1_50
 chat_outFileBackgroundSelected=a1_600
 chat_outFileIcon=n1_50
 chat_outFileInfoSelectedText=n1_50
-chat_outFileInfoText=a1_100(80)
+chat_outFileInfoText=a1_100 (a=80)
 chat_outFileNameText=n1_50
 chat_outFileProgress=n1_50
 chat_outFileProgressSelected=n1_50
@@ -290,26 +290,26 @@ chat_outReactionButtonTextSelected=n1_900
 chat_outReplyLine=a1_100
 chat_outReplyMediaMessageSelectedText=n1_50
 chat_outReplyMediaMessageText=n1_50
-chat_outReplyMessageText=n1_50(80)
-chat_outReplyNameText=a1_100(80)
+chat_outReplyMessageText=n1_50 (a=80)
+chat_outReplyNameText=a1_100 (a=80)
 chat_outSentCheck=a2_200
 chat_outSentCheckRead=a2_200
 chat_outSentCheckReadSelected=a2_200
 chat_outSentCheckSelected=a2_200
-chat_outSentClock=a1_100(50)
+chat_outSentClock=a1_100 (a=50)
 chat_outSentClockSelected=a2_200
 chat_outSiteNameText=n1_50
 chat_outTextSelectionCursor=a2_300
 chat_outTextSelectionHighlight=n1_700
-chat_outTimeSelectedText=a1_100(80)
-chat_outTimeText=a1_100(80)
+chat_outTimeSelectedText=a1_100 (a=80)
+chat_outTimeText=a1_100 (a=80)
 chat_outUpCall=a1_300
 chat_outVenueInfoSelectedText=n1_50
 chat_outVenueInfoText=n1_50
 chat_outViaBotNameText=n1_50
-chat_outViews=a1_100(80)
-chat_outViewsSelected=a1_100(80)
-chat_outVoiceSeekbar=a1_100(50)
+chat_outViews=a1_100 (a=80)
+chat_outViewsSelected=a1_100 (a=80)
+chat_outVoiceSeekbar=a1_100 (a=50)
 chat_outVoiceSeekbarFill=a1_100
 chat_outVoiceSeekbarSelected=n1_300
 chat_previewDurationText=n1_50
@@ -332,7 +332,7 @@ chat_secretChatStatusText=a1_600
 chat_secretTimeText=mWhite
 chat_secretTimerBackground=n1_50
 chat_secretTimerText=mWhite
-chat_selectedBackground=a1_200(50)
+chat_selectedBackground=a1_200 (a=50)
 chat_sentError=mRed500
 chat_sentErrorIcon=mWhite
 chat_serviceBackground=n2_100
@@ -343,7 +343,7 @@ chat_serviceText=n2_800
 chat_status=a1_600
 chat_stickerNameText=n1_50
 chat_stickerReplyLine=a1_600
-chat_stickerReplyMessageText=n1_900(70)
+chat_stickerReplyMessageText=n1_900 (a=70)
 chat_stickerReplyNameText=a1_600
 chat_stickerViaBotNameText=n1_900
 chat_stickersHintPanel=n1_50
@@ -446,7 +446,7 @@ dialogBackgroundGray=n1_50
 dialogBadgeBackground=a1_600
 dialogBadgeText=a1_600
 dialogButton=a1_600
-dialogButtonSelector=n2_200(50)
+dialogButtonSelector=n2_200 (a=50)
 dialogCameraIcon=mWhite
 dialogCheckboxSquareBackground=a1_600
 dialogCheckboxSquareCheck=n1_50
@@ -492,7 +492,7 @@ dialogTopBackground=a1_600
 dialog_inlineProgress=a1_600
 dialog_inlineProgressBackground=n1_50
 dialog_liveLocationProgress=a1_600
-divider=n1_200(50)
+divider=n1_200 (a=50)
 emptyListPlaceholder=n2_800
 fastScrollActive=a1_200
 fastScrollInactive=a1_600
@@ -531,8 +531,8 @@ key_player_progressCachedBackground=a2_300
 key_sheet_other=a1_600
 key_sheet_scrollUp=n1_200
 key_voipgroup_overlayAlertMutedByAdmin2=a3_100
-listSelector=n2_200(60)
-listSelectorSDK21=n2_200(60)
+listSelector=n2_200 (a=60)
+listSelectorSDK21=n2_200 (a=60)
 location_actionActiveIcon=a1_600
 location_actionBackground=n1_50
 location_actionIcon=a1_600
@@ -598,7 +598,7 @@ profile_creatorIcon=a1_600
 profile_status=n1_600
 profile_tabSelectedLine=a1_600
 profile_tabSelectedText=a1_600
-profile_tabSelector=n2_200(50)
+profile_tabSelector=n2_200 (a=50)
 profile_tabText=n1_500
 profile_title=n1_900
 profile_verifiedBackground=a1_600

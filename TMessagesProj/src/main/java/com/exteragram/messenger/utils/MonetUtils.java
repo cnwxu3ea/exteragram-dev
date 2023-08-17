@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.PatternMatcher;
 import android.util.Log;
@@ -100,29 +101,46 @@ public class MonetUtils {
         }
     }
 
-    public static int getColor(String color) {
-        int alpha = 100;
+    private final static String ALPHA = "a";
+    private final static String SATURATION = "s";
 
+    public static int getColor(String color) {
         try {
+            int alpha = 100, saturation = 100;
+
             if (color.matches(".*\\(.*\\).*")) {
-                int startIndex = color.indexOf("(") + 1;
-                int endIndex = color.indexOf(")");
-                String alphaStr = color.substring(startIndex, endIndex);
-                alpha = Integer.parseInt(alphaStr);
-                color = color.substring(0, startIndex - 1);
+                int startIndex = color.indexOf("(") + 1,
+                        endIndex = color.indexOf(")");
+                String params = color.substring(startIndex, endIndex);
+                String[] paramPairs = params.split(",");
+                for (String paramPair : paramPairs) {
+                    String[] keyValue = paramPair.split("=");
+                    if (keyValue.length == 2) {
+                        String key = keyValue[0].trim(),
+                                value = keyValue[1].trim();
+
+                        if (key.equalsIgnoreCase(ALPHA)) {
+                            alpha = Integer.parseInt(value);
+                        } else if (key.equalsIgnoreCase(SATURATION)) {
+                            saturation = Integer.parseInt(value);
+                        }
+                    }
+                }
+                color = color.substring(0, startIndex - 1).trim();
             }
 
             int colorId = ids.getOrDefault(color, 0);
             int colorValue = ApplicationLoader.applicationContext.getColor(colorId);
-            float alphaFactor = alpha * 2.55f;
 
-            return ColorUtils.setAlphaComponent(colorValue, (int) alphaFactor);
+            int adjustedColor = ColorUtils.blendARGB(Color.WHITE, colorValue, saturation / 100f);
+            adjustedColor = ColorUtils.setAlphaComponent(adjustedColor, (int) (alpha * 2.55f));
+
+            return adjustedColor;
         } catch (Exception e) {
             FileLog.e(e);
         }
         return 0;
     }
-
 
     private static class OverlayChangeReceiver extends BroadcastReceiver {
 

@@ -184,17 +184,15 @@ public class PremiumGradient {
 
         public void gradientMatrix(int x, int y, int x1, int y1, float xOffset, float yOffset) {
             chekColors();
+            int height = y1 - y;
             if (exactly) {
-                int height = y1 - y;
                 float sx = (x1 - x) / (float) size;
                 float sy = height / (float) size;
 
                 matrix.reset();
                 matrix.postScale(sx, sy, 100 * cx, 100 * cy);
                 matrix.postTranslate(xOffset, yOffset);
-                shader.setLocalMatrix(matrix);
             } else {
-                int height = y1 - y;
                 int gradientHeight = height + height;
                 float sx = (x1 - x) / (float) size;
                 float sy = gradientHeight / (float) size;
@@ -203,6 +201,8 @@ public class PremiumGradient {
                 matrix.reset();
                 matrix.postScale(sx, sy, 75, sizeHalf);
                 matrix.postTranslate(xOffset, -gradientHeight + yOffset);
+            }
+            if (shader != null) {
                 shader.setLocalMatrix(matrix);
             }
         }

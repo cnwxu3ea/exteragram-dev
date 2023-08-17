@@ -7,13 +7,13 @@ actionBarDefault=n1_900
 actionBarDefaultArchived=n2_800
 actionBarDefaultArchivedIcon=n1_10
 actionBarDefaultArchivedSearch=n1_10
-actionBarDefaultArchivedSelector=n1_700(80)
+actionBarDefaultArchivedSelector=n1_700 (a=80)
 actionBarDefaultArchivedTitle=n1_10
 actionBarDefaultIcon=n1_10
 actionBarDefaultSearch=n1_50
 actionBarDefaultSearchArchivedPlaceholder=mBlack
 actionBarDefaultSearchPlaceholder=n1_300
-actionBarDefaultSelector=n1_700(80)
+actionBarDefaultSelector=n1_700 (a=80)
 actionBarDefaultSubmenuBackground=n2_800
 actionBarDefaultSubmenuItem=n1_50
 actionBarDefaultSubmenuItemIcon=a2_100
@@ -22,12 +22,12 @@ actionBarDefaultSubtitle=n1_300
 actionBarDefaultTitle=mWhite
 actionBarTabActiveText=a1_200
 actionBarTabLine=a1_200
-actionBarTabSelector=n2_700(50)
+actionBarTabSelector=n2_700 (a=50)
 actionBarTabUnactiveText=n2_300
 actionBarTipBackground=n1_800
-actionBarWhiteSelector=n1_700(80)
+actionBarWhiteSelector=n1_700 (a=80)
 avatar_actionBarIconBlue=mWhite
-avatar_actionBarSelectorBlue=n1_700(80)
+avatar_actionBarSelectorBlue=n1_700 (a=80)
 avatar_background2Saved=a1_200
 avatar_backgroundActionBarBlue=n1_900
 avatar_backgroundArchived=a1_200
@@ -63,7 +63,7 @@ chat_attachAudioBackground=a1_200
 chat_attachAudioIcon=a1_800
 chat_attachAudioText=a1_200
 chat_attachCheckBoxBackground=a1_200
-chat_attachCheckBoxCheck=n2_800(90)
+chat_attachCheckBoxCheck=n2_800 (a=90)
 chat_attachContactBackground=a1_200
 chat_attachContactIcon=a1_800
 chat_attachContactText=a1_200
@@ -201,7 +201,7 @@ chat_inlineResultIcon=a1_100
 chat_linkSelectBackground=n1_300
 chat_lockIcon=a1_100
 chat_mediaInfoText=n1_200
-chat_mediaLoaderPhoto=n2_900(80)
+chat_mediaLoaderPhoto=n2_900 (a=80)
 chat_mediaLoaderPhotoIcon=a1_200
 chat_mediaLoaderPhotoIconSelected=a1_600
 chat_mediaLoaderPhotoSelected=a1_200
@@ -290,8 +290,8 @@ chat_outReactionButtonTextSelected=mWhite
 chat_outReplyLine=a1_700
 chat_outReplyMediaMessageSelectedText=n1_900
 chat_outReplyMediaMessageText=n1_900
-chat_outReplyMessageText=a1_900(70)
-chat_outReplyNameText=a1_900(70)
+chat_outReplyMessageText=a1_900 (a=70)
+chat_outReplyNameText=a1_900 (a=70)
 chat_outSentCheck=a2_600
 chat_outSentCheckRead=a1_800
 chat_outSentCheckReadSelected=a1_600
@@ -309,7 +309,7 @@ chat_outVenueInfoText=n1_900
 chat_outViaBotNameText=n1_900
 chat_outViews=n1_700
 chat_outViewsSelected=n1_700
-chat_outVoiceSeekbar=a1_800(40)
+chat_outVoiceSeekbar=a1_800 (a=40)
 chat_outVoiceSeekbarFill=a1_800
 chat_outVoiceSeekbarSelected=a1_600
 chat_previewDurationText=n1_50
@@ -332,7 +332,7 @@ chat_secretChatStatusText=n1_50
 chat_secretTimeText=mWhite
 chat_secretTimerBackground=a1_100
 chat_secretTimerText=n1_900
-chat_selectedBackground=a2_700(30)
+chat_selectedBackground=a2_700 (a=30)
 chat_sentError=mRed200
 chat_sentErrorIcon=mWhite
 chat_serviceBackground=n2_800
@@ -446,7 +446,7 @@ dialogBackgroundGray=n1_900
 dialogBadgeBackground=n1_900
 dialogBadgeText=a1_600
 dialogButton=a1_200
-dialogButtonSelector=n2_700(80)
+dialogButtonSelector=n2_700 (a=80)
 dialogCameraIcon=mWhite
 dialogCheckboxSquareBackground=n1_900
 dialogCheckboxSquareCheck=a1_800
@@ -492,7 +492,7 @@ dialogTopBackground=n2_800
 dialog_inlineProgress=a1_100
 dialog_inlineProgressBackground=n1_900
 dialog_liveLocationProgress=a1_100
-divider=n2_700(50)
+divider=n2_700 (a=50)
 emptyListPlaceholder=n2_200
 fastScrollActive=a1_600
 fastScrollInactive=a1_200
@@ -530,8 +530,8 @@ key_player_progressCachedBackground=a2_700
 key_sheet_other=a1_100
 key_sheet_scrollUp=n2_500
 key_voipgroup_overlayAlertMutedByAdmin2=a3_100
-listSelector=n2_700(60)
-listSelectorSDK21=n2_700(60)
+listSelector=n2_700 (a=60)
+listSelectorSDK21=n2_700 (a=60)
 location_actionActiveIcon=a1_800
 location_actionBackground=a1_200
 location_actionIcon=a1_800
@@ -597,7 +597,7 @@ profile_creatorIcon=a1_100
 profile_status=n1_50
 profile_tabSelectedLine=a1_200
 profile_tabSelectedText=a1_200
-profile_tabSelector=n2_700(50)
+profile_tabSelector=n2_700 (a=50)
 profile_tabText=n1_300
 profile_title=n1_50
 profile_verifiedBackground=a1_200
