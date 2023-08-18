@@ -74,6 +74,7 @@ public class ExteraConfig {
     public static boolean disableNumberRounding;
     public static boolean formatTimeWithSeconds;
     public static boolean inAppVibration;
+    public static boolean filterZalgo;
     public static int tabletMode;
 
     public static int downloadSpeedBoost;
@@ -187,7 +188,8 @@ public class ExteraConfig {
             disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
             formatTimeWithSeconds = preferences.getBoolean("formatTimeWithSeconds", false);
             inAppVibration = preferences.getBoolean("inAppVibration", true);
-            tabletMode = preferences.getInt("tabletMode", 0);
+            filterZalgo = preferences.getBoolean("filterZalgo", true);
+            tabletMode = 0; // preferences.getInt("tabletMode", 0);
 
             downloadSpeedBoost = preferences.getInt("downloadSpeedBoost", 0);
             uploadSpeedBoost = preferences.getBoolean("uploadSpeedBoost", false);

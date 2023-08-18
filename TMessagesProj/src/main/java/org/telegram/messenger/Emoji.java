@@ -19,6 +19,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -29,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.exteragram.messenger.utils.FontUtils;
+import com.exteragram.messenger.utils.LocaleUtils;
 
 import org.telegram.ui.Components.AnimatedEmojiSpan;
 
@@ -571,7 +573,7 @@ public class Emoji {
         }
         ArrayList<EmojiSpanRange> emojis = parseEmojis(s, emojiOnly);
         if (emojis.isEmpty()) {
-            return cs;
+            return LocaleUtils.filterSpannable(cs);
         }
 
         AnimatedEmojiSpan[] animatedEmojiSpans = s.getSpans(0, s.length(), AnimatedEmojiSpan.class);
@@ -606,7 +608,7 @@ public class Emoji {
                 break;
             }
         }
-        return s;
+        return LocaleUtils.filterSpannable(s);
     }
 
     public static class EmojiSpan extends ImageSpan {

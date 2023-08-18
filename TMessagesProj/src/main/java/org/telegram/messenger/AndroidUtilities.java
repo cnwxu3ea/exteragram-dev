@@ -2385,9 +2385,11 @@ public class AndroidUtilities {
     }
 
     public static boolean isTabletInternal() {
-        if (ExteraConfig.tabletMode == 1) isTablet = true;
-        else if (ExteraConfig.tabletMode == 2) isTablet = false;
-        if (isTablet == null) {
+        if (ExteraConfig.tabletMode == 1) {
+            isTablet = true;
+        } else if (ExteraConfig.tabletMode == 2) {
+            isTablet = false;
+        } else if (isTablet == null) {
             isTablet = isTabletForce();
         }
         return isTablet;

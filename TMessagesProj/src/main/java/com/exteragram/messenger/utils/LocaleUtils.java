@@ -30,6 +30,9 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LocaleUtils {
     public static String getActionBarTitle() {
         String title;
@@ -116,5 +119,54 @@ public class LocaleUtils {
         } catch (Exception e) {
             return "exteraGram";
         }
+    }
+
+    private static final Pattern ZALGO_PATTERN = Pattern.compile("\\p{Mn}{3,}");
+
+    private static boolean canFilter(CharSequence text) {
+        return ExteraConfig.filterZalgo && !TextUtils.isEmpty(text) && ZALGO_PATTERN.matcher(text).find();
+    }
+
+    public static CharSequence filterSpannable(CharSequence text) {
+        if (!canFilter(text)) {
+            return text;
+        }
+
+        if (!(text instanceof Spannable s)) {
+            return filter(text);
+        }
+
+        final Spannable finalS = new SpannableString(filter(s));
+        Object[] spans = s.getSpans(0, s.length(), Object.class);
+
+        for (Object span : spans) {
+            int start = Math.min(s.getSpanStart(span), finalS.length());
+            int end = Math.min(s.getSpanEnd(span), finalS.length());
+            int flags = s.getSpanFlags(span);
+
+            finalS.setSpan(span, start, end, flags);
+        }
+        return finalS;
+    }
+
+    public static String filter(CharSequence text) {
+        return filter(text.toString());
+    }
+
+    public static String filter(String text) {
+        if (canFilter(text)) {
+            Matcher matcher = ZALGO_PATTERN.matcher(text);
+            StringBuilder output = new StringBuilder(text.length());
+            int lastEnd = 0;
+
+            while (matcher.find()) {
+                output.append(text, lastEnd, matcher.start()).
+                        append("\u2060".repeat(matcher.group().length()));
+                lastEnd = matcher.end();
+            }
+
+            return output.append(text, lastEnd, text.length()).toString();
+        }
+        return text;
     }
 }

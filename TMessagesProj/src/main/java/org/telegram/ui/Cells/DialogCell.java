@@ -1580,7 +1580,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                                     SpannableStringBuilder builder = (SpannableStringBuilder) messageString;
                                     builder.insert(0, " ");
                                     builder.setSpan(new FixedWidthSpan(AndroidUtilities.dp((thumbSize + 2) * thumbsCount - 2 + 5)), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                    Emoji.replaceEmoji(builder, Theme.dialogs_messagePaint[paintIndex].getFontMetricsInt(), AndroidUtilities.dp(17), false);
+                                    messageString = Emoji.replaceEmoji(builder, Theme.dialogs_messagePaint[paintIndex].getFontMetricsInt(), AndroidUtilities.dp(17), false);
                                     if (message.hasHighlightedWords()) {
                                         CharSequence s = AndroidUtilities.highlightText(builder, message.highlightedWords, resourcesProvider);
                                         if (s != null) {
@@ -2088,6 +2088,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 thumbImage[i].setImageY(buttonTop);
             }
         } else if ((useForceThreeLines || SharedConfig.useThreeLinesLayout) && messageNameString != null && (currentDialogFolderId == 0 || currentDialogFolderDialogsCount == 1)) {
+            messageNameString = Emoji.replaceEmoji(messageNameString, Theme.dialogs_messagePaint[paintIndex].getFontMetricsInt(), AndroidUtilities.dp(17), false);
             try {
                 if (message != null && message.hasHighlightedWords()) {
                     CharSequence s = AndroidUtilities.highlightText(messageNameString, message.highlightedWords, resourcesProvider);

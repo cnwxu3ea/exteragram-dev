@@ -91,6 +91,8 @@
     <string name="DisableNumberRounding">Disable Number Rounding</string>
     <string name="FormatTimeWithSeconds">Format Time with Seconds</string>
     <string name="InAppVibration">In-App Vibration</string>
+    <string name="FilterZalgo">Filter Zalgo</string>
+    <string name="FilterZalgoInfo">Removes \"%1$s\" symbols in names and messages.</string>
     <string name="TabletMode">Tablet Mode</string>
 
     <string name="DownloadSpeedBoost">Download Speed Boost</string>

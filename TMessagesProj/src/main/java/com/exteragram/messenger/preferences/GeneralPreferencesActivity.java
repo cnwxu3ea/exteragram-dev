@@ -74,6 +74,7 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
     private int formatTimeWithSecondsRow;
     private int disableNumberRoundingRow;
     private int inAppVibrationRow;
+    private int filterZalgoRow;
     private int tabletModeRow;
     private int generalDividerRow;
 
@@ -111,7 +112,8 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         disableNumberRoundingRow = newRow();
         formatTimeWithSecondsRow = newRow();
         inAppVibrationRow = newRow();
-        tabletModeRow = newRow();
+        filterZalgoRow = newRow();
+        tabletModeRow = -1;
         generalDividerRow = newRow();
 
         speedBoostersHeaderRow = newRow();
@@ -144,6 +146,11 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         } else if (position == inAppVibrationRow) {
             ExteraConfig.editor.putBoolean("inAppVibration", ExteraConfig.inAppVibration ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.inAppVibration);
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == filterZalgoRow) {
+            ExteraConfig.editor.putBoolean("filterZalgo", ExteraConfig.filterZalgo ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.filterZalgo);
+            listAdapter.notifyItemChanged(generalDividerRow);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == tabletModeRow) {
             if (getParentActivity() == null) {
@@ -266,6 +273,8 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("FormatTimeWithSeconds", R.string.FormatTimeWithSeconds), "12:34 -> 12:34:56", ExteraConfig.formatTimeWithSeconds, true, true);
                     } else if (position == inAppVibrationRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.InAppVibration), ExteraConfig.inAppVibration, true);
+                    } else if (position == filterZalgoRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.FilterZalgo), ExteraConfig.filterZalgo, false);
                     } else if (position == disableUnarchiveSwipeRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DisableUnarchiveSwipe", R.string.DisableUnarchiveSwipe), ExteraConfig.disableUnarchiveSwipe, false);
                     } else if (position == archiveOnPullRow) {
@@ -312,6 +321,9 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                         textInfoPrivacyCell.setText(LocaleController.getString("ShowIdAndDcInfo", R.string.ShowIdAndDcInfo));
                     } else if (position == archiveDividerRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("DisableUnarchiveSwipeInfo", R.string.DisableUnarchiveSwipeInfo));
+                    } else if (position == generalDividerRow) {
+                        textInfoPrivacyCell.getTextView().setMovementMethod(null);
+                        textInfoPrivacyCell.setText(LocaleController.formatString(R.string.FilterZalgoInfo, LocaleUtils.filter("Z̷͍͌ā̸̜l̸̞̂g̷͍̝o̶̩̓")));
                     }
                 }
                 case 13 -> {
@@ -327,14 +339,12 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == generalDividerRow) {
-                return 1;
-            } else if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow ||
+            if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow ||
                     position == speedBoostersHeaderRow || position == cameraTypeHeaderRow) {
                 return 3;
             } else if (position == cameraXQualityRow || position == tabletModeRow || position == showIdAndDcRow) {
                 return 7;
-            } else if (position == cameraTypeDividerRow || position == speedBoostersDividerRow || position == profileDividerRow  || position == archiveDividerRow) {
+            } else if (position == cameraTypeDividerRow || position == speedBoostersDividerRow || position == profileDividerRow  || position == archiveDividerRow || position == generalDividerRow) {
                 return 8;
             } else if (position == downloadSpeedChooserRow) {
                 return 13;
