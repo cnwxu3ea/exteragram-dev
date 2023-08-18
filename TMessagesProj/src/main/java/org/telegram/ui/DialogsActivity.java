@@ -4326,7 +4326,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (initialDialogsType != DIALOGS_TYPE_WIDGET) {
             floatingButton2Container = new FrameLayout(context);
             floatingButton2Container.setVisibility(onlySelect && initialDialogsType != 10 || folderId != 0 || !storiesEnabled ? View.GONE : View.VISIBLE);
-            contentView.addView(floatingButton2Container, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 36 : 40), (Build.VERSION.SDK_INT >= 21 ? 36 : 40), (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 24 : 0, 0, LocaleController.isRTL ? 0 : 24, 14 + 60 + 8));
+            contentView.addView(floatingButton2Container, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 22 : 0, 0, LocaleController.isRTL ? 0 : 22, 14 + 56 + 16));
             floatingButton2Container.setOnClickListener(v -> {
                 if (parentLayout != null && parentLayout.isInPreviewMode()) {
                     finishPreviewFragment();
@@ -4344,7 +4344,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 @SuppressLint("NewApi")
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    outline.setOval(0, 0, AndroidUtilities.dp(36), AndroidUtilities.dp(36));
+                    if (ExteraConfig.squareFab) {
+                        outline.setRoundRect(0, 0, AndroidUtilities.dp(40), AndroidUtilities.dp(40), AndroidUtilities.dp(12));
+                    } else {
+                        outline.setOval(0, 0, AndroidUtilities.dp(40), AndroidUtilities.dp(40));
+                    }
                 }
             });
 
@@ -4471,7 +4475,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         });
-        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
         floatingButtonContainer.addView(floatingButton, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         updateFloatingButtonColor();
         updateStoriesPosting();
@@ -11598,6 +11601,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhite), Color.WHITE, 0.1f),
                     Theme.blendOver(Theme.getColor(Theme.key_windowBackgroundWhite), Theme.getColor(Theme.key_listSelector))
             );
+            drawable = CanvasUtils.createFabBackground(false, true);
             floatingButton2Container.setBackground(drawable);
         }
     }

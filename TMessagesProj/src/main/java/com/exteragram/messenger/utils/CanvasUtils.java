@@ -11,7 +11,10 @@
 
 package com.exteragram.messenger.utils;
 
+import static org.telegram.messenger.AndroidUtilities.dp;
+
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -19,10 +22,10 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 
 import com.exteragram.messenger.ExteraConfig;
 
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -32,14 +35,22 @@ import java.util.Objects;
 public class CanvasUtils {
 
     public static Drawable createFabBackground() {
-        return createFabBackground(false);
+        return createFabBackground(false, false);
     }
 
     public static Drawable createFabBackground(boolean altColor) {
-        int r = AndroidUtilities.dp(ExteraConfig.squareFab ? 16 : 100);
+        return createFabBackground(altColor, false);
+    }
+
+    public static Drawable createFabBackground(boolean altColor, boolean small) {
+        int r = ExteraConfig.squareFab ? small ? 12 : 16 : 100;
         int c = Theme.getColor(altColor ? Theme.key_dialogFloatingButton : Theme.key_chats_actionBackground);
         int pc = Theme.getColor(altColor ? Theme.key_dialogFloatingButtonPressed : Theme.key_chats_actionPressedBackground);
-        return Theme.createSimpleSelectorRoundRectDrawable(r, c, pc);
+        if (small) {
+            c = ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhite), Color.WHITE, 0.1f);
+            pc = Theme.blendOver(Theme.getColor(Theme.key_windowBackgroundWhite), Theme.getColor(Theme.key_listSelector));
+        }
+        return Theme.createSimpleSelectorRoundRectDrawable(dp(r), c, pc);
     }
 
     public static CombinedDrawable createCircleDrawableWithIcon(Context context, int iconRes, int size) {

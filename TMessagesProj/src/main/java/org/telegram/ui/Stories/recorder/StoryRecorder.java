@@ -312,7 +312,9 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
             src.screenRect.set(loc[0], loc[1], loc[0] + imageView.getWidth(), loc[1] + imageView.getHeight());
             src.backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             src.backgroundPaint.setColor(Theme.getColor(Theme.key_chats_actionBackground));
-            src.iconDrawable = floatingButton.getContext().getResources().getDrawable(R.drawable.story_camera).mutate();
+            Drawable drawable = floatingButton.getContext().getResources().getDrawable(R.drawable.story_camera).mutate();
+            drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
+            src.iconDrawable = drawable;
             src.iconSize = AndroidUtilities.dp(56);
             src.rounding = ExteraConfig.squareFab ? AndroidUtilities.dp(16) : Math.max(src.screenRect.width(), src.screenRect.height()) / 2f;
             return src;

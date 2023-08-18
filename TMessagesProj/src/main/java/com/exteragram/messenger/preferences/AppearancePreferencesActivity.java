@@ -181,7 +181,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
         drawerHeaderRow = newRow();
         statusRow = getUserConfig().isPremium() ? newRow() : -1;
-        myStoriesRow = MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled() ? newRow() : -1;
+        myStoriesRow = getMessagesController().storiesEnabled() ? newRow() : -1;
         archivedChatsRow = ChatUtils.hasArchivedChats() ? newRow() : -1;
         newGroupRow = newRow();
         newSecretChatRow = newRow();
