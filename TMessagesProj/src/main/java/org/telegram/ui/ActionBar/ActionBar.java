@@ -450,6 +450,7 @@ public class ActionBar extends FrameLayout {
             createTitleTextView(0);
         }
         if (titleTextView[0] != null) {
+            titleTextView[0].setTypeface(AndroidUtilities.getTypeface(value != null && value.toString().equalsIgnoreCase("экстераграм") ? "fonts/impact.ttf" : "fonts/rmedium.ttf"));
             titleTextView[0].setVisibility(value != null && !isSearchFieldVisible ? VISIBLE : INVISIBLE);
             titleTextView[0].setText(lastTitle = value);
             if (!ExteraConfig.hideActionBarStatus && UserConfig.getInstance(UserConfig.selectedAccount).isPremium()) {
