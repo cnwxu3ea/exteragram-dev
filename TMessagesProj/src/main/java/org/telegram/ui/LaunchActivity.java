@@ -749,38 +749,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     drawerLayoutContainer.setDrawCurrentPreviewFragmentAbove(true);
                     return true;
                 }
-            } else if (view instanceof DrawerActionCell && id == 14) {
-                Bundle args = new Bundle();
-                args.putInt("folderId", 1);
-                final BaseFragment fragment = new DialogsActivity(args) {
-                    @Override
-                    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
-                        super.onTransitionAnimationEnd(isOpen, backward);
-                        if (!isOpen && backward) {
-                            drawerLayoutContainer.setDrawCurrentPreviewFragmentAbove(false);
-                            actionBarLayout.getView().invalidate();
-                        }
-                    }
-
-                    @Override
-                    public void onFragmentDestroy() {
-                        super.onFragmentDestroy();
-                        drawerLayoutContainer.setAllowOpenDrawer(true, false);
-                        actionBarLayout.getView().invalidate();
-                    }
-
-                    @Override
-                    public void onPreviewOpenAnimationEnd() {
-                        super.onPreviewOpenAnimationEnd();
-                        drawerLayoutContainer.setAllowOpenDrawer(false, false);
-                        drawerLayoutContainer.setDrawCurrentPreviewFragmentAbove(false);
-                        drawerLayoutContainer.closeDrawer(false);
-                        actionBarLayout.getView().invalidate();
-                    }
-                };
-                actionBarLayout.presentFragmentAsPreview(fragment);
-                drawerLayoutContainer.setDrawCurrentPreviewFragmentAbove(true);
-                return true;
             }
             return false;
         });

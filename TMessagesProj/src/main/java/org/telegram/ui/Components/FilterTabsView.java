@@ -1952,7 +1952,7 @@ public class FilterTabsView extends FrameLayout {
 
     public void updateSelector() {
         selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF));
-        float rad = AndroidUtilities.dpf2(ExteraConfig.tabStyle == 3 ? 8 : ExteraConfig.tabStyle == 4 ? 30 : 3);
+        float rad = AndroidUtilities.dpf2(ExteraConfig.tabStyle == 3 ? 10 : ExteraConfig.tabStyle == 4 ? 30 : 3);
         if (ExteraConfig.tabStyle == 1 || ExteraConfig.tabStyle >= 3) {
             selectorDrawable.setCornerRadii(new float[]{rad, rad, rad, rad, rad, rad, rad, rad});
         } else {

@@ -1335,11 +1335,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private final static int translate = 62;
 
-    private final static int permissions = 100;
-    private final static int administrators = 101;
-    private final static int members = 102;
-    private final static int recent_actions = 103;
-    private final static int show_pinned = 104;
+    private final static int permissions = 90;
+    private final static int administrators = 91;
+    private final static int members = 92;
+    private final static int recent_actions = 93;
+    private final static int show_pinned = 94;
 
     private final static int id_chat_compose_panel = 1000;
 
@@ -32509,18 +32509,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void updatePaddings() {
-        UndoView undoView = getUndoView();
-        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(200);
-        animator.addUpdateListener(animation -> {
+        AndroidUtilities.runOnUIThread(() -> {
             if (fragmentView != null) {
                 fragmentView.requestLayout();
             }
             updateBulletinLayout();
+            UndoView undoView = getUndoView();
             if (undoView != null) {
                 undoView.setAdditionalTranslationY(0);
             }
-        });
-        animator.start();
+        }, 200);
     }
 
     private boolean haveDiscussion() {

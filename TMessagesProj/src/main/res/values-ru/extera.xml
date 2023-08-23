@@ -93,7 +93,7 @@
     <string name="DisableNumberRounding">Отключить округление чисел</string>
     <string name="FormatTimeWithSeconds">Показывать время с секундами</string>
     <string name="InAppVibration">Вибрация в приложении</string>
-    <string name="FilterZalgo">Фильтр Zalgo</string>
+    <string name="FilterZalgo">Фильтр \"Zalgo\"</string>
     <string name="FilterZalgoInfo">Убирает \"%1$s\" символы в именах и сообщениях.</string>
     <string name="TabletMode">Планшетный режим</string>
 

@@ -1247,7 +1247,7 @@ public class ManageLinksActivity extends BaseFragment {
                 linkIcon.draw(canvas);
             }
 
-            if (drawDivider) {
+            if (drawDivider && !ExteraConfig.disableDividers) {
                 canvas.drawLine(AndroidUtilities.dp(70), getMeasuredHeight() - 1, getMeasuredWidth() + AndroidUtilities.dp(23), getMeasuredHeight(), Theme.dividerPaint);
             }
         }

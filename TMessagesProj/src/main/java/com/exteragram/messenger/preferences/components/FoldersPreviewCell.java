@@ -137,8 +137,8 @@ public class FoldersPreviewCell extends FrameLayout {
                                 startY + dpf2(6) * textStyleProgress - dpf2(37.5f) * chipsStyleProgress,
                                 startX + sw + dpf2(4) * (1 - titleProgress) * (1 - counterProgress) + dpf2(22) * chipsStyleProgress,
                                 startY + dp(8) - dpf2(4) * roundedStyleProgress - dpf2(9.5f) * chipsStyleProgress,
-                                dpf2(8 + 15 * pillsStyleProgress),
-                                dpf2(8 + 15 * pillsStyleProgress),
+                                dpf2(10 + 15 * pillsStyleProgress),
+                                dpf2(10 + 15 * pillsStyleProgress),
                                 Theme.dialogs_onlineCirclePaint);
                         float iconOffset = startX + dpf2(6) * (1 - titleProgress) * (1 - counterProgress) + dpf2(11) * chipsStyleProgress;
                         icon.setBounds((int) (iconOffset), (int) h / 2 - dp(13), (int) (dpf2(26) * iconProgress * hideAllChatsProgress + iconOffset), (int) h / 2 + dp(13));

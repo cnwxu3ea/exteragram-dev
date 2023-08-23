@@ -5001,19 +5001,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (inPreviewMode) {
             final TLRPC.User currentUser = getUserConfig().getCurrentUser();
             avatarContainer = new ChatAvatarContainer(actionBar.getContext(), null, false);
-            if (folderId == 1) {
-                avatarContainer.getSubtitleTextView().setVisibility(View.GONE);
-                avatarContainer.setTitle(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
-                CombinedDrawable thumbDrawable = CanvasUtils.createRoundRectDrawableWithIcon(AndroidUtilities.dp(42), ExteraConfig.getAvatarCorners(42), R.drawable.chats_archive);
-                thumbDrawable.setIconSize(AndroidUtilities.dp(22), AndroidUtilities.dp(22));
-                Theme.setCombinedDrawableColor(thumbDrawable, getThemedColor(Theme.key_avatar_backgroundArchivedHidden), false);
-                Theme.setCombinedDrawableColor(thumbDrawable, getThemedColor(Theme.key_avatar_text), true);
-                avatarContainer.getAvatarImageView().setImageDrawable(thumbDrawable);
-            } else {
-                avatarContainer.setTitle(UserObject.getUserName(currentUser));
-                avatarContainer.setSubtitle(LocaleController.formatUserStatus(currentAccount, currentUser));
-                avatarContainer.setUserAvatar(currentUser, true);
-            }
+            avatarContainer.setTitle(UserObject.getUserName(currentUser));
+            avatarContainer.setSubtitle(LocaleController.formatUserStatus(currentAccount, currentUser));
+            avatarContainer.setUserAvatar(currentUser, true);
             avatarContainer.setOccupyStatusBar(false);
             avatarContainer.setLeftPadding(AndroidUtilities.dp(12));
             actionBar.addView(avatarContainer, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 0, 0, 40, 0));
