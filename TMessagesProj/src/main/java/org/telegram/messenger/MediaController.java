@@ -104,7 +104,6 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
-import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.utils.SystemUtils;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
@@ -2104,8 +2103,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             playingMessageObject = null;
             downloadingCurrentMessage = false;
             if (notify) {
-                NotificationsController.audioManager.abandonAudioFocus(this);
-                hasAudioFocus = 0;
                 int index = -1;
                 if (voiceMessagesPlaylist != null) {
                     if (byVoiceEnd && (index = voiceMessagesPlaylist.indexOf(lastFile)) >= 0) {
@@ -2138,6 +2135,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         pipRoundVideoView.close(true);
                         pipRoundVideoView = null;
                     }
+                }
+                if (!playingNext) {
+                    checkAudioFocus(lastFile, false);
                 }
             }
             if (stopService) {
@@ -2620,7 +2620,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    private void checkAudioFocus(MessageObject messageObject) {
+    private void checkAudioFocus(MessageObject messageObject, boolean request) {
         int neededAudioFocus;
         if (messageObject.isVoice() || messageObject.isRoundVideo()) {
             if (useFrontSpeaker) {
@@ -2631,16 +2631,22 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         } else {
             neededAudioFocus = 1;
         }
-        if (hasAudioFocus != neededAudioFocus) {
+        if (hasAudioFocus != neededAudioFocus && request) {
             hasAudioFocus = neededAudioFocus;
             int result;
             if (neededAudioFocus == 3) {
                 result = NotificationsController.audioManager.requestAudioFocus(this, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN);
             } else {
-                result = NotificationsController.audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, neededAudioFocus == 2 && !SharedConfig.pauseMusicOnMedia ? AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK : AudioManager.AUDIOFOCUS_GAIN);
+                result = NotificationsController.audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, neededAudioFocus == 2 && !SharedConfig.pauseMusicOnMedia ? AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK : AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
             }
             if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                 audioFocus = AUDIO_FOCUSED;
+            }
+        } else if (hasAudioFocus != 0 && !request) {
+            int result = NotificationsController.audioManager.abandonAudioFocus(this);
+            if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                audioFocus = AUDIO_NO_FOCUS_NO_DUCK;
+                hasAudioFocus = 0;
             }
         }
     }
@@ -2938,7 +2944,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             videoPlayer.setTextureView(currentTextureView);
         }
 
-        checkAudioFocus(messageObject);
+        checkAudioFocus(messageObject, true);
         setPlayerVolume();
 
         isPaused = false;
@@ -3490,7 +3496,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 return false;
             }
         }
-        checkAudioFocus(messageObject);
+        checkAudioFocus(messageObject, true);
         setPlayerVolume();
 
         isPaused = false;
@@ -3642,6 +3648,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             } else if (videoPlayer != null) {
                 videoPlayer.pause();
             }
+            checkAudioFocus(messageObject, false);
             isPaused = true;
             NotificationCenter.getInstance(playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, playingMessageObject.getId());
         } catch (Exception e) {
@@ -3677,7 +3684,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             } else if (videoPlayer != null) {
                 videoPlayer.play();
             }
-            checkAudioFocus(messageObject);
+            checkAudioFocus(messageObject, true);
             isPaused = false;
             NotificationCenter.getInstance(playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, playingMessageObject.getId());
         } catch (Exception e) {

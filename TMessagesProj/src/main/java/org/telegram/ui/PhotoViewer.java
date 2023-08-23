@@ -45,6 +45,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.AudioManager;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.net.Uri;
@@ -282,7 +283,7 @@ import java.util.Objects;
 
 @SuppressLint("WrongConstant")
 @SuppressWarnings("unchecked")
-public class PhotoViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector2.OnGestureListener, GestureDetector2.OnDoubleTapListener {
+public class PhotoViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector2.OnGestureListener, GestureDetector2.OnDoubleTapListener, AudioManager.OnAudioFocusChangeListener {
     private final static float ZOOM_SCALE = 0.1f;
     private final static int MARK_DEFERRED_IMAGE_LOADING = 1;
 
@@ -762,6 +763,44 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 MeasureSpec.makeMeasureSpec(marginTop + AndroidUtilities.dp(10 + 23 + 10), MeasureSpec.EXACTLY)
             );
         }
+    }
+
+    private boolean hasAudioFocus;
+    private final AudioManager audioManager;
+
+    public void requestAudioFocus(boolean request) {
+        if (request && currentMessageObject != null && !currentMessageObject.isGif()) {
+            if (SharedConfig.pauseMusicOnMedia) {
+                int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    hasAudioFocus = true;
+                }
+            }
+        } else if (hasAudioFocus) {
+            int result = audioManager.abandonAudioFocus(this);
+            if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                hasAudioFocus = false;
+            }
+        }
+    }
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+        AndroidUtilities.runOnUIThread(() -> {
+            switch (focusChange) {
+                case AudioManager.AUDIOFOCUS_GAIN -> {
+                    if (!isVideoPlaying()) {
+                        playVideoOrWeb();
+                    }
+                }
+                case AudioManager.AUDIOFOCUS_LOSS, AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                    if (isVideoPlaying()) {
+                        pauseVideoOrWeb();
+                    }
+                    hasAudioFocus = false;
+                }
+            }
+        });
     }
 
     private int currentAccount;
@@ -3751,6 +3790,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         blackPaint.setColor(0xff000000);
         videoFrameBitmapPaint.setColor(0xffffffff);
         centerImage.setFileLoadingPriority(FileLoader.PRIORITY_HIGH);
+        audioManager = (AudioManager) ApplicationLoader.applicationContext.getSystemService(Context.AUDIO_SERVICE);
     }
 
     @SuppressWarnings("unchecked")
@@ -8919,7 +8959,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 pipItem.setEnabled(true);
                 pipItem.animate().alpha(1.0f).setDuration(175).withEndAction(null).start();
             }
-            playerWasReady = true;
+            if (!playerWasReady) {
+                requestAudioFocus(true);
+                playerWasReady = true;
+            }
             if (currentMessageObject != null && currentMessageObject.isVideo()) {
                 AndroidUtilities.cancelRunOnUIThread(setLoadingRunnable);
                 FileLoader.getInstance(currentMessageObject.currentAccount).removeLoadingVideo(currentMessageObject.getDocument(), true, false);
@@ -9552,6 +9595,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (shouldSavePositionForCurrentVideoShortTerm != null) {
                 final float progress = videoPlayer.getCurrentPosition() / (float) videoPlayer.getDuration();
                 savedVideoPositions.put(shouldSavePositionForCurrentVideoShortTerm, new SavedVideoPosition(progress, SystemClock.elapsedRealtime()));
+            }
+            if (onClose) {
+                requestAudioFocus(false);
             }
             videoPlayer.releasePlayer(true);
             videoPlayer = null;
@@ -11518,6 +11564,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             playVideoOrWeb();
         }
+        requestAudioFocus(!playing);
         containerView.invalidate();
     }
 
@@ -13139,6 +13186,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } else {
                     menuItem.hideSubItem(gallery_menu_copy);
                 }
+            }
+            if (hasAudioFocus && !isVideo) {
+                requestAudioFocus(false);
             }
             if (isVideo || isEmbedVideo) {
                 speedItem.setVisibility(View.VISIBLE);
@@ -15796,6 +15846,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (pauseOnMinimize && ExteraConfig.pauseOnMinimize && videoPlayer != null && !videoPlayer.isPlaying()) {
             pauseOnMinimize = false;
             videoPlayer.play();
+            requestAudioFocus(true);
         }
     }
 
@@ -15815,6 +15866,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (ExteraConfig.pauseOnMinimize && videoPlayer != null && videoPlayer.isPlaying()) {
             pauseOnMinimize = true;
             videoPlayer.pause();
+            requestAudioFocus(false);
         }
     }
 

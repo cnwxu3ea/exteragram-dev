@@ -320,6 +320,7 @@ public class PipVideoOverlay {
         if (instance.parentSheet != null) {
             instance.parentSheet.destroy();
         } else if (instance.photoViewer != null) {
+            instance.photoViewer.requestAudioFocus(false);
             instance.photoViewer.destroyPhotoViewer();
             MediaController.getInstance().tryResumePausedAudio();
         }
@@ -1071,11 +1072,13 @@ public class PipVideoOverlay {
                 if (videoPlayer == null) {
                     return;
                 }
-                if (videoPlayer.isPlaying()) {
+                boolean isPlaying = videoPlayer.isPlaying();
+                if (isPlaying) {
                     videoPlayer.pause();
                 } else {
                     videoPlayer.play();
                 }
+                photoViewer.requestAudioFocus(!isPlaying);
             }
             updatePlayButton();
         });

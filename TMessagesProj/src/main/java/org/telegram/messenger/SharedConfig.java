@@ -582,7 +582,7 @@ public class SharedConfig {
             streamMedia = preferences.getBoolean("streamMedia", true);
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             pauseMusicOnRecord = preferences.getBoolean("pauseMusicOnRecord", false);
-            pauseMusicOnMedia = preferences.getBoolean("pauseMusicOnMedia", false);
+            pauseMusicOnMedia = preferences.getBoolean("pauseMusicOnMedia", true);
             forceDisableTabletMode = preferences.getBoolean("forceDisableTabletMode", false);
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             streamMkv = preferences.getBoolean("streamMkv", false);
