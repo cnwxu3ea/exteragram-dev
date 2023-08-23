@@ -3157,8 +3157,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     if (ExteraConfig.hideSendAsPeer) {
                         AndroidUtilities.runOnUIThread(() -> {
                             ignoreSendAsButtonUpdates = false;
-                            updateSendAsButton(true, false);
-                        }, 850);
+                        }, 1000);
                         updateSendAsButton(true, true);
                     }
 

@@ -306,17 +306,17 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             var peerId = MessageObject.getPeerId(peerObj.peer);
 
             if (peerId > 0) {
-                TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(peerId);
+                TLRPC.User user = messagesController.getUser(peerId);
                 if (user != null) {
                     AndroidUtilities.runOnUIThread(() -> {
                         MessagesController.openChatOrProfileWith(user, null, parentFragment, 0, false);
                     }, 500);
                 }
             } else {
-                TLRPC.Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(-peerId);
+                TLRPC.Chat chat = messagesController.getChat(-peerId);
                 if (chat != null) {
                     AndroidUtilities.runOnUIThread(() -> {
-                        MessagesController.openChatOrProfileWith(null, chat, parentFragment, 0, false);
+                        MessagesController.openChatOrProfileWith(null, chat, parentFragment, 1, false);
                     }, 500);
                 }
             }
