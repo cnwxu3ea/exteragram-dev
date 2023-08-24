@@ -308,44 +308,43 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             }
             nameLockTop = AndroidUtilities.dp(22.0f);
             updateStatus(false, false, null, false);
-        } else {
-            if (chat != null) {
-                dialog_id = -chat.id;
-                drawCheck = chat.verified;
-                if (!LocaleController.isRTL) {
-                    nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
-                } else {
-                    nameLeft = AndroidUtilities.dp(11);
-                }
-                updateStatus(drawCheck, ExteraConfig.isExtera(chat), null, false);
-            } else if (user != null) {
-                dialog_id = user.id;
-                if (!LocaleController.isRTL) {
-                    nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
-                } else {
-                    nameLeft = AndroidUtilities.dp(11);
-                }
-                nameLockTop = AndroidUtilities.dp(21);
-                drawCheck = user.verified;
-                drawPremium = !savedMessages && MessagesController.getInstance(currentAccount).isPremiumUser(user);
-                updateStatus(drawCheck, ExteraConfig.isExteraDev(user), user, false);
-            } else if (contact != null) {
-                if (!LocaleController.isRTL) {
-                    nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
-                } else {
-                    nameLeft = AndroidUtilities.dp(11);
-                }
-                if (actionButton == null) {
-                    actionButton = new CanvasButton(this);
-                    actionButton.setDelegate(() -> {
-                        if (getParent() instanceof RecyclerListView) {
-                            RecyclerListView parent = (RecyclerListView) getParent();
-                            parent.getOnItemClickListener().onItemClick(this, parent.getChildAdapterPosition(this));
-                        } else {
-                            callOnClick();
-                        }
-                    });
-                }
+        } else if (chat != null) {
+            dialog_id = -chat.id;
+            drawCheck = chat.verified;
+            if (!LocaleController.isRTL) {
+                nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
+            } else {
+                nameLeft = AndroidUtilities.dp(11);
+            }
+            updateStatus(drawCheck, ExteraConfig.isExtera(chat), null, false);
+        } else if (user != null) {
+            dialog_id = user.id;
+            if (!LocaleController.isRTL) {
+                nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
+            } else {
+                nameLeft = AndroidUtilities.dp(11);
+            }
+            nameLockTop = AndroidUtilities.dp(21);
+            drawCheck = user.verified;
+            drawPremium = !savedMessages && MessagesController.getInstance(currentAccount).isPremiumUser(user);
+            updateStatus(drawCheck, ExteraConfig.isExteraDev(user), user, false);
+        } else if (contact != null) {
+            dialog_id = 0;
+            if (!LocaleController.isRTL) {
+                nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
+            } else {
+                nameLeft = AndroidUtilities.dp(11);
+            }
+            if (actionButton == null) {
+                actionButton = new CanvasButton(this);
+                actionButton.setDelegate(() -> {
+                    if (getParent() instanceof RecyclerListView) {
+                        RecyclerListView parent = (RecyclerListView) getParent();
+                        parent.getOnItemClickListener().onItemClick(this, parent.getChildAdapterPosition(this));
+                    } else {
+                        callOnClick();
+                    }
+                });
             }
         }
         if (!LocaleController.isRTL) {
@@ -759,7 +758,12 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             actionLayout.draw(canvas);
             canvas.restore();
         }
-        StoriesUtilities.drawAvatarWithStory(dialog_id, canvas, avatarImage, avatarStoryParams);
+        if (user != null) {
+            StoriesUtilities.drawAvatarWithStory(user.id, canvas, avatarImage, avatarStoryParams);
+        } else {
+            avatarImage.setImageCoords(avatarStoryParams.originalAvatarRect);
+            avatarImage.draw(canvas);
+        }
     }
 
     @Override
@@ -804,7 +808,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (avatarStoryParams.checkOnTouchEvent(event, this)) {
+        if (user != null && avatarStoryParams.checkOnTouchEvent(event, this)) {
             return true;
         }
         if (actionButton != null && actionButton.checkTouchEvent(event)) {
