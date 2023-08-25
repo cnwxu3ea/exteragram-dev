@@ -100,7 +100,7 @@ chat_emojiPanelBackspace=n1_400
 chat_emojiPanelBadgeBackground=n1_50
 chat_emojiPanelBadgeText=n1_900
 chat_emojiPanelEmptyText=a1_600
-chat_emojiPanelIcon=a2_300
+chat_emojiPanelIcon=a2_400
 chat_emojiPanelIconSelected=a1_600
 chat_emojiPanelIconSelector=n2_200
 chat_emojiPanelMasksIcon=a1_600
@@ -281,7 +281,7 @@ chat_outMenuSelected=n1_50
 chat_outPollCorrectAnswer=a1_100
 chat_outPollWrongAnswer=mRed200
 chat_outPreviewInstantSelectedText=mBlack
-chat_outPreviewInstantText=n1_50
+chat_outPreviewInstantText=a1_100
 chat_outPreviewLine=n1_50
 chat_outPsaNameText=n1_50
 chat_outReactionButtonBackground=a1_300
@@ -291,7 +291,7 @@ chat_outReplyLine=a1_100
 chat_outReplyMediaMessageSelectedText=n1_50
 chat_outReplyMediaMessageText=n1_50
 chat_outReplyMessageText=n1_50 (a=80)
-chat_outReplyNameText=a1_100 (a=80)
+chat_outReplyNameText=a1_100
 chat_outSentCheck=a2_200
 chat_outSentCheckRead=a2_200
 chat_outSentCheckReadSelected=a2_200
@@ -321,7 +321,7 @@ chat_recordedVoiceDot=a1_600
 chat_recordedVoicePlayPause=a1_100
 chat_recordedVoiceProgress=n1_300
 chat_recordedVoiceProgressInner=n1_50
-chat_replyPanelClose=a1_600
+chat_replyPanelClose=a2_500
 chat_replyPanelIcons=a1_600
 chat_replyPanelLine=n1_50
 chat_replyPanelMessage=n1_50
@@ -350,7 +350,7 @@ chat_stickersHintPanel=n1_50
 chat_textSelectBackground=a1_200
 chat_topPanelBackground=mWhite
 chat_topPanelClose=a2_500
-chat_topPanelLine=a2_500
+chat_topPanelLine=a1_600
 chat_topPanelMessage=n2_500
 chat_topPanelTitle=a1_600
 chat_unreadMessagesStartArrowIcon=a1_900
@@ -753,6 +753,12 @@ windowBackgroundWhiteInputFieldActivated=a1_600
 windowBackgroundWhiteLinkSelection=n1_200
 windowBackgroundWhiteLinkText=a3_600
 windowBackgroundWhiteValueText=a1_600
+stories_circle_dialog1=a1_300
+stories_circle_dialog2=a1_300
+stories_circle_closeFriends1=a3_300
+stories_circle_closeFriends2=a3_300
+stories_circle1=a1_300
+stories_circle2=a1_300
 end
 
 //monet theme fixes by the8055u & reNightly
