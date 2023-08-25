@@ -25,6 +25,8 @@ import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Outline;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.AnimatedVectorDrawable;
@@ -74,7 +76,6 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.AnimationNotificationsLocker;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.AutoDeleteMediaTask;
 import org.telegram.messenger.BuildVars;
@@ -99,10 +100,8 @@ import org.telegram.messenger.camera.Size;
 import org.telegram.messenger.video.MP4Builder;
 import org.telegram.messenger.video.Mp4Movie;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 import java.io.File;
@@ -134,8 +133,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private Delegate delegate;
     private Paint paint;
     private RectF rect;
-    private ImageView switchCameraButton;
-    private ImageView flashlightButton;
+    private final ImageView switchCameraButton;
+    private final ImageView flashlightButton;
     private CrossOutDrawable flashlightButtonDrawable;
     AnimatedVectorDrawable switchCameraDrawable = null;
     private ImageView muteImageView;
@@ -297,9 +296,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         flashlightButton.setScaleType(ImageView.ScaleType.CENTER);
         addView(flashlightButton, LayoutHelper.createFrame(62, 62, Gravity.LEFT | Gravity.BOTTOM, 70, 0, 0, 0));
         flashlightButton.setOnClickListener(v -> {
-            if (!isFrontface) {
-                enableTorch();
-                flashlightButtonDrawable.setCrossOut(flashlightButton.getTag() == null, true);
+            if (isCameraReady()) {
+                toggleTorch();
             }
         });
 
@@ -308,13 +306,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         switchCameraButton.setContentDescription(LocaleController.getString("AccDescrSwitchCamera", R.string.AccDescrSwitchCamera));
         addView(switchCameraButton, LayoutHelper.createFrame(62, 62, Gravity.LEFT | Gravity.BOTTOM, 8, 0, 0, 0));
         switchCameraButton.setOnClickListener(v -> {
+            disableTorch();
             if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
-                if (!cameraReady || cameraSession == null || !cameraSession.isInitied() || cameraThread == null) {
+                if (!isCameraReady()) {
                     return;
                 }
                 switchCamera();
             } else {
-                if (!cameraReady || !cameraXController.isInitied() || cameraThread == null){
+                if (!isCameraReady()) {
                     return;
                 }
                 switchCameraX();
@@ -328,6 +327,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             valueAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
             valueAnimator.addUpdateListener(valueAnimator1 -> {
                 float p = (float) valueAnimator1.getAnimatedValue();
+                if (!drawBlur) {
+                    flashlightButton.setAlpha(isFrontface ? 1f - p : p);
+                }
                 if (p < 0.5f) {
                     p = (1f - p / 0.5f);
                 } else {
@@ -338,8 +340,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 cameraContainer.setScaleY(scaleDown);
                 textureOverlayView.setScaleX(p * scaleDown);
                 textureOverlayView.setScaleY(scaleDown);
-                float a = (float) valueAnimator1.getAnimatedValue();
-                flashlightButton.setAlpha(isFrontface ? 1f - a : a);
             });
             valueAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
@@ -349,10 +349,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     cameraContainer.setScaleY(1f);
                     textureOverlayView.setScaleY(1f);
                     textureOverlayView.setScaleX(1f);
-                    flashlightButton.setAlpha(isFrontface ? 0f : 1f);
-                    if (isFrontface) {
-                        flashlightButton.setTag(null);
-                        flashlightButtonDrawable.setCrossOut(true, false);
+                    if (!drawBlur) {
+                        flashlightButton.setAlpha(isFrontface ? 0.0f : 1.0f);
                     }
                     flipAnimationInProgress = false;
                     invalidate();
@@ -474,15 +472,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     public void destroy(boolean async, final Runnable beforeDestroyRunnable) {
+        disableTorch();
         if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
             if (cameraSession != null) {
-                flashlightButton.setTag(null);
                 cameraSession.destroy();
                 CameraController.getInstance().close(cameraSession, !async ? new CountDownLatch(1) : null, beforeDestroyRunnable);
             }
         } else {
             try {
-                flashlightButton.setTag(null);
                 cameraXController.stopVideoRecording(true);
                 cameraXController.closeCamera();
             }  catch (Exception ignored) {}
@@ -654,6 +651,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
             @Override
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                disableTorch();
                 if (cameraThread != null) {
                     cameraThread.shutdown(0);
                     cameraThread = null;
@@ -722,7 +720,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         });
         animatorSet.playTogether(
                 ObjectAnimator.ofFloat(switchCameraButton, View.ALPHA, open ? 1.0f : 0.0f),
-                ObjectAnimator.ofFloat(flashlightButton, View.ALPHA, !isFrontface && open ? 1.0f : 0.0f),
+                ObjectAnimator.ofFloat(flashlightButton, View.ALPHA, !open || !drawBlur && isFrontface ? 0.0f : 1.0f),
                 ObjectAnimator.ofFloat(muteImageView, View.ALPHA, 0.0f),
                 ObjectAnimator.ofInt(paint, AnimationProperties.PAINT_ALPHA, open ? 255 : 0),
                 ObjectAnimator.ofFloat(cameraContainer, View.ALPHA, open ? 1.0f : 0.0f),
@@ -746,6 +744,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
             });
         } else {
+            updateOriginalBrightness();
             setTranslationX(0);
         }
         animatorSet.setDuration(180);
@@ -791,6 +790,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (BuildVars.DEBUG_VERSION && !cameraFile.exists()) {
                 FileLog.e(new RuntimeException("file not found :( round video"));
             }
+            disableTorch();
             if (videoEditedInfo.needConvert()) {
                 file = null;
                 encryptedFile = null;
@@ -830,6 +830,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             } else {
                 reason = state == 3 ? 2 : 5;
             }
+            disableTorch();
             if (cameraThread != null) {
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.recordStopped, recordingGuid, reason);
                 int send;
@@ -872,6 +873,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     public void cancel(boolean byGesture) {
         stopProgressTimer();
+        disableTorch();
         if (videoPlayer != null) {
             videoPlayer.releasePlayer(true);
             videoPlayer = null;
@@ -3186,15 +3188,75 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
-    public void enableTorch() {
-        if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
-            if (cameraSession != null) {
-                cameraSession.setTorchEnabled(flashlightButton.getTag() == null);
-                flashlightButton.setTag(flashlightButton.getTag() == null ? 1 : null);
+    private static float originalBrightness = 1f;
+    private static boolean enabled = false;
+
+    public void disableTorch() {
+        if (enabled) {
+            toggleTorch();
+        }
+    }
+
+    public void toggleTorch() {
+        if (!isFrontface || drawBlur) {
+            enabled ^= true;
+            flashlightButtonDrawable.setCrossOut(!enabled, true);
+        }
+        if (!isFrontface) {
+            if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
+                if (cameraSession != null) {
+                    cameraSession.setTorchEnabled(enabled);
+                }
+            } else {
+                CameraXController.setTorchEnabled(enabled);
             }
+        } else if (drawBlur) {
+            enableFrontFlash();
+        }
+    }
+
+    private void updateOriginalBrightness() {
+        Activity activity = delegate.getParentActivity();
+        if (activity != null) {
+            originalBrightness = activity.getWindow().getAttributes().screenBrightness;
+        }
+    }
+
+    public void enableFrontFlash() {
+        Activity activity = delegate.getParentActivity();
+
+        ValueAnimator progressAnimator = ValueAnimator.ofFloat(enabled ? 0f : 1f, enabled ? 1f : 0f).setDuration(350);
+        progressAnimator.setInterpolator(Easings.easeOutQuad);
+        progressAnimator.addUpdateListener(animation -> {
+            float progress = (float) animation.getAnimatedValue();
+            int animatedColor = ColorUtils.blendARGB(Color.WHITE, Color.BLACK, progress);
+
+            switchCameraDrawable.setColorFilter(new PorterDuffColorFilter(animatedColor, PorterDuff.Mode.MULTIPLY));
+            paint.setColor(animatedColor);
+
+            WindowManager.LayoutParams layoutParams = activity.getWindow().getAttributes();
+            layoutParams.screenBrightness = originalBrightness + progress * (1.0f - originalBrightness);
+            activity.getWindow().setAttributes(layoutParams);
+        });
+        progressAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                int color = Theme.getColor(Theme.key_windowBackgroundWhite);
+                if (!(ColorUtils.calculateLuminance(color) > 0.721f)) {
+                    AndroidUtilities.setLightStatusBar(activity.getWindow(), enabled);
+                }
+            }
+        });
+        progressAnimator.start();
+        blurBehindDrawable.showFlash(enabled);
+        flashlightButtonDrawable.invertColor(enabled);
+    }
+
+    private boolean isCameraReady() {
+        if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
+            return cameraReady && cameraSession != null && cameraSession.isInitied() && cameraThread != null;
         } else {
-            CameraXController.setTorchEnabled(flashlightButton.getTag() == null);
-            flashlightButton.setTag(flashlightButton.getTag() == null ? 1 : null);
+            return cameraReady && cameraXController.isInitied() && cameraThread != null;
         }
     }
 

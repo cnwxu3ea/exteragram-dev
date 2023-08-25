@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import static android.graphics.Canvas.ALL_SAVE_FLAG;
 
+import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +10,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+
+import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
@@ -54,6 +57,18 @@ public class BlurBehindDrawable {
     private boolean skipDraw;
 
     private float panTranslationY;
+
+    private float flashProgress = 0f;
+
+    public void showFlash(boolean show) {
+        float to = show ? 1f : 0f;
+        ValueAnimator animator = ValueAnimator.ofFloat(1f - to, to).setDuration(400);
+        animator.addUpdateListener(animation -> {
+            flashProgress = (Float) animation.getAnimatedValue();
+            invalidate();
+        });
+        animator.start();
+    }
 
     BlurBackgroundTask blurBackgroundTask = new BlurBackgroundTask();
 
@@ -120,7 +135,7 @@ public class BlurBehindDrawable {
             canvas.drawBitmap(bitmap[0], 0, 0, emptyPaint);
             canvas.restore();
             wasDraw = true;
-            canvas.drawColor(0x1a000000);
+            canvas.drawColor(ColorUtils.blendARGB(0x1a000000, Color.WHITE, flashProgress));
         }
         canvas.restore();
 

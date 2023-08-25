@@ -7916,7 +7916,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
         instantCameraView = new InstantCameraView(getContext(), this, themeDelegate);
-        contentView.addView(instantCameraView, 21, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
+        contentView.addView(instantCameraView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
+
+        // fix for official bug when instantCameraView's blur overlapped chatActivityEnterView
+        if (chatActivityEnterView != null) {
+            chatActivityEnterView.bringToFront();
+            var recordCircle = chatActivityEnterView.getRecordCircle();
+            if (recordCircle != null) {
+                recordCircle.bringToFront();
+            }
+        }
     }
 
     private void dimBehindView(float value,  boolean hidePagedownButtons) {
