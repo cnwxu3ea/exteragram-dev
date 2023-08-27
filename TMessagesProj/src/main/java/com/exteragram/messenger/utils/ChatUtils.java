@@ -11,16 +11,25 @@
 
 package com.exteragram.messenger.utils;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
 import android.util.Base64;
+
+import com.google.android.exoplayer2.util.Log;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -34,6 +43,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.TranscribeButton;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
@@ -41,6 +51,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 public class ChatUtils {
+
+    private static final class InstanceHolder {
+        private static final ChatUtils instance = new ChatUtils();
+    }
+
+
+    public static ChatUtils getInstance() {
+        return InstanceHolder.instance;
+    }
+
     private static boolean useFallback;
     private static final CharsetDecoder textDecoder = StandardCharsets.UTF_8.newDecoder();
 
@@ -99,6 +119,52 @@ public class ChatUtils {
         return did == UserConfig.getInstance(currentAccount).getClientUserId() ? LocaleController.getString("SavedMessages", R.string.SavedMessages) : name;
     }
 
+    public boolean canSaveSticker(MessageObject messageObject) {
+        return canSaveSticker(messageObject.getDocument());
+    }
+
+    public boolean canSaveSticker(TLRPC.Document document) {
+        return MessageObject.isStaticStickerDocument(document) || MessageObject.isVideoStickerDocument(document);
+    }
+
+    public void saveStickerToGallery(Activity activity, MessageObject messageObject, Utilities.Callback<Uri> callback) {
+        saveStickerToGallery(activity, getPathToMessage(messageObject), messageObject.isVideoSticker(), callback);
+    }
+
+    public void saveStickerToGallery(Activity activity, TLRPC.Document document, Utilities.Callback<Uri> callback) {
+        String path = getFileLoader().getPathToAttach(document, true).toString();
+        File temp = new File(path);
+        if (!temp.exists()) {
+            return;
+        }
+        saveStickerToGallery(activity, path, MessageObject.isVideoSticker(document), callback);
+    }
+
+    public void saveStickerToGallery(Activity activity, String path, boolean isVideo, Utilities.Callback<Uri> callback) {
+        Utilities.globalQueue.postRunnable(() -> {
+            if (!TextUtils.isEmpty(path)) {
+                try {
+                    FileLog.e(path);
+                    if (isVideo) {
+                        MediaController.saveFile(path, activity, 1, null, null, callback);
+                    } else {
+                        Bitmap image = BitmapFactory.decodeFile(path);
+                        if (image != null) {
+                            File file = new File(path.endsWith(".webp") ? path.replace(".webp", ".png") : path + ".png");
+                            FileOutputStream stream = new FileOutputStream(file);
+                            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            stream.close();
+                            MediaController.saveFile(file.toString(), activity, 0, null, null, callback);
+                        }
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+            }
+        });
+    }
+
+
     public interface SearchCallback {
         void run(TLRPC.User user);
     }
@@ -148,8 +214,7 @@ public class ChatUtils {
                 return;
             }
 
-            if (response instanceof TLRPC.messages_BotResults) {
-                TLRPC.messages_BotResults res = (TLRPC.messages_BotResults) response;
+            if (response instanceof TLRPC.messages_BotResults res) {
                 if (!cache && res.cache_time != 0) {
                     getMessageStorage().saveBotCache(key, res);
                 }

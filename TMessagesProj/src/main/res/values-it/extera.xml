@@ -169,7 +169,6 @@
     <string name="BoldItalic">Grassetto corsivo</string>
     <string name="OpenPremiumBot">Apri bot ufficiale</string>
     <string name="CopyPhoto">Copia foto</string>
-    <string name="CopySticker">Copia sticker</string>
     <string name="SaveMessage">Salva messaggio</string>
     <string name="TrackSaved">Traccia salvata nei **%1$s**.</string>
     <string name="ChannelToSaveChanged">Le tracce saranno salvate nei **%1$s**.</string>

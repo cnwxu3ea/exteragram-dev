@@ -172,7 +172,6 @@ CameraX падтрымліваецца толькі на
     <string name="BoldItalic">Тлусты курсіў</string>
     <string name="OpenPremiumBot">Адкрыць афіцыйнага бота</string>
     <string name="CopyPhoto">Капіраваць фота</string>
-    <string name="CopySticker">Капіраваць стыкер</string>
     <string name="SaveMessage">Захаваць паведамленне</string>
     <string name="TrackSaved">Трэк захаваны ў **%1$s**.</string>
     <string name="ChannelToSaveChanged">Трэк захаваны ў **%1$s**.</string>

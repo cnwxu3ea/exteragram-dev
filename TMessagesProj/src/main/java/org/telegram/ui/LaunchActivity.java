@@ -6406,6 +6406,14 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         }
                         break;
                     }
+                    case Bulletin.TYPE_STICKER_SAVED: {
+                        if (fragment != null) {
+                            BulletinFactory.of(fragment).createDownloadBulletin(BulletinFactory.FileType.STICKER).show();
+                        } else {
+                            BulletinFactory.of(container, null).createDownloadBulletin(BulletinFactory.FileType.STICKER).show();
+                        }
+                        break;
+                    }
                     case Bulletin.TYPE_ERROR:
                         if (fragment != null) {
                             BulletinFactory.of(fragment).createErrorBulletin((String) args[1]).show();

@@ -172,7 +172,6 @@ CameraX підтримується тільки на
     <string name="BoldItalic">Жирний курсив</string>
     <string name="OpenPremiumBot">Відкрити офіційного бота</string>
     <string name="CopyPhoto">Копіювати фото</string>
-    <string name="CopySticker">Копіювати наліпку</string>
     <string name="SaveMessage">Зберегти повідомлення</string>
     <string name="TrackSaved">Пісню збережено</string>
     <string name="ChannelToSaveChanged">Треки будуть збережені в **%1$s**.</string>

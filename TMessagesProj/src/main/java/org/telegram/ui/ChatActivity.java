@@ -23896,10 +23896,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     options.add(OPTION_DELETE_STICKER_FROM_FAVORITES);
                                     icons.add(R.drawable.msg_unfave);
                                 }
-                                if (MessageObject.isStaticStickerDocument(selectedObject.getDocument()) && ExteraConfig.showCopyPhotoButton) {
-                                    items.add(LocaleController.getString("CopySticker", R.string.CopySticker));
-                                    options.add(OPTION_COPY_PHOTO);
-                                    icons.add(R.drawable.msg_copy_photo);
+                                if (ChatUtils.getInstance().canSaveSticker(selectedObject)) {
+                                    items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+                                    options.add(OPTION_SAVE_TO_GALLERY);
+                                    icons.add(R.drawable.msg_gallery);
                                 }
                             }
                         } else if (type == 8) {
@@ -23936,10 +23936,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(OPTION_DELETE_STICKER_FROM_FAVORITES);
                                 icons.add(R.drawable.msg_unfave);
                             }
-                            if (MessageObject.isStaticStickerDocument(selectedObject.getDocument()) && ExteraConfig.showCopyPhotoButton) {
-                                items.add(LocaleController.getString("CopySticker", R.string.CopySticker));
-                                options.add(OPTION_COPY_PHOTO);
-                                icons.add(R.drawable.msg_copy_photo);
+                            if (ChatUtils.getInstance().canSaveSticker(selectedObject)) {
+                                items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+                                options.add(OPTION_SAVE_TO_GALLERY);
+                                icons.add(R.drawable.msg_gallery);
                             }
                         }
                         if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && (!selectedObject.needDrawBluredPreview() || selectedObject.hasExtendedMediaPreview()) &&
@@ -25885,7 +25885,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     selectedObjectToEditCaption = null;
                     return;
                 }
-                if (selectedObjectGroup != null) {
+                if (ChatUtils.getInstance().canSaveSticker(selectedObject)) {
+                    ChatUtils.getInstance().saveStickerToGallery(getParentActivity(), selectedObject, uri -> {
+                        if (BulletinFactory.canShowBulletin(ChatActivity.this)) {
+                            BulletinFactory.of(this).createDownloadBulletin(BulletinFactory.FileType.STICKER, themeDelegate).show();
+                        }
+                    });
+                } else if (selectedObjectGroup != null) {
                     int filesAmount = selectedObjectGroup.messages.size();
                     boolean allPhotos = true, allVideos = true;
                     for (int a = 0; a < filesAmount; a++) {

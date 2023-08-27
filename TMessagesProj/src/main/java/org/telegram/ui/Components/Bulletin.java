@@ -85,6 +85,7 @@ public class Bulletin {
     public static final int TYPE_ERROR_SUBTITLE = 4;
     public static final int TYPE_APP_ICON = 5;
     public static final int TYPE_SUCCESS = 6;
+    public static final int TYPE_STICKER_SAVED = 10;
 
     public int tag;
     public int hash;

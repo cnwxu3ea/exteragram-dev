@@ -35,6 +35,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.ChatUtils;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
@@ -63,6 +65,7 @@ import org.telegram.ui.Cells.StickerEmojiCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EmojiPacksAlert;
 import org.telegram.ui.Components.EmojiView;
@@ -238,6 +241,11 @@ public class ContentPreviewViewer {
                         icons.add(R.drawable.msg_media);
                         actions.add(1);
                     }
+                    if (ChatUtils.getInstance().canSaveSticker(currentDocument)) {
+                        items.add(LocaleController.formatString("SaveToGallery", R.string.SaveToGallery));
+                        icons.add(R.drawable.msg_gallery);
+                        actions.add(7);
+                    }
                     if (delegate.needRemove()) {
                         items.add(LocaleController.getString("ImportStickersRemoveMenu", R.string.ImportStickersRemoveMenu));
                         icons.add(R.drawable.msg_delete);
@@ -292,6 +300,10 @@ public class ContentPreviewViewer {
                             MediaDataController.getInstance(currentAccount).addRecentSticker(MediaDataController.TYPE_IMAGE, parentObject, currentDocument, (int) (System.currentTimeMillis() / 1000), true);
                         } else if (actions.get(which) == 5) {
                             delegate.remove(importingSticker);
+                        } else if (actions.get(which) == 7) {
+                            ChatUtils.getInstance().saveStickerToGallery(parentActivity, currentDocument, uri -> {
+                                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_STICKER_SAVED);
+                            });
                         }
                         if (popupWindow != null) {
                             popupWindow.dismiss();

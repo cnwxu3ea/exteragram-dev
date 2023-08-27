@@ -169,7 +169,6 @@
     <string name="BoldItalic">Negrito Itálico</string>
     <string name="OpenPremiumBot">Abrir bot oficial</string>
     <string name="CopyPhoto">Copiar foto</string>
-    <string name="CopySticker">Copiar Sticker</string>
     <string name="SaveMessage">Salvar Mensagem</string>
     <string name="TrackSaved">Faixa salva em **%1$s**.</string>
     <string name="ChannelToSaveChanged">Faixas serão salvas em **%1$s**.</string>

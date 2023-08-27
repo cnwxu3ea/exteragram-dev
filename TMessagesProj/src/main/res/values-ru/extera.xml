@@ -250,7 +250,7 @@
     <string name="BoldItalic">Жирный курсив</string>
     <string name="OpenPremiumBot">Открыть официального бота</string>
     <string name="CopyPhoto">Копировать фото</string>
-    <string name="CopySticker">Копировать стикер</string>
+    <string name="StickerSavedHint">Стикер сохранен в галерею.</string>
     <string name="SaveMessage">Сохранить сообщение</string>
 
     <string name="TrackSaved">Трек сохранен в **%1$s**.</string>
