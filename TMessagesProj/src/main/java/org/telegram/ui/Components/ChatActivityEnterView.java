@@ -2575,8 +2575,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         sendButtonContainer.addView(cancelBotButton, LayoutHelper.createFrame(48, 48));
         cancelBotButton.setOnClickListener(view -> {
             String text = messageEditText != null ? messageEditText.getText().toString() : "";
-            if (client != null && client.isGenerating()) {
-                client.stop();
+            if (isGenerating()) {
+                parentFragment.getClient().stop();
                 AndroidUtilities.runOnUIThread(() -> {
                     getEditField().setText(prompt);
                     getEditField().setSelection(prompt.length());
@@ -3661,8 +3661,18 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         return false;
     }
 
-    private Client client;
     private String prompt;
+
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+    }
+
+    private boolean isGenerating() {
+        if (parentFragment != null && parentFragment.getClient() != null) {
+            return parentFragment.getClient().isGenerating();
+        }
+        return false;
+    }
 
     private boolean onSendLongClick(View view) {
         if (isInScheduleMode()) {
@@ -3698,8 +3708,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             });
             sendPopupLayout.setShownFromBottom(false);
 
-            if (ExteraConfig.isExteraDev(UserConfig.getInstance(currentAccount).getCurrentUser())) {
-
+            if (parentFragment != null) {
                 if (!Config.isApiKeySet()) {
                     TextView textView = new LinkSpanDrawable.LinksTextView(getContext());
                     textView.setTag(R.id.fit_width_tag, 1);
@@ -3751,7 +3760,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                                 sendPopupWindow.dismiss();
                             }
-                            client = new Client(parentFragment);
+                            Client client = parentFragment.getClient();
                             if (finalI == 0) {
                                 final AlertDialog progressDialog = new AlertDialog(parentActivity, AlertDialog.ALERT_TYPE_SPINNER);
                                 prompt = String.valueOf(getEditField().getText());
@@ -6046,7 +6055,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         return encryptedChat == null || AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 101;
     }
 
-    private void checkSendButton(boolean animated) {
+    public void checkSendButton(boolean animated) {
         if (editingMessageObject != null || recordingAudioVideo) {
             return;
         }
@@ -6223,10 +6232,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                 }
             }
-        } else if (message.length() > 0 || forceShowSendButton || audioToSend != null || videoToSendMessageObject != null || slowModeTimer == Integer.MAX_VALUE && !isInScheduleMode() || client != null && client.isGenerating()) {
+        } else if (message.length() > 0 || forceShowSendButton || audioToSend != null || videoToSendMessageObject != null || slowModeTimer == Integer.MAX_VALUE && !isInScheduleMode() || isGenerating()) {
             final String caption = messageEditText == null ? null : messageEditText.getCaption();
-            boolean showBotButton = caption != null && (sendButton.getVisibility() == VISIBLE || expandStickersButton != null && expandStickersButton.getVisibility() == VISIBLE) || client != null && client.isGenerating();
-            boolean showSendButton = caption == null && (cancelBotButton.getVisibility() == VISIBLE || expandStickersButton != null && expandStickersButton.getVisibility() == VISIBLE) || client != null && !client.isGenerating();
+            boolean showBotButton = caption != null && (sendButton.getVisibility() == VISIBLE || expandStickersButton != null && expandStickersButton.getVisibility() == VISIBLE) || isGenerating();
+            boolean showSendButton = caption == null && (cancelBotButton.getVisibility() == VISIBLE || expandStickersButton != null && expandStickersButton.getVisibility() == VISIBLE) || isGenerating();
             int color;
             if (slowModeTimer == Integer.MAX_VALUE && !isInScheduleMode()) {
                 color = getThemedColor(Theme.key_chat_messagePanelIcons);
@@ -6328,7 +6337,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_Y, 0.1f));
                         animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.ALPHA, 0.0f));
                     }
-                    if (caption != null || client != null && client.isGenerating()) {
+                    if (caption != null || isGenerating()) {
                         runningAnimationType = 3;
                         animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_X, 1.0f));
                         animators.add(ObjectAnimator.ofFloat(cancelBotButton, View.SCALE_Y, 1.0f));
@@ -6348,7 +6357,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             if (animation.equals(runningAnimation)) {
-                                if (caption != null || client != null && client.isGenerating()) {
+                                if (caption != null || isGenerating()) {
                                     cancelBotButton.setVisibility(VISIBLE);
                                     sendButton.setVisibility(GONE);
                                 } else {
@@ -6384,7 +6393,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         slowModeButton.setAlpha(0.0f);
                         setSlowModeButtonVisible(false);
                     }
-                    if (caption != null || client != null && client.isGenerating()) {
+                    if (caption != null || isGenerating()) {
                         sendButton.setScaleX(0.1f);
                         sendButton.setScaleY(0.1f);
                         sendButton.setAlpha(0.0f);

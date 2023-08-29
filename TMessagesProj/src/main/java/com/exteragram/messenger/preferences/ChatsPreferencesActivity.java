@@ -22,6 +22,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.gpt.core.Config;
+import com.exteragram.messenger.gpt.ui.EditKeyActivity;
+import com.exteragram.messenger.gpt.ui.SetupActivity;
 import com.exteragram.messenger.preferences.components.AltSeekbar;
 import com.exteragram.messenger.preferences.components.DoubleTapCell;
 import com.exteragram.messenger.preferences.components.StickerShapeCell;
@@ -38,6 +41,7 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.HeaderCell;
+import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextCheckCell2;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
@@ -45,6 +49,7 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SlideChooseView;
+import org.telegram.ui.ThemeActivity;
 
 import java.util.Locale;
 
@@ -97,6 +102,10 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private int stickerShapeRow;
     private int stickerShapeDividerRow;
 
+    private int gptRow;
+    private int chatSettingsRow;
+    private int otherDividerRow;
+
     private int stickersHeaderRow;
     private int hideStickerTimeRow;
     private int unlimitedRecentStickersRow;
@@ -132,6 +141,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private int clearRow;
     private int historyRow;
     private int reportRow;
+    private int generateRow;
     private int detailsRow;
     private int messagesDividerRow;
 
@@ -253,6 +263,10 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         stickerShapeRow = newRow();
         stickerShapeDividerRow = newRow();
 
+        gptRow = newRow();
+        chatSettingsRow = newRow();
+        otherDividerRow = newRow();
+
         stickersHeaderRow = newRow();
         hideStickerTimeRow = newRow();
         unlimitedRecentStickersRow = newRow();
@@ -295,6 +309,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             clearRow = newRow();
             historyRow = newRow();
             reportRow = newRow();
+            generateRow = Config.isApiKeySet() ? newRow() : -1;
             detailsRow = newRow();
         } else {
             copyPhotoRow = -1;
@@ -302,6 +317,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             clearRow = -1;
             historyRow = -1;
             reportRow = -1;
+            generateRow = -1;
             detailsRow = -1;
         }
         showActionTimestampsRow = newRow();
@@ -470,10 +486,11 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             messageMenuExpanded ^= true;
             updateRowsId();
             listAdapter.notifyItemChanged(messageMenuRow, payload);
+            int itemCount = Config.isApiKeySet() ? 7 : 6;
             if (messageMenuExpanded) {
-                listAdapter.notifyItemRangeInserted(messageMenuRow + 1, 6);
+                listAdapter.notifyItemRangeInserted(messageMenuRow + 1, itemCount);
             } else {
-                listAdapter.notifyItemRangeRemoved(messageMenuRow + 1, 6);
+                listAdapter.notifyItemRangeRemoved(messageMenuRow + 1, itemCount);
             }
         } else if (position >= permissionsRow && position <= recentActionsRow) {
             if (position == permissionsRow) {
@@ -506,11 +523,18 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             } else if (position == historyRow) {
                 ExteraConfig.editor.putBoolean("showHistoryButton", ExteraConfig.showHistoryButton ^= true).apply();
                 listAdapter.notifyItemChanged(historyRow, payload);
+            } else if (position == generateRow) {
+                ExteraConfig.editor.putBoolean("showGenerateButton", ExteraConfig.showGenerateButton ^= true).apply();
+                listAdapter.notifyItemChanged(generateRow, payload);
             } else if (position == detailsRow) {
                 ExteraConfig.editor.putBoolean("showDetailsButton", ExteraConfig.showDetailsButton ^= true).apply();
                 listAdapter.notifyItemChanged(detailsRow, payload);
             }
             listAdapter.notifyItemChanged(messageMenuRow, payload);
+        } else if (position == gptRow) {
+            presentFragment(Config.isApiKeySet() ? new SetupActivity() : new EditKeyActivity());
+        } else if (position == chatSettingsRow) {
+            presentFragment(new ThemeActivity(0));
         }
     }
 
@@ -551,6 +575,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         ExteraConfig.editor.putBoolean("showSaveMessageButton", ExteraConfig.showSaveMessageButton = enabled).apply();
         ExteraConfig.editor.putBoolean("showReportButton", ExteraConfig.showReportButton = enabled).apply();
         ExteraConfig.editor.putBoolean("showHistoryButton", ExteraConfig.showHistoryButton = enabled).apply();
+        if (Config.isApiKeySet()) {
+            ExteraConfig.editor.putBoolean("showGenerateButton", ExteraConfig.showGenerateButton = enabled).apply();
+        }
         ExteraConfig.editor.putBoolean("showDetailsButton", ExteraConfig.showDetailsButton = enabled).apply();
         AndroidUtilities.updateVisibleRows(listView);
     }
@@ -566,6 +593,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         if (ExteraConfig.showReportButton)
             i++;
         if (ExteraConfig.showHistoryButton)
+            i++;
+        if (Config.isApiKeySet() && ExteraConfig.showGenerateButton)
             i++;
         if (ExteraConfig.showDetailsButton)
             i++;
@@ -620,6 +649,21 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             switch (holder.getItemViewType()) {
                 case 1 ->
                         holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                case 2 -> {
+                    TextCell textCell = (TextCell) holder.itemView;
+                    textCell.setColors(Theme.key_dialogIcon, Theme.key_windowBackgroundWhiteBlackText);
+                    textCell.offsetFromImage = 64;
+                    textCell.heightDp = 60;
+                    textCell.imageLeft = 20;
+                    textCell.imageView.setTranslationY(AndroidUtilities.dp(2));
+                    if (position == gptRow) {
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.ChatGPT), R.drawable.msg_bot, true);
+                        textCell.setSubtitle(LocaleController.getString(R.string.ChatGPTInfo));
+                    } else if (position == chatSettingsRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.msg_discussion, false);
+                        textCell.setSubtitle(LocaleController.getString(R.string.ChatSettingsInfo));
+                    }
+                }
                 case 3 -> {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == stickersHeaderRow) {
@@ -729,7 +773,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     } else if (position == messageMenuRow) {
                         int messageMenuSelectedCount = getMessageMenuSelectedCount();
                         checkCell.setTextAndCheck(LocaleController.getString("MessageMenu", R.string.MessageMenu), messageMenuSelectedCount > 0, true, true);
-                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/6", messageMenuSelectedCount), !messageMenuExpanded, () -> {
+                        checkCell.setCollapseArrow(String.format(Locale.US, Config.isApiKeySet() ? "%d/7" : "%d/6", messageMenuSelectedCount), !messageMenuExpanded, () -> {
                             boolean checked = !checkCell.isChecked();
                             checkCell.setChecked(checked);
                             setMessageMenuEnabled(checked);
@@ -758,6 +802,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         checkBoxCell.setText(LocaleController.getString("ReportChat", R.string.ReportChat), "", ExteraConfig.showReportButton, true, true);
                     } else if (position == historyRow) {
                         checkBoxCell.setText(LocaleController.getString("MessageHistory", R.string.MessageHistory), "", ExteraConfig.showHistoryButton, true, true);
+                    } else if (position == generateRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.Generate), "", ExteraConfig.showGenerateButton, true, true);
                     } else if (position == detailsRow) {
                         checkBoxCell.setText(LocaleController.getString("Details", R.string.Details), "", ExteraConfig.showDetailsButton, true, true);
                     }
@@ -768,8 +814,10 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
         @Override
         public int getItemViewType(int position) {
-            if (position == stickerShapeDividerRow) {
+            if (position == stickerShapeDividerRow || position == otherDividerRow) {
                 return 1;
+            } else if (position == gptRow || position == chatSettingsRow) {
+                return 2;
             } else if (position == stickersHeaderRow || position == chatsHeaderRow || position == videosHeaderRow || position == stickerShapeHeaderRow ||
                     position == doubleTapHeaderRow || position == photosHeaderRow || position == messagesHeaderRow) {
                 return 3;

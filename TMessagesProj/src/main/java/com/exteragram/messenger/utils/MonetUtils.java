@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.PatternMatcher;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.graphics.ColorUtils;

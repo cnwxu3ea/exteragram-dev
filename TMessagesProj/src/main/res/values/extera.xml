@@ -28,7 +28,7 @@
     <string name="AvatarCornersLeft">Square</string>
     <string name="AvatarCornersRight">Circle</string>
     <string name="SingleCornerRadius">Single Corner Radius</string>
-    <string name="SingleCornerRadiusInfo">Forums will have the same shape as chats.</string>
+    <string name="SingleCornerRadiusInfo">Forums will have the same avatar shape as chats.</string>
 
     <string name="ListOfChats">Chat List</string>
     <string name="ActionBarTitle">Title Text</string>
@@ -56,8 +56,23 @@
     <string name="SolarIcons">Use \"Solar\" Icons</string>
     <string name="SolarIconsInfo" translatable="false">Powered by @Design480 × @TierOhneNation</string>
 
+    <string name="BlurOptions">Blur Options</string>
     <string name="ForceBlur">Force Blur</string>
     <string name="ForceBlurInfo">Blur will be applied to absolutely all themes.</string>
+    <string name="BlurElements">Blur Elements</string>
+    <string name="BlurActionBar">Action Bar</string>
+    <string name="BlurBottomPanel">Bottom Panel</string>
+    <string name="BlurDialogs">Dialogs</string>
+    <string name="BlurSmoothnessDefault">Default</string>
+    <string name="BlurSmoothnessSmooth">Smooth</string>
+    <string name="BlurSmoothnessSmoothest">Ultra-smoothly</string>
+    <string name="BlurSaturation">Saturation</string>
+    <string name="BlurSaturationLeft">Faded</string>
+    <string name="BlurSaturationRight">Saturated</string>
+    <string name="BlurStrength">Strength</string>
+    <string name="BlurStrengthLeft">Transparent</string>
+    <string name="BlurStrengthRight">Blurry</string>
+
     <string name="ForceSnow">Force Snow</string>
     <string name="ForceSnowInfo">Snow will appear in the action bar, drawer and background of chats.</string>
     <string name="UseSystemFonts">Use System Fonts</string>
@@ -120,6 +135,8 @@
     <string name="StickerSizeRight">Big</string>
     <string name="StickerSizeDialogMessageReplyTo">wow</string>
     <string name="StickerSizeDialogMessage">woah, he is so cute!</string>
+
+    <string name="ChatSettingsInfo">Media Settings, App Icon and other</string>
 
     <string name="StickerShape">Stickers Shape</string>
     <string name="StickerShapeRounded">Rounded</string>
@@ -201,6 +218,8 @@
     <string name="Datacenter">Datacenter</string>
 
     <!-- GPT -->
+    <string name="ChatGPT" translatable="false">ChatGPT</string>
+    <string name="ChatGPTInfo">Set up API Key, Roles and History</string>
     <string name="ApiKey">API Key</string>
     <string name="ApiKeyInfo">This API Key will be used to send requests to OpenAI servers. To generate an API Key, you can use the *official website*.</string>
     <string name="Roles">Roles</string>
@@ -217,7 +236,9 @@
     <string name="ShowResponseOnly">Show Response only</string>
     <string name="Use16kModel">Use 16k Model</string>
     <string name="Use16kModelInfo">The 16k model is a language model with a maximum limit of 16,384 tokens. By default, a model with 4,096 tokens is used.</string>
-    <string name="TapToAddApiKey">Tap to add an API Key to get started with AI features.</string>
+    <string name="TapToAddApiKey">Tap to add an API Key to get started with ChatGPT features.</string>
+    <string name="Generate">Generate</string>
+    <string name="ClearConversationHistoryInfo">Are you sure you want to clear **all** ChatGPT conversation history?</string>
 
     <string name="GPTError400">Conversation history is full</string>
     <string name="GPTError400Info">Try clearing the history or using the 16k model to increase the limit.</string>
@@ -263,7 +284,7 @@
     <string name="formatterDay24HSec" translatable="false">HH:mm:ss</string>
     <string name="formatterDay12HSec" translatable="false">h:mm:ss a</string>
 
-    <string name="PhotoEditorTypefaceImpact">Impact</string>
+    <string name="PhotoEditorTypefaceImpact" translatable="false">Impact</string>
 
     <string name="AppIconMonet" translatable="false">Monet</string>
     <string name="AppIconGradient">Gradient</string>

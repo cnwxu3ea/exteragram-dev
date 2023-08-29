@@ -11,12 +11,8 @@
 
 package com.exteragram.messenger.utils;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;

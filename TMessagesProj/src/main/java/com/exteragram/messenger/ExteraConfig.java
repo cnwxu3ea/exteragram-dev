@@ -113,6 +113,7 @@ public class ExteraConfig {
     public static boolean showClearButton;
     public static boolean showSaveMessageButton;
     public static boolean showDetailsButton;
+    public static boolean showGenerateButton;
     public static boolean showReportButton;
     public static boolean showHistoryButton;
     public static boolean addCommaAfterMention;
@@ -261,6 +262,7 @@ public class ExteraConfig {
             showActionTimestamps = preferences.getBoolean("showActionTimestamps", true);
             hideShareButton = preferences.getBoolean("hideShareButton", true);
             showDetailsButton = preferences.getBoolean("showDetailsButton", false);
+            showGenerateButton = preferences.getBoolean("showGenerateButton", true);
             showSaveMessageButton = preferences.getBoolean("showSaveMessageButton", false);
             showCopyPhotoButton = preferences.getBoolean("showCopyPhotoButton", true);
             showClearButton = preferences.getBoolean("showClearButton", true);

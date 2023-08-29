@@ -17,10 +17,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-
 import android.util.Base64;
-
-import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;

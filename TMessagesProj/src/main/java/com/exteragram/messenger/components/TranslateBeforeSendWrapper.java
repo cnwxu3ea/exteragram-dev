@@ -13,9 +13,11 @@ package com.exteragram.messenger.components;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.utils.PopupUtils;
 import com.exteragram.messenger.utils.TranslatorUtils;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;

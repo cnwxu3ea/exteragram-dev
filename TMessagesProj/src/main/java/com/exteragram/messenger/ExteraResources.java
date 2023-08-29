@@ -38,5 +38,4 @@ public class ExteraResources extends Resources {
     public Drawable getDrawableForDensity(int id, int density, @Nullable Theme theme) {
         return mResources.getDrawableForDensity(current.getIcon(id), density, theme);
     }
-
 }

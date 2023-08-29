@@ -215,21 +215,21 @@ public class UpdaterUtils {
         try {
             var info = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
             switch (info.versionCode % 10) {
-                case 1:
-                case 3:
+                case 1, 3 -> {
                     return "armeabi-v7a";
-                case 2:
-                case 4:
+                }
+                case 2, 4 -> {
                     return "x86";
-                case 5:
-                case 7:
+                }
+                case 5, 7 -> {
                     return "arm64-v8a";
-                case 6:
-                case 8:
+                }
+                case 6, 8 -> {
                     return "x86_64";
-                case 0:
-                case 9:
+                }
+                case 0, 9 -> {
                     return "universal";
+                }
             }
         } catch (Exception e) {
             return Build.SUPPORTED_ABIS[0];

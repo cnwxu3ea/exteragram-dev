@@ -122,6 +122,8 @@
     <string name="StickerShapeRounded">Закруглённая</string>
     <string name="StickerShapeRoundedMsg">Сообщение</string>
 
+    <string name="ChatSettingsInfo">Медиа, иконки приложения и прочее</string>
+
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
     <string name="HideReactions">Скрыть реакции</string>
@@ -200,6 +202,7 @@
     <string name="Datacenter">Датацентр</string>
 
     <!-- GPT -->
+    <string name="ChatGPTInfo">API-Ключ, роли и история сообщений</string>
     <string name="ApiKey">API-Ключ</string>
     <string name="ApiKeyInfo">Этот API-ключ будет использоваться для отправки запросов на сервера OpenAI. Для генерации ключа API можно воспользоваться *официальным сайтом*.</string>
     <string name="Roles">Роли</string>
@@ -216,7 +219,9 @@
     <string name="ShowResponseOnly">Показывать только ответ</string>
     <string name="Use16kModel">Использовать модель 16k</string>
     <string name="Use16kModelInfo">Модель 16k - это языковая модель с максимальным ограничением в 16,384 токена. По умолчанию используется модель с 4,096 токенами.</string>
-    <string name="TapToAddApiKey">Нажмите, чтобы добавить ключ API для начала работы с функциями ИИ.</string>
+    <string name="TapToAddApiKey">Нажмите, чтобы добавить ключ API для начала работы с ChatGPT.</string>
+    <string name="Generate">Генерировать</string>
+    <string name="ClearConversationHistoryInfo">Вы точно хотите очистить **всю** историю сообщений ChatGPT?</string>
 
     <string name="GPTError400">История разговора заполнена</string>
     <string name="GPTError400Info">Попробуйте очистить историю или использовать модель 16k для увеличения лимита.</string>

@@ -15,7 +15,6 @@ import android.graphics.drawable.Drawable;
 import android.hardware.display.DisplayManager;
 import android.os.SystemClock;
 import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.OrientationEventListener;
@@ -29,6 +28,7 @@ import androidx.camera.core.ImageCapture;
 import androidx.camera.view.PreviewView;
 
 import com.exteragram.messenger.utils.VibratorUtils;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.NotificationCenter;

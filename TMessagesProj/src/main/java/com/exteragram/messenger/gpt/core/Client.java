@@ -1,17 +1,31 @@
+/*
+
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, 2023
+
+*/
+
 package com.exteragram.messenger.gpt.core;
 
+import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.exteragram.messenger.gpt.ui.EditKeyActivity;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BulletinFactory;
 
 import java.io.BufferedReader;
@@ -188,9 +202,7 @@ public class Client {
                     FileLog.e("GPT ERROR: " + errorMessage + " " + errorCode);
 
                     if (fragment != null) {
-                        AndroidUtilities.runOnUIThread(() -> {
-                            showErrorBulletin(errorCode, errorMessage.toLowerCase(Locale.ROOT));
-                        });
+                        AndroidUtilities.runOnUIThread(() -> showErrorBulletin(errorCode, errorMessage.toLowerCase(Locale.ROOT)));
                     }
                 }
             } catch (Exception e) {
@@ -278,8 +290,8 @@ public class Client {
         testKey = key;
     }
 
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
+    public void setTimeout(int time) {
+        timeout = time;
     }
 
     public void setOnStartFinishRunnable(Runnable onStartFinishRunnable) {
@@ -291,9 +303,22 @@ public class Client {
     }
 
     public void clearHistory() {
-        Config.clearConversationHistory();
-        if (fragment != null) {
+        if (fragment == null) {
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
+        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString(R.string.ClearConversationHistoryInfo)));
+        builder.setTitle(LocaleController.getString("ClearHistory", R.string.ClearHistory));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton), (dialog, which) -> {
+            Config.clearConversationHistory();
             BulletinFactory.of(fragment).createSimpleBulletin(R.raw.ic_delete, LocaleController.getString("HistoryCleared", R.string.HistoryCleared)).show();
+        });
+        AlertDialog dialog = builder.create();
+        fragment.showDialog(dialog);
+        TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        if (button != null) {
+            button.setTextColor(Theme.getColor(Theme.key_text_RedBold));
         }
     }
 

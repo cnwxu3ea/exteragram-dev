@@ -80,10 +80,6 @@ public class TranslatorUtils {
         return language != null ? language.displayName : null;
     }
 
-    public static boolean isLanguageSupported(String isoCode) {
-        return languages.stream().anyMatch(lang -> lang.code.equals(isoCode));
-    }
-
     public static String getLangCodeByIndex(int idx) {
         if (idx >= 0 && idx < languages.size()) {
             return languages.get(idx).code;

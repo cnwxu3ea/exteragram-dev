@@ -1,5 +1,15 @@
-package com.exteragram.messenger.utils;
+/*
 
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, 2023
+
+*/
+
+package com.exteragram.messenger.utils;
 
 import android.content.Context;
 import android.os.Build;
@@ -7,7 +17,9 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.ApplicationLoader;
 
 public class VibratorUtils {
@@ -74,8 +86,7 @@ public class VibratorUtils {
 
         view.setHapticFeedbackEnabled(false);
 
-        if (view instanceof ViewGroup) {
-            ViewGroup viewGroup = (ViewGroup) view;
+        if (view instanceof ViewGroup viewGroup) {
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 View childView = viewGroup.getChildAt(i);
                 disableHapticFeedback(childView);

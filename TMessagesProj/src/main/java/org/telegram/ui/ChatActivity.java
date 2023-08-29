@@ -110,6 +110,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.components.MessageDetailsPopupWrapper;
+import com.exteragram.messenger.gpt.core.Client;
+import com.exteragram.messenger.gpt.core.Config;
 import com.exteragram.messenger.utils.ChatUtils;
 import com.exteragram.messenger.utils.SystemUtils;
 import com.exteragram.messenger.utils.TranslatorUtils;
@@ -984,6 +986,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int OPTION_COPY_PHOTO = 202;
     private final static int OPTION_DETAILS = 204;
     private final static int OPTION_HISTORY = 205;
+    private final static int OPTION_GENERATE = 206;
+
+    private final Client client = new Client(this);
+
+    public Client getClient() {
+        return client;
+    }
 
     private final static int[] allowedNotificationsDuringChatListAnimations = new int[]{
             NotificationCenter.messagesRead,
@@ -2689,6 +2698,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         if (chatAttachAlert != null) {
             chatAttachAlert.dismissInternal();
+        }
+        if (client.isGenerating()) {
+            client.stop();
         }
         ContentPreviewViewer.getInstance().clearDelegate(contentPreviewViewerDelegate);
         getNotificationCenter().onAnimationFinish(transitionAnimationIndex);
@@ -24109,6 +24121,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
                     }
                 }
+                if (ExteraConfig.showGenerateButton && allowChatActions && ChatUtils.getMessageText(selectedObject, selectedObjectGroup) != null && !noforwards && message.messageOwner.action == null) {
+                    items.add(LocaleController.getString(R.string.Generate));
+                    options.add(OPTION_GENERATE);
+                    icons.add(R.drawable.msg_bot);
+                }
                 if (!selectedObject.isSponsored() && ExteraConfig.showDetailsButton) {
                     items.add(LocaleController.getString("Details", R.string.Details));
                     options.add(OPTION_DETAILS);
@@ -25765,6 +25782,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     searchUserMessages(null, chat);
                 }
                 showMessagesSearchListView(true);
+                break;
+            }
+            case OPTION_GENERATE: {
+                if (chatActivityEnterView == null) {
+                    break;
+                }
+                final AlertDialog progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
+                String prompt = ChatUtils.getMessageText(selectedObject, selectedObjectGroup).toString();
+                chatActivityEnterView.setPrompt(prompt);
+                client.setOnStartFinishRunnable(() -> chatActivityEnterView.checkSendButton(true));
+                client.getResponse(prompt, res -> {
+                    if (progressDialog.isShowing()) {
+                        try {
+                            progressDialog.dismiss();
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
+                    }
+                    if (!TextUtils.isEmpty(res)) {
+                        String finalResult = (Config.showResponseOnly ? "" : prompt + "\n\n————————\n\n") + res;
+                        chatActivityEnterView.getEditField().setText(finalResult);
+                        chatActivityEnterView.getEditField().setSelection(finalResult.length());
+                    }
+                });
+                progressDialog.setOnCancelListener(dialog -> client.stop());
+                progressDialog.show();
+                chatActivityEnterView.showContextProgress(true);
                 break;
             }
             case OPTION_DELETE: {
