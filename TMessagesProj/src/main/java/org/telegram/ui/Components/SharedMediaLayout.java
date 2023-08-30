@@ -2542,12 +2542,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         }
 
         shadowLine = new View(context);
-        if (!ExteraConfig.disableDividers) {
-            shadowLine.setBackgroundColor(getThemedColor(Theme.key_divider));
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-            layoutParams.topMargin = isStoriesView() ? 0 : AndroidUtilities.dp(48) - 1;
-            addView(shadowLine, layoutParams);
-        }
+        shadowLine.setBackgroundColor(getThemedColor(Theme.key_divider));
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+        layoutParams.topMargin = isStoriesView() ? 0 : AndroidUtilities.dp(48) - 1;
+        addView(shadowLine, layoutParams);
 
         updateTabs(false);
         switchToCurrentSelectedMode(false);

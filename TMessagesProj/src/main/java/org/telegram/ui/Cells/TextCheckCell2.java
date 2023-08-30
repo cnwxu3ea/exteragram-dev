@@ -70,8 +70,7 @@ public class TextCheckCell2 extends FrameLayout {
                 @Override
                 protected void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
-                    if (!ExteraConfig.disableDividers)
-                        canvas.drawLine(0, AndroidUtilities.dp(14), 0, getMeasuredHeight()- AndroidUtilities.dp(14), Theme.dividerPaint);
+                    canvas.drawLine(0, AndroidUtilities.dp(14), 0, getMeasuredHeight()- AndroidUtilities.dp(14), Theme.dividerPaint);
                 }
             };
             //checkBoxClickArea.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 2));
@@ -269,7 +268,7 @@ public class TextCheckCell2 extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (needDivider && !ExteraConfig.disableDividers) {
+        if (needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }

@@ -393,7 +393,7 @@ public class TextCheckCell extends FrameLayout {
             float animatedRad = rad * animationProgress;
             canvas.drawCircle(cx, cy, animatedRad, animationPaint);
         }
-        if (needDivider && !ExteraConfig.disableDividers) {
+        if (needDivider) {
             if (imageView != null) {
                 canvas.drawLine(LocaleController.isRTL ? 0 : padding, getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? padding : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
             } else {

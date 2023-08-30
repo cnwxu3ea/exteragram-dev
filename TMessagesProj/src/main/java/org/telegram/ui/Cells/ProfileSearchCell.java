@@ -694,7 +694,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             return;
         }
 
-        if (useSeparator && !ExteraConfig.disableDividers) {
+        if (useSeparator) {
             if (LocaleController.isRTL) {
                 canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth() - AndroidUtilities.dp(AndroidUtilities.leftBaseline), getMeasuredHeight() - 1, Theme.dividerPaint);
             } else {

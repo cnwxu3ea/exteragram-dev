@@ -2021,8 +2021,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
         int a = Theme.dividerPaint.getAlpha();
         if (alpha > a) alpha = a;
         Theme.dividerPaint.setAlpha(alpha);
-        if (!ExteraConfig.disableDividers)
-            canvas.drawLine(0, y, getMeasuredWidth(), y, Theme.dividerPaint);
+        canvas.drawLine(0, y, getMeasuredWidth(), y, Theme.dividerPaint);
         Theme.dividerPaint.setAlpha(a);
     }
 
@@ -2280,7 +2279,7 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
                 if (clipRoundForeground) {
                     canvas.restore();
                 }
-                if (actionBarHeight != 0 && !ExteraConfig.disableDividers)
+                if (actionBarHeight != 0)
                     canvas.drawLine(0, actionBarHeight + 1, getMeasuredWidth(), actionBarHeight + 1, Theme.dividerPaint);
                 return result;
             }

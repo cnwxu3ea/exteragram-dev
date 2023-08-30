@@ -50,7 +50,9 @@ public class DividerCell extends View {
             paint.setColor(Theme.getColor(Theme.key_divider, resourcesProvider));
         }
 
-        if (!ExteraConfig.disableDividers) canvas.drawLine(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getPaddingTop(), paint);
+        if (!ExteraConfig.disableDividers) {
+            canvas.drawLine(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getPaddingTop(), paint);
+        }
     }
 
     public void setForceDarkTheme(boolean forceDarkTheme) {

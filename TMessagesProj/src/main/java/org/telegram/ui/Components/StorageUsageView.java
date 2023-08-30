@@ -215,7 +215,7 @@ public class StorageUsageView extends FrameLayout {
             }
             calculatingTextView.setVisibility(View.GONE);
             if (totalSize > 0) {
-                divider.setVisibility(ExteraConfig.disableDividers ? GONE : VISIBLE);
+                divider.setVisibility(VISIBLE);
                 textSettingsCell.setVisibility(VISIBLE);
                 telegramCacheTextView.setVisibility(View.VISIBLE);
                 telegramDatabaseTextView.setVisibility(GONE);

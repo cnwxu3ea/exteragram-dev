@@ -72,7 +72,7 @@ public class CreationTextCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (divider && !ExteraConfig.disableDividers) {
+        if (divider) {
             canvas.drawLine(AndroidUtilities.dp(startPadding), getMeasuredHeight() - 1, getMeasuredWidth() + AndroidUtilities.dp(23), getMeasuredHeight(), Theme.dividerPaint);
         }
     }

@@ -153,7 +153,7 @@ public class AvailableReactionCell extends FrameLayout {
             l = pad;
         }
 
-        if (!ExteraConfig.disableDividers) canvas.drawLine(getPaddingLeft() + l, getHeight() - w, getWidth() - getPaddingRight() - r, getHeight() - w, Theme.dividerPaint);
+        canvas.drawLine(getPaddingLeft() + l, getHeight() - w, getWidth() - getPaddingRight() - r, getHeight() - w, Theme.dividerPaint);
     }
 
     @Override

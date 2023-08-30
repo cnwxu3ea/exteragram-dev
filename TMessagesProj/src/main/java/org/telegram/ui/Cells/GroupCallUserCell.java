@@ -904,7 +904,7 @@ public class GroupCallUserCell extends FrameLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        if (needDivider && !ExteraConfig.disableDividers) {
+        if (needDivider) {
             if (progressToAvatarPreview != 0) {
                 dividerPaint.setAlpha((int) ((1.0f - progressToAvatarPreview) * 255));
             } else {

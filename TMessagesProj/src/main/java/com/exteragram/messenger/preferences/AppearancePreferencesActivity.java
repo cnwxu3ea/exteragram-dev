@@ -255,6 +255,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         } else if (position == disableDividersRow) {
             ExteraConfig.editor.putBoolean("disableDividers", ExteraConfig.disableDividers ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.disableDividers);
+            Theme.applyCommonTheme();
             if (getListView().getLayoutManager() != null)
                 recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
             parentLayout.rebuildAllFragmentViews(true, true);

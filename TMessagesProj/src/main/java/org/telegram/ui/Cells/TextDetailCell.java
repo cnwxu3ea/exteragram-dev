@@ -181,7 +181,7 @@ public class TextDetailCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (needDivider  && !ExteraConfig.disableDividers) {
+        if (needDivider) {
             canvas.drawLine(
                 LocaleController.isRTL ? 0 : AndroidUtilities.dp(20),
                 getMeasuredHeight() - 1,

@@ -43,7 +43,7 @@ public class HashtagSearchCell extends TextView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (needDivider && !ExteraConfig.disableDividers) {
+        if (needDivider) {
             canvas.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1, Theme.dividerPaint);
         }
     }

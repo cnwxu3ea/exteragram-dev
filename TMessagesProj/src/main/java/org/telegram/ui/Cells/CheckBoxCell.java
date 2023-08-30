@@ -379,7 +379,7 @@ public class CheckBoxCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (needDivider && !ExteraConfig.disableDividers) {
+        if (needDivider) {
             int offset = AndroidUtilities.dp(currentType == TYPE_CHECK_BOX_ROUND ? 60 : 20) + (int) Math.abs(textView.getTranslationX());
             canvas.drawLine(LocaleController.isRTL ? 0 : offset, getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? offset : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }

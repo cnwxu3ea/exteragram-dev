@@ -436,7 +436,7 @@ public class SessionCell extends FrameLayout {
                 canvas.restore();
             }
         }
-        if (needDivider && !ExteraConfig.disableDividers) {
+        if (needDivider) {
             int margin = currentType == 1 ? 49 : 72;
             canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(margin), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(margin) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }

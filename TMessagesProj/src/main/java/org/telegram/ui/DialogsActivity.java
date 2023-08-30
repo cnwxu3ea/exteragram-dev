@@ -945,12 +945,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (searchAnimationProgress < 1) {
                         int a = Theme.dividerPaint.getAlpha();
                         Theme.dividerPaint.setAlpha((int) (a * searchAnimationProgress));
-                        if (!ExteraConfig.disableDividers)
-                            canvas.drawLine(0, y, getMeasuredWidth(), y, Theme.dividerPaint);
+                        canvas.drawLine(0, y, getMeasuredWidth(), y, Theme.dividerPaint);
                         Theme.dividerPaint.setAlpha(a);
                     } else {
-                        if (!ExteraConfig.disableDividers)
-                            canvas.drawLine(0, y, getMeasuredWidth(), y, Theme.dividerPaint);
+                        canvas.drawLine(0, y, getMeasuredWidth(), y, Theme.dividerPaint);
                     }
                 }
             }
@@ -1692,8 +1690,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 int alpha = Theme.dividerPaint.getAlpha();
                 Theme.dividerPaint.setAlpha((int) (rightFragmentOpenedProgress * alpha));
-                if (!ExteraConfig.disableDividers)
-                    canvas.drawRect(AndroidUtilities.dp(RightSlidingDialogContainer.getRightPaddingSize()), 0, AndroidUtilities.dp(RightSlidingDialogContainer.getRightPaddingSize()) - 1, getMeasuredHeight(), Theme.dividerPaint);
+                canvas.drawRect(AndroidUtilities.dp(RightSlidingDialogContainer.getRightPaddingSize()), 0, AndroidUtilities.dp(RightSlidingDialogContainer.getRightPaddingSize()) - 1, getMeasuredHeight(), Theme.dividerPaint);
                 Theme.dividerPaint.setAlpha(alpha);
             }
 

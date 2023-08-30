@@ -1172,8 +1172,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             protected void dispatchDraw(Canvas canvas) {
                 super.dispatchDraw(canvas);
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
-                if (!ExteraConfig.disableDividers)
-                    canvas.drawLine(0, bottom, getWidth(), bottom, Theme.dividerPaint);
+                canvas.drawLine(0, bottom, getWidth(), bottom, Theme.dividerPaint);
             }
         };
         bottomOverlayChatText = new UnreadCounterTextView(context);
@@ -2866,7 +2865,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             canvas.restore();
             canvas.save();
             canvas.translate(super.translationX, 0);
-            if (drawDivider && !ExteraConfig.disableDividers) {
+            if (drawDivider) {
                 int left = fullSeparator ? 0 : AndroidUtilities.dp(messagePaddingStart);
                 if (LocaleController.isRTL) {
                     canvas.drawLine(0 - super.translationX, getMeasuredHeight() - 1, getMeasuredWidth() - left, getMeasuredHeight() - 1, Theme.dividerPaint);

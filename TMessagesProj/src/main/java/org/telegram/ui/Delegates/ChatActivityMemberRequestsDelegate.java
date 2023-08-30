@@ -67,8 +67,7 @@ public class ChatActivityMemberRequestsDelegate {
                 @Override
                 protected void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
-                    if (!ExteraConfig.disableDividers)
-                        canvas.drawLine(0, getMeasuredHeight() - AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(2), Theme.dividerPaint);
+                    canvas.drawLine(0, getMeasuredHeight() - AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(2), Theme.dividerPaint);
                 }
             };
             root.setBackgroundResource(R.drawable.blockpanel);

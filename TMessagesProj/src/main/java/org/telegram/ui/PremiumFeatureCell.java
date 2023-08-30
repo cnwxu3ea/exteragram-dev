@@ -75,7 +75,7 @@ public class PremiumFeatureCell extends FrameLayout {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-        if (drawDivider && !ExteraConfig.disableDividers) {
+        if (drawDivider) {
             canvas.drawRect(AndroidUtilities.dp(62), getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight(), Theme.dividerPaint);
         }
     }

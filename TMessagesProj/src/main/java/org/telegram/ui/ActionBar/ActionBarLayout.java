@@ -137,7 +137,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                     }
                 }
                 boolean result = super.drawChild(canvas, child, drawingTime);
-                if (actionBarHeight != 0 && !ExteraConfig.disableDividers)
+                if (actionBarHeight != 0)
                     canvas.drawLine(0, actionBarHeight + 1, getMeasuredWidth(), actionBarHeight + 1, Theme.dividerPaint);
                 return result;
             }
@@ -494,8 +494,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         int a = Theme.dividerPaint.getAlpha();
         if (alpha > a) alpha = a;
         Theme.dividerPaint.setAlpha(alpha);
-        if (!ExteraConfig.disableDividers)
-            canvas.drawLine(0, y, getMeasuredWidth(), y, Theme.dividerPaint);
+        canvas.drawLine(0, y, getMeasuredWidth(), y, Theme.dividerPaint);
         Theme.dividerPaint.setAlpha(a);
     }
 

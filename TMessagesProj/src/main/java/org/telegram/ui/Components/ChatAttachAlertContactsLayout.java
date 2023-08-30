@@ -268,7 +268,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         @Override
         protected void onDraw(Canvas canvas) {
-            if (needDivider && !ExteraConfig.disableDividers) {
+            if (needDivider) {
                 canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(70), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(70) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
             }
         }

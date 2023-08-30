@@ -3651,8 +3651,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             } else {
                 canvas.drawRect(0, bottom, getWidth(), getHeight(), getThemedPaint(Theme.key_paint_chatComposeBackground));
             }
-            if (!ExteraConfig.disableDividers)
-                canvas.drawLine(0, bottom, getWidth(), bottom, Theme.dividerPaint);
+            canvas.drawLine(0, bottom, getWidth(), bottom, Theme.dividerPaint);
         }
     }
 

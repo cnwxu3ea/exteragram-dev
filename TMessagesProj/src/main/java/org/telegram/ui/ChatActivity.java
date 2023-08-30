@@ -6421,8 +6421,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 AndroidUtilities.rectTmp2.set(0, bottom, getMeasuredWidth(), getMeasuredHeight());
                 contentView.drawBlurRect(canvas, getY(), AndroidUtilities.rectTmp2, getThemedPaint(Theme.key_paint_chatComposeBackground), false);
-                if (!ExteraConfig.disableDividers)
-                    canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
+                canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
             }
         };
         bottomMessagesActionContainer.drawBlur = false;
@@ -6652,8 +6651,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             @Override
             protected void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
-                if (!ExteraConfig.disableDividers)
-                    canvas.drawLine(0, getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight(), Theme.dividerPaint);
+                canvas.drawLine(0, getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight(), Theme.dividerPaint);
             }
         };
         chatActivityEnterView.addTopView(chatActivityEnterTopView, replyLineView, 48);
@@ -6827,8 +6825,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 super.onDraw(canvas);
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 canvas.drawRect(0, bottom, getMeasuredWidth(), getMeasuredHeight(), getThemedPaint(Theme.key_paint_chatComposeBackground));
-                if (!ExteraConfig.disableDividers)
-                    canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
+                canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
             }
         };
         bottomOverlay.setWillNotDraw(false);
@@ -6871,8 +6868,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     canvas.drawRect(0, bottom, getMeasuredWidth(), getMeasuredHeight(), getThemedPaint(Theme.key_paint_chatComposeBackground));
                 }
                 super.dispatchDraw(canvas);
-                if (!ExteraConfig.disableDividers)
-                    canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
+                canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
             }
         };
         bottomOverlayChat.isTopView = false;
@@ -7470,8 +7466,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             @Override
             protected void dispatchDraw(Canvas canvas) {
                 super.dispatchDraw(canvas);
-                if (!ExteraConfig.disableDividers)
-                    canvas.drawLine(0, getMeasuredHeight() - AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(2), Theme.dividerPaint);
+                canvas.drawLine(0, getMeasuredHeight() - AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(2), Theme.dividerPaint);
             }
         };
         topChatPanelView.backgroundColor = getThemedColor(Theme.key_chat_topPanelBackground);
@@ -7732,8 +7727,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 AndroidUtilities.rectTmp2.set(0, bottom, getMeasuredWidth(), getMeasuredHeight());
                 contentView.drawBlurRect(canvas, getY(), AndroidUtilities.rectTmp2, getThemedPaint(Theme.key_paint_chatComposeBackground), false);
-                if (!ExteraConfig.disableDividers)
-                    canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
+                canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
             }
 
             @Override
@@ -8487,8 +8481,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             @Override
             protected void dispatchDraw(Canvas canvas) {
                 super.dispatchDraw(canvas);
-                if (!ExteraConfig.disableDividers)
-                    canvas.drawLine(0, getMeasuredHeight() - AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(2), Theme.dividerPaint);
+                canvas.drawLine(0, getMeasuredHeight() - AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(2), Theme.dividerPaint);
             }
         };
         pinnedMessageView.setTag(1);

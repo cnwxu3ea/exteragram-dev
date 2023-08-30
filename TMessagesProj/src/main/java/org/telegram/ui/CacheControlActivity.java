@@ -2894,7 +2894,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         @Override
         protected void dispatchDraw(Canvas canvas) {
             super.dispatchDraw(canvas);
-            if (needDivider && !ExteraConfig.disableDividers) {
+            if (needDivider) {
                 canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(72), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(72) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
             }
         }

@@ -260,7 +260,7 @@ public class SlideChooseView extends View {
         paint.setColor(AndroidUtilities.getTransparentColor(getThemedColor(Theme.key_switchTrackChecked), allowSlide ? 1.0f : 0.5f));
         canvas.drawCircle(cx, cy, AndroidUtilities.dp(6), paint);
         
-        if (!ExteraConfig.disableDividers && needDivider) {
+        if (needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(21), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(21) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }

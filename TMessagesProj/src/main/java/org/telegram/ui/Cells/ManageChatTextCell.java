@@ -125,7 +125,7 @@ public class ManageChatTextCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (divider && !ExteraConfig.disableDividers) {
+        if (divider) {
             if (dividerColor != 0) {
                 Theme.dividerExtraPaint.setColor(Theme.getColor(dividerColor));
             }

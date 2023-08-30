@@ -164,21 +164,19 @@ public class NotificationsCheckCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (!ExteraConfig.disableDividers) {
-            if (needDivider) {
-                canvas.drawLine(
+        if (needDivider) {
+            canvas.drawLine(
                     LocaleController.isRTL ? 0 : AndroidUtilities.dp(imageView != null ? 64 : 20),
                     getMeasuredHeight() - 1,
                     getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(imageView != null ? 64 : 20) : 0),
                     getMeasuredHeight() - 1,
                     Theme.dividerPaint
-                );
-            }
-            if (drawLine) {
-                int x = LocaleController.isRTL ? AndroidUtilities.dp(76) : getMeasuredWidth() - AndroidUtilities.dp(76) - 1;
-                int y = (getMeasuredHeight() - AndroidUtilities.dp(22)) / 2;
-                canvas.drawRect(x, y, x + 2, y + AndroidUtilities.dp(22), Theme.dividerPaint);
-            }
+            );
+        }
+        if (drawLine) {
+            int x = LocaleController.isRTL ? AndroidUtilities.dp(76) : getMeasuredWidth() - AndroidUtilities.dp(76) - 1;
+            int y = (getMeasuredHeight() - AndroidUtilities.dp(22)) / 2;
+            canvas.drawRect(x, y, x + 2, y + AndroidUtilities.dp(22), Theme.dividerPaint);
         }
     }
 

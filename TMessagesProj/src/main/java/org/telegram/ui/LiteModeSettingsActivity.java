@@ -629,23 +629,21 @@ public class LiteModeSettingsActivity extends BaseFragment {
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            if (!ExteraConfig.disableDividers) {
-                if (LocaleController.isRTL) {
-                    if (needLine) {
-                        float x = dp(19 + 37 + 19);
-                        canvas.drawRect(x - dp(0.66f), (getMeasuredHeight() - dp(20)) / 2f, x, (getMeasuredHeight() + dp(20)) / 2f, Theme.dividerPaint);
-                    }
-                    if (needDivider) {
-                        canvas.drawLine(getMeasuredWidth() - dp(64) + (textView.getTranslationX() < 0 ? dp(-32) : 0), getMeasuredHeight() - 1, 0, getMeasuredHeight() - 1, Theme.dividerPaint);
-                    }
-                } else {
-                    if (needLine) {
-                        float x = getMeasuredWidth() - dp(19 + 37 + 19);
-                        canvas.drawRect(x - dp(0.66f), (getMeasuredHeight() - dp(20)) / 2f, x, (getMeasuredHeight() + dp(20)) / 2f, Theme.dividerPaint);
-                    }
-                    if (needDivider) {
-                        canvas.drawLine(dp(64) + textView.getTranslationX(), getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, Theme.dividerPaint);
-                    }
+            if (LocaleController.isRTL) {
+                if (needLine) {
+                    float x = dp(19 + 37 + 19);
+                    canvas.drawRect(x - dp(0.66f), (getMeasuredHeight() - dp(20)) / 2f, x, (getMeasuredHeight() + dp(20)) / 2f, Theme.dividerPaint);
+                }
+                if (needDivider) {
+                    canvas.drawLine(getMeasuredWidth() - dp(64) + (textView.getTranslationX() < 0 ? dp(-32) : 0), getMeasuredHeight() - 1, 0, getMeasuredHeight() - 1, Theme.dividerPaint);
+                }
+            } else {
+                if (needLine) {
+                    float x = getMeasuredWidth() - dp(19 + 37 + 19);
+                    canvas.drawRect(x - dp(0.66f), (getMeasuredHeight() - dp(20)) / 2f, x, (getMeasuredHeight() + dp(20)) / 2f, Theme.dividerPaint);
+                }
+                if (needDivider) {
+                    canvas.drawLine(dp(64) + textView.getTranslationX(), getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, Theme.dividerPaint);
                 }
             }
         }

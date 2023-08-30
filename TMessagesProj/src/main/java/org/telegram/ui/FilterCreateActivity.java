@@ -1592,7 +1592,7 @@ public class FilterCreateActivity extends BaseFragment {
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            if (divider && !ExteraConfig.disableDividers) {
+            if (divider) {
                 canvas.drawRect(textView.getLeft(), getMeasuredHeight() - 1, textView.getRight(), getMeasuredHeight(), Theme.dividerPaint);
             }
         }
@@ -1653,7 +1653,7 @@ public class FilterCreateActivity extends BaseFragment {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
 
-            if (needDivider && !ExteraConfig.disableDividers) {
+            if (needDivider) {
                 canvas.drawRect(textView.getLeft(), getMeasuredHeight() - 1, textView.getRight(), getMeasuredHeight(), Theme.dividerPaint);
             }
         }
@@ -1747,7 +1747,7 @@ public class FilterCreateActivity extends BaseFragment {
                 revokedLinkIcon.draw(canvas);
             }
 
-            if (needDivider && !ExteraConfig.disableDividers) {
+            if (needDivider) {
                 canvas.drawRect(LocaleController.isRTL ? 0 : dp(64), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? dp(64) : 0), getMeasuredHeight(), Theme.dividerPaint);
             }
         }
