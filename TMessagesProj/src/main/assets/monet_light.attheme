@@ -14,7 +14,7 @@ actionBarDefaultSearch=n1_900
 actionBarDefaultSearchArchivedPlaceholder=n1_700
 actionBarDefaultSearchPlaceholder=n1_400
 actionBarDefaultSelector=n1_200 (a=80)
-actionBarDefaultSubmenuBackground=a1_10
+actionBarDefaultSubmenuBackground=mWhite
 actionBarDefaultSubmenuItem=n1_900
 actionBarDefaultSubmenuItemIcon=a2_600
 actionBarDefaultSubmenuSeparator=n1_50
@@ -312,7 +312,7 @@ chat_outViewsSelected=a1_100 (a=80)
 chat_outVoiceSeekbar=a1_100 (a=50)
 chat_outVoiceSeekbarFill=a1_100
 chat_outVoiceSeekbarSelected=n1_300
-chat_previewDurationText=n1_50
+chat_previewDurationText=mBlack
 chat_previewGameText=a1_600
 chat_recordTime=a1_600
 chat_recordVoiceCancel=a1_600

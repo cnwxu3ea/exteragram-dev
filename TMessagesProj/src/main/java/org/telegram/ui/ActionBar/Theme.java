@@ -2378,14 +2378,14 @@ public class Theme {
         }
 
         public boolean isMonet() {
-            return "Monet Dark".equals(name) || "Monet Light".equals(name);
+            return "Monet Dark".equals(name) || "Monet Light".equals(name) || "Monet Black".equals(name);
         }
 
         public boolean isDark() {
             if (isDark != UNKNOWN) {
                 return isDark == DARK;
             }
-            if ("Dark Blue".equals(name) || "Night".equals(name) || "Monet Dark".equals(name)) {
+            if ("Dark Blue".equals(name) || "Night".equals(name) || "Monet Dark".equals(name) || "Monet Black".equals(name)) {
                 isDark = DARK;
             } else if ("Blue".equals(name) || "Arctic Blue".equals(name) || "Day".equals(name) || "Monet Light".equals(name)) {
                 isDark = LIGHT;
@@ -4492,7 +4492,7 @@ public class Theme {
             themeInfo.previewOutColor = MonetUtils.getColor("a1_600");
             themeInfo.sortIndex = 6;
             themes.add(themeInfo);
-            themesDict.put("Monet Light", themeInfo);
+            themesDict.put(themeInfo.name, themeInfo);
 
             themeInfo = new ThemeInfo();
             themeInfo.name = "Monet Dark";
@@ -4502,7 +4502,17 @@ public class Theme {
             themeInfo.previewOutColor = MonetUtils.getColor("a1_200");
             themeInfo.sortIndex = 7;
             themes.add(themeInfo);
-            themesDict.put("Monet Dark", themeInfo);
+            themesDict.put(themeInfo.name, themeInfo);
+
+            themeInfo = new ThemeInfo();
+            themeInfo.name = "Monet Black";
+            themeInfo.assetName = "monet_black.attheme";
+            themeInfo.previewBackgroundColor = MonetUtils.getColor("mBlack");
+            themeInfo.previewInColor = MonetUtils.getColor("n1_800");
+            themeInfo.previewOutColor = MonetUtils.getColor("a1_200");
+            themeInfo.sortIndex = 8;
+            themes.add(themeInfo);
+            themesDict.put(themeInfo.name, themeInfo);
         }
 
         String themesString = themeConfig.getString("themes2", null);
