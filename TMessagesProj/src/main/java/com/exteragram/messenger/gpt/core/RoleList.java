@@ -13,6 +13,8 @@ package com.exteragram.messenger.gpt.core;
 
 import static com.exteragram.messenger.gpt.core.Config.getRoles;
 
+import android.os.Build;
+
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
@@ -38,23 +40,57 @@ public class RoleList extends ArrayList<Role> {
 
     @Override
     public boolean contains(@Nullable Object o) {
-        return stream().anyMatch(r -> r.equals(o))
-                || Arrays.stream(Suggestions.values())
-                .map(Suggestions::getRole)
-                .anyMatch(suggestedRole -> suggestedRole.equals(o));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return stream().anyMatch(r -> r.equals(o))
+                    || Arrays.stream(Suggestions.values())
+                    .map(Suggestions::getRole)
+                    .anyMatch(suggestedRole -> suggestedRole.equals(o));
+        } else {
+            for (Role role : this) {
+                if (role.equals(o)) {
+                    return true;
+                }
+            }
+
+            for (Suggestions suggestion : Suggestions.values()) {
+                Role suggestedRole = suggestion.getRole();
+                if (suggestedRole.equals(o)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     public Role getSelected() {
-        Role suggestedRole = Arrays.stream(Suggestions.values())
-                .map(Suggestions::getRole)
-                .filter(Role::isSelected)
-                .findFirst()
-                .orElse(null);
+        Role suggestedRole = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            suggestedRole = Arrays.stream(Suggestions.values())
+                    .map(Suggestions::getRole)
+                    .filter(Role::isSelected)
+                    .findFirst()
+                    .orElse(null);
 
-        return stream()
-                .filter(Role::isSelected)
-                .findFirst()
-                .orElse(suggestedRole);
+            return stream()
+                    .filter(Role::isSelected)
+                    .findFirst()
+                    .orElse(suggestedRole);
+        } else {
+            for (Suggestions suggestion : Suggestions.values()) {
+                Role role = suggestion.getRole();
+                if (role.isSelected()) {
+                    suggestedRole = role;
+                    break;
+                }
+            }
+
+            for (Role role : this) {
+                if (role.isSelected()) {
+                    return role;
+                }
+            }
+        }
+        return suggestedRole;
     }
 
     @Override
@@ -81,19 +117,37 @@ public class RoleList extends ArrayList<Role> {
 
     public void edit(Role newRole) {
         fill();
-        stream()
-                .filter(role -> role.equals(newRole))
-                .findFirst()
-                .ifPresent(role -> role.setPrompt(newRole.getPrompt()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stream()
+                    .filter(role -> role.equals(newRole))
+                    .findFirst()
+                    .ifPresent(role -> role.setPrompt(newRole.getPrompt()));
+        } else {
+            for (Role role : this) {
+                if (role.equals(newRole)) {
+                    role.setPrompt(newRole.getPrompt());
+                    break;
+                }
+            }
+        }
         save();
     }
 
     public void edit(Role oldRole, Role newRole) {
         fill();
-        stream()
-                .filter(role -> role.equals(oldRole))
-                .findFirst()
-                .ifPresent(role -> Collections.replaceAll(this, role, newRole));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stream()
+                    .filter(role -> role.equals(oldRole))
+                    .findFirst()
+                    .ifPresent(role -> Collections.replaceAll(this, role, newRole));
+        } else {
+            for (int i = 0; i < size(); i++) {
+                if (get(i).equals(oldRole)) {
+                    set(i, newRole);
+                    break;
+                }
+            }
+        }
         save();
     }
 
