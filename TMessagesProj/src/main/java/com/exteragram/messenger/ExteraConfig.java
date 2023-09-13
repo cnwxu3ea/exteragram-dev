@@ -227,7 +227,7 @@ public class ExteraConfig {
             useSystemFonts = preferences.getBoolean("useSystemFonts", true);
             newSwitchStyle = preferences.getBoolean("newSwitchStyle", true);
             disableDividers = preferences.getBoolean("disableDividers", false);
-            useLNavigation = preferences.getBoolean("useLNavigation", false);
+            useLNavigation = preferences.getBoolean("useLNavigation", true);
 
             blurSmoothness = preferences.getInt("blurSmoothness", SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_HIGH ? 2 : 0);
             forceBlur = preferences.getBoolean("forceBlur", false);

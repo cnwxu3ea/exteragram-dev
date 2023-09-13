@@ -11745,11 +11745,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 filterTabsView.invalidate();
             }
             if (dialogStoriesCell != null) {
-                dialogStoriesCell.setScaleX(s);
-                dialogStoriesCell.setScaleY(s);
+                if (allowToScale()) {
+                    dialogStoriesCell.setScaleX(s);
+                    dialogStoriesCell.setScaleY(s);
+                    dialogStoriesCell.setPivotX(isDrawerTransition ? dialogStoriesCell.getMeasuredWidth() : 0);
+                    dialogStoriesCell.setPivotY(0);
+                }
                 dialogStoriesCell.setTranslationX(getSlideAmplitude() * (1f - slideFragmentProgress));
-                dialogStoriesCell.setPivotX(isDrawerTransition ? dialogStoriesCell.getMeasuredWidth() : 0);
-                dialogStoriesCell.setPivotY(0);
             }
             if (floatingButtonContainer != null) {
                 floatingButtonContainer.setTranslationX(getSlideAmplitude() * (1f - slideFragmentProgress));

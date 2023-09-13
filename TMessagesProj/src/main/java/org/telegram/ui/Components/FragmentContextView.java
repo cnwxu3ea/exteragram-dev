@@ -353,7 +353,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     timeLayout.draw(canvas);
                     canvas.restore();
                 }
-                canvas.drawLine(0, AndroidUtilities.dp(getStyleHeight()), getMeasuredWidth(), AndroidUtilities.dp(getStyleHeight()), Theme.dividerPaint);
+                canvas.drawLine(0, AndroidUtilities.dp(getStyleHeight()) - 2 / AndroidUtilities.density, getMeasuredWidth(), AndroidUtilities.dp(getStyleHeight()) - 2 / AndroidUtilities.density, Theme.dividerPaint);
             }
         };
         ((BlurredFrameLayout) frameLayout).drawBlur = ExteraConfig.blurActionBar;

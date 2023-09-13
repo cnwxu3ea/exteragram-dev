@@ -17,6 +17,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.util.Base64;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -96,7 +98,7 @@ public class AppUtils {
     }
 
     public static int getSwipeVelocity() {
-        return AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? 1500 : 800;
+        return AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? 1500 : 850;
     }
 
     // do not change or remove this part of the code if you're making public fork

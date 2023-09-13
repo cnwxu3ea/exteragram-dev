@@ -283,8 +283,6 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                 SharedConfig.setAnimationsEnabled(true);
             }
             ((TextCheckCell) view).setChecked(ExteraConfig.useLNavigation);
-            parentLayout.rebuildAllFragmentViews(false, false);
-            showBulletin();
         } else if (position == centerTitleRow) {
             ExteraConfig.editor.putBoolean("centerTitle", ExteraConfig.centerTitle ^= true).apply();
             chatListPreviewCell.updateCenteredTitle(true);
