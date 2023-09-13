@@ -1940,7 +1940,7 @@ public class StoriesController {
 
     public void destroyStoryList(StoriesList list) {
         if (storiesLists[list.type] != null) {
-            storiesLists[list.type].remove(list.userId);
+            storiesLists[list.type].remove(list.dialogId);
         }
     }
 
@@ -1968,7 +1968,7 @@ public class StoriesController {
         public static final int TYPE_ARCHIVE = 1;
 
         public final int currentAccount;
-        public final long userId;
+        public final long dialogId;
         public final int type;
 
         public final HashMap<Long, TreeSet<Integer>> groupedByDay = new HashMap<>();
@@ -2057,7 +2057,7 @@ public class StoriesController {
 
         private StoriesList(int currentAccount, long userId, int type, Utilities.Callback<StoriesList> destroy) {
             this.currentAccount = currentAccount;
-            this.userId = userId;
+            this.dialogId = userId;
             this.type = type;
             this.destroyRunnable = () -> destroy.run(this);
 
@@ -2078,16 +2078,12 @@ public class StoriesController {
                 final ArrayList<TLRPC.User> loadedUsers = new ArrayList<>();
                 try {
                     SQLiteDatabase database = storage.getDatabase();
-                    if (type == TYPE_PINNED) {
-                        cursor = database.queryFinalized(String.format(Locale.US, "SELECT data FROM profile_stories WHERE dialog_id = %d ORDER BY story_id DESC", userId));
-                    } else {
-                        cursor = database.queryFinalized("SELECT data FROM archived_stories ORDER BY story_id DESC");
-                    }
+                    cursor = database.queryFinalized(String.format(Locale.US, "SELECT data FROM profile_stories WHERE dialog_id = %d AND type = %d ORDER BY story_id DESC", dialogId, type));
                     while (cursor.next()) {
                         NativeByteBuffer data = cursor.byteBufferValue(0);
                         if (data != null) {
                             TLRPC.StoryItem storyItem = TLRPC.StoryItem.TLdeserialize(data, data.readInt32(true), true);
-                            storyItem.dialogId = userId;
+                            storyItem.dialogId = dialogId;
                             storyItem.messageId = storyItem.id;
                             MessageObject msg = new MessageObject(currentAccount, storyItem);
                             for (TLRPC.PrivacyRule rule : storyItem.privacy) {
@@ -2117,7 +2113,7 @@ public class StoriesController {
                 }
 
                 AndroidUtilities.runOnUIThread(() -> {
-                    FileLog.d("StoriesList "+type+"{"+userId+"} preloadCache {" + storyItemMessageIds(cacheResult) + "}");
+                    FileLog.d("StoriesList "+type+"{"+ dialogId +"} preloadCache {" + storyItemMessageIds(cacheResult) + "}");
                     preloading = false;
                     MessagesController.getInstance(currentAccount).putUsers(loadedUsers, true);
                     if (invalidateAfterPreload) {
@@ -2220,11 +2216,7 @@ public class StoriesController {
             storage.getStorageQueue().postRunnable(() -> {
                 try {
                     SQLiteDatabase database = storage.getDatabase();
-                    if (type == TYPE_PINNED) {
-                        database.executeFast(String.format(Locale.US, "DELETE FROM profile_stories WHERE dialog_id = %d", userId)).stepThis().dispose();
-                    } else if (type == TYPE_ARCHIVE) {
-                        database.executeFast("DELETE FROM archived_stories").stepThis().dispose();
-                    }
+                    database.executeFast(String.format(Locale.US, "DELETE FROM profile_stories WHERE dialog_id = %d AND type = %d", dialogId, type)).stepThis().dispose();
                 } catch (Throwable e) {
                     storage.checkSQLException(e);
                 }
@@ -2248,16 +2240,11 @@ public class StoriesController {
                 SQLitePreparedStatement state = null;
                 ArrayList<MessageObject> toSave = new ArrayList<>();
                 fill(toSave, true, true);
-                FileLog.d("StoriesList "+type+"{"+userId+"} saveCache {" + storyItemMessageIds(toSave) + "}");
+                FileLog.d("StoriesList " + type + "{"+ dialogId +"} saveCache {" + storyItemMessageIds(toSave) + "}");
                 try {
                     SQLiteDatabase database = storage.getDatabase();
-                    if (type == TYPE_PINNED) {
-                        database.executeFast(String.format(Locale.US, "DELETE FROM profile_stories WHERE dialog_id = %d", userId)).stepThis().dispose();
-                        state = database.executeFast("REPLACE INTO profile_stories VALUES(?, ?, ?)");
-                    } else {
-                        database.executeFast("DELETE FROM archived_stories").stepThis().dispose();
-                        state = database.executeFast("REPLACE INTO archived_stories VALUES(?, ?)");
-                    }
+                    database.executeFast(String.format(Locale.US, "DELETE FROM profile_stories WHERE dialog_id = %d AND type = %d", dialogId, type)).stepThis().dispose();
+                    state = database.executeFast("REPLACE INTO profile_stories VALUES(?, ?, ?, ?)");
 
                     for (int i = 0; i < toSave.size(); ++i) {
                         MessageObject messageObject = toSave.get(i);
@@ -2270,14 +2257,10 @@ public class StoriesController {
                         storyItem.serializeToStream(data);
 
                         state.requery();
-                        if (type == TYPE_PINNED) {
-                            state.bindLong(1, userId);
-                            state.bindInteger(2, storyItem.id);
-                            state.bindByteBuffer(3, data);
-                        } else {
-                            state.bindInteger(1, storyItem.id);
-                            state.bindByteBuffer(2, data);
-                        }
+                        state.bindLong(1, dialogId);
+                        state.bindInteger(2, storyItem.id);
+                        state.bindByteBuffer(3, data);
+                        state.bindInteger(4, type);
                         state.step();
                         data.reuse();
                     }
@@ -2300,7 +2283,7 @@ public class StoriesController {
             if (lastLoadTime == null) {
                 return true;
             }
-            final int key = Objects.hash(currentAccount, type, userId);
+            final int key = Objects.hash(currentAccount, type, dialogId);
             Long time = lastLoadTime.get(key);
             if (time == null) {
                 return true;
@@ -2310,7 +2293,7 @@ public class StoriesController {
 
         private void resetCanLoad() {
             if (lastLoadTime != null) {
-                lastLoadTime.remove(Objects.hash(currentAccount, type, userId));
+                lastLoadTime.remove(Objects.hash(currentAccount, type, dialogId));
             }
         }
 
@@ -2327,7 +2310,7 @@ public class StoriesController {
             TLObject request;
             if (type == TYPE_PINNED) {
                 TLRPC.TL_stories_getPinnedStories req = new TLRPC.TL_stories_getPinnedStories();
-                req.user_id = MessagesController.getInstance(currentAccount).getInputUser(userId);
+                req.user_id = MessagesController.getInstance(currentAccount).getInputUser(dialogId);
                 if (!loadedObjects.isEmpty()) {
                     req.offset_id = offset_id = loadedObjects.last();
                 } else {
@@ -2345,7 +2328,7 @@ public class StoriesController {
                 req.limit = count;
                 request = req;
             }
-            FileLog.d("StoriesList " + type + "{"+userId+"} load");
+            FileLog.d("StoriesList " + type + "{"+dialogId+"} load");
 
             loading = true;
             ConnectionsManager.getInstance(currentAccount).sendRequest(request, (response, err) -> {
@@ -2357,7 +2340,7 @@ public class StoriesController {
                         newMessageObjects.add(toMessageObject(storyItem));
                     }
                     AndroidUtilities.runOnUIThread(() -> {
-                        FileLog.d("StoriesList " + type + "{"+userId+"} loaded {" + storyItemMessageIds(newMessageObjects) + "}");
+                        FileLog.d("StoriesList " + type + "{"+dialogId+"} loaded {" + storyItemMessageIds(newMessageObjects) + "}");
 
                         MessagesController.getInstance(currentAccount).putUsers(stories.users, false);
                         loading = false;
@@ -2394,7 +2377,7 @@ public class StoriesController {
                             if (lastLoadTime == null) {
                                 lastLoadTime = new HashMap<>();
                             }
-                            lastLoadTime.put(Objects.hash(currentAccount, type, userId), System.currentTimeMillis());
+                            lastLoadTime.put(Objects.hash(currentAccount, type, dialogId), System.currentTimeMillis());
                         } else {
                             resetCanLoad();
                         }
@@ -2426,7 +2409,7 @@ public class StoriesController {
 //        }
 
         public void updateDeletedStories(List<TLRPC.StoryItem> storyItems) {
-            FileLog.d("StoriesList " + type + "{"+userId+"} updateDeletedStories {" + storyItemIds(storyItems) + "}");
+            FileLog.d("StoriesList " + type + "{"+dialogId+"} updateDeletedStories {" + storyItemIds(storyItems) + "}");
             if (storyItems == null) {
                 return;
             }
@@ -2454,7 +2437,7 @@ public class StoriesController {
         }
 
         public void updateStories(List<TLRPC.StoryItem> storyItems) {
-            FileLog.d("StoriesList " + type + "{"+userId+"} updateStories {" + storyItemIds(storyItems) + "}");
+            FileLog.d("StoriesList " + type + "{"+dialogId+"} updateStories {" + storyItemIds(storyItems) + "}");
             if (storyItems == null) {
                 return;
             }
@@ -2519,7 +2502,7 @@ public class StoriesController {
         }
 
         private MessageObject toMessageObject(TLRPC.StoryItem storyItem) {
-            storyItem.dialogId = userId;
+            storyItem.dialogId = dialogId;
             storyItem.messageId = storyItem.id;
             MessageObject msg = new MessageObject(currentAccount, storyItem);
             msg.generateThumbs(false);

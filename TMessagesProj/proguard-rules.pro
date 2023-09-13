@@ -26,6 +26,7 @@
 -keep class com.google.android.exoplayer2.extractor.FlacStreamMetadata { *; }
 -keep class com.google.android.exoplayer2.metadata.flac.PictureFrame { *; }
 -keep class com.google.android.exoplayer2.decoder.SimpleDecoderOutputBuffer { *; }
+-keep class org.telegram.ui.Stories.recorder.FfmpegAudioWaveformLoader { *; }
 
 # Keep all class member names of CameraX
 -keep class androidx.camera.extensions.** { *; }
