@@ -2894,7 +2894,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         fragmentView.setWillNotDraw(false);
         contentView = ((NestedFrameLayout) fragmentView);
-        contentView.needBlur = true;
+        contentView.needBlur = ExteraConfig.blurActionBar;
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         listView = new ClippedListView(context) {
@@ -6738,7 +6738,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         int actionBarColor = actionBarAnimationColorFrom != 0 ? actionBarAnimationColorFrom : getThemedColor(Theme.key_actionBarDefault);
         int actionBarColor2 = actionBarColor;
-        if (SharedConfig.chatBlurEnabled()) {
+        if (SharedConfig.chatBlurEnabled() && ExteraConfig.blurActionBar) {
             actionBarColor = ColorUtils.setAlphaComponent(actionBarColor, 0);
         }
         topView.setBackgroundColor(ColorUtils.blendARGB(actionBarColor, color, progress));

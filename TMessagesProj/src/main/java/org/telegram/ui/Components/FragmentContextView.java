@@ -70,6 +70,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.audioinfo.AudioInfo;
@@ -306,6 +307,17 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
 
             @Override
+            public void onDraw(Canvas canvas) {
+                if (!SharedConfig.chatBlurEnabled() || !ExteraConfig.blurActionBar) {
+                    if (backgroundPaint == null) {
+                        backgroundPaint = new Paint();
+                    }
+                    backgroundPaint.setColor(Theme.getColor(Theme.key_inappPlayerBackground));
+                    canvas.drawRect(0, AndroidUtilities.dp(getStyleHeight()), getMeasuredWidth(), AndroidUtilities.dp(getStyleHeight()), backgroundPaint);
+                }
+            }
+
+            @Override
             protected void dispatchDraw(Canvas canvas) {
                 super.dispatchDraw(canvas);
                 if (currentStyle == STYLE_INACTIVE_GROUP_CALL && timeLayout != null) {
@@ -341,9 +353,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     timeLayout.draw(canvas);
                     canvas.restore();
                 }
-                canvas.drawLine(0, AndroidUtilities.dp(getStyleHeight()) - 1, getMeasuredWidth(), AndroidUtilities.dp(getStyleHeight()) - 1, Theme.dividerPaint);
+                canvas.drawLine(0, AndroidUtilities.dp(getStyleHeight()), getMeasuredWidth(), AndroidUtilities.dp(getStyleHeight()), Theme.dividerPaint);
             }
         };
+        ((BlurredFrameLayout) frameLayout).drawBlur = ExteraConfig.blurActionBar;
         addView(frameLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.TOP | Gravity.LEFT, 0, 0, 0, 0));
 
         selector = new View(context);

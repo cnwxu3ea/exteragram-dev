@@ -130,6 +130,9 @@ public class LiteModeSettingsActivity extends BaseFragment {
                     }
                 }
                 boolean value = LiteMode.isEnabledSetting(item.flags);
+                if ((item.flags & LiteMode.FLAG_CHAT_BLUR) > 0) {
+                    ExteraConfig.toggleBlur(!value);
+                }
                 LiteMode.toggleFlag(item.flags, !value);
                 updateValues();
             } else if (item.viewType == VIEW_TYPE_SWITCH2) {

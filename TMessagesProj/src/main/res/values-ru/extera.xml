@@ -54,8 +54,16 @@
     <string name="IconPack">Иконки</string>
     <string name="SolarIcons">Использовать набор \"Solar\"</string>
 
+    <string name="BlurOptions">Настройки размытия</string>
     <string name="ForceBlur">Принудительное размытие</string>
     <string name="ForceBlurInfo">Размытие будет применяться на абсолютно все темы.</string>
+    <string name="BlurElements">Элементы с размытием</string>
+    <string name="BlurActionBar">Заголовок</string>
+    <string name="BlurBottomPanel">Нижняя панель</string>
+    <string name="BlurDialogs">Диалоговые окна</string>
+    <string name="BlurSmoothnessSmooth">Плавно</string>
+    <string name="BlurSmoothnessSmoothest">Ультраплавно</string>
+
     <string name="UseSystemFonts">Системные шрифты</string>
     <string name="UseSystemEmoji">Системные эмодзи</string>
     <string name="NewSwitchStyle">Переключатели в стиле MD3</string>

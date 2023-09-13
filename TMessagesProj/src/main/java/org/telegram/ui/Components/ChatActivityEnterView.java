@@ -3642,11 +3642,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
             if (allowBlur) {
                 backgroundPaint.setColor(getThemedColor(Theme.key_chat_messagePanelBackground));
-                if (SharedConfig.chatBlurEnabled() && sizeNotifierLayout != null) {
-                    AndroidUtilities.rectTmp2.set(0, bottom, getWidth(), getHeight());
+                AndroidUtilities.rectTmp2.set(0, bottom, getWidth(), getHeight());
+                if (SharedConfig.chatBlurEnabled() && sizeNotifierLayout != null && ExteraConfig.blurBottomPanel) {
                     sizeNotifierLayout.drawBlurRect(canvas, getTop(), AndroidUtilities.rectTmp2, backgroundPaint, false);
                 } else {
-                    canvas.drawRect(0, bottom, getWidth(), getHeight(), backgroundPaint);
+                    canvas.drawRect(AndroidUtilities.rectTmp2, backgroundPaint);
                 }
             } else {
                 canvas.drawRect(0, bottom, getWidth(), getHeight(), getThemedPaint(Theme.key_paint_chatComposeBackground));

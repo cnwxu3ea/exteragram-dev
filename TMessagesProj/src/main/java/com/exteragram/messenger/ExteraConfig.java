@@ -55,12 +55,18 @@ public class ExteraConfig {
     public static boolean useSolarIcons;
 
     public static boolean squareFab;
-    public static boolean forceBlur;
     public static boolean forceSnow;
     public static boolean useSystemFonts;
     public static boolean newSwitchStyle;
     public static boolean disableDividers;
     public static boolean useLNavigation;
+
+    // Blur Preferences
+    public static int blurSmoothness;
+    public static boolean forceBlur;
+    public static boolean blurActionBar;
+    public static boolean blurBottomPanel;
+    public static boolean blurDialogs;
 
     public static int eventType;
     public static boolean alternativeOpenAnimation;
@@ -150,7 +156,6 @@ public class ExteraConfig {
             1972014627,
             168769611,
             480000401,
-            5307590670L,
             639891381,
             1773117711,
             5330087923L,
@@ -178,7 +183,7 @@ public class ExteraConfig {
                 return;
             }
 
-            preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+            preferences = getPreferences("exteraconfig");
             editor = preferences.edit();
 
             // General
@@ -218,12 +223,19 @@ public class ExteraConfig {
             useSolarIcons = preferences.getBoolean("useSolarIcons", true);
 
             squareFab = preferences.getBoolean("squareFab", true);
-            forceBlur = preferences.getBoolean("forceBlur", false);
             forceSnow = preferences.getBoolean("forceSnow", false);
             useSystemFonts = preferences.getBoolean("useSystemFonts", true);
             newSwitchStyle = preferences.getBoolean("newSwitchStyle", true);
             disableDividers = preferences.getBoolean("disableDividers", false);
             useLNavigation = preferences.getBoolean("useLNavigation", false);
+
+            blurSmoothness = preferences.getInt("blurSmoothness", SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_HIGH ? 2 : 0);
+            forceBlur = preferences.getBoolean("forceBlur", false);
+
+            boolean blur = getPreferences("mainconfig").getBoolean("chatBlur", true);
+            blurActionBar = preferences.getBoolean("blurActionBar", blur);
+            blurBottomPanel = preferences.getBoolean("blurBottomPanel", blur);
+            blurDialogs = preferences.getBoolean("blurDialogs", blur);
 
             eventType = preferences.getInt("eventType", 0);
             alternativeOpenAnimation = preferences.getBoolean("alternativeOpenAnimation", true);
@@ -298,6 +310,10 @@ public class ExteraConfig {
         }
     }
 
+    private static SharedPreferences getPreferences(String name) {
+        return ApplicationLoader.applicationContext.getSharedPreferences(name, Activity.MODE_PRIVATE);
+    }
+
     public static boolean isExtera(@NonNull TLRPC.Chat chat) {
         return Arrays.stream(OFFICIAL_CHANNELS).anyMatch(id -> id == chat.id);
     }
@@ -334,6 +350,28 @@ public class ExteraConfig {
         }
 
         return (int) Math.ceil(radius);
+    }
+
+    public static int getBlurRedrawTimeout() {
+        return switch (blurSmoothness) {
+            case 1 -> 6;
+            case 2 -> 0;
+            default -> 16;
+        };
+    }
+
+    public static int getBlurCrossfadeDuration() {
+        return switch (blurSmoothness) {
+            case 1 -> 25;
+            case 2 -> 1;
+            default -> 50;
+        };
+    }
+
+    public static void toggleBlur(boolean enabled) {
+        ExteraConfig.editor.putBoolean("blurActionBar", ExteraConfig.blurActionBar = enabled).apply();
+        ExteraConfig.editor.putBoolean("blurBottomPanel", ExteraConfig.blurBottomPanel = enabled).apply();
+        ExteraConfig.editor.putBoolean("blurDialogs", ExteraConfig.blurDialogs = enabled).apply();
     }
 
     public static void toggleDrawerElements(int id) {

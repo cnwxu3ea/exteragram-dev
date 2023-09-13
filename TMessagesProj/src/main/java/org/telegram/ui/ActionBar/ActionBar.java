@@ -1884,10 +1884,12 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setDrawBlurBackground(SizeNotifierFrameLayout contentView) {
-        blurredBackground = true;
+        blurredBackground = ExteraConfig.blurActionBar;
         this.contentView = contentView;
         contentView.blurBehindViews.add(this);
-        setBackground(null);
+        if (blurredBackground) {
+            setBackground(null);
+        }
     }
 
     @Override

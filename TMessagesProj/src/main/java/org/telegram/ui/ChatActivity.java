@@ -5820,7 +5820,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (currentChat != null) {
             pendingRequestsDelegate = new ChatActivityMemberRequestsDelegate(this, currentChat, this::invalidateChatListViewTopPadding);
             pendingRequestsDelegate.setChatInfo(chatInfo, false);
-            contentView.addView(pendingRequestsDelegate.getView(), ViewGroup.LayoutParams.MATCH_PARENT, pendingRequestsDelegate.getViewHeight());
+            contentView.addView(pendingRequestsDelegate.getView(contentView), ViewGroup.LayoutParams.MATCH_PARENT, pendingRequestsDelegate.getViewHeight());
         }
 
         pinnedMessageView = null;
@@ -6420,7 +6420,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             public void onDraw(Canvas canvas) {
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 AndroidUtilities.rectTmp2.set(0, bottom, getMeasuredWidth(), getMeasuredHeight());
-                contentView.drawBlurRect(canvas, getY(), AndroidUtilities.rectTmp2, getThemedPaint(Theme.key_paint_chatComposeBackground), false);
+                if (SharedConfig.chatBlurEnabled() && ExteraConfig.blurBottomPanel) {
+                    contentView.drawBlurRect(canvas, getY(), AndroidUtilities.rectTmp2, getThemedPaint(Theme.key_paint_chatComposeBackground), false);
+                } else {
+                    canvas.drawRect(AndroidUtilities.rectTmp2, getThemedPaint(Theme.key_paint_chatComposeBackground));
+                }
                 canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
             }
         };
@@ -6857,7 +6861,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             @Override
             protected void dispatchDraw(Canvas canvas) {
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
-                if (SharedConfig.chatBlurEnabled()) {
+                if (SharedConfig.chatBlurEnabled() && ExteraConfig.blurBottomPanel) {
                     if (backgroundPaint == null) {
                         backgroundPaint = new Paint();
                     }
@@ -7471,6 +7475,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         };
         topChatPanelView.backgroundColor = getThemedColor(Theme.key_chat_topPanelBackground);
         topChatPanelView.backgroundPaddingBottom = AndroidUtilities.dp(2);
+        topChatPanelView.drawBlur = ExteraConfig.blurActionBar;
         topChatPanelView.setTag(1);
         topChatPanelViewOffset = -AndroidUtilities.dp(50);
         invalidateChatListViewTopPadding();
@@ -7726,7 +7731,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             public void onDraw(Canvas canvas) {
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 AndroidUtilities.rectTmp2.set(0, bottom, getMeasuredWidth(), getMeasuredHeight());
-                contentView.drawBlurRect(canvas, getY(), AndroidUtilities.rectTmp2, getThemedPaint(Theme.key_paint_chatComposeBackground), false);
+                if (SharedConfig.chatBlurEnabled() && ExteraConfig.blurBottomPanel) {
+                    contentView.drawBlurRect(canvas, getY(), AndroidUtilities.rectTmp2, getThemedPaint(Theme.key_paint_chatComposeBackground), false);
+                } else {
+                    canvas.drawRect(AndroidUtilities.rectTmp2, getThemedPaint(Theme.key_paint_chatComposeBackground));
+                }
                 canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
             }
 
@@ -8490,6 +8499,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         pinnedMessageView.setBackgroundResource(R.drawable.blockpanel);
         pinnedMessageView.backgroundColor = getThemedColor(Theme.key_chat_topPanelBackground);
         pinnedMessageView.backgroundPaddingBottom = AndroidUtilities.dp(2);
+        pinnedMessageView.drawBlur = ExteraConfig.blurActionBar;
         pinnedMessageView.getBackground().mutate().setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.MULTIPLY));
         int index = 8;
         if (topChatPanelView != null && topChatPanelView.getParent() == contentView) {
@@ -8991,7 +9001,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pinnedViewH = Math.max(0, AndroidUtilities.dp(48) + pinnedMessageEnterOffset);
         }
         float pendingViewH = 0;
-        View pendingRequestsView = pendingRequestsDelegate != null ? pendingRequestsDelegate.getView() : null;
+        View pendingRequestsView = pendingRequestsDelegate != null ? pendingRequestsDelegate.getView(contentView) : null;
         if (pendingRequestsView != null && pendingRequestsView.getVisibility() == View.VISIBLE) {
             pendingViewH = Math.max(0, pendingRequestsView.getHeight() + pendingRequestsDelegate.getViewEnterOffset() - AndroidUtilities.dp(4));
         }
@@ -9107,7 +9117,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pinnedMessageView.setTranslationY(translation);
             translation += AndroidUtilities.dp(48);
         }
-        View pendingRequestsView = pendingRequestsDelegate != null ? pendingRequestsDelegate.getView() : null;
+        View pendingRequestsView = pendingRequestsDelegate != null ? pendingRequestsDelegate.getView(contentView) : null;
         if (pendingRequestsView != null) {
             translation += pendingRequestsDelegate.getViewEnterOffset();
             pendingRequestsView.setTranslationY(translation);
@@ -11845,7 +11855,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int maxAdapterPosition = -1;
         int minAdapterPosition = -1;
 
-        boolean blurEnabled = SharedConfig.chatBlurEnabled() && Color.alpha(Theme.getColor(Theme.key_chat_BlurAlpha)) != 255;
+        boolean blurEnabled = SharedConfig.chatBlurEnabled() && (Color.alpha(Theme.getColor(Theme.key_chat_BlurAlpha)) != 255 || ExteraConfig.forceBlur);
 
         MessageObject messageStarter = isTopic ? topicStarterMessageObject : threadMessageObject;
 
@@ -11873,11 +11883,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             if (bottom <= clipTop - chatListViewPaddingVisibleOffset || top > chatListView.getMeasuredHeight() - blurredViewBottomOffset) {
                 if (messageCell != null) {
-                    if (blurEnabled) {
-                        messageCell.setVisibleOnScreen(false);
-                    } else {
-                        messageCell.setVisibleOnScreen(true);
-                    }
+                    messageCell.setVisibleOnScreen(blurEnabled);
                 }
                 continue;
             }
@@ -13616,8 +13622,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             blurredViewTopOffset = 0;
             blurredViewBottomOffset = 0;
             if (SharedConfig.chatBlurEnabled()) {
-                blurredViewTopOffset = actionBarHeight;
-                blurredViewBottomOffset = AndroidUtilities.dp(203);
+                if (ExteraConfig.blurActionBar) {
+                    blurredViewTopOffset = actionBarHeight;
+                }
+                if (ExteraConfig.blurBottomPanel) {
+                    blurredViewBottomOffset = AndroidUtilities.dp(203);
+                }
             }
             for (int i = 0; i < childCount; i++) {
                 View child = getChildAt(i);

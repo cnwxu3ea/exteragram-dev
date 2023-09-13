@@ -234,7 +234,7 @@ public class TranslateButton extends FrameLayout {
         popupLayout.addView(new ActionBarPopupWindow.GapView(getContext(), resourcesProvider), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
 
         if (detectedLanguageNameAccusative != null) {
-            ActionBarMenuSubItem dontTranslateButton = new ActionBarMenuSubItem(getContext(), true, false, resourcesProvider);
+            ActionBarMenuSubItem dontTranslateButton = new ActionBarMenuSubItem(getContext(), false, false, resourcesProvider);
             String text;
             if (accusative[0]) {
                 text = LocaleController.formatString("DoNotTranslateLanguage", R.string.DoNotTranslateLanguage, detectedLanguageNameAccusative);
@@ -265,7 +265,7 @@ public class TranslateButton extends FrameLayout {
             popupLayout.addView(dontTranslateButton);
         }
 
-        ActionBarMenuSubItem hideButton = new ActionBarMenuSubItem(getContext(), true, false, resourcesProvider);
+        ActionBarMenuSubItem hideButton = new ActionBarMenuSubItem(getContext(), detectedLanguageNameAccusative == null, true, resourcesProvider);
         hideButton.setTextAndIcon(LocaleController.getString("Hide", R.string.Hide), R.drawable.msg_cancel);
         hideButton.setOnClickListener(e -> {
             translateController.setHideTranslateDialog(dialogId, true);

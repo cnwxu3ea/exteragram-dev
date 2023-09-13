@@ -63,15 +63,8 @@
     <string name="BlurActionBar">Action Bar</string>
     <string name="BlurBottomPanel">Bottom Panel</string>
     <string name="BlurDialogs">Dialogs</string>
-    <string name="BlurSmoothnessDefault">Default</string>
     <string name="BlurSmoothnessSmooth">Smooth</string>
-    <string name="BlurSmoothnessSmoothest">Ultra-smoothly</string>
-    <string name="BlurSaturation">Saturation</string>
-    <string name="BlurSaturationLeft">Faded</string>
-    <string name="BlurSaturationRight">Saturated</string>
-    <string name="BlurStrength">Strength</string>
-    <string name="BlurStrengthLeft">Transparent</string>
-    <string name="BlurStrengthRight">Blurry</string>
+    <string name="BlurSmoothnessSmoothest">Ultra-smooth</string>
 
     <string name="ForceSnow">Force Snow</string>
     <string name="ForceSnowInfo">Snow will appear in the action bar, drawer and background of chats.</string>

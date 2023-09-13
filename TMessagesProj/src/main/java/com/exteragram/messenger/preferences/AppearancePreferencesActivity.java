@@ -15,10 +15,8 @@ import android.content.Context;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.preferences.components.AvatarCornersPreviewCell;
 import com.exteragram.messenger.preferences.components.ChatListPreviewCell;
@@ -30,7 +28,6 @@ import com.exteragram.messenger.utils.ChatUtils;
 import com.exteragram.messenger.utils.LocaleUtils;
 import com.exteragram.messenger.utils.PopupUtils;
 import com.exteragram.messenger.utils.SystemUtils;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -38,13 +35,19 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
+import org.telegram.ui.Cells.TextCheckCell2;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.SlideChooseView;
 import org.telegram.ui.LaunchActivity;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
@@ -76,6 +79,10 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             LocaleController.getString("NewYear", R.string.NewYear),
             LocaleController.getString("ValentinesDay", R.string.ValentinesDay),
             LocaleController.getString("Halloween", R.string.Halloween)
+    }, blurSmoothnessOptions = new String[]{
+            LocaleController.getString("Default", R.string.Default),
+            LocaleController.getString(R.string.BlurSmoothnessSmooth),
+            LocaleController.getString(R.string.BlurSmoothnessSmoothest)
     };
 
     private int avatarCornersPreviewRow;
@@ -105,7 +112,6 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
     private int appearanceHeaderRow;
     private int fabShapeRow;
-    private int forceBlurRow;
     private int forceSnowRow;
     private int useSystemFontsRow;
     private int useSystemEmojiRow;
@@ -113,6 +119,15 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
     private int disableDividersRow;
     private int alternativeNavigationRow;
     private int appearanceDividerRow;
+
+    private int blurOptionsHeaderRow;
+    private int blurSmoothnessRow;
+    private int blurElementsRow;
+    private int blurActionBarRow;
+    private int blurBottomBarRow;
+    private int blurDialogsRow;
+    private int forceBlurRow;
+    private int blurSettingsDividerRow;
 
     private int drawerOptionsHeaderRow;
     private int eventChooserRow;
@@ -132,6 +147,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
     private int savedMessagesRow;
     private int scanQrRow;
     private int drawerDividerRow;
+
+    private boolean blurElementsExpanded;
 
     @Override
     protected void updateRowsId() {
@@ -164,7 +181,6 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
         appearanceHeaderRow = newRow();
         fabShapeRow = newRow();
-        forceBlurRow = newRow();
         forceSnowRow = newRow();
         useSystemFontsRow = newRow();
         useSystemEmojiRow = newRow();
@@ -172,6 +188,21 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         disableDividersRow = newRow();
         alternativeNavigationRow = newRow();
         appearanceDividerRow = newRow();
+
+        blurOptionsHeaderRow = newRow();
+        blurSmoothnessRow = newRow();
+        blurElementsRow = newRow();
+        if (blurElementsExpanded) {
+            blurActionBarRow = newRow();
+            blurBottomBarRow = newRow();
+            blurDialogsRow = newRow();
+        } else {
+            blurActionBarRow = -1;
+            blurBottomBarRow = -1;
+            blurDialogsRow = -1;
+        }
+        forceBlurRow = newRow();
+        blurSettingsDividerRow = newRow();
 
         drawerOptionsHeaderRow = newRow();
         eventChooserRow = newRow();
@@ -211,12 +242,37 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             ExteraConfig.editor.putBoolean("singleCornerRadius", ExteraConfig.singleCornerRadius ^= true).apply();
             parentLayout.rebuildAllFragmentViews(false, false);
             ((TextCheckCell) view).setChecked(ExteraConfig.singleCornerRadius);
-        }  else if (position == forceBlurRow) {
+        } else if (position == forceBlurRow) {
             ExteraConfig.editor.putBoolean("forceBlur", ExteraConfig.forceBlur ^= true).apply();
-            if (!SharedConfig.chatBlurEnabled() && ExteraConfig.forceBlur || SharedConfig.chatBlurEnabled() && !ExteraConfig.forceBlur) {
-                SharedConfig.toggleChatBlur();
+            if (!SharedConfig.chatBlurEnabled() && ExteraConfig.forceBlur) {
+                setBlurElementsEnabled(true);
             }
             ((TextCheckCell) view).setChecked(ExteraConfig.forceBlur);
+        } else if (position == blurElementsRow) {
+            blurElementsExpanded ^= true;
+            updateRowsId();
+            listAdapter.notifyItemChanged(blurElementsRow, payload);
+            if (blurElementsExpanded) {
+                listAdapter.notifyItemRangeInserted(blurElementsRow + 1, 3);
+            } else {
+                listAdapter.notifyItemRangeRemoved(blurElementsRow + 1, 3);
+            }
+        } else if (position >= blurActionBarRow && position <= blurDialogsRow) {
+            if (position == blurActionBarRow) {
+                ExteraConfig.editor.putBoolean("blurActionBar", ExteraConfig.blurActionBar ^= true).apply();
+                listAdapter.notifyItemChanged(blurActionBarRow, payload);
+            } else if (position == blurBottomBarRow) {
+                ExteraConfig.editor.putBoolean("blurBottomPanel", ExteraConfig.blurBottomPanel ^= true).apply();
+                listAdapter.notifyItemChanged(blurBottomBarRow, payload);
+            } else if (position == blurDialogsRow) {
+                ExteraConfig.editor.putBoolean("blurDialogs", ExteraConfig.blurDialogs ^= true).apply();
+                listAdapter.notifyItemChanged(blurDialogsRow, payload);
+            }
+            if (!SharedConfig.chatBlurEnabled() && (ExteraConfig.blurActionBar || ExteraConfig.blurBottomPanel || ExteraConfig.blurDialogs) ||
+                    SharedConfig.chatBlurEnabled() && !ExteraConfig.blurActionBar && !ExteraConfig.blurBottomPanel && !ExteraConfig.blurDialogs) {
+                SharedConfig.toggleChatBlur();
+            }
+            listAdapter.notifyItemChanged(blurElementsRow, payload);
         } else if (position == alternativeOpenAnimationRow) {
             ExteraConfig.editor.putBoolean("alternativeOpenAnimation", ExteraConfig.alternativeOpenAnimation ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.alternativeOpenAnimation);
@@ -256,10 +312,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             ExteraConfig.editor.putBoolean("disableDividers", ExteraConfig.disableDividers ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.disableDividers);
             Theme.applyCommonTheme();
-            if (getListView().getLayoutManager() != null)
-                recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
-            parentLayout.rebuildAllFragmentViews(true, true);
-            getListView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
+            parentLayout.rebuildAllFragmentViews(false, false);
+            listAdapter.notifyDataSetChanged();
         } else if (position == statusRow) {
             ExteraConfig.toggleDrawerElements(10);
             ((TextCell) view).setChecked(ExteraConfig.changeStatus);
@@ -367,6 +421,25 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         return new ListAdapter(context);
     }
 
+    private int getBlurElementsSelectedCount() {
+        int i = 0;
+        if (ExteraConfig.blurActionBar)
+            i++;
+        if (ExteraConfig.blurBottomPanel)
+            i++;
+        if (ExteraConfig.blurDialogs)
+            i++;
+        return i;
+    }
+
+    private void setBlurElementsEnabled(boolean enabled) {
+        if (enabled && !SharedConfig.chatBlurEnabled() || !enabled && SharedConfig.chatBlurEnabled()) {
+            SharedConfig.toggleChatBlur();
+        }
+        ExteraConfig.toggleBlur(enabled);
+        AndroidUtilities.updateVisibleRows(listView);
+    }
+
     private class ListAdapter extends BaseListAdapter {
 
         public ListAdapter(Context context) {
@@ -430,6 +503,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == appearanceHeaderRow) {
                         headerCell.setText(LocaleController.getString("Appearance", R.string.Appearance));
+                    } else if (position == blurOptionsHeaderRow) {
+                        headerCell.setText(LocaleController.getString("BlurOptions", R.string.BlurOptions));
                     } else if (position == drawerHeaderRow) {
                         headerCell.setText(LocaleController.getString("DrawerElements", R.string.DrawerElements));
                     } else if (position == drawerOptionsHeaderRow) {
@@ -449,8 +524,6 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.UseSystemFonts), ExteraConfig.useSystemFonts, true);
                     } else if (position == useSystemEmojiRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.UseSystemEmoji), SharedConfig.useSystemEmoji, true);
-                    } else if (position == forceBlurRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString(R.string.ForceBlur), LocaleController.getString(R.string.ForceBlurInfo), ExteraConfig.forceBlur, true, true);
                     } else if (position == forceSnowRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("ForceSnow", R.string.ForceSnow), LocaleController.getString(R.string.ForceSnowInfo), ExteraConfig.forceSnow, true, true);
                     } else if (position == alternativeNavigationRow) {
@@ -475,6 +548,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.SolarIcons), ExteraConfig.useSolarIcons, false);
                     } else if (position == alternativeOpenAnimationRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.DrawerAlternativeOpeningAnimation), ExteraConfig.alternativeOpenAnimation, false);
+                    } else if (position == forceBlurRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ForceBlur), ExteraConfig.forceBlur, false);
                     }
                 }
                 case 2 -> {
@@ -529,7 +604,42 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                         cell.setText(LocaleController.getString(R.string.SingleCornerRadiusInfo));
                     } else if (position == chatListDividerRow) {
                         cell.setText(LocaleController.getString(R.string.ListOfChatsInfo));
+                    } else if (position == blurSettingsDividerRow) {
+                        cell.setText(LocaleController.getString(R.string.ForceBlurInfo));
                     }
+                }
+                case 13 -> {
+                    SlideChooseView slide = (SlideChooseView) holder.itemView;
+                    if (position == blurSmoothnessRow) {
+                        slide.setNeedDivider(true);
+                        slide.setCallback(index -> ExteraConfig.editor.putInt("blurSmoothness", ExteraConfig.blurSmoothness = index).apply());
+                        slide.setOptions(ExteraConfig.blurSmoothness, Arrays.stream(blurSmoothnessOptions).map(CharSequence::toString).toArray(String[]::new));
+                    }
+                }
+                case 18 -> {
+                    TextCheckCell2 checkCell = (TextCheckCell2) holder.itemView;
+                    if (position == blurElementsRow) {
+                        int blurElementsSelectedCount = getBlurElementsSelectedCount();
+                        checkCell.setTextAndCheck(LocaleController.getString(R.string.BlurElements), blurElementsSelectedCount > 0, true, true);
+                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/3", blurElementsSelectedCount), !blurElementsExpanded, () -> {
+                            boolean checked = !checkCell.isChecked();
+                            checkCell.setChecked(checked);
+                            setBlurElementsEnabled(checked);
+                        });
+                    }
+                    checkCell.getCheckBox().setColors(Theme.key_switchTrack, Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
+                    checkCell.getCheckBox().setDrawIconType(0);
+                }
+                case 19 -> {
+                    CheckBoxCell checkBoxCell = (CheckBoxCell) holder.itemView;
+                    if (position == blurActionBarRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.BlurActionBar), "", ExteraConfig.blurActionBar, true, true);
+                    } else if (position == blurBottomBarRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.BlurBottomPanel), "", ExteraConfig.blurBottomPanel, true, true);
+                    } else if (position == blurDialogsRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.BlurDialogs), "", ExteraConfig.blurDialogs, true, true);
+                    }
+                    checkBoxCell.setPad(1);
                 }
             }
         }
@@ -540,22 +650,28 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                 return 1;
             } else if (position == statusRow || position == myStoriesRow || position == archivedChatsRow || position >= newGroupRow && position <= scanQrRow) {
                 return 2;
-            } else if (position == appearanceHeaderRow || position == drawerHeaderRow || position == drawerOptionsHeaderRow || position == solarIconsHeaderRow || position == foldersHeaderRow || position == chatListHeaderRow) {
+            } else if (position == appearanceHeaderRow || position == blurOptionsHeaderRow || position == drawerHeaderRow || position == drawerOptionsHeaderRow || position == solarIconsHeaderRow || position == foldersHeaderRow || position == chatListHeaderRow) {
                 return 3;
             } else if (position == eventChooserRow || position == actionBarTitleRow || position == tabStyleRow || position == tabTitleRow) {
                 return 7;
-            } else if (position == appearanceDividerRow || position == solarIconsInfoRow || position == foldersDividerRow || position == avatarCornersDividerRow || position == chatListDividerRow) {
+            } else if (position == appearanceDividerRow || position == solarIconsInfoRow || position == foldersDividerRow || position == avatarCornersDividerRow || position == chatListDividerRow || position == blurSettingsDividerRow) {
                 return 8;
             } else if (position == avatarCornersPreviewRow) {
                 return 9;
             } else if (position == fabShapeRow) {
                 return 12;
+            } else if (position == blurSmoothnessRow) {
+                return 13;
             } else if (position == foldersPreviewRow) {
                 return 14;
             } else if (position == solarIconsPreviewRow) {
                 return 15;
             } else if (position == chatListPreviewRow) {
                 return 17;
+            } else if (position == blurElementsRow) {
+                return 18;
+            } else if (position >= blurActionBarRow && position <= blurDialogsRow) {
+                return 19;
             }
             return 5;
         }

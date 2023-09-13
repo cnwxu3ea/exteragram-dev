@@ -7562,7 +7562,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         }
 
         protected void drawBackground(Canvas canvas) {
-            if (SharedConfig.chatBlurEnabled() && backgroundColor != Color.TRANSPARENT) {
+            if (SharedConfig.chatBlurEnabled() && ExteraConfig.blurActionBar && backgroundColor != Color.TRANSPARENT) {
                 if (backgroundPaint == null) {
                     backgroundPaint = new Paint();
                 }

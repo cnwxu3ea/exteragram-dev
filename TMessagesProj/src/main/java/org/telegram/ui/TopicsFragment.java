@@ -1257,7 +1257,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         if (currentChat != null) {
             pendingRequestsDelegate = new ChatActivityMemberRequestsDelegate(this, currentChat, this::updateTopView);
             pendingRequestsDelegate.setChatInfo(chatFull, false);
-            topView.addView(pendingRequestsDelegate.getView(), ViewGroup.LayoutParams.MATCH_PARENT, pendingRequestsDelegate.getViewHeight());
+            topView.addView(pendingRequestsDelegate.getView(contentView), ViewGroup.LayoutParams.MATCH_PARENT, pendingRequestsDelegate.getViewHeight());
         }
 
         if (!inPreviewMode) {
@@ -1413,7 +1413,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             translation += Math.max(0, fragmentContextView.getTopPadding());
             fragmentContextView.setTranslationY(translation);
         }
-        View pendingRequestsView = pendingRequestsDelegate != null ? pendingRequestsDelegate.getView() : null;
+        View pendingRequestsView = pendingRequestsDelegate != null ? pendingRequestsDelegate.getView(contentView) : null;
         if (pendingRequestsView != null) {
             pendingRequestsView.setTranslationY(translation + pendingRequestsDelegate.getViewEnterOffset());
             translation += pendingRequestsDelegate.getViewEnterOffset() + pendingRequestsDelegate.getViewHeight();

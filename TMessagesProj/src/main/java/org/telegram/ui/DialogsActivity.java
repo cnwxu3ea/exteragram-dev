@@ -615,7 +615,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         public ContentView(Context context) {
             super(context);
-            needBlur = true;
+            needBlur = ExteraConfig.blurActionBar;
             blurBehindViews.add(this);
         }
 

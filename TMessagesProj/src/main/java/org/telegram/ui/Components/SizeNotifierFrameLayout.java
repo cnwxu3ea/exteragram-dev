@@ -27,6 +27,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.exteragram.messenger.ExteraConfig;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
@@ -549,12 +550,12 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     final BlurBackgroundTask blurBackgroundTask = new BlurBackgroundTask();
 
     public void startBlur() {
-        if (!blurIsRunning || blurGeneratingTuskIsRunning || !invalidateBlur || !SharedConfig.chatBlurEnabled()) {
+        if (!blurIsRunning || blurGeneratingTuskIsRunning || (!invalidateBlur && ExteraConfig.blurSmoothness != 2) || !SharedConfig.chatBlurEnabled()) {
             return;
         }
 
         int blurAlpha = Color.alpha(Theme.getColor(Theme.key_chat_BlurAlpha));
-        if (blurAlpha == 255) {
+        if (blurAlpha == 255 && !ExteraConfig.forceBlur) {
             return;
         }
         int lastW = getMeasuredWidth();
@@ -715,7 +716,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         super.onAnimationEnd(animation);
                     }
                 });
-                blurCrossfade.setDuration(50);
+                blurCrossfade.setDuration(ExteraConfig.getBlurCrossfadeDuration());
                 blurCrossfade.start();
                 invalidateBlurredViews();
                 currentBitmap = finalBitmap;
@@ -723,7 +724,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 AndroidUtilities.runOnUIThread(() -> {
                     blurGeneratingTuskIsRunning = false;
                     startBlur();
-                }, 16);
+                }, ExteraConfig.getBlurRedrawTimeout());
             });
         }
     }
@@ -816,6 +817,9 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     public void drawBlurRect(Canvas canvas, float y, Rect rectTmp, Paint blurScrimPaint, boolean top) {
         int blurAlpha = Color.alpha(Theme.getColor(Theme.key_chat_BlurAlpha));
+        if (blurAlpha == 255 && ExteraConfig.forceBlur) {
+            blurAlpha = 200;
+        }
         if (currentBitmap == null || !SharedConfig.chatBlurEnabled()) {
             canvas.drawRect(rectTmp, blurScrimPaint);
             return;
@@ -840,6 +844,9 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     public void drawBlurCircle(Canvas canvas, float viewY, float cx, float cy, float radius, Paint blurScrimPaint, boolean top) {
         int blurAlpha = Color.alpha(Theme.getColor(Theme.key_chat_BlurAlpha));
+        if (blurAlpha == 255 && ExteraConfig.forceBlur) {
+            blurAlpha = 200;
+        }
         if (currentBitmap == null || !SharedConfig.chatBlurEnabled()) {
             canvas.drawCircle(cx, cy, radius, blurScrimPaint);
             return;

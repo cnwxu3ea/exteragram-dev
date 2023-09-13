@@ -26,9 +26,12 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AvatarsImageView;
+import org.telegram.ui.Components.BlurredFrameLayout;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MemberRequestsBottomSheet;
+import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
 import java.util.List;
 
@@ -39,7 +42,7 @@ public class ChatActivityMemberRequestsDelegate {
     private final TLRPC.Chat currentChat;
     private final int currentAccount;
 
-    private FrameLayout root;
+    private BlurredFrameLayout root;
     private AvatarsImageView avatarsView;
     private TextView requestsCountTextView;
     private ImageView closeView;
@@ -61,16 +64,19 @@ public class ChatActivityMemberRequestsDelegate {
         this.callback = callback;
     }
 
-    public View getView() {
+    public View getView(SizeNotifierFrameLayout fragmentView) {
         if (root == null) {
-            root = new FrameLayout(fragment.getParentActivity()) {
+            root = new BlurredFrameLayout(fragment.getParentActivity(), fragmentView) {
                 @Override
                 protected void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
                     canvas.drawLine(0, getMeasuredHeight() - AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(2), Theme.dividerPaint);
                 }
             };
+            root.drawBlur = ExteraConfig.blurActionBar;
             root.setBackgroundResource(R.drawable.blockpanel);
+            root.backgroundColor = fragment.getThemedColor(Theme.key_chat_topPanelBackground);
+            root.backgroundPaddingBottom = AndroidUtilities.dp(2);
             root.getBackground().mutate().setColorFilter(new PorterDuffColorFilter(fragment.getThemedColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.MULTIPLY));
             root.setVisibility(View.GONE);
             pendingRequestsEnterOffset = -getViewHeight();
