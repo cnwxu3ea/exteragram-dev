@@ -1,30 +1,34 @@
-    <!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 
-     This is the source code of exteraGram for Android.
+ This is the source code of exteraGram for Android.
 
-     We do not and cannot prevent the use of our code,
-     but be respectful and credit the original author.
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
 
-     Copyright @immat0x1, 2023
+ Copyright @immat0x1, 2023
 
-     -->
+-->
 <resources>
     <string name="Preferences">параметри exteraGram</string>
-    <!--  Main Menu  -->
+    <!-- Main Menu -->
     <string name="Links">Посилання</string>
     <string name="AboutExteraDescription">Експериментальний клієнт Telegram заснований на офіційних джерелах!</string>
     <string name="Channel">Канал</string>
     <string name="Crowdin">Перекладати</string>
     <string name="SourceCode">Вихідний код</string>
     <string name="Categories">Категорії</string>
-    <!--  Appearance  -->
+    <!-- Appearance -->
     <string name="AvatarCorners">Закруглення аватарок</string>
     <string name="AvatarCornersLeft">Квадрат</string>
     <string name="AvatarCornersRight">Коло</string>
+    <string name="SingleCornerRadius">Радіус одного кута</string>
+    <string name="SingleCornerRadiusInfo">Форуми матимуть таку ж форму аватарів, як і чати.</string>
     <string name="ListOfChats">Список чатів</string>
     <string name="ActionBarTitle">Заголовок</string>
     <string name="ActionBarTitleUsername">Ім\'я користувача</string>
     <string name="ActionBarTitleName">Ім’я</string>
+    <string name="HideStories">Приховати історії</string>
     <string name="HideActionBarStatus">Приховати статус</string>
     <string name="CenterTitle">Центрувати заголовок в панелі дій</string>
     <string name="ListOfChatsInfo">Текст заголовка буде замінений назвою теки, коли іконки увімкнено.</string>
@@ -37,13 +41,20 @@
     <string name="TabStyleRounded">Округлі</string>
     <string name="TabStyleChips">Чіпс</string>
     <string name="TabStylePills">Пілюля</string>
-    <string name="TabCounter">Счётчик уведомлений</string>
+    <string name="TabCounter">Лічильник повідомлень</string>
     <string name="HideAllChats">Сховати теку \"%1$s\"</string>
     <string name="FoldersInfo">Іконки синхронізовані з Telegram.</string>
     <string name="IconPack">Іконки</string>
     <string name="SolarIcons">Використовувати іконки \"Solar\"</string>
+    <string name="BlurOptions">Параметри розмиття</string>
     <string name="ForceBlur">Примусове розмиття</string>
     <string name="ForceBlurInfo">Розмиття буде застосовано до всіх тем.</string>
+    <string name="BlurElements">Розмиття елементів</string>
+    <string name="BlurActionBar">Панель дій</string>
+    <string name="BlurBottomPanel">Нижня панель</string>
+    <string name="BlurDialogs">Діалоги</string>
+    <string name="BlurSmoothnessSmooth">Гладке</string>
+    <string name="BlurSmoothnessSmoothest">Ультрагладкі</string>
     <string name="ForceSnow">Включити Сніг</string>
     <string name="ForceSnowInfo">Сніг також з\'явиться в панелі дій та фоні чатів.</string>
     <string name="UseSystemFonts">Використовувати системні шрифти</string>
@@ -60,21 +71,20 @@
     <string name="ValentinesDay">День Святого Валентина</string>
     <string name="Halloween">Хеллоуїн</string>
     <string name="DrawerElements">Елементи меню</string>
-    <!--  General  -->
+    <!-- General -->
     <string name="CameraType">Тип камери</string>
     <string name="CameraTypeSystem">Система</string>
     <string name="DefaultCameraInfo">Використовувати камеру Telegram.</string>
-    <string name="CameraXInfo">
-CameraX підтримується тільки на
-<![CDATA[ <a href="https://developer.android.com/training/camerax/devices"> обраних пристроях</a> ]]>
-, підтримка ефектів і лінз залежить від вашого виробника.
-</string>
+    <string name="CameraXInfo">CameraX підтримується тільки на <![CDATA[<a href="https://developer.android.com/training/camerax/devices"> обраних пристроях</a>]]>, підтримка ефектів і лінз залежить від вашого виробника.</string>
     <string name="SystemCameraInfo">Прямий доступ до системної камери (не застосовується в відеоповідомленнях).</string>
     <string name="PerformanceMode">Режим Продуктивності</string>
     <string name="PerformanceModeInfo">Якість CameraX буде знижена на користь продуктивності.</string>
     <string name="CameraQuality">Якість камери</string>
     <string name="DisableNumberRounding">Вимкнути округлення чисел</string>
     <string name="FormatTimeWithSeconds">Форматувати час з секундами</string>
+    <string name="InAppVibration">Вібрація в додатку</string>
+    <string name="FilterZalgo">Фільтр \"Zalgo\"</string>
+    <string name="FilterZalgoInfo">Видаляє символи \"%1$s\" в іменах і повідомленнях.</string>
     <string name="TabletMode">Режим планшета</string>
     <string name="DownloadSpeedBoost">Прискорення швидкості завантаження</string>
     <string name="UploadSpeedBoost">Збільшення швидкості завантаження</string>
@@ -87,21 +97,24 @@ CameraX підтримується тільки на
     <string name="ArchiveOnPull">Відкрити архів при витягуванні</string>
     <string name="DisableUnarchiveSwipe">Вимкнути свайп «Розархівувати»</string>
     <string name="DisableUnarchiveSwipeInfo">Проведення вліво не призведе до видалення чатів з архіву.</string>
-    <!--  Other  -->
+    <!-- Other -->
     <string name="AnalyticsInfo">Коли ці параметри ввімкнені, дані про пристрій збираються і надсилаються до Google Analytics і Crashlytics, дозволяє нам зберігати статистику використання та відстежувати помилки в додатку. \n\n, Однак, якщо параметри вимкнуті, збір даних припиняється і відправляються дані миттєво видалено.</string>
     <string name="DeleteAccount">Видалити акаунт</string>
     <string name="ResetSettings">Скинути налаштування</string>
-    <!--  Chats  -->
+    <!-- Chats -->
     <string name="StickerSize">Розмір наліпок</string>
     <string name="StickerSizeLeft">Маленький</string>
     <string name="StickerSizeRight">Великий</string>
     <string name="StickerSizeDialogMessageReplyTo">овва</string>
     <string name="StickerSizeDialogMessage">Дивно, він такий милий!</string>
+    <string name="ChatSettingsInfo">Налаштування медіа, іконка додатку та інше</string>
     <string name="StickerShape">Форма наліпки</string>
     <string name="StickerShapeRounded">Закруглений</string>
     <string name="StickerShapeRoundedMsg">Повідомлення</string>
     <string name="StickerTime">Ховати час наліпок</string>
     <string name="UnlimitedRecentStickers">Необмежені улюблені Наклейки</string>
+    <string name="HideReactions">Сховати реакції</string>
+    <string name="HideReactionsInfo">Реакції повністю зникнуть з інтерфейсу.</string>
     <string name="DoubleTap">Подвійне натискання</string>
     <string name="DoubleTapIncoming">Вхідні повідомлення</string>
     <string name="DoubleTapOutgoing">Вихідні повідомлення</string>
@@ -114,6 +127,8 @@ CameraX підтримується тільки на
     <string name="HideShareButton">Приховати бокову кнопку %1$s</string>
     <string name="MessageMenu">Меню повідомлення</string>
     <string name="AddCommaAfterMention">Додати кому після згадування</string>
+    <string name="HideSendAsPeer">Приховати кнопку \"Надіслати як…\"</string>
+    <string name="HideSendAsPeerInfo">Ви все ще можете отримати доступ до меню «Надіслати як…», довго натискаючи кнопку Emojis/Stickers/GIFs.</string>
     <string name="HidePhotoCounter">Приховати лічильник фотографій</string>
     <string name="HidePhotoCounterInfo">Набридливий лічильник фотографій у верхній частині екрана зникне з вашого перегляду.</string>
     <string name="HideCameraTile">Приховати плитку миттєвої камери</string>
@@ -133,7 +148,7 @@ CameraX підтримується тільки на
     <string name="PauseOnMinimizeInfo">Призупиняє відтворення відео, коли пристрій заблоковано або згорнуто exteraGram.</string>
     <string name="DisablePlayback">Вимкнути відтворення</string>
     <string name="DisablePlaybackInfo">Вимикає відтворення при натисканні кнопки гучності.</string>
-    <!--  Updates  -->
+    <!-- Updates -->
     <string name="LastCheck">Остання перевірка</string>
     <string name="CurrentVersion">Поточна версія</string>
     <string name="BuildType">Тип збірки</string>
@@ -150,7 +165,7 @@ CameraX підтримується тільки на
     <string name="Version">Версія</string>
     <string name="UpdateSize">Розмір оновлення</string>
     <string name="Changelog">Список змін:</string>
-    <!--  Message Details  -->
+    <!-- Message Details -->
     <string name="Details">Деталі</string>
     <string name="Date">Дата</string>
     <string name="EditedDate">Дата редагування</string>
@@ -162,16 +177,57 @@ CameraX підтримується тільки на
     <string name="Bitrate">Бітрейт</string>
     <string name="MimeType">Тип медіа</string>
     <string name="Datacenter">Дата-центр</string>
-    <!--  Other  -->
+    <!-- GPT -->
+    <string name="ChatGPTInfo">Налаштувати API ключа, ролі та історію</string>
+    <string name="ApiKey">API ключ</string>
+    <string name="ApiKeyInfo">Цей ключ API буде використовуватися для надсилання запитів до серверів OpenAI. Щоб згенерувати ключ API, можна використовувати *офіційний сайт*.</string>
+    <string name="Roles">Ролі</string>
+    <string name="RolesInfo">Створюйте ролі для своїх потреб!</string>
+    <string name="Suggestions">Пропозиції</string>
+    <string name="RoleName">Назва</string>
+    <string name="RolePrompt">Запит</string>
+    <string name="PromptInfo">Запит - це текст, наданий моделі, як відправна точка для створення відповіді або продовження діалогу.</string>
+    <string name="NewRole">Нова роль</string>
+    <string name="EditRole">Редагувати роль</string>
+    <string name="HistoryInfo">Історія бесід дозволяє ШІ зрозуміти попередні запити та відповіді і приймати їх при створенні наступних відповідей.</string>
+    <string name="ResponseStreaming">Потокова передача відповідей</string>
+    <string name="ResponseStreamingInfo">Забезпечує більш плавне та швидке зображення відповідей.</string>
+    <string name="ShowResponseOnly">Показати лише відповідь</string>
+    <string name="Use16kModel">Використовувати 16k модель</string>
+    <string name="Use16kModelInfo">Модель 16k - це мовна модель з максимальним обмеженням кількості 16,384 токена. За замовчуванням використовується модель з 4,096 токенами.</string>
+    <string name="TapToAddApiKey">Натисніть щоб додати ключ API, щоб почати роботу з функціями ChatGPT.</string>
+    <string name="Generate">Згенерувати</string>
+    <string name="ClearConversationHistoryInfo">Ви впевнені, що хочете очистити **всю** історію чатів ChatGPT?</string>
+    <string name="GPTError400">Історія бесід переповнена</string>
+    <string name="GPTError400Info">Спробуйте очистити історію або скористайтеся 16k моделлю для збільшення ліміту.</string>
+    <string name="GPTError401">Надано некоректний API ключ</string>
+    <string name="GPTError401Info">Переконайтеся, що ключ API, який ви використовуєте, є правильним або згенеруєте новий.</string>
+    <string name="GPTError429Limit">Досягнуто ліміту частот для запитів</string>
+    <string name="GPTError429LimitInfo">Ви занадто швидко надсилаєте запити. Спробуйте ще раз пізніше.</string>
+    <string name="GPTError429Quota">Ви перевищили поточну квоту</string>
+    <string name="GPTError429QuotaInfo">Ви досягли максимальних місячних витрат. Перевірте свій план і платіжні реквізити.</string>
+    <string name="GPTError503">Наразі двигун перевантажений</string>
+    <string name="GPTError503Info">Повторіть запит після короткого очікування.</string>
+    <string name="GPTError">На сервері сталася помилка під час обробки вашого запиту</string>
+    <string name="GPTErrorInfo">Повторіть запит після короткого очікування та зверніться до служби підтримки OpenAI, якщо проблема не зникне.</string>
+    <!-- Bot Button information -->
+    <string name="CopyTitle">Копіювати назву</string>
+    <string name="CopyCallback">Копіювати callback-дані</string>
+    <string name="CopyInlineQuery">Копіювати інлайн-запит</string>
+    <string name="CopyID">Копіювати ID користувача</string>
+    <!-- Other -->
     <string name="RestartRequired">Перезапустіть програму, щоб зміни вступили в силу.</string>
-    <string name="ResetPreferences">**exteraGram** Налаштування були скинуті.</string>
+    <string name="ResetPreferences">Налаштування **exteraGram** були скинуті.</string>
+    <string name="ResetPreferencesInfo">Ви впевнені, що хочете скинути **всі** налаштування exteraGram за замовчуванням?</string>
     <string name="UserNotFound">Користувача з таким **ID** не знайдено.</string>
     <string name="PhotoCopied">Фото скопійовано до буфера обміну.</string>
+    <string name="MutualContactInfo">Цей контакт є взаємним.</string>
     <string name="ToBeginning">На початок</string>
     <string name="MessageHistory">Історія повідомлень</string>
     <string name="BoldItalic">Жирний курсив</string>
     <string name="OpenPremiumBot">Відкрити офіційного бота</string>
     <string name="CopyPhoto">Копіювати фото</string>
+    <string name="StickerSavedHint">Наліпка збережена в галереї</string>
     <string name="SaveMessage">Зберегти повідомлення</string>
     <string name="TrackSaved">Пісню збережено</string>
     <string name="ChannelToSaveChanged">Треки будуть збережені в **%1$s**.</string>
