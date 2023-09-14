@@ -49,11 +49,7 @@ import java.util.stream.Stream;
 
 public class GeneralPreferencesActivity extends BasePreferencesActivity {
 
-    private final CharSequence[] tabletMode = new CharSequence[]{
-            LocaleController.getString("DistanceUnitsAutomatic", R.string.DistanceUnitsAutomatic),
-            LocaleController.getString("PasswordOn", R.string.PasswordOn),
-            LocaleController.getString("PasswordOff", R.string.PasswordOff)
-    }, id = new CharSequence[]{
+    private final CharSequence[] id = new CharSequence[]{
             LocaleController.getString("Hide", R.string.Hide),
             "Telegram API",
             "Bot API"
@@ -75,7 +71,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
     private int disableNumberRoundingRow;
     private int inAppVibrationRow;
     private int filterZalgoRow;
-    private int tabletModeRow;
     private int generalDividerRow;
 
     private int profileHeaderRow;
@@ -113,7 +108,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         formatTimeWithSecondsRow = newRow();
         inAppVibrationRow = newRow();
         filterZalgoRow = newRow();
-        tabletModeRow = -1;
         generalDividerRow = newRow();
 
         speedBoostersHeaderRow = newRow();
@@ -152,15 +146,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
             ((TextCheckCell) view).setChecked(ExteraConfig.filterZalgo);
             listAdapter.notifyItemChanged(generalDividerRow);
             parentLayout.rebuildAllFragmentViews(false, false);
-        } else if (position == tabletModeRow) {
-            if (getParentActivity() == null) {
-                return;
-            }
-            PopupUtils.showDialog(tabletMode, LocaleController.getString("TabletMode", R.string.TabletMode), ExteraConfig.tabletMode, getContext(), i -> {
-                ExteraConfig.editor.putInt("tabletMode", ExteraConfig.tabletMode = i).apply();
-                listAdapter.notifyItemChanged(tabletModeRow, payload);
-                showBulletin();
-            });
         } else if (position == archiveOnPullRow) {
             ExteraConfig.editor.putBoolean("archiveOnPull", ExteraConfig.archiveOnPull ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.archiveOnPull);
@@ -291,8 +276,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                     TextSettingsCell textSettingsCell = (TextSettingsCell) holder.itemView;
                     if (position == cameraXQualityRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("CameraQuality", R.string.CameraQuality), ExteraConfig.cameraResolution + "p", payload, false);
-                    } else if (position == tabletModeRow) {
-                        textSettingsCell.setTextAndValue(LocaleController.getString("TabletMode", R.string.TabletMode), tabletMode[ExteraConfig.tabletMode], payload, false);
                     } else if (position == showIdAndDcRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("ShowIdAndDc", R.string.ShowIdAndDc), id[ExteraConfig.showIdAndDc], payload, false);
                     }
@@ -342,7 +325,7 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
             if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow ||
                     position == speedBoostersHeaderRow || position == cameraTypeHeaderRow) {
                 return 3;
-            } else if (position == cameraXQualityRow || position == tabletModeRow || position == showIdAndDcRow) {
+            } else if (position == cameraXQualityRow || position == showIdAndDcRow) {
                 return 7;
             } else if (position == cameraTypeDividerRow || position == speedBoostersDividerRow || position == profileDividerRow  || position == archiveDividerRow || position == generalDividerRow) {
                 return 8;

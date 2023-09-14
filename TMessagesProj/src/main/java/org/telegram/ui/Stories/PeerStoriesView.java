@@ -1185,7 +1185,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                         }
 
                         if (!unsupported && allowShare) {
-                            if (UserConfig.getInstance(currentAccount).isPremium()) {
+                            if (UserConfig.getInstance(currentAccount).isPremium() || true) {
                                 ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery), false, resourcesProvider).setOnClickListener(v -> {
                                     saveToGallery();
                                     if (popupMenu != null) {
@@ -1452,7 +1452,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                     popupMenu.dismiss();
                 }
             });
-        } else {
+        } else if (false) {
             Drawable lockIcon2 = ContextCompat.getDrawable(getContext(), R.drawable.msg_gallery_locked2);
             lockIcon2.setColorFilter(new PorterDuffColorFilter(ColorUtils.blendARGB(Color.WHITE, Color.BLACK, 0.5f), PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable2 = new CombinedDrawable(

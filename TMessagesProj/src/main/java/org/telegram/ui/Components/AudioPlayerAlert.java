@@ -1086,10 +1086,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             args.putBoolean("canSelectTopics", true);
             DialogsActivity activity = new DialogsActivity(args);
             activity.setDelegate((fragment, dids, message, param, topicsFragment) -> {
-                ExteraConfig.setChannelToSave(dids.get(0).dialogId);
+                ChatUtils.getInstance().setLikeDialog(dids.get(0).dialogId);
                 AudioPlayerAlert alert = new AudioPlayerAlert(parentActivity, resourcesProvider);
                 parentFragment.showDialog(alert);
-                AndroidUtilities.runOnUIThread(() -> BulletinFactory.of((FrameLayout) alert.getContainerView(), resourcesProvider).createSimpleBulletin(R.raw.ic_save_to_music, LocaleController.formatString("ChannelToSaveChanged", R.string.ChannelToSaveChanged, ChatUtils.getName(ExteraConfig.channelToSave))).show(), 450);
+                AndroidUtilities.runOnUIThread(() -> BulletinFactory.of((FrameLayout) alert.getContainerView(), resourcesProvider).createSimpleBulletin(R.raw.ic_save_to_music, LocaleController.formatString("ChannelToSaveChanged", R.string.ChannelToSaveChanged, ChatUtils.getName(ChatUtils.getInstance().getLikeDialog()))).show(), 450);
                 fragment.finishFragment();
                 return true;
             });
@@ -1099,10 +1099,9 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         });
         likeButton.setOnClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            if (ExteraConfig.channelToSave == 0) ExteraConfig.setChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
             ArrayList<MessageObject> liked = new ArrayList<>(List.of(MediaController.getInstance().getPlayingMessageObject()));
-            SendMessagesHelper.getInstance(currentAccount).sendMessage(liked, ExteraConfig.channelToSave, true, true, false, 0);
-            BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.ic_save_to_music, LocaleController.formatString("TrackSaved", R.string.TrackSaved, ChatUtils.getName(ExteraConfig.channelToSave))).show();
+            SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(liked, ChatUtils.getInstance().getLikeDialog(), true, true, false, 0);
+            BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.ic_save_to_music, LocaleController.formatString("TrackSaved", R.string.TrackSaved, ChatUtils.getName(ChatUtils.getInstance().getLikeDialog()))).show();
         });
         
         optionsButton = new ActionBarMenuItem(context, null, 0, iconColor, false, resourcesProvider);

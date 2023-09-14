@@ -19,6 +19,8 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
@@ -49,13 +51,36 @@ import java.util.Locale;
 
 public class ChatUtils {
 
-    private static final class InstanceHolder {
-        private static final ChatUtils instance = new ChatUtils();
+    private static final ChatUtils[] Instance = new ChatUtils[UserConfig.MAX_ACCOUNT_COUNT];
+    private static final Object[] lockObjects = new Object[UserConfig.MAX_ACCOUNT_COUNT];
+
+    private static int selectedAccount;
+
+    static {
+        for (int i = 0; i < UserConfig.MAX_ACCOUNT_COUNT; i++) {
+            lockObjects[i] = new Object();
+        }
     }
 
+    public ChatUtils(int num) {
+        selectedAccount = num;
+    }
 
     public static ChatUtils getInstance() {
-        return InstanceHolder.instance;
+        return getInstance(UserConfig.selectedAccount);
+    }
+
+    public static ChatUtils getInstance(int num) {
+        ChatUtils localInstance = Instance[num];
+        if (localInstance == null) {
+            synchronized (lockObjects) {
+                localInstance = Instance[num];
+                if (localInstance == null) {
+                    Instance[num] = localInstance = new ChatUtils(num);
+                }
+            }
+        }
+        return localInstance;
     }
 
     private static boolean useFallback;
@@ -97,7 +122,6 @@ public class ChatUtils {
     }
 
     public static String getName(long did) {
-        int currentAccount = UserConfig.selectedAccount;
         String name = null;
         if (DialogObject.isEncryptedDialog(did)) {
             TLRPC.EncryptedChat encryptedChat = getMessagesController().getEncryptedChat(DialogObject.getEncryptedChatId(did));
@@ -113,7 +137,7 @@ public class ChatUtils {
             TLRPC.Chat chat = getMessagesController().getChat(-did);
             if (chat != null) name = chat.title;
         }
-        return did == UserConfig.getInstance(currentAccount).getClientUserId() ? LocaleController.getString("SavedMessages", R.string.SavedMessages) : name;
+        return did == getUserConfig().getClientUserId() ? LocaleController.getString("SavedMessages", R.string.SavedMessages) : name;
     }
 
     public boolean canSaveSticker(MessageObject messageObject) {
@@ -293,19 +317,23 @@ public class ChatUtils {
     }
 
     public static MessagesController getMessagesController() {
-        return MessagesController.getInstance(UserConfig.selectedAccount);
+        return MessagesController.getInstance(selectedAccount);
     }
 
     public static MessagesStorage getMessageStorage() {
-        return MessagesStorage.getInstance(UserConfig.selectedAccount);
+        return MessagesStorage.getInstance(selectedAccount);
     }
 
     public static ConnectionsManager getConnectionsManager() {
-        return ConnectionsManager.getInstance(UserConfig.selectedAccount);
+        return ConnectionsManager.getInstance(selectedAccount);
     }
 
     public static FileLoader getFileLoader() {
-        return FileLoader.getInstance(UserConfig.selectedAccount);
+        return FileLoader.getInstance(selectedAccount);
+    }
+
+    public static UserConfig getUserConfig() {
+        return UserConfig.getInstance(selectedAccount);
     }
 
     public static void addMessageToClipboard(MessageObject selectedObject, Runnable callback) {
@@ -420,5 +448,13 @@ public class ChatUtils {
         } catch (CharacterCodingException e) {
             return Base64.encodeToString(data, Base64.NO_PADDING | Base64.NO_WRAP);
         }
+    }
+
+    public void setLikeDialog(long did) {
+        ExteraConfig.editor.putLong("channelToSave" + selectedAccount, did).apply();
+    }
+
+    public long getLikeDialog() {
+        return ExteraConfig.preferences.getLong("channelToSave" + selectedAccount, getUserConfig().getClientUserId());
     }
 }

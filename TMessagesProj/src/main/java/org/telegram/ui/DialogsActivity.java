@@ -11724,7 +11724,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhite), Color.WHITE, 0.1f),
                     Theme.blendOver(Theme.getColor(Theme.key_windowBackgroundWhite), Theme.getColor(Theme.key_listSelector))
             );
-            drawable = CanvasUtils.createFabBackground(false, true);
+            drawable = CanvasUtils.createFabBackground(false, 40);
             floatingButton2Container.setBackground(drawable);
         }
     }

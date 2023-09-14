@@ -83,7 +83,7 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
     public final static int TYPE_ARCHIVE= 1;
     private static final float COLLAPSED_DIS = 18;
     private static final float ITEM_WIDTH = 70;
-    private static final int FAKE_TOP_PADDING = 8;
+    private static final int FAKE_TOP_PADDING = 4;
 
     private final int type;
     public final static int HEIGHT_IN_DP = 81;

@@ -24,8 +24,6 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 
-import com.exteragram.messenger.ExteraConfig;
-
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -35,18 +33,18 @@ import java.util.Objects;
 public class CanvasUtils {
 
     public static Drawable createFabBackground() {
-        return createFabBackground(false, false);
+        return createFabBackground(false, 56);
     }
 
     public static Drawable createFabBackground(boolean altColor) {
-        return createFabBackground(altColor, false);
+        return createFabBackground(altColor, 56);
     }
 
-    public static Drawable createFabBackground(boolean altColor, boolean small) {
-        int r = ExteraConfig.squareFab ? small ? 12 : 16 : 100;
+    public static Drawable createFabBackground(boolean altColor, int size) {
+        int r = (int) Math.ceil(16 * size / 56f);
         int c = Theme.getColor(altColor ? Theme.key_dialogFloatingButton : Theme.key_chats_actionBackground);
         int pc = Theme.getColor(altColor ? Theme.key_dialogFloatingButtonPressed : Theme.key_chats_actionPressedBackground);
-        if (small) {
+        if (r == 12) {
             c = ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhite), Color.WHITE, 0.1f);
             pc = Theme.blendOver(Theme.getColor(Theme.key_windowBackgroundWhite), Theme.getColor(Theme.key_listSelector));
         }

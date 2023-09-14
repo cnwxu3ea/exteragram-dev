@@ -73,11 +73,11 @@ public class StoriesPageView extends BaseListPageView {
                 LocaleController.getString("PremiumStoriesExpirationDescription", R.string.PremiumStoriesExpirationDescription),
                 PremiumPreviewFragment.PREMIUM_FEATURE_STORIES_EXPIRATION_DURATION
         ));
-        itemsTmp.add(new Item(VIEW_TYPE_ITEM, R.drawable.msg_stories_save,
-                LocaleController.getString("PremiumStoriesSaveToGallery", R.string.PremiumStoriesSaveToGallery),
-                LocaleController.getString("PremiumStoriesSaveToGalleryDescription", R.string.PremiumStoriesSaveToGalleryDescription),
-                PremiumPreviewFragment.PREMIUM_FEATURE_STORIES_SAVE_TO_GALLERY
-        ));
+//        itemsTmp.add(new Item(VIEW_TYPE_ITEM, R.drawable.msg_stories_save,
+//                LocaleController.getString("PremiumStoriesSaveToGallery", R.string.PremiumStoriesSaveToGallery),
+//                LocaleController.getString("PremiumStoriesSaveToGalleryDescription", R.string.PremiumStoriesSaveToGalleryDescription),
+//                PremiumPreviewFragment.PREMIUM_FEATURE_STORIES_SAVE_TO_GALLERY
+//        ));
         itemsTmp.add(new Item(VIEW_TYPE_ITEM, R.drawable.msg_stories_caption,
                 LocaleController.getString("PremiumStoriesCaption", R.string.PremiumStoriesCaption),
                 LocaleController.getString("PremiumStoriesCaptionDescription", R.string.PremiumStoriesCaptionDescription),

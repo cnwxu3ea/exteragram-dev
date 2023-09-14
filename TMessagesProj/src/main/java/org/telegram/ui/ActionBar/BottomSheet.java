@@ -65,7 +65,9 @@ import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 
+import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.camera.CameraXView;
+import com.exteragram.messenger.utils.VibratorUtils;
 
 import java.util.ArrayList;
 
@@ -1778,6 +1780,13 @@ public class BottomSheet extends Dialog {
 
         public BottomSheet show() {
             bottomSheet.show();
+
+            if (!ExteraConfig.inAppVibration) {
+                VibratorUtils.disableHapticFeedback(bottomSheet.containerView);
+                VibratorUtils.disableHapticFeedback(bottomSheet.customView);
+                VibratorUtils.disableHapticFeedback(bottomSheet.container);
+            }
+
             return bottomSheet;
         }
 

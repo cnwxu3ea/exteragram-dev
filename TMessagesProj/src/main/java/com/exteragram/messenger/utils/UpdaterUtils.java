@@ -142,7 +142,7 @@ public class UpdaterUtils {
                 uploadDate = obj.getString("published_at").replaceAll("[TZ]", " ");
                 uploadDate = LocaleController.formatDateTime(getMillisFromDate(uploadDate, "yyyy-M-dd hh:mm:ss") / 1000);
                 Update update = new Update(version, changelog, size, downloadURL, uploadDate);
-                if (update.isNew() && fragment != null) {
+                if (update.isNew() && fragment != null && fragment.getContext() != null) {
                     checkDirs();
                     AndroidUtilities.runOnUIThread(() -> {
                         (new UpdaterBottomSheet(fragment.getContext(), fragment, true, update)).show();
@@ -308,7 +308,7 @@ public class UpdaterUtils {
 
     public static class DownloadReceiver extends BroadcastReceiver {
         @Override
-        public void onReceive(Context context, Intent intent){
+        public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
                 long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 1L);

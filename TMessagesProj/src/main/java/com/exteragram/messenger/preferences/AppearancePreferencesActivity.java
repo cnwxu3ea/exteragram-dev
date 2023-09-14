@@ -15,8 +15,10 @@ import android.content.Context;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.preferences.components.AvatarCornersPreviewCell;
 import com.exteragram.messenger.preferences.components.ChatListPreviewCell;
@@ -28,6 +30,7 @@ import com.exteragram.messenger.utils.ChatUtils;
 import com.exteragram.messenger.utils.LocaleUtils;
 import com.exteragram.messenger.utils.PopupUtils;
 import com.exteragram.messenger.utils.SystemUtils;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -83,6 +86,10 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             LocaleController.getString("Default", R.string.Default),
             LocaleController.getString(R.string.BlurSmoothnessSmooth),
             LocaleController.getString(R.string.BlurSmoothnessSmoothest)
+    }, tabletMode = new CharSequence[]{
+            LocaleController.getString("DistanceUnitsAutomatic", R.string.DistanceUnitsAutomatic),
+            LocaleController.getString("PasswordOn", R.string.PasswordOn),
+            LocaleController.getString("PasswordOff", R.string.PasswordOff)
     };
 
     private int avatarCornersPreviewRow;
@@ -112,6 +119,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
     private int appearanceHeaderRow;
     private int fabShapeRow;
+    private int tabletModeRow;
     private int forceSnowRow;
     private int useSystemFontsRow;
     private int useSystemEmojiRow;
@@ -181,11 +189,12 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
         appearanceHeaderRow = newRow();
         fabShapeRow = newRow();
-        forceSnowRow = newRow();
+        tabletModeRow = newRow();
         useSystemFontsRow = newRow();
         useSystemEmojiRow = newRow();
         newSwitchStyleRow = newRow();
         disableDividersRow = newRow();
+        forceSnowRow = newRow();
         alternativeNavigationRow = newRow();
         appearanceDividerRow = newRow();
 
@@ -238,6 +247,15 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             SharedConfig.toggleUseSystemEmoji();
             ((TextCheckCell) view).setChecked(SharedConfig.useSystemEmoji);
             parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == tabletModeRow) {
+            if (getParentActivity() == null) {
+                return;
+            }
+            PopupUtils.showDialog(tabletMode, LocaleController.getString("TabletMode", R.string.TabletMode), ExteraConfig.tabletMode, getContext(), i -> {
+                ExteraConfig.editor.putInt("tabletMode", ExteraConfig.tabletMode = i).apply();
+                listAdapter.notifyItemChanged(tabletModeRow, payload);
+                showBulletin();
+            });
         } else if (position == singleCornerRadiusRow) {
             ExteraConfig.editor.putBoolean("singleCornerRadius", ExteraConfig.singleCornerRadius ^= true).apply();
             parentLayout.rebuildAllFragmentViews(false, false);
@@ -588,6 +606,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                         textSettingsCell.setTextAndValue(LocaleController.getString(R.string.TabTitleStyle), tabIcons[ExteraConfig.tabIcons], payload, true);
                     } else if (position == tabStyleRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString(R.string.TabStyle), styles[ExteraConfig.tabStyle], payload, true);
+                    } else if (position == tabletModeRow) {
+                        textSettingsCell.setTextAndValue(LocaleController.getString("TabletMode", R.string.TabletMode), tabletMode[ExteraConfig.tabletMode], payload, true);
                     }
                 }
                 case 8 -> {
@@ -650,7 +670,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                 return 2;
             } else if (position == appearanceHeaderRow || position == blurOptionsHeaderRow || position == drawerHeaderRow || position == drawerOptionsHeaderRow || position == solarIconsHeaderRow || position == foldersHeaderRow || position == chatListHeaderRow) {
                 return 3;
-            } else if (position == eventChooserRow || position == actionBarTitleRow || position == tabStyleRow || position == tabTitleRow) {
+            } else if (position == eventChooserRow || position == actionBarTitleRow || position == tabStyleRow || position == tabTitleRow || position == tabletModeRow) {
                 return 7;
             } else if (position == appearanceDividerRow || position == solarIconsInfoRow || position == foldersDividerRow || position == avatarCornersDividerRow || position == chatListDividerRow || position == blurSettingsDividerRow) {
                 return 8;

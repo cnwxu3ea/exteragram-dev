@@ -30960,7 +30960,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (headerItem != null) {
                 headerItem.updateColor();
             }
-            //setNavigationBarColor(getNavigationBarColor());
+            setNavigationBarColor(getNavigationBarColor());
             if (fragmentContextView != null) {
                 fragmentContextView.updateColors();
             }

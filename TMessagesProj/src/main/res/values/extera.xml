@@ -66,8 +66,8 @@
     <string name="BlurSmoothnessSmooth">Smooth</string>
     <string name="BlurSmoothnessSmoothest">Ultra-smooth</string>
 
-    <string name="ForceSnow">Force Snow</string>
-    <string name="ForceSnowInfo">Snow will appear in the action bar, drawer and background of chats.</string>
+    <string name="ForceSnow">Force Snowflakes</string>
+    <string name="ForceSnowInfo">Snowflakes will appear in the action bar, drawer and background of chats.</string>
     <string name="UseSystemFonts">Use System Fonts</string>
     <string name="UseSystemEmoji">Use System Emoji</string>
     <string name="NewSwitchStyle">MD3 Switch Style</string>

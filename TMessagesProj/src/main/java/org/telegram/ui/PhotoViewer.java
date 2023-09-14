@@ -6214,7 +6214,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         pickerViewSendButton = new ImageView(parentActivity);
         pickerViewSendButton.setScaleType(ImageView.ScaleType.CENTER);
-        pickerViewSendDrawable = CanvasUtils.createFabBackground(true);
+        pickerViewSendDrawable = CanvasUtils.createFabBackground(true, 48);
         pickerViewSendButton.setBackgroundDrawable(pickerViewSendDrawable);
         pickerViewSendButton.setImageResource(R.drawable.msg_input_send_mini);
         pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
@@ -8643,7 +8643,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private void playVideoOrWeb() {
         if (videoPlayer != null) {
             videoPlayer.play();
-        } else {
+        } else if (photoViewerWebView != null) {
             photoViewerWebView.playVideo();
         }
     }
@@ -8651,7 +8651,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private void pauseVideoOrWeb() {
         if (videoPlayer != null) {
             videoPlayer.pause();
-        } else {
+        } else if (photoViewerWebView != null) {
             photoViewerWebView.pauseVideo();
         }
     }

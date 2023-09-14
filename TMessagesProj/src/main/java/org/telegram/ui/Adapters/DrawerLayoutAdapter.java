@@ -320,7 +320,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 items.add(new Item(15, LocaleController.getString("SetEmojiStatus", R.string.SetEmojiStatus), R.drawable.msg_status_set));
             }
         }
-        if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled()) {
+        if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled() && ExteraConfig.myStories) {
             items.add(new Item(16, LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), R.drawable.msg_menu_stories));
         }
         TLRPC.TL_attachMenuBots menuBots = MediaDataController.getInstance(UserConfig.selectedAccount).getAttachMenuBots();

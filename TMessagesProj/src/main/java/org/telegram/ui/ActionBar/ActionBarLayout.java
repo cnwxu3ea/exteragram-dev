@@ -2531,10 +2531,10 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             return;
         }
 
-        v.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        v.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        v.setPivotX(0);
+//        v.setPivotY(0);
         v.setAlpha(1f);
-        v.setPivotX(0);
-        v.setPivotY(0);
         v.setScaleX(1);
         v.setScaleY(1);
         v.setTranslationX(0);

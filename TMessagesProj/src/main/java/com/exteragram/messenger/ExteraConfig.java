@@ -162,7 +162,6 @@ public class ExteraConfig {
             666154369,
             139303278
     };
-    public static long channelToSave;
     public static String targetLang;
     public static int voiceHintShowcases;
     public static boolean useGoogleCrashlytics;
@@ -300,7 +299,6 @@ public class ExteraConfig {
             checkUpdatesOnLaunch = preferences.getBoolean("checkUpdatesOnLaunch", true);
 
             // Other
-            channelToSave = preferences.getLong("channelToSave", 0);
             targetLang = preferences.getString("targetLang", "en");
             voiceHintShowcases = preferences.getInt("voiceHintShowcases", 0);
             useGoogleCrashlytics = preferences.getBoolean("useGoogleCrashlytics", BuildVars.isBetaApp());
@@ -389,10 +387,6 @@ public class ExteraConfig {
             case 11 -> editor.putBoolean("myStories", myStories ^= true).apply();
         }
         NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
-    }
-
-    public static void setChannelToSave(long id) {
-        editor.putLong("channelToSave", channelToSave = id).apply();
     }
 
     public static void toggleLogging() {
