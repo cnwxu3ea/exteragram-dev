@@ -29,6 +29,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -371,7 +372,7 @@ public class ChatUtils {
         return path;
     }
 
-    public static boolean hasArchivedChats() {
+    public boolean hasArchivedChats() {
         return getMessagesController().dialogs_dict.get(DialogObject.makeFolderDialogId(1)) != null;
     }
 
@@ -456,5 +457,18 @@ public class ChatUtils {
 
     public long getLikeDialog() {
         return ExteraConfig.preferences.getLong("channelToSave" + selectedAccount, getUserConfig().getClientUserId());
+    }
+
+    public boolean hasBotsInSideMenu() {
+        TLRPC.TL_attachMenuBots menuBots = MediaDataController.getInstance(selectedAccount).getAttachMenuBots();
+        if (menuBots != null && menuBots.bots != null) {
+            for (int i = 0; i < menuBots.bots.size(); i++) {
+                TLRPC.TL_attachMenuBot bot = menuBots.bots.get(i);
+                if (bot.show_in_side_menu) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

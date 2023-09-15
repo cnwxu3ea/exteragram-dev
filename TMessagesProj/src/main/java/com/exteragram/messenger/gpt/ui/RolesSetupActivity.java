@@ -156,7 +156,7 @@ public class RolesSetupActivity extends BasePreferencesActivity implements Notif
             int count = listView.getChildCount();
             for (int a = 0; a < count; a++) {
                 View child = listView.getChildAt(a);
-                if (!(child instanceof RadioButtonCell)) {
+                if (!(child instanceof RadioButtonCell radioButtonCell)) {
                     continue;
                 }
                 RecyclerView.ViewHolder holder = listView.findContainingViewHolder(child);
@@ -165,7 +165,6 @@ public class RolesSetupActivity extends BasePreferencesActivity implements Notif
                 }
                 int position = holder.getAdapterPosition();
                 ItemInner item = items.get(position);
-                RadioButtonCell radioButtonCell = (RadioButtonCell) child;
                 radioButtonCell.setChecked(item.role.isSelected(), true);
             }
         }
@@ -215,7 +214,7 @@ public class RolesSetupActivity extends BasePreferencesActivity implements Notif
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
         ItemInner item = items.get(position);
-        if (item == null || item.role.isSelected()) {
+        if (item == null || item.role == null || item.role.isSelected()) {
             return;
         }
         if (item.viewType == VIEW_TYPE_ROLE) {

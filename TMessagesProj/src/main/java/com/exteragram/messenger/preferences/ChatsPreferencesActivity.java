@@ -215,11 +215,11 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         ActionBarMenu menu = actionBar.createMenu();
         resetItem = menu.addItem(0, R.drawable.msg_reset);
         resetItem.setContentDescription(LocaleController.getString("Reset", R.string.Reset));
-        resetItem.setVisibility(ExteraConfig.stickerSize != 14.0f ? View.VISIBLE : View.GONE);
+        resetItem.setVisibility(ExteraConfig.stickerSize != 12.0f ? View.VISIBLE : View.GONE);
         resetItem.setTag(null);
         resetItem.setOnClickListener(v -> {
             AndroidUtilities.updateViewVisibilityAnimated(resetItem, false, 0.5f, true);
-            ValueAnimator animator = ValueAnimator.ofFloat(ExteraConfig.stickerSize, 14.0f);
+            ValueAnimator animator = ValueAnimator.ofFloat(ExteraConfig.stickerSize, 12.0f);
             animator.setDuration(200);
             animator.addUpdateListener(valueAnimator -> {
                 ExteraConfig.editor.putFloat("stickerSize", ExteraConfig.stickerSize = (Float) valueAnimator.getAnimatedValue()).apply();

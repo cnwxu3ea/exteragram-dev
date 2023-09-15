@@ -3197,12 +3197,23 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
+    public boolean hasTorch() {
+        if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
+            if (cameraSession != null) {
+                return cameraSession.flashAvailable();
+            }
+        } else {
+            return CameraXController.isFlashAvailable();
+        }
+        return false;
+    }
+
     public void toggleTorch() {
         if (!isFrontface || drawBlur) {
             enabled ^= true;
             flashlightButtonDrawable.setCrossOut(!enabled, true);
         }
-        if (!isFrontface) {
+        if (!isFrontface || hasTorch()) {
             if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
                 if (cameraSession != null) {
                     cameraSession.setTorchEnabled(enabled);

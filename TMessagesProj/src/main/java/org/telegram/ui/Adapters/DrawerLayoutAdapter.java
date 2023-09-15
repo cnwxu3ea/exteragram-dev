@@ -323,17 +323,19 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled() && ExteraConfig.myStories) {
             items.add(new Item(16, LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), R.drawable.msg_menu_stories));
         }
-        TLRPC.TL_attachMenuBots menuBots = MediaDataController.getInstance(UserConfig.selectedAccount).getAttachMenuBots();
-        if (menuBots != null && menuBots.bots != null) {
-            for (int i = 0; i < menuBots.bots.size(); i++) {
-                TLRPC.TL_attachMenuBot bot = menuBots.bots.get(i);
-                if (bot.show_in_side_menu) {
-                    items.add(new Item(bot));
+        if (ExteraConfig.archivedChats && ChatUtils.getInstance().hasArchivedChats()) {
+            items.add(new Item(14, LocaleController.getString("ArchivedChats", R.string.ArchivedChats), archiveIcon));
+        }
+        if (ExteraConfig.menuBots) {
+            TLRPC.TL_attachMenuBots menuBots = MediaDataController.getInstance(UserConfig.selectedAccount).getAttachMenuBots();
+            if (menuBots != null && menuBots.bots != null) {
+                for (int i = 0; i < menuBots.bots.size(); i++) {
+                    TLRPC.TL_attachMenuBot bot = menuBots.bots.get(i);
+                    if (bot.show_in_side_menu) {
+                        items.add(new Item(bot));
+                    }
                 }
             }
-        }
-        if (ExteraConfig.archivedChats && ChatUtils.hasArchivedChats()) {
-            items.add(new Item(14, LocaleController.getString("ArchivedChats", R.string.ArchivedChats), archiveIcon));
         }
         if (items.size() > 0) {
             items.add(null);

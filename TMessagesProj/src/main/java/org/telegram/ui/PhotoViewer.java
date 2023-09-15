@@ -525,13 +525,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
 
                 final boolean isLandscape = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y;
-                final int subtitleTranslation = dp((haveSubtitle ? 30 : 33) - (isLandscape ? 6 : 0) + (ExteraConfig.centerTitle ? 3 : 0));
+                final int subtitleTranslation = dp((haveSubtitle ? 30 : 33) - (isLandscape ? 6 : 0) + (ExteraConfig.centerTitle ? 2 : 1));
 
                 if (animated) {
                     ArrayList<Animator> arrayList = new ArrayList<>();
                     arrayList.add(ObjectAnimator.ofFloat(subtitleTextView, View.ALPHA, haveSubtitle ? 1 : 0));
                     arrayList.add(ObjectAnimator.ofFloat(subtitleTextView, View.TRANSLATION_Y, subtitleTranslation));
-                    arrayList.add(ObjectAnimator.ofFloat(titleLayout, View.TRANSLATION_Y, haveSubtitle ? AndroidUtilities.dp(-9 - (ExteraConfig.centerTitle ? 3 : 0)) : 0));
+                    arrayList.add(ObjectAnimator.ofFloat(titleLayout, View.TRANSLATION_Y, haveSubtitle ? AndroidUtilities.dp(-9 - (ExteraConfig.centerTitle ? 2 : 1)) : 0));
                     arrayList.add(ObjectAnimator.ofFloat(titleLayout, View.SCALE_X, haveSubtitle && !ExteraConfig.centerTitle ? .95f : 1));
                     arrayList.add(ObjectAnimator.ofFloat(titleLayout, View.SCALE_Y, haveSubtitle && !ExteraConfig.centerTitle ? .95f : 1));
                     subtitleAnimator = new AnimatorSet();
@@ -541,7 +541,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } else {
                     subtitleTextView.setAlpha(haveSubtitle ? 1 : 0);
                     subtitleTextView.setTranslationY(subtitleTranslation);
-                    titleLayout.setTranslationY(haveSubtitle ? AndroidUtilities.dp(-9 - (ExteraConfig.centerTitle ? 3 : 0)) : 0);
+                    titleLayout.setTranslationY(haveSubtitle ? AndroidUtilities.dp(-9 - (ExteraConfig.centerTitle ? 2 : 1)) : 0);
                     titleLayout.setScaleX(haveSubtitle && !ExteraConfig.centerTitle ? .95f : 1);
                     titleLayout.setScaleY(haveSubtitle && !ExteraConfig.centerTitle ? .95f : 1);
                 }

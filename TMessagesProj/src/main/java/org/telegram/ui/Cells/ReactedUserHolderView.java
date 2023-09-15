@@ -191,7 +191,7 @@ public class ReactedUserHolderView extends FrameLayout {
             reactView.setAnimatedEmojiDrawable(null);
             hasReactImage = true;
             Drawable likeDrawableFilled = ContextCompat.getDrawable(getContext(), R.drawable.media_like_active).mutate();
-            reactView.setColorFilter(new PorterDuffColorFilter(0xFFFF2E38, PorterDuff.Mode.MULTIPLY));
+            likeDrawableFilled.setColorFilter(new PorterDuffColorFilter(0xFFFF2E38, PorterDuff.Mode.MULTIPLY));
             reactView.setImageDrawable(likeDrawableFilled);
             contentDescription = LocaleController.formatString("AccDescrLike", R.string.AccDescrLike);
         } else if (reaction != null) {

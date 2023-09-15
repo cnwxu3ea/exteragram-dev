@@ -24176,7 +24176,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         icons.add(selectedObject.messageOwner.ttl_period != 0 ? R.drawable.msg_delete_auto : R.drawable.msg_delete);
                     }
                 }
-                if (ExteraConfig.showGenerateButton && allowChatActions && ChatUtils.getMessageText(selectedObject, selectedObjectGroup) != null && !noforwards && message.messageOwner.action == null) {
+                if (Config.isApiKeySet() && ExteraConfig.showGenerateButton && allowChatActions && ChatUtils.getMessageText(selectedObject, selectedObjectGroup) != null && !noforwards && message.messageOwner != null && message.messageOwner.action == null) {
                     items.add(LocaleController.getString(R.string.Generate));
                     options.add(OPTION_GENERATE);
                     icons.add(R.drawable.msg_bot);

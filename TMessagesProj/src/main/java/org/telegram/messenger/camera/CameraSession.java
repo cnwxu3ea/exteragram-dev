@@ -150,6 +150,27 @@ public class CameraSession {
         sharedPreferences.edit().putString(cameraInfo.frontCamera != 0 ? "flashMode_front" : "flashMode", mode).apply();
     }
 
+    public boolean flashAvailable() {
+        if (cameraInfo.camera == null) {
+            return false;
+        }
+
+        Camera.Parameters params = null;
+        try {
+            params = cameraInfo.camera.getParameters();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
+        if (params == null || params.getFlashMode() == null) {
+            return false;
+        }
+
+        List<String> supportedFlashModes = params.getSupportedFlashModes();
+
+        return supportedFlashModes != null && !supportedFlashModes.isEmpty() && (supportedFlashModes.size() != 1 || !supportedFlashModes.get(0).equals(Camera.Parameters.FLASH_MODE_OFF));
+    }
+
     public void setTorchEnabled(boolean enabled) {
         try {
             useTorch = enabled;

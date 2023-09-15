@@ -70,7 +70,7 @@ public class ExteraConfig {
 
     public static int eventType;
     public static boolean alternativeOpenAnimation;
-    public static boolean changeStatus, myStories, newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr;
+    public static boolean changeStatus, myStories, menuBots, newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr;
 
     // General
     public static int cameraType;
@@ -194,7 +194,7 @@ public class ExteraConfig {
             formatTimeWithSeconds = preferences.getBoolean("formatTimeWithSeconds", false);
             inAppVibration = preferences.getBoolean("inAppVibration", true);
             filterZalgo = preferences.getBoolean("filterZalgo", true);
-            tabletMode = 0; // preferences.getInt("tabletMode", 0);
+            tabletMode = preferences.getInt("tabletMode", 0);
 
             downloadSpeedBoost = preferences.getInt("downloadSpeedBoost", 0);
             uploadSpeedBoost = preferences.getBoolean("uploadSpeedBoost", false);
@@ -241,6 +241,7 @@ public class ExteraConfig {
 
             changeStatus = preferences.getBoolean("changeStatus", true);
             myStories = preferences.getBoolean("myStories", true);
+            menuBots = preferences.getBoolean("menuBots", true);
             newGroup = preferences.getBoolean("newGroup", true);
             newSecretChat = preferences.getBoolean("newSecretChat", false);
             newChannel = preferences.getBoolean("newChannel", false);
@@ -252,7 +253,7 @@ public class ExteraConfig {
             scanQr = preferences.getBoolean("scanQr", true);
 
             // Chats
-            stickerSize = preferences.getFloat("stickerSize", 14.0f);
+            stickerSize = preferences.getFloat("stickerSize", 12.0f);
             stickerShape = preferences.getInt("stickerShape", 1);
 
             hideStickerTime = preferences.getBoolean("hideStickerTime", false);
@@ -385,6 +386,7 @@ public class ExteraConfig {
             case 9 -> editor.putBoolean("scanQr", scanQr ^= true).apply();
             case 10 -> editor.putBoolean("changeStatus", changeStatus ^= true).apply();
             case 11 -> editor.putBoolean("myStories", myStories ^= true).apply();
+            case 12 -> editor.putBoolean("menuBots", menuBots ^= true).apply();
         }
         NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
     }

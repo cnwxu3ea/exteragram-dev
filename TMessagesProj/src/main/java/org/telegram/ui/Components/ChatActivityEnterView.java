@@ -3716,7 +3716,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             sendPopupLayout.setShownFromBottom(false);
 
             if (parentFragment != null) {
-                if (!Config.isApiKeySet()) {
+                final boolean hidden = Config.preferences.getBoolean("gpt_hint_hidden", false);
+                if (!Config.isApiKeySet() && !hidden) {
+                    FrameLayout hintView = new FrameLayout(getContext());
+
                     TextView textView = new LinkSpanDrawable.LinksTextView(getContext());
                     textView.setTag(R.id.fit_width_tag, 1);
                     textView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_REGULAR));
@@ -3734,8 +3737,23 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     });
                     textView.setMaxWidth(AndroidUtilities.dp(260));
                     textView.setText(LocaleController.getString(R.string.TapToAddApiKey));
-                    sendPopupLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
-                } else {
+                    hintView.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 44, 0));
+
+                    ImageView closeButton = new ImageView(getContext());
+                    closeButton.setImageResource(R.drawable.miniplayer_close);
+                    closeButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarDefaultSubmenuItemIcon), PorterDuff.Mode.MULTIPLY));
+                    closeButton.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_dialogButtonSelector), 1, AndroidUtilities.dp(14)));
+                    closeButton.setScaleType(ImageView.ScaleType.CENTER);
+                    closeButton.setOnClickListener(v -> {
+                        if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                            sendPopupWindow.dismiss();
+                            sendPopupLayout = null;
+                        }
+                        Config.editor.putBoolean("gpt_hint_hidden", true).apply();
+                    });
+                    hintView.addView(closeButton, LayoutHelper.createFrame(36, 36, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 2, 0));
+                    sendPopupLayout.addView(hintView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+                } else if (Config.isApiKeySet()) {
                     final ImageView[] buttons = new ImageView[3];
                     FrameLayout buttonsView = new FrameLayout(getContext()) {
                         @Override
@@ -3803,11 +3821,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         });
                     }
                 }
-                FrameLayout gapView = new FrameLayout(getContext());
-                ImageView frame = new ImageView(getContext());
-                frame.setBackgroundColor(getThemedColor(Theme.key_actionBarDefaultSubmenuSeparator));
-                gapView.addView(frame, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-                sendPopupLayout.addView(gapView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
+                if (Config.isApiKeySet() || !Config.isApiKeySet() && !hidden) {
+                    FrameLayout gapView = new FrameLayout(getContext());
+                    ImageView frame = new ImageView(getContext());
+                    frame.setBackgroundColor(getThemedColor(Theme.key_actionBarDefaultSubmenuSeparator));
+                    gapView.addView(frame, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+                    sendPopupLayout.addView(gapView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
+                }
             }
 
             boolean scheduleButtonValue = parentFragment != null && parentFragment.canScheduleMessage();

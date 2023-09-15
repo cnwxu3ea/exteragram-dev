@@ -23,6 +23,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -201,7 +202,7 @@ public class Client {
 
                     FileLog.e("GPT ERROR: " + errorMessage + " " + errorCode);
 
-                    if (fragment != null) {
+                    if (fragment != null && testKey == null) {
                         AndroidUtilities.runOnUIThread(() -> showErrorBulletin(errorCode, errorMessage.toLowerCase(Locale.ROOT)));
                     }
                 }
@@ -235,7 +236,7 @@ public class Client {
                 icon = 3;
                 title = R.string.GPTError401;
                 subtitle = R.string.GPTError401Info;
-                button = LocaleController.getString("Settings", R.string.Settings);
+                button = LocaleController.getString("Open", R.string.Open);
                 onButtonClick = () -> fragment.presentFragment(new EditKeyActivity());
             }
             case 429 -> {
@@ -247,6 +248,8 @@ public class Client {
                     icon = 3;
                     title = R.string.GPTError429Quota;
                     subtitle = R.string.GPTError429QuotaInfo;
+                    button = LocaleController.getString("Open", R.string.Open);
+                    onButtonClick = () -> Browser.openUrl(fragment.getParentActivity(), "https://platform.openai.com/account/usage");
                 }
             }
             case 503 -> {
