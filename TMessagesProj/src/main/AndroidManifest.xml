@@ -326,6 +326,44 @@
         </activity-alias>
 
         <activity-alias
+            android:name="com.exteragram.messenger.SapphireIcon"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_sapphire"
+            android:roundIcon="@mipmap/ic_launcher_sapphire"
+            android:targetActivity="org.telegram.ui.LaunchActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity-alias>
+
+        <activity-alias
+            android:name="com.exteragram.messenger.OriginsIcon"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_origins"
+            android:roundIcon="@mipmap/ic_launcher_origins"
+            android:targetActivity="org.telegram.ui.LaunchActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity-alias>
+
+        <activity-alias
             android:name="com.exteragram.messenger.SusIcon"
             android:enabled="false"
             android:exported="true"

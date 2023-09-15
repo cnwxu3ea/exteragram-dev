@@ -42,11 +42,13 @@ public class LauncherIconController {
 
     public enum LauncherIcon {
         DEFAULT("DefaultIcon", BuildVars.isBetaApp() ? R.mipmap.ic_background_beta : R.color.ic_background, BuildVars.isBetaApp() ? R.mipmap.ic_foreground_beta : R.drawable.ic_foreground, R.string.AppIconDefault),
+        ORIGINS("OriginsIcon", R.color.ic_background, R.mipmap.ic_foreground_origins, R.string.AppIconOrigins),
         MONET("MonetIcon", R.color.ic_background_monet, R.drawable.ic_foreground_monet, R.string.AppIconMonet, Build.VERSION.SDK_INT < 31 || Build.VERSION.SDK_INT > 32),
         GRADIENT("GradientIcon", R.mipmap.ic_background_gradient, R.drawable.ic_foreground_white, R.string.AppIconGradient),
         AURORA("AuroraIcon", R.mipmap.ic_background_aurora, R.drawable.ic_foreground_white, R.string.AppIconAurora),
         NEO("NeoIcon", R.mipmap.ic_background_neo, R.mipmap.ic_foreground_neo, R.string.AppIconNeo),
         GOOGLE("GoogleIcon", R.color.white, R.mipmap.ic_foreground_google, R.string.AppIconGoogle),
+        SAPPHIRE("SapphireIcon", R.mipmap.ic_background_sapphire, R.mipmap.ic_foreground_sapphire, R.string.AppIconSapphire),
         AMETHYST("AmethystIcon", R.mipmap.ic_background_amethyst, R.mipmap.ic_foreground_amethyst, R.string.AppIconAmethyst),
         DSGN480("Dsgn480Icon", R.mipmap.ic_background_480dsgn, R.mipmap.ic_foreground_480dsgn, R.string.AppIcon480DSGN),
         ORBIT("OrbitIcon", R.color.ic_background, R.mipmap.ic_foreground_orbit, R.string.AppIconOrbit),

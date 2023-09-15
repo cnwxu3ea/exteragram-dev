@@ -279,12 +279,14 @@
 
     <string name="PhotoEditorTypefaceImpact" translatable="false">Impact</string>
 
+    <string name="AppIconOrigins">Origins</string>
     <string name="AppIconMonet" translatable="false">Monet</string>
     <string name="AppIconGradient">Gradient</string>
     <string name="AppIconAurora">Aurora</string>
     <string name="AppIconNeo">Neo</string>
     <string name="AppIconGoogle" translatable="false">Google</string>
     <string name="AppIconAmethyst">Amethyst</string>
+    <string name="AppIconSapphire">Sapphire</string>
     <string name="AppIcon480DSGN" translatable="false">480 DSGN</string>
     <string name="AppIconSpace">Space</string>
     <string name="AppIconOrbit">Orbit</string>
