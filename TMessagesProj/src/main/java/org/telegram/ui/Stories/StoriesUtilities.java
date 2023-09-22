@@ -25,6 +25,7 @@ import androidx.core.graphics.ColorUtils;
 import com.exteragram.messenger.ExteraConfig;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
@@ -185,7 +186,7 @@ public class StoriesUtilities {
         if (progressToSate != 1f) {
             progressToSate = CubicBezierInterpolator.DEFAULT.getInterpolation(progressToSate);
         }
-        float insetTo = params.isStoryCell ? 0 : AndroidUtilities.lerp(
+        float insetTo = params.isStoryCell && !params.drawInside ? 0 : AndroidUtilities.lerp(
                 getInset(params.prevState, params.animateFromUnreadState),
                 getInset(params.currentState, params.animateFromUnreadState),
                 params.progressToSate
@@ -208,7 +209,7 @@ public class StoriesUtilities {
             }
             boolean animateOut = params.prevState == STATE_HAS_UNREAD && params.progressToSate != 1f;
 
-            float inset = params.isStoryCell ? -AndroidUtilities.dp(4) : 0;//AndroidUtilities.lerp(AndroidUtilities.dp(2), 0, imageScale);
+            float inset = params.isStoryCell && !params.drawInside ? -AndroidUtilities.dp(4) : 0;//AndroidUtilities.lerp(AndroidUtilities.dp(2), 0, imageScale);
             if (animateOut) {
                 inset += AndroidUtilities.dp(5) * progressToSate;
                 gradientTools.paint.setAlpha((int) (0xFF * params.alpha * (1f - progressToSate)));
@@ -242,9 +243,9 @@ public class StoriesUtilities {
             }
             float inset;
             if (params.drawSegments) {
-                inset = params.isStoryCell ? -AndroidUtilities.dpf2(3.5f) : 0;
+                inset = params.isStoryCell && !params.drawInside ? -AndroidUtilities.dpf2(3.5f) : 0;
             } else {
-                inset = params.isStoryCell ? -AndroidUtilities.dpf2(2.7f) : 0;
+                inset = params.isStoryCell && !params.drawInside ? -AndroidUtilities.dpf2(2.7f) : 0;
             }
             if (animateOut) {
                 inset += AndroidUtilities.dp(5) * progressToSate;
@@ -288,9 +289,9 @@ public class StoriesUtilities {
             }
             float inset;
             if (params.drawSegments) {
-                inset = params.isStoryCell ? -AndroidUtilities.dpf2(3.5f) : 0;
+                inset = params.isStoryCell && !params.drawInside ? -AndroidUtilities.dpf2(3.5f) : 0;
             } else {
-                inset = params.isStoryCell ? -AndroidUtilities.dpf2(2.7f) : 0;
+                inset = params.isStoryCell && !params.drawInside ? -AndroidUtilities.dpf2(2.7f) : 0;
             }
             boolean animateOut = params.prevState == STATE_PROGRESS && params.progressToSate != 1f;
             if (animateOut) {
@@ -356,7 +357,10 @@ public class StoriesUtilities {
         }
 
         params.globalState = globalState == StoriesController.STATE_READ ? STATE_READ : STATE_HAS_UNREAD;
-        TLRPC.TL_userStories userStories = storiesController.getStories(params.dialogId);
+        TLRPC.PeerStories userStories = storiesController.getStories(params.dialogId);
+        if (userStories == null) {
+            userStories = storiesController.getStoriesFromFullPeer(params.dialogId);
+        }
         int storiesCount;
         if (params.drawHiddenStoriesAsSegments) {
             storiesCount = storiesController.getHiddenList().size();
@@ -373,7 +377,7 @@ public class StoriesUtilities {
         } else {
             globalPaint = params.isStoryCell ? storyCellGreyPaint[params.isArchive ? 1 : 0] : grayPaint;
         }
-        if (storiesCount == 1) {
+        if (storiesCount <= 1) {
             Paint localPaint = paint;
             if (storiesController.hasUnreadStories(params.dialogId)) {
                 localPaint = unreadPaint;
@@ -409,7 +413,7 @@ public class StoriesUtilities {
             for (int i = 0; i < storiesCount; i++) {
                 Paint segmentPaint = params.isStoryCell ? storyCellGreyPaint[params.isArchive ? 1 : 0] : grayPaint;
                 if (params.drawHiddenStoriesAsSegments) {
-                    int userUnreadState = storiesController.getUnreadState(storiesController.getHiddenList().get(storiesCount - 1 - i).user_id);
+                    int userUnreadState = storiesController.getUnreadState(DialogObject.getPeerDialogId(storiesController.getHiddenList().get(storiesCount - 1 - i).peer));
                     if (userUnreadState == StoriesController.STATE_UNREAD_CLOSE_FRIEND) {
                         segmentPaint = closeFriendsPaint;
                     } else if (userUnreadState == STATE_UNREAD) {
@@ -443,16 +447,33 @@ public class StoriesUtilities {
     }
 
     private static int getPredictiveUnreadState(StoriesController storiesController, long dialogId) {
-        TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(dialogId);
-        if (dialogId != UserConfig.getInstance(UserConfig.selectedAccount).clientUserId && user != null && user.stories_max_id > 0 && !user.stories_unavailable) {
-            int maxReadId = storiesController.dialogIdToMaxReadId.get(dialogId, 0);
-            if (user.stories_max_id > maxReadId) {
-                return STATE_HAS_UNREAD;
+        if (dialogId == 0) {
+            return STATE_EMPTY;
+        }
+        if (dialogId > 0) {
+            TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(dialogId);
+            if (dialogId != UserConfig.getInstance(UserConfig.selectedAccount).clientUserId && user != null && user.stories_max_id > 0 && !user.stories_unavailable) {
+                int maxReadId = storiesController.dialogIdToMaxReadId.get(dialogId, 0);
+                if (user.stories_max_id > maxReadId) {
+                    return STATE_HAS_UNREAD;
+                } else {
+                    return STATE_READ;
+                }
             } else {
-                return STATE_READ;
+                return STATE_EMPTY;
             }
         } else {
-            return STATE_EMPTY;
+            TLRPC.Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(-dialogId);
+            if (chat != null && chat.stories_max_id > 0 && !chat.stories_unavailable) {
+                int maxReadId = storiesController.dialogIdToMaxReadId.get(dialogId, 0);
+                if (chat.stories_max_id > maxReadId) {
+                    return STATE_HAS_UNREAD;
+                } else {
+                    return STATE_READ;
+                }
+            } else {
+                return STATE_EMPTY;
+            }
         }
     }
 
@@ -639,6 +660,23 @@ public class StoriesUtilities {
         return errorGradientTools.paint;
     }
 
+    public static Paint getErrorPaint(RectF rect) {
+        if (errorGradientTools == null) {
+            errorGradientTools = new GradientTools();
+            errorGradientTools.isDiagonal = true;
+            errorGradientTools.isRotate = true;
+            int orange = Theme.getColor(Theme.key_color_orange);
+            final int red = Theme.getColor(Theme.key_text_RedBold);
+            orange = ColorUtils.blendARGB(orange, red, .25f);
+            errorGradientTools.setColors(orange, red);
+            errorGradientTools.paint.setStrokeWidth(AndroidUtilities.dpf2(2.3f));
+            errorGradientTools.paint.setStyle(Paint.Style.STROKE);
+            errorGradientTools.paint.setStrokeCap(Paint.Cap.ROUND);
+        }
+        errorGradientTools.setBounds(rect.left, rect.top, rect.right, rect.bottom);
+        return errorGradientTools.paint;
+    }
+
     public static void setStoryMiniImage(ImageReceiver imageReceiver, TLRPC.StoryItem storyItem) {
         if (storyItem == null) {
             return;
@@ -668,15 +706,18 @@ public class StoriesUtilities {
         if (storyItem.media != null && storyItem.media.document != null) {
             TLRPC.PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(storyItem.media.document.thumbs, Integer.MAX_VALUE);
             imageReceiver.setImage(ImageLocation.getForDocument(size, storyItem.media.document), filter, null, null, ImageLoader.createStripedBitmap(storyItem.media.document.thumbs), 0, null, storyItem, 0);
+            imageReceiver.addDecorator(new StoryWidgetsImageDecorator(storyItem));
         } else {
             TLRPC.Photo photo = storyItem.media != null ? storyItem.media.photo : null;
             if (storyItem.media instanceof TLRPC.TL_messageMediaUnsupported) {
                 Bitmap bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
                 bitmap.eraseColor(ColorUtils.blendARGB(Color.BLACK, Color.WHITE, 0.2f));
                 imageReceiver.setImageBitmap(bitmap);
+                imageReceiver.addDecorator(new StoryWidgetsImageDecorator(storyItem));
             } else if (photo != null && photo.sizes != null) {
                 TLRPC.PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, Integer.MAX_VALUE);
                 imageReceiver.setImage(null, null, ImageLocation.getForPhoto(size, photo), filter, null, null, ImageLoader.createStripedBitmap(photo.sizes), 0, null, storyItem, 0);
+                imageReceiver.addDecorator(new StoryWidgetsImageDecorator(storyItem));
             } else {
                 imageReceiver.clearImage();
             }
@@ -874,14 +915,14 @@ public class StoriesUtilities {
         }
     }
 
-    public static EnsureStoryFileLoadedObject ensureStoryFileLoaded(TLRPC.TL_userStories stories, Runnable onDoneOrTimeout) {
-        if (stories == null || stories.stories.isEmpty() || stories.user_id == UserConfig.getInstance(UserConfig.selectedAccount).clientUserId) {
+    public static EnsureStoryFileLoadedObject ensureStoryFileLoaded(TLRPC.PeerStories stories, Runnable onDoneOrTimeout) {
+        if (stories == null || stories.stories.isEmpty() || DialogObject.getPeerDialogId(stories.peer) == UserConfig.getInstance(UserConfig.selectedAccount).clientUserId) {
             onDoneOrTimeout.run();
             return null;
         }
         TLRPC.StoryItem storyItem = null;
         StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).storiesController;
-        int maxReadId = storiesController.dialogIdToMaxReadId.get(stories.user_id);
+        int maxReadId = storiesController.dialogIdToMaxReadId.get(DialogObject.getPeerDialogId(stories.peer));
 
         for (int i = 0; i < stories.stories.size(); i++) {
             if (stories.stories.get(i).id > maxReadId) {
@@ -929,7 +970,7 @@ public class StoriesUtilities {
             }
         }
 
-        EnsureStoryFileLoadedObject ensureStoryFileLoadedObject = new EnsureStoryFileLoadedObject(storiesController, stories.user_id);
+        EnsureStoryFileLoadedObject ensureStoryFileLoadedObject = new EnsureStoryFileLoadedObject(storiesController, DialogObject.getPeerDialogId(stories.peer));
         ensureStoryFileLoadedObject.runnable = () -> {
             if (ensureStoryFileLoadedObject.cancelled) {
                 return;
@@ -997,6 +1038,7 @@ public class StoriesUtilities {
         public float crossfadeToDialogProgress;
         public float progressToProgressSegments;
         public float alpha = 1f;
+        public boolean drawInside;
 
         private long dialogId;
         public int currentState;
@@ -1055,12 +1097,22 @@ public class StoriesUtilities {
             child = view;
             StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
             if (event.getAction() == MotionEvent.ACTION_DOWN && originalAvatarRect.contains(event.getX(), event.getY())) {
-                TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(dialogId);
+                TLRPC.User user = null;
+                TLRPC.Chat chat = null;
+                if (dialogId > 0) {
+                    user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(dialogId);
+                } else {
+                    chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(-dialogId);
+                }
                 boolean hasStories;
                 if (drawHiddenStoriesAsSegments) {
                     hasStories = storiesController.hasHiddenStories();
                 } else {
-                    hasStories = (MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController().hasStories(dialogId) || user != null && !user.stories_unavailable && user.stories_max_id > 0);
+                    if (dialogId > 0) {
+                        hasStories = (MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController().hasStories(dialogId) || user != null && !user.stories_unavailable && user.stories_max_id > 0);
+                    } else {
+                        hasStories = (MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController().hasStories(dialogId) || chat != null && !chat.stories_unavailable && chat.stories_max_id > 0);
+                    }
                 }
                 if (dialogId != UserConfig.getInstance(UserConfig.selectedAccount).clientUserId && hasStories) {
                     if (buttonBounce == null) {
@@ -1140,11 +1192,20 @@ public class StoriesUtilities {
                     openStory(dialogId, null);
                     return;
                 }
-                TLRPC.User user = messagesController.getUser(dialogId);
-                if (user != null && !user.stories_unavailable && user.stories_max_id > 0) {
-                    UserStoriesLoadOperation operation = new UserStoriesLoadOperation();
-                    operation.load(dialogId, view, this);
-                    return;
+                if (dialogId > 0) {
+                    TLRPC.User user = messagesController.getUser(dialogId);
+                    if (user != null && !user.stories_unavailable && user.stories_max_id > 0) {
+                        UserStoriesLoadOperation operation = new UserStoriesLoadOperation();
+                        operation.load(dialogId, view, this);
+                        return;
+                    }
+                } else {
+                    TLRPC.Chat chat = messagesController.getChat(-dialogId);
+                    if (chat != null && !chat.stories_unavailable && chat.stories_max_id > 0) {
+                        UserStoriesLoadOperation operation = new UserStoriesLoadOperation();
+                        operation.load(dialogId, view, this);
+                        return;
+                    }
                 }
             }
         }
@@ -1197,17 +1258,16 @@ public class StoriesUtilities {
             storiesController.setLoading(dialogId, true);
             view.invalidate();
 
-            TLRPC.User user = messagesController.getUser(dialogId);
-
-            TLRPC.TL_stories_getUserStories req = new TLRPC.TL_stories_getUserStories();
-            req.user_id = MessagesController.getInstance(currentAccount).getInputUser(dialogId);
+            TLRPC.TL_stories_getPeerStories req = new TLRPC.TL_stories_getPeerStories();
+            req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
             reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                 boolean openned = false;
                 boolean finished = true;
                 if (response != null) {
-                    TLRPC.TL_stories_userStories stories_userStories = (TLRPC.TL_stories_userStories) response;
+                    TLRPC.TL_stories_peerStories stories_userStories = (TLRPC.TL_stories_peerStories) response;
                     MessagesController.getInstance(currentAccount).putUsers(stories_userStories.users, false);
-                    TLRPC.TL_userStories stories = stories_userStories.stories;
+                    MessagesController.getInstance(currentAccount).putChats(stories_userStories.chats, false);
+                    TLRPC.PeerStories stories = stories_userStories.stories;
                     if (!stories.stories.isEmpty()) {
                         MessagesController.getInstance(currentAccount).getStoriesController().putStories(dialogId, stories);
                         finished = false;
@@ -1221,10 +1281,23 @@ public class StoriesUtilities {
                     }
                 }
                 if (!openned) {
-                    TLRPC.User user2 = messagesController.getUser(dialogId);
-                    user2.stories_unavailable = true;
-                    MessagesStorage.getInstance(currentAccount).putUsersAndChats(Collections.singletonList(user2), null, false, true);
-                    messagesController.putUser(user2, false);
+                    if (dialogId > 0) {
+                        TLRPC.User user2 = messagesController.getUser(dialogId);
+                        if (user2 != null) {
+                            user2.stories_unavailable = true;
+                            MessagesStorage.getInstance(currentAccount).putUsersAndChats(Collections.singletonList(user2), null, false, true);
+                            messagesController.putUser(user2, false);
+                        }
+                    }
+
+                    if (dialogId < 0) {
+                        TLRPC.Chat chat = messagesController.getChat(-dialogId);
+                        if (chat != null) {
+                            chat.stories_unavailable = true;
+                            MessagesStorage.getInstance(currentAccount).putUsersAndChats(null, Collections.singletonList(chat), false, true);
+                            messagesController.putChat(chat, false);
+                        }
+                    }
                 }
 
                 if (finished) {

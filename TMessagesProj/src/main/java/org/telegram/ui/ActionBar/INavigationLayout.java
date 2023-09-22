@@ -279,6 +279,10 @@ public interface INavigationLayout {
         return null;
     }
 
+    void setIsSheet(boolean isSheet);
+
+    boolean isSheet();
+
     interface INavigationLayoutDelegate {
         @SuppressWarnings("deprecation")
         default boolean needPresentFragment(INavigationLayout layout, NavigationParams params) {

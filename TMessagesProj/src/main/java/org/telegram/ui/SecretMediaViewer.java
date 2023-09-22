@@ -1646,9 +1646,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (photoAnimationEndRunnable != null) {
-                    Runnable r = photoAnimationEndRunnable;
+                    photoAnimationEndRunnable.run();
                     photoAnimationEndRunnable = null;
-                    r.run();
                 }
             }
         });
@@ -1960,9 +1959,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         if (photoAnimationInProgress != 0) {
             if (Math.abs(photoTransitionAnimationStartTime - System.currentTimeMillis()) >= 500) {
                 if (photoAnimationEndRunnable != null) {
-                    Runnable r = photoAnimationEndRunnable;
+                    photoAnimationEndRunnable.run();
                     photoAnimationEndRunnable = null;
-                    r.run();
                 }
                 photoAnimationInProgress = 0;
             }
@@ -2111,9 +2109,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                     isVisible = false;
                     AndroidUtilities.runOnUIThread(() -> {
                         if (photoAnimationEndRunnable != null) {
-                            Runnable r = photoAnimationEndRunnable;
+                            photoAnimationEndRunnable.run();
                             photoAnimationEndRunnable = null;
-                            r.run();
                         }
                     });
                 }
@@ -2151,9 +2148,8 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     if (photoAnimationEndRunnable != null) {
-                        Runnable r = photoAnimationEndRunnable;
+                        photoAnimationEndRunnable.run();
                         photoAnimationEndRunnable = null;
-                        r.run();
                     }
                 }
             });
