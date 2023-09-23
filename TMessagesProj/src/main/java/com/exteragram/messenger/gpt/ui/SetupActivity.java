@@ -219,9 +219,15 @@ public class SetupActivity extends BasePreferencesActivity {
             presentFragment(new RolesSetupActivity());
         } else if (position == saveHistoryRow) {
             Config.editor.putBoolean("saveHistory", Config.saveHistory ^= true).apply();
+            if (!Config.saveHistory) {
+                Config.clearConversationHistory();
+            }
             ((TextCell) view).setChecked(Config.saveHistory);
         } else if (position == use16KModelRow) {
             Config.editor.putBoolean("use16KModel", Config.use16KModel ^= true).apply();
+            if (!Config.use16KModel) {
+                Config.clearConversationHistory();
+            }
             ((TextCheckCell) view).setChecked(Config.use16KModel);
         } else if (position == responseStreamingRow) {
             Config.editor.putBoolean("responseStreaming", Config.responseStreaming ^= true).apply();

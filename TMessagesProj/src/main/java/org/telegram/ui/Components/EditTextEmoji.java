@@ -618,7 +618,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
         if (emojiView != null) {
             return;
         }
-        emojiView = new EmojiView(parentFragment, allowAnimatedEmoji, false, false, getContext(), false, null, null, currentStyle != STYLE_STORY, resourcesProvider) {
+        emojiView = new EmojiView(parentFragment, allowAnimatedEmoji && UserConfig.getInstance(UserConfig.selectedAccount).isPremium(), false, false, getContext(), false, null, null, currentStyle != STYLE_STORY, resourcesProvider) {
             @Override
             protected void dispatchDraw(Canvas canvas) {
                 if (currentStyle == STYLE_STORY) {

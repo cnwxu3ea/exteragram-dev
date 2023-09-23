@@ -225,7 +225,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     private ExteraResources res = null;
     @Override
     public Resources getResources() {
-        return res == null ? res = new ExteraResources(getResources()) : res;
+        return res == null ? res = new ExteraResources(super.getResources()) : res;
     }
     public void reloadIcons() {
         res.getActiveIconPack();

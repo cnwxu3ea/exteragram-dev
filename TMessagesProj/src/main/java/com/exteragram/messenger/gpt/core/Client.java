@@ -20,6 +20,7 @@ import com.exteragram.messenger.gpt.ui.EditKeyActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -42,6 +43,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Client {
+
+    public static volatile DispatchQueue gptQueue = new DispatchQueue("gptQueue");
 
     private ExecutorService executor;
     private HttpURLConnection connection;
@@ -214,8 +217,8 @@ public class Client {
                 if (callback != null) {
                     callback.onResponse(finalResponse);
                 }
-                stop();
             }, 10);
+            stop();
         });
     }
 
@@ -230,7 +233,7 @@ public class Client {
                 title = R.string.GPTError400;
                 subtitle = R.string.GPTError400Info;
                 button = LocaleController.getString("Clear", R.string.Clear);
-                onButtonClick = this::clearHistory;
+                onButtonClick = () -> clearHistory(false);
             }
             case 401 -> {
                 icon = 3;
@@ -305,33 +308,40 @@ public class Client {
         return isGenerating;
     }
 
-    public void clearHistory() {
+    public void clearHistory(boolean confirm) {
         if (fragment == null) {
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString(R.string.ClearConversationHistoryInfo)));
-        builder.setTitle(LocaleController.getString("ClearHistory", R.string.ClearHistory));
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton), (dialog, which) -> {
+        if (confirm) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString(R.string.ClearConversationHistoryInfo)));
+            builder.setTitle(LocaleController.getString("ClearHistory", R.string.ClearHistory));
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton), (dialog, which) -> {
+                Config.clearConversationHistory();
+                BulletinFactory.of(fragment).createSimpleBulletin(R.raw.ic_delete, LocaleController.getString("HistoryCleared", R.string.HistoryCleared)).show();
+            });
+            AlertDialog dialog = builder.create();
+            fragment.showDialog(dialog);
+            TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            if (button != null) {
+                button.setTextColor(Theme.getColor(Theme.key_text_RedBold));
+            }
+        } else {
             Config.clearConversationHistory();
             BulletinFactory.of(fragment).createSimpleBulletin(R.raw.ic_delete, LocaleController.getString("HistoryCleared", R.string.HistoryCleared)).show();
-        });
-        AlertDialog dialog = builder.create();
-        fragment.showDialog(dialog);
-        TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        if (button != null) {
-            button.setTextColor(Theme.getColor(Theme.key_text_RedBold));
         }
     }
 
     public void stop() {
-        if (executor == null) {
-            return;
-        }
-
-        executor.shutdownNow();
-        connection.disconnect();
+        gptQueue.postRunnable(() -> {
+            if (executor != null) {
+                executor.shutdownNow();
+            }
+            if (connection != null) {
+                connection.disconnect();
+            }
+        });
 
         isGenerating = false;
 
@@ -339,9 +349,11 @@ public class Client {
             testKey = null;
         }
 
-        if (onStartFinishRunnable != null) {
-            onStartFinishRunnable.run();
-        }
+        AndroidUtilities.runOnUIThread(() -> {
+            if (onStartFinishRunnable != null) {
+                onStartFinishRunnable.run();
+            }
+        });
     }
 }
 

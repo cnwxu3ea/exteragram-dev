@@ -3816,7 +3816,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                     sendPopupLayout = null;
                                 }, 50);
                             } else {
-                                client.clearHistory();
+                                client.clearHistory(true);
                             }
                         });
                     }
@@ -4809,7 +4809,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
             }
         }
-        allowAnimatedEmoji = needAnimatedEmoji && UserConfig.getInstance(currentAccount).isPremium();
+        allowAnimatedEmoji = needAnimatedEmoji && (UserConfig.getInstance(currentAccount).isPremium() || parentFragment != null && UserObject.isUserSelf(parentFragment.getCurrentUser()));
         allowStickers = needStickers;
         allowGifs = needGifs;
         if (emojiView != null) {
