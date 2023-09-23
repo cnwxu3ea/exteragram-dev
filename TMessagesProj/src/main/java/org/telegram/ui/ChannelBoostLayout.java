@@ -303,6 +303,7 @@ public class ChannelBoostLayout extends FrameLayout {
             usersLoading = false;
             if (response != null) {
                 TLRPC.TL_stories_boostersList list = (TLRPC.TL_stories_boostersList) response;
+                MessagesController.getInstance(currentAccount).putUsers(list.users, false);
                 boosters.addAll(list.boosters);
                 hasNext = !TextUtils.isEmpty(list.next_offset) && boosters.size() < list.count;
                 nextRemaining = list.count - boosters.size();
