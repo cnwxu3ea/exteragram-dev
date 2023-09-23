@@ -483,15 +483,7 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
             Collections.sort(circles, (a, b) -> (int) (b.cachedIndex - a.cachedIndex));
         }
 
-        final float segmentsAlpha = clamp(1f - expandProgress / 0.2f, 1, 0);
-        float segmentsCount = segmentsCountAnimated.set(count);
-        float segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount);
-
-        if (ExteraConfig.avatarCorners == 28) {
-            count = 1;
-            segmentsCount = segmentsCountAnimated.set(1);
-            segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount > 0 ? 1 : 0);
-        }
+        float segmentsAlpha = clamp(1f - expandProgress / 0.2f, 1, 0);
         
         boolean isFailed = storiesController.isLastUploadingFailed(dialogId);
         boolean isUploading = (storiesController.hasUploadingStories(dialogId) && !isFailed) || progressWasDrawn && !progressIsDone;
@@ -538,8 +530,14 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
         }
         if (progressToUploading < 1f) {
             segmentsAlpha = clamp(1f - expandProgress / 0.2f, 1, 0) * (1f - progressToUploading);
-            final float segmentsCount = segmentsCountAnimated.set(count);
-            final float segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount);
+            float segmentsCount = segmentsCountAnimated.set(count);
+            float segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount);
+
+            if (ExteraConfig.avatarCorners != 28) {
+                count = 1;
+                segmentsCount = segmentsCountAnimated.set(1);
+                segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount > 0 ? 1 : 0);
+            }
 
             storiesGradientTools.setBounds(this.left, cy - dp(24), this.right, cy + dp(24));
             if (isFailed) {
@@ -583,13 +581,15 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
                     if (read < 1) {
                         storiesGradientTools.paint.setAlpha((int) (0xFF * (1f - read) * segmentsAlpha));
                         storiesGradientTools.paint.setStrokeWidth(dpf2(2.33f));
-                        canvas.drawArc(rect2, a, -widthAngle * appear, false, storiesGradientTools.paint);
+                        canvas.drawRoundRect(rect2, ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(2), true), ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(2), true), storiesGradientTools.paint);
+                        //canvas.drawArc(rect2, a, -widthAngle * appear, false, storiesGradientTools.paint);
                     }
 
                     if (read > 0) {
                         readPaint.setAlpha((int) (readPaintAlpha * read * segmentsAlpha));
                         readPaint.setStrokeWidth(dpf2(1.5f));
-                        canvas.drawArc(rect3, a, -widthAngle * appear, false, readPaint);
+                        canvas.drawRoundRect(rect3, ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(2), true), ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(2), true), readPaint);
+                        //canvas.drawArc(rect3, a, -widthAngle * appear, false, readPaint);
                     }
 
                     if (bounceScale != 1) {

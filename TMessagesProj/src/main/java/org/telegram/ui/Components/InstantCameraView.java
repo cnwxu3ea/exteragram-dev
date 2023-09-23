@@ -3252,8 +3252,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         progressAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                int color = Theme.getColor(Theme.key_windowBackgroundWhite);
-                if (!(ColorUtils.calculateLuminance(color) > 0.721f)) {
+                int color;
+                if (resourcesProvider != null) {
+                    color = resourcesProvider.getColorOrDefault(Theme.key_actionBarDefault);
+                } else {
+                    color = Theme.getColor(Theme.key_actionBarDefault, null, true);
+                }
+                if (ColorUtils.calculateLuminance(color) <= 0.7f) {
                     AndroidUtilities.setLightStatusBar(activity.getWindow(), enabled);
                 }
             }

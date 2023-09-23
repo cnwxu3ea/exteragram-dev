@@ -9492,8 +9492,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (stickersExpanded && show != 1) {
             setStickersExpanded(false, false, false);
         }
-        if (getParentFragment() != null)
+        if (getParentFragment() != null) {
             AndroidUtilities.runOnUIThread(() -> AndroidUtilities.setNavigationBarColor(parentActivity.getWindow(), show == 1 ? getThemedColor(Theme.key_chat_emojiPanelBackground) : getParentFragment().getNavigationBarColor(), show != 1), show == 1 ? 0 : 200);
+        }
 
         updateFieldHint(false);
         checkBotMenu();

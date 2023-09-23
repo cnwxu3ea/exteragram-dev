@@ -2559,6 +2559,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         public void setData(int index, String primary, String secondary, String title) {
             this.primary[index].setText(primary);
             this.secondary[index].setText(secondary);
+            this.secondary[index].setTag(Theme.key_windowBackgroundWhiteGrayText2);
             this.title[index].setText(title);
 
             updateColors();
@@ -2821,6 +2822,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     public boolean isLightStatusBar() {
         int color = getThemedColor(Theme.key_windowBackgroundWhite);
         return ColorUtils.calculateLuminance(color) > 0.7f;
+    }
+
+    @Override
+    public int getNavigationBarColor() {
+        return getThemedColor(Theme.key_windowBackgroundWhite);
     }
 
     @Override

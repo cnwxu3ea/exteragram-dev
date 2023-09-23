@@ -7876,7 +7876,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         } else {
             pipVideoOverlayAnimateFlag = false;
 
-            switchToPip(false);
+            if (!ExteraConfig.pauseOnMinimize) {
+                switchToPip(false);
+            }
         }
     }
 

@@ -22,6 +22,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -30,6 +31,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.multidex.MultiDex;
 
 import com.exteragram.messenger.ExteraConfig;
@@ -41,6 +43,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.LauncherIconController;
 
@@ -547,5 +550,39 @@ public class ApplicationLoader extends Application {
             }
         }
         return result;
+    }
+
+    public boolean checkApkInstallPermissions(final Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !applicationContext.getPackageManager().canRequestPackageInstalls()) {
+            AlertsCreator.createApkRestrictedDialog(context, null).show();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean openApkInstall(Activity activity, TLRPC.Document document) {
+        boolean exists = false;
+        try {
+            String fileName = FileLoader.getAttachFileName(document);
+            File f = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(document, true);
+            if (exists = f.exists()) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                if (Build.VERSION.SDK_INT >= 24) {
+                    intent.setDataAndType(FileProvider.getUriForFile(activity, ApplicationLoader.getApplicationId() + ".provider", f), "application/vnd.android.package-archive");
+                } else {
+                    intent.setDataAndType(Uri.fromFile(f), "application/vnd.android.package-archive");
+                }
+                try {
+                    activity.startActivityForResult(intent, 500);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return exists;
     }
 }

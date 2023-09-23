@@ -163,11 +163,12 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private boolean adminShortcutsExpanded;
     private boolean messageMenuExpanded;
 
+    private final int startStickerSize = 4, endStickerSize = 20;
+
     private class StickerSizeCell extends FrameLayout {
 
         private final StickerSizePreviewCell messagesCell;
         private final AltSeekbar seekBar;
-        int startStickerSize = 4, endStickerSize = 20;
         private int lastWidth;
 
         public StickerSizeCell(Context context) {
@@ -222,7 +223,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             ValueAnimator animator = ValueAnimator.ofFloat(ExteraConfig.stickerSize, 12.0f);
             animator.setDuration(200);
             animator.addUpdateListener(valueAnimator -> {
-                ExteraConfig.editor.putFloat("stickerSize", ExteraConfig.stickerSize = (Float) valueAnimator.getAnimatedValue()).apply();
+                float p = (Float) valueAnimator.getAnimatedValue();
+                ExteraConfig.editor.putFloat("stickerSize", ExteraConfig.stickerSize = p).apply();
+                stickerSizeCell.seekBar.setProgress((p - startStickerSize) / (endStickerSize - startStickerSize));
                 stickerSizeCell.invalidate();
             });
             animator.start();

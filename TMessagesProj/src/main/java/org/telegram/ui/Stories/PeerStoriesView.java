@@ -1725,6 +1725,11 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
 
     private void toggleArchiveForStory(long dialogId) {
         TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(dialogId);
+
+        if (user == null) {
+            return;
+        }
+
         boolean hide = !user.stories_hidden;
         MessagesController messagesController = MessagesController.getInstance(currentAccount);
 
@@ -2612,8 +2617,6 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                 if (LaunchActivity.instance != null) {
                     LaunchActivity.instance.checkAppUpdate(true);
                 }
-            } else if (BuildVars.isHuaweiStoreApp()){
-                Browser.openUrl(getContext(), BuildVars.HUAWEI_STORE_URL);
             } else {
                 Browser.openUrl(getContext(), BuildVars.PLAYSTORE_APP_URL);
             }
@@ -3696,6 +3699,12 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                     stringBuilder.setSpan(span, stringBuilder.length() - 3, stringBuilder.length() - 2, 0);
                     stringBuilder.append(AndroidUtilities.formatWholeNumber(storyItem.views.views_count, 0));
                     selfStatusView.setText(stringBuilder);
+
+                    if (selfView != null) {
+                        LayoutParams layoutParams = (LayoutParams) selfView.getLayoutParams();
+                        layoutParams.rightMargin = (int) (AndroidUtilities.dp(40 + 40) + selfStatusView.getPaint().measureText(stringBuilder.toString()));
+                    }
+
                 } else {
                     selfStatusView.setText("");
                 }

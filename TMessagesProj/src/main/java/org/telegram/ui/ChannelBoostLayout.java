@@ -171,10 +171,10 @@ public class ChannelBoostLayout extends FrameLayout {
                 StatisticActivity.OverviewCell overviewCell = (StatisticActivity.OverviewCell) holder.itemView;
 
                 overviewCell.setData(0, Integer.toString(boostsStatus.level), null, LocaleController.getString("BoostsLevel2", R.string.BoostsLevel2));
-                if (boostsStatus.premium_audience != null || boostsStatus.premium_audience.total == 0) {
-                    overviewCell.setData(1, "~" + (int) boostsStatus.premium_audience.part, String.format(Locale.US, "%.1f", (float) boostsStatus.premium_audience.part / (float) boostsStatus.premium_audience.total) + "%", LocaleController.getString("PremiumSubscribers", R.string.PremiumSubscribers));
+                if (boostsStatus.premium_audience != null && boostsStatus.premium_audience.total != 0) {
+                    overviewCell.setData(1, String.valueOf((int) boostsStatus.premium_audience.part), "~" + String.format(Locale.US, "%.1f", (float) boostsStatus.premium_audience.part / (float) boostsStatus.premium_audience.total * 100) + "%", LocaleController.getString("PremiumSubscribers", R.string.PremiumSubscribers));
                 } else {
-                    overviewCell.setData(1, "~0", "0%", LocaleController.getString("PremiumSubscribers", R.string.PremiumSubscribers));
+                    overviewCell.setData(1, "0", "0%", LocaleController.getString("PremiumSubscribers", R.string.PremiumSubscribers));
                 }
                 overviewCell.setData(2, String.valueOf(boostsStatus.boosts), null, LocaleController.getString("BoostsExisting", R.string.BoostsExisting));
                 overviewCell.setData(3, String.valueOf(boostsStatus.next_level_boosts - boostsStatus.boosts), null, LocaleController.getString("BoostsToLevel", R.string.BoostsToLevel));
@@ -245,7 +245,7 @@ public class ChannelBoostLayout extends FrameLayout {
         if (boostsStatus != null) {
             items.add(new ItemInternal(BOOST_VIEW, false));
             items.add(new ItemInternal(HEADER_VIEW_TYPE, LocaleController.getString("StatisticOverview", R.string.StatisticOverview)));
-            items.add(new ItemInternal(OVERVIEW_TYPE, true));
+            items.add(new ItemInternal(OVERVIEW_TYPE, false));
             items.add(new ItemInternal(DIVIDER_VIEW_TYPE, false));
 
 
