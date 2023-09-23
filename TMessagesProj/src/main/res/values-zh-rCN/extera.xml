@@ -53,8 +53,8 @@
     <string name="BlurActionBar">操作栏</string>
     <string name="BlurBottomPanel">底部面板</string>
     <string name="BlurDialogs">对话框</string>
-    <string name="BlurSmoothnessSmooth">平滑度</string>
-    <string name="BlurSmoothnessSmoothest">极致平滑</string>
+    <string name="BlurSmoothnessSmooth">平滑</string>
+    <string name="BlurSmoothnessSmoothest">超平滑</string>
     <string name="ForceSnow">强制\"飘雪\"动画</string>
     <string name="ForceSnowInfo">雪花也会出现在操作栏和聊天背景中。</string>
     <string name="UseSystemFonts">使用系统字体</string>
