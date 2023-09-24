@@ -56,6 +56,7 @@ import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
+import com.exteragram.messenger.utils.VoiceEnhancer;
 import com.google.zxing.common.detector.MathUtils;
 
 import com.exteragram.messenger.camera.BaseCameraView;
@@ -2035,7 +2036,7 @@ public class CameraView extends BaseCameraView implements TextureView.SurfaceTex
 
         DispatchQueue fileWriteQueue;
 
-        private Runnable recorderRunnable = new Runnable() {
+        private final Runnable recorderRunnable = new Runnable() {
 
             @Override
             public void run() {
@@ -2100,6 +2101,7 @@ public class CameraView extends BaseCameraView implements TextureView.SurfaceTex
                     }
                 }
                 try {
+                    VoiceEnhancer.release();
                     audioRecorder.release();
                 } catch (Exception e) {
                     FileLog.e(e);
@@ -2552,6 +2554,7 @@ public class CameraView extends BaseCameraView implements TextureView.SurfaceTex
                     buffers.add(new InstantCameraView.AudioBufferInfo());
                 }
                 audioRecorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, audioSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+                VoiceEnhancer.init(audioRecorder);
                 audioRecorder.startRecording();
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("CameraView " + "initied audio record with channels " + audioRecorder.getChannelCount() + " sample rate = " + audioRecorder.getSampleRate() + " bufferSize = " + bufferSize);
