@@ -373,7 +373,8 @@ public class ChatUtils {
     }
 
     public boolean hasArchivedChats() {
-        return getMessagesController().dialogs_dict.get(DialogObject.makeFolderDialogId(1)) != null;
+        // todo
+        return true; // getMessagesController().dialogs_dict.get(DialogObject.makeFolderDialogId(1)) != null;
     }
 
     public static CharSequence getMessageText(MessageObject selectedObject, MessageObject.GroupedMessages selectedObjectGroup) {

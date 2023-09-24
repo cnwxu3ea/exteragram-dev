@@ -277,7 +277,7 @@ public class FileLoadOperation {
     private void updateParams() {
         if (ExteraConfig.downloadSpeedBoost == 2) {
             downloadChunkSizeBig = 1024 * 1024;
-            maxDownloadRequests = maxDownloadRequestsBig = 14;
+            maxDownloadRequests = maxDownloadRequestsBig = 12;
         } else if ((preloadPrefixSize > 0 || ExteraConfig.downloadSpeedBoost == 1 || MessagesController.getInstance(currentAccount).getfileExperimentalParams) && !forceSmallChunk) {
             downloadChunkSizeBig = 1024 * 512;
             maxDownloadRequests = maxDownloadRequestsBig = 8;

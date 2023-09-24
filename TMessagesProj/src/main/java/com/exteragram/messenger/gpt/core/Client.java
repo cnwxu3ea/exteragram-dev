@@ -24,6 +24,7 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -55,7 +56,8 @@ public class Client {
 
     private String testKey;
 
-    private static final int STREAM_SYMBOLS_LIMIT = 10; // decreasing this limit can f*ck off optimization
+    private static final int STREAM_SYMBOLS_LIMIT = SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_HIGH ? 10 : 15; // decreasing this limit can f*ck off optimization
+
     private int streamSymbolsCount = 0;
     private static int timeout = 10000;
 
@@ -175,7 +177,7 @@ public class Client {
                                                     if (callback != null) {
                                                         callback.onResponse(res.toString());
                                                     }
-                                                }, 10);
+                                                }, STREAM_SYMBOLS_LIMIT);
                                                 streamSymbolsCount = 0;
                                             }
                                         }
@@ -217,7 +219,7 @@ public class Client {
                 if (callback != null) {
                     callback.onResponse(finalResponse);
                 }
-            }, 10);
+            }, STREAM_SYMBOLS_LIMIT);
             stop();
         });
     }
@@ -243,17 +245,20 @@ public class Client {
                 onButtonClick = () -> fragment.presentFragment(new EditKeyActivity());
             }
             case 429 -> {
-                if (errorMessage.equals("too many requests")) {
-                    icon = 5;
-                    title = R.string.GPTError429Limit;
-                    subtitle = R.string.GPTError429LimitInfo;
-                } else {
+                // https://platform.openai.com/docs/guides/error-codes/api-errors
+                // but openai still returns "too many requests" even if you exceeded your quota ¯\_(ツ)_/¯
+
+                //if (errorMessage.equals("too many requests")) {
+                //    icon = 5;
+                //    title = R.string.GPTError429Limit;
+                //    subtitle = R.string.GPTError429LimitInfo;
+                //} else {
                     icon = 3;
                     title = R.string.GPTError429Quota;
                     subtitle = R.string.GPTError429QuotaInfo;
                     button = LocaleController.getString("Open", R.string.Open);
                     onButtonClick = () -> Browser.openUrl(fragment.getParentActivity(), "https://platform.openai.com/account/usage");
-                }
+                //}
             }
             case 503 -> {
                 icon = 4;

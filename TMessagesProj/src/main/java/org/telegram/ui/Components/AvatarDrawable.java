@@ -361,18 +361,14 @@ public class AvatarDrawable extends Drawable {
         canvas.save();
         canvas.translate(bounds.left, bounds.top);
         AndroidUtilities.rectTmp.set(0, 0, size, size);
-        canvas.drawRoundRect(AndroidUtilities.rectTmp,
-                ExteraConfig.getAvatarCorners(size, isProfile ? 0 : 2, true, false),
-                ExteraConfig.getAvatarCorners(size, isProfile ? 0 : 2, true, false),
-                Theme.avatar_backgroundPaint
-        );
+        canvas.drawRoundRect(AndroidUtilities.rectTmp, roundRadius, roundRadius, Theme.avatar_backgroundPaint);
 
         if (avatarType == AVATAR_TYPE_ARCHIVED) {
             if (archivedAvatarProgress != 0) {
                 Theme.avatar_backgroundPaint.setColor(ColorUtils.setAlphaComponent(getThemedColor(Theme.key_avatar_backgroundArchived), alpha));
                 canvas.drawRoundRect(0, 0, size * archivedAvatarProgress, size * archivedAvatarProgress,
-                        ExteraConfig.getAvatarCorners(size, isProfile ? 0 : 2, true, false) * archivedAvatarProgress,
-                        ExteraConfig.getAvatarCorners(size, isProfile ? 0 : 2, true, false) * archivedAvatarProgress,
+                        ExteraConfig.getAvatarCorners(size, 2, true, false) * archivedAvatarProgress,
+                        ExteraConfig.getAvatarCorners(size, 2, true, false) * archivedAvatarProgress,
                         Theme.avatar_backgroundPaint
                 );
                 if (Theme.dialogs_archiveAvatarDrawableRecolored) {

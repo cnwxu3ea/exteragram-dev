@@ -53,14 +53,13 @@ public class EditRoleActivity extends BaseFragment {
 
     private EditTextBoldCursor promptField;
     private OutlineTextContainerView promptFieldContainer;
-    private TextView helpTextView;
 
     private View doneButton;
 
     private final static int done_button = 1;
 
     private final static int NAME_LIMIT = 50;
-    private final static int PROMPT_LIMIT = 600;
+    private final static int PROMPT_LIMIT = 800;
 
     private static Role currentRole;
 
@@ -68,7 +67,7 @@ public class EditRoleActivity extends BaseFragment {
         currentRole = role;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "DefaultLocale"})
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
@@ -231,7 +230,7 @@ public class EditRoleActivity extends BaseFragment {
 
         promptFieldContainer.setText(String.format("%s • %d", LocaleController.getString(R.string.RolePrompt), PROMPT_LIMIT));
 
-        helpTextView = new LinkSpanDrawable.LinksTextView(context);
+        TextView helpTextView = new LinkSpanDrawable.LinksTextView(context);
         helpTextView.setFocusable(true);
         helpTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         helpTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText8));

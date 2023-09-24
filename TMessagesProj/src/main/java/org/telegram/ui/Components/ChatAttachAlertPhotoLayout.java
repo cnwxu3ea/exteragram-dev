@@ -2456,7 +2456,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
                 cameraView = new CameraView(getContext(), isCameraFrontfaceBeforeEnteringEditMode != null ? isCameraFrontfaceBeforeEnteringEditMode : parentAlert.openWithFrontFaceCamera, lazy) {
 
-                    Bulletin.Delegate bulletinDelegate = new Bulletin.Delegate() {
+                    final Bulletin.Delegate bulletinDelegate = new Bulletin.Delegate() {
                         @Override
                         public int getBottomOffset(int tag) {
                             return AndroidUtilities.dp(126) + parentAlert.getBottomInset();
@@ -2476,7 +2476,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     }
                 };
             } else {
-                cameraView = new CameraXView(parentAlert.baseFragment.getParentActivity(), parentAlert.openWithFrontFaceCamera, lazy);
+                cameraView = new CameraXView(parentAlert.baseFragment.getParentActivity(), isCameraFrontfaceBeforeEnteringEditMode != null ? isCameraFrontfaceBeforeEnteringEditMode : parentAlert.openWithFrontFaceCamera, lazy);
             }
             if (cameraCell != null && lazy) {
                 cameraView.setThumbDrawable(cameraCell.getDrawable());
@@ -2988,7 +2988,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             cameraViewW = (int) endWidth;
             cameraViewH = (int) endHeight;
             final float s = fromScale * (1f - value) + value;
-            if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
+            if ((!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) && cameraView.getTextureView() != null) {
                 cameraView.getTextureView().setScaleX(s);
                 cameraView.getTextureView().setScaleY(s);
             }
@@ -3009,8 +3009,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         } else {
             cameraViewW = (int) startWidth;
             cameraViewH = (int) startHeight;
-            cameraView.getTextureView().setScaleX(1f);
-            cameraView.getTextureView().setScaleY(1f);
+            if (cameraView.getTextureView() != null) {
+                cameraView.getTextureView().setScaleX(1f);
+                cameraView.getTextureView().setScaleY(1f);
+            }
             animationClipTop = 0;
             animationClipBottom = endHeight;
             animationClipLeft = 0;

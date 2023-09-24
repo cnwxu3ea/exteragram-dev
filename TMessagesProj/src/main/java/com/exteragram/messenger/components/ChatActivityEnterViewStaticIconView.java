@@ -99,12 +99,10 @@ public class ChatActivityEnterViewStaticIconView extends FrameLayout {
         }
 
         switch (state) {
-            case VOICE:
-                setContentDescription(LocaleController.getString("AccDescrVoiceMessage", R.string.AccDescrVoiceMessage));
-                break;
-            case VIDEO:
-                setContentDescription(LocaleController.getString("AccDescrVideoMessage", R.string.AccDescrVideoMessage));
-                break;
+            case VOICE ->
+                    setContentDescription(LocaleController.getString("AccDescrVoiceMessage", R.string.AccDescrVoiceMessage));
+            case VIDEO ->
+                    setContentDescription(LocaleController.getString("AccDescrVideoMessage", R.string.AccDescrVideoMessage));
         }
     }
 

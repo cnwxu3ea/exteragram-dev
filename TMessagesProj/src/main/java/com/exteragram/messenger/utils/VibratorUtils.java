@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import com.exteragram.messenger.ExteraConfig;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
 
 public class VibratorUtils {
 
@@ -44,13 +45,13 @@ public class VibratorUtils {
                 VibrationEffect effect = VibrationEffect.createOneShot(time, VibrationEffect.DEFAULT_AMPLITUDE);
                 vibrator.vibrate(effect);
             } catch (Exception e) {
-                // ignored
+                FileLog.e(e);
             }
         } else {
             try {
                 vibrator.vibrate(time);
             } catch (Exception e) {
-                // ignored
+                FileLog.e(e);
             }
         }
     }
@@ -60,21 +61,17 @@ public class VibratorUtils {
     }
 
     public static void vibrateEffect(VibrationEffect effect) {
-        if (!isVibrationAllowed()) {
-            return;
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isVibrationAllowed()) {
             try {
                 vibrator.cancel();
             } catch (Exception e) {
-                // ignored
+                FileLog.e(e);
             }
 
             try {
                 vibrator.vibrate(effect);
             } catch (Exception e) {
-                // ignored
+                FileLog.e(e);
             }
         }
     }

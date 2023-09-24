@@ -1100,7 +1100,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         likeButton.setOnClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             ArrayList<MessageObject> liked = new ArrayList<>(List.of(MediaController.getInstance().getPlayingMessageObject()));
-            SendMessagesHelper.getInstance(UserConfig.selectedAccount).sendMessage(liked, ChatUtils.getInstance().getLikeDialog(), true, true, false, 0);
+            SendMessagesHelper.getInstance(currentAccount).sendMessage(liked, ChatUtils.getInstance(currentAccount).getLikeDialog(), true, true, false, 0);
             BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.ic_save_to_music, LocaleController.formatString("TrackSaved", R.string.TrackSaved, ChatUtils.getName(ChatUtils.getInstance().getLikeDialog()))).show();
         });
         

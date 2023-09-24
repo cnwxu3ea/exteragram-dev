@@ -354,7 +354,7 @@ public class ExteraConfig {
     public static int getBlurRedrawTimeout() {
         return switch (blurSmoothness) {
             case 1 -> 6;
-            case 2 -> 0;
+            case 2 -> 1;
             default -> 16;
         };
     }

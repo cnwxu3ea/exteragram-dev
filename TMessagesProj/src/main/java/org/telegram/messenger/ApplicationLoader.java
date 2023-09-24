@@ -36,7 +36,6 @@ import androidx.multidex.MultiDex;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.camera.CameraXUtils;
-import com.exteragram.messenger.utils.CrashlyticsUtils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
@@ -342,7 +341,6 @@ public class ApplicationLoader extends Application {
             firebaseCrashlytics = FirebaseCrashlytics.getInstance();
             firebaseAnalytics.setAnalyticsCollectionEnabled(ExteraConfig.useGoogleAnalytics);
             firebaseCrashlytics.setCrashlyticsCollectionEnabled(ExteraConfig.useGoogleCrashlytics);
-            CrashlyticsUtils.logEvents();
         });
     }
 
