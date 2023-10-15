@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -228,10 +229,17 @@ import java.util.regex.Pattern;
 public class LaunchActivity extends BasePermissionsActivity implements INavigationLayout.INavigationLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
 
     private ExteraResources res = null;
+    private AssetManager assetManager = null;
+
     @Override
     public Resources getResources() {
-        return res == null ? res = new ExteraResources(super.getResources()) : res;
+        if (assetManager != super.getResources().getAssets()) {
+            res = new ExteraResources(super.getResources());
+            assetManager = super.getResources().getAssets();
+        }
+        return res;
     }
+
     public void reloadIcons() {
         res.getActiveIconPack();
     }
