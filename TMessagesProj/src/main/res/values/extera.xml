@@ -210,6 +210,22 @@
     <string name="MimeType">Mime Type</string>
     <string name="Datacenter">Datacenter</string>
 
+    <!-- Backup -->
+    <string name="WriteFileName">Write the file name…</string>
+    <string name="ExportSettings">Export Settings</string>
+    <string name="ApplySettings">Apply Settings</string>
+    <string name="ImportTitle">Are you sure you want to apply these settings?</string>
+    <string name="ImportConfirm">Yes, apply</string>
+    <string name="CancelConfirm">No, leave it as is</string>
+    <string name="SettingsSaved">Settings file saved successfully.</string>
+    <string name="SettingsImported">Settings successfully applied.</string>
+    <string name="ImportChanges_one">**1** change will be applied to the current settings.</string>
+    <string name="ImportChanges_two">**%1$d** changes will be applied to the current settings.</string>
+    <string name="ImportChanges_few">**%1$d** changes will be applied to the current settings.</string>
+    <string name="ImportChanges_many">**%1$d** changes will be applied to the current settings.</string>
+    <string name="ImportChanges_other">**%1$d** changes will be applied to the current settings.</string>
+    <string name="SameSettings">It looks like the settings are same as the current ones.</string>
+
     <!-- GPT -->
     <string name="ChatGPT" translatable="false">ChatGPT</string>
     <string name="ChatGPTInfo">Set up API Key, Roles and History</string>

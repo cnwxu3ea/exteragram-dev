@@ -489,6 +489,11 @@ public class SharedConfig {
         editor.apply();
     }
 
+    public static void reloadConfig() {
+        configLoaded = false;
+        loadConfig();
+    }
+
     public static void loadConfig() {
         synchronized (sync) {
             if (configLoaded || ApplicationLoader.applicationContext == null) {

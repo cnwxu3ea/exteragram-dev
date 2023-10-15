@@ -18,8 +18,8 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
+import com.exteragram.messenger.backup.PreferencesUtils;
 import com.exteragram.messenger.camera.CameraXUtils;
-import com.exteragram.messenger.gpt.core.Config;
 import com.exteragram.messenger.icons.BaseIconSet;
 import com.exteragram.messenger.icons.EmptyIconSet;
 import com.exteragram.messenger.icons.SolarIconSet;
@@ -182,7 +182,7 @@ public class ExteraConfig {
                 return;
             }
 
-            preferences = getPreferences("exteraconfig");
+            preferences = PreferencesUtils.getPreferences("exteraconfig");
             editor = preferences.edit();
 
             // General
@@ -231,7 +231,7 @@ public class ExteraConfig {
             blurSmoothness = preferences.getInt("blurSmoothness", SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_HIGH ? 2 : 0);
             forceBlur = preferences.getBoolean("forceBlur", false);
 
-            boolean blur = getPreferences("mainconfig").getBoolean("chatBlur", true);
+            boolean blur = PreferencesUtils.getPreferences("mainconfig").getBoolean("chatBlur", true);
             blurActionBar = preferences.getBoolean("blurActionBar", blur);
             blurBottomPanel = preferences.getBoolean("blurBottomPanel", blur);
             blurDialogs = preferences.getBoolean("blurDialogs", blur);
@@ -307,10 +307,6 @@ public class ExteraConfig {
 
             configLoaded = true;
         }
-    }
-
-    private static SharedPreferences getPreferences(String name) {
-        return ApplicationLoader.applicationContext.getSharedPreferences(name, Activity.MODE_PRIVATE);
     }
 
     public static boolean isExtera(@NonNull TLRPC.Chat chat) {
@@ -421,12 +417,6 @@ public class ExteraConfig {
             case 0, 1, 2 -> (doubleTapSeekDuration + 1) * 5000;
             default -> 30000;
         };
-    }
-
-    public static void clearPreferences() {
-        Config.editor.clear().apply();
-        ExteraConfig.editor.clear().apply();
-        reloadConfig();
     }
 
     public static void reloadConfig() {

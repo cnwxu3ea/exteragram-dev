@@ -209,6 +209,21 @@
     <string name="MimeType">Тип медиа</string>
     <string name="Datacenter">Датацентр</string>
 
+    <!-- Backup -->
+    <string name="WriteFileName">Напишите имя файла…</string>
+    <string name="ExportSettings">Экспортировать настройки</string>
+    <string name="ApplySettings">Применить настройки</string>
+    <string name="ImportTitle">Вы действительно хотите применить эти настройки?</string>
+    <string name="ImportConfirm">Да, применить</string>
+    <string name="CancelConfirm">Нет, оставить как есть</string>
+    <string name="SettingsSaved">Файл настроек успешно сохранен.</string>
+    <string name="SettingsImported">Настройки успешно применены.</string>
+    <string name="ImportChanges_one">**1** изменение будет применено к текущим настройкам.</string>
+    <string name="ImportChanges_few">**%1$d** изменения будет применено к текущим настройкам.</string>
+    <string name="ImportChanges_many">**%1$d** изменений будет применено к текущим настройкам.</string>
+    <string name="ImportChanges_other">**%1$d** изменений будет применено к текущим настройкам.</string>
+    <string name="SameSettings">Похоже, что настройки ничем не отличаются от текущих.</string>
+
     <!-- GPT -->
     <string name="ChatGPTInfo">API-Ключ, роли и история сообщений</string>
     <string name="ApiKey">API-Ключ</string>

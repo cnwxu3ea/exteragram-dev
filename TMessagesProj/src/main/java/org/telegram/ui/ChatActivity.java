@@ -109,6 +109,8 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.backup.PreferencesUtils;
+import com.exteragram.messenger.backup.BackupBottomSheet;
 import com.exteragram.messenger.components.MessageDetailsPopupWrapper;
 import com.exteragram.messenger.gpt.core.Client;
 import com.exteragram.messenger.gpt.core.Config;
@@ -117,7 +119,6 @@ import com.exteragram.messenger.utils.SystemUtils;
 import com.exteragram.messenger.utils.TranslatorUtils;
 import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.util.Consumer;
 import com.google.zxing.common.detector.MathUtils;
 
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -320,7 +321,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -993,6 +993,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int OPTION_DETAILS = 204;
     private final static int OPTION_HISTORY = 205;
     private final static int OPTION_GENERATE = 206;
+    private final static int OPTION_IMPORT_SETTINGS = 207;
 
     private final Client client = new Client(this);
 
@@ -14319,7 +14320,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             if (messageObject.getDocument() != null && !messageObject.isMusic()) {
                                 String mime = messageObject.getDocument().mime_type;
                                 if (mime != null) {
-                                    if (messageObject.getDocumentName().toLowerCase().endsWith("attheme")) {
+                                    if (PreferencesUtils.getInstance().isBackup(messageObject)) {
+                                        return 30;
+                                    } else if (messageObject.getDocumentName().toLowerCase().endsWith("attheme")) {
                                         return 10;
                                     } else if (mime.endsWith("/xml")) {
                                         return 5;
@@ -24023,6 +24026,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 options.add(OPTION_SHARE);
                                 icons.add(R.drawable.msg_shareout);
                             }
+                        } else if (type == 30) {
+                            items.add(LocaleController.getString(R.string.ApplySettings));
+                            options.add(OPTION_IMPORT_SETTINGS);
+                            icons.add(R.drawable.msg_settings);
+                            if (!noforwards) {
+                                items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                                options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
+                                icons.add(R.drawable.msg_download);
+                                items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                                options.add(OPTION_SHARE);
+                                icons.add(R.drawable.msg_shareout);
+                            }
                         } else if (type == 10) {
                             items.add(LocaleController.getString("ApplyThemeFile", R.string.ApplyThemeFile));
                             options.add(OPTION_APPLY_LOCALIZATION_OR_THEME);
@@ -24255,6 +24270,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("ApplyThemeFile", R.string.ApplyThemeFile));
                             options.add(OPTION_APPLY_LOCALIZATION_OR_THEME);
                             icons.add(R.drawable.msg_theme);
+                        } else if (type == 30) {
+                            items.add(LocaleController.getString(R.string.ApplySettings));
+                            options.add(OPTION_IMPORT_SETTINGS);
+                            icons.add(R.drawable.msg_settings);
                         } else if (type == 7) {
                             items.add(LocaleController.getString("AddToStickers", R.string.AddToStickers));
                             options.add(OPTION_ADD_TO_STICKERS_OR_MASKS);
@@ -26124,6 +26143,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         BulletinFactory.of(this).createDownloadBulletin(selectedObject.isVideo() ? BulletinFactory.FileType.VIDEO : BulletinFactory.FileType.PHOTO, themeDelegate).show();
                     }
                 }
+                break;
+            }
+            case OPTION_IMPORT_SETTINGS: {
+                new BackupBottomSheet(ChatActivity.this, selectedObject).showIfPossible();
                 break;
             }
             case OPTION_APPLY_LOCALIZATION_OR_THEME: {
@@ -29703,7 +29726,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     arrayList = new ArrayList<>();
                     arrayList.add(messageObject);
                 }
-                showDialog(new ShareAlert(getContext(), ChatActivity.this, arrayList, null, null, ChatObject.isChannel(currentChat), null, null, false, false, themeDelegate) {
+                showDialog(new ShareAlert(getContext(), ChatActivity.this, arrayList, null, null, null, ChatObject.isChannel(currentChat), null, null, false, false, themeDelegate) {
                     @Override
                     public void dismissInternal() {
                         super.dismissInternal();
@@ -30535,7 +30558,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     presentFragment(fragment);
                 }
             } else if (message.type == MessageObject.TYPE_FILE || message.type == MessageObject.TYPE_TEXT) {
-                if (message.getDocumentName().toLowerCase().endsWith("attheme")) {
+                if (PreferencesUtils.getInstance().isBackup(message)) {
+                    new BackupBottomSheet(ChatActivity.this, message).showIfPossible();
+                    return;
+                } else if (message.getDocumentName().toLowerCase().endsWith("attheme")) {
                     File locFile = null;
                     if (message.messageOwner.attachPath != null && message.messageOwner.attachPath.length() != 0) {
                         File f = new File(message.messageOwner.attachPath);

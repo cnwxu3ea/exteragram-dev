@@ -88,6 +88,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.ExteraResources;
+import com.exteragram.messenger.backup.PreferencesUtils;
 import com.exteragram.messenger.utils.ChatUtils;
 import com.exteragram.messenger.utils.MonetUtils;
 import com.exteragram.messenger.preferences.MainPreferencesActivity;
@@ -1724,6 +1725,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         boolean newContact = false;
         boolean newContactAlert = false;
         boolean scanQr = false;
+        boolean exportSettings = false;
         String searchQuery = null;
         String callSearchQuery = null;
         String newContactName = null;
@@ -2667,10 +2669,12 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                         url = url.replace("tg:addlist", "tg://telegram.org").replace("tg://addlist", "tg://telegram.org");
                                         data = Uri.parse(url);
                                         folderSlug = data.getQueryParameter("slug");
-                                    } else if ((url.startsWith("tg:extera") || url.startsWith("tg://extera"))) {
+                                    } else if (url.startsWith("tg:extera") || url.startsWith("tg://extera")) {
                                         open_settings = 7;
-                                    } else if ((url.startsWith("tg:update") || url.startsWith("tg://update"))) {
+                                    } else if (url.startsWith("tg:update") || url.startsWith("tg://update")) {
                                         checkUpdates = true;
+                                    } else if (url.startsWith("tg:export") || url.startsWith("tg://export")) {
+                                        exportSettings = true;
                                     } else {
                                         unsupportedUrl = url.replace("tg://", "").replace("tg:", "");
                                         int index;
@@ -3085,12 +3089,16 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     drawerLayoutContainer.setAllowOpenDrawer(true, false);
                 }
                 pushOpened = true;
-            } else if (checkUpdates) {
+            } else if (checkUpdates || exportSettings) {
                 BaseFragment currentFragment = !mainFragmentsStack.isEmpty() ? mainFragmentsStack.get(mainFragmentsStack.size() - 1) : null;
                 if (currentFragment != null && (currentFragment.isRemovingFromStack() || currentFragment.isInPreviewMode())) {
                     currentFragment = mainFragmentsStack.size() > 1 ? mainFragmentsStack.get(mainFragmentsStack.size() - 2) : null;
                 }
-                UpdaterUtils.checkUpdates(currentFragment, true, () -> showBulletin(factory -> factory.createErrorBulletin(LocaleController.getString("NoUpdates", R.string.NoUpdates))), null);
+                if (checkUpdates) {
+                    UpdaterUtils.checkUpdates(currentFragment, true, () -> showBulletin(factory -> factory.createErrorBulletin(LocaleController.getString("NoUpdates", R.string.NoUpdates))), null);
+                } else if (exportSettings) {
+                    PreferencesUtils.getInstance().exportSettings(currentFragment);
+                }
             } else if (newContact) {
                 final NewContactBottomSheet fragment = new NewContactBottomSheet(actionBarLayout.getLastFragment(), this);
                 if (newContactName != null) {

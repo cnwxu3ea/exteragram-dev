@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.backup.PreferencesUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -48,6 +49,7 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
     private int analyticsDividerRow;
 
     private int deleteAccountRow;
+    private int exportSettingsRow;
     private int resetSettingsRow;
     private int deleteAccountDividerRow;
 
@@ -59,7 +61,8 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
         crashlyticsRow = newRow();
         analyticsRow = newRow();
         analyticsDividerRow = newRow();
-        
+
+        exportSettingsRow = newRow();
         resetSettingsRow = newRow();
         deleteAccountRow = newRow();
         deleteAccountDividerRow = newRow();
@@ -88,7 +91,7 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
             builder.setTitle(LocaleController.getString("ResetSettings", R.string.ResetSettings));
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             builder.setPositiveButton(LocaleController.getString("Reset", R.string.Reset), (dialog, which) -> {
-                ExteraConfig.clearPreferences();
+                PreferencesUtils.clearPreferences();
                 parentLayout.rebuildAllFragmentViews(false, false);
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
@@ -158,6 +161,8 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
                 }.start();
             });
             showDialog(dialog);
+        } else if (position == exportSettingsRow) {
+            PreferencesUtils.getInstance().exportSettings(OtherPreferencesActivity.this);
         }
     }
 
@@ -193,6 +198,8 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
                         textCell.setColors(Theme.key_text_RedBold, Theme.key_text_RedRegular);
                     } else if (position == resetSettingsRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ResetSettings", R.string.ResetSettings), R.drawable.msg_reset, true);
+                    } else if (position == exportSettingsRow) {
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.ExportSettings), R.drawable.msg_settings, true);
                     }
                 }
                 case 3 -> {

@@ -105,6 +105,7 @@ import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.MessageStatisticActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -114,6 +115,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.backup.PreferencesUtils;
 import com.exteragram.messenger.components.TranslateBeforeSendWrapper;
 import com.exteragram.messenger.utils.CanvasUtils;
 import com.exteragram.messenger.utils.TranslatorUtils;
@@ -139,6 +141,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     private ShareSearchAdapter searchAdapter;
     protected ArrayList<MessageObject> sendingMessageObjects;
     private String[] sendingText = new String[2];
+    private String sendingFile;
     private int hasPoll;
     private StickerEmptyView searchEmptyView;
     private Drawable shadowDrawable;
@@ -463,14 +466,14 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     }
 
     public ShareAlert(final Context context, ArrayList<MessageObject> messages, final String text, boolean channel, final String copyLink, boolean fullScreen, Theme.ResourcesProvider resourcesProvider) {
-        this(context, null, messages, text, null, channel, copyLink, null, fullScreen, false, resourcesProvider);
+        this(context, null, messages, null, text, null, channel, copyLink, null, fullScreen, false, resourcesProvider);
     }
 
     public ShareAlert(final Context context, ChatActivity fragment, ArrayList<MessageObject> messages, final String text, final String text2, boolean channel, final String copyLink, final String copyLink2, boolean fullScreen, boolean forCall) {
-        this(context, fragment, messages, text, text2, channel, copyLink, copyLink2, fullScreen, forCall, null);
+        this(context, fragment, messages, null, text, text2, channel, copyLink, copyLink2, fullScreen, forCall, null);
     }
 
-    public ShareAlert(final Context context, ChatActivity fragment, ArrayList<MessageObject> messages, final String text, final String text2, boolean channel, final String copyLink, final String copyLink2, boolean fullScreen, boolean forCall, Theme.ResourcesProvider resourcesProvider) {
+    public ShareAlert(final Context context, ChatActivity fragment, ArrayList<MessageObject> messages, final String filePath, final String text, final String text2, boolean channel, final String copyLink, final String copyLink2, boolean fullScreen, boolean forCall, Theme.ResourcesProvider resourcesProvider) {
         super(context, true, resourcesProvider);
         this.resourcesProvider = resourcesProvider;
 
@@ -493,6 +496,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         isChannel = channel;
         sendingText[0] = text;
         sendingText[1] = text2;
+        sendingFile = filePath;
         useSmoothKeyboard = true;
 
         super.setDelegate(new BottomSheetDelegate() {
@@ -1189,20 +1193,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 }
             }
         });
-        searchGridView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(android.graphics.Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                RecyclerListView.Holder holder = (RecyclerListView.Holder) parent.getChildViewHolder(view);
-                if (holder != null) {
-                    int pos = holder.getAdapterPosition();
-                    outRect.left = pos % 4 == 0 ? 0 : AndroidUtilities.dp(4);
-                    outRect.right = pos % 4 == 3 ? 0 : AndroidUtilities.dp(4);
-                } else {
-                    outRect.left = AndroidUtilities.dp(4);
-                    outRect.right = AndroidUtilities.dp(4);
-                }
-            }
-        });
         searchGridView.setAdapter(searchAdapter);
         searchGridView.setGlowColor(getThemedColor(darkTheme ? Theme.key_voipgroup_inviteMembersBackground : Theme.key_dialogScrollGlow));
 
@@ -1359,7 +1349,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         containerView.addView(frameLayout2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM));
         frameLayout2.setOnTouchListener((v, event) -> true);
 
-        commentTextView = new EditTextEmoji(context, sizeNotifierFrameLayout, null, EditTextEmoji.STYLE_DIALOG, UserConfig.getInstance(currentAccount).isPremium(), resourcesProvider) {
+        commentTextView = new EditTextEmoji(context, sizeNotifierFrameLayout, null, EditTextEmoji.STYLE_DIALOG, sendingFile == null, resourcesProvider) {
 
             private boolean shouldAnimateEditTextWithBounds;
             private int messageEditTextPredrawHeigth;
@@ -1429,7 +1419,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             commentTextView.getEditText().setCursorColor(getThemedColor(Theme.key_voipgroup_nameText));
         }
         commentTextView.setBackgroundColor(backgroundColor);
-        commentTextView.setHint(LocaleController.getString("ShareComment", R.string.ShareComment));
+        commentTextView.setHint(sendingFile != null ? LocaleController.getString(R.string.WriteFileName) : LocaleController.getString("ShareComment", R.string.ShareComment));
         commentTextView.onResume();
         commentTextView.setPadding(0, 0, AndroidUtilities.dp(84), 0);
         frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT));
@@ -2048,6 +2038,19 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     }
                     SendMessagesHelper.getInstance(currentAccount).sendMessage(SendMessagesHelper.SendMessageParams.of(sendingText[num], key, null, replyTopMsg, null, true, null, null, null, withSound, 0, null, false));
                 }
+            } else if (sendingFile != null) {
+                for (int a = 0; a < selectedDialogs.size(); a++) {
+                    long key = selectedDialogs.keyAt(a);
+                    TLRPC.TL_forumTopic topic = selectedDialogTopics.get(selectedDialogs.get(key));
+                    MessageObject replyTopMsg = topic != null ? new MessageObject(currentAccount, topic.topicStartMessage, false, false) : null;
+                    if (frameLayout2.getTag() != null && commentTextView.length() > 0 && text[0] != null) {
+                        File backup = new File(sendingFile);
+                        String newName = sendingFile = backup.getParent() + "/" + PreferencesUtils.generateBackupName(text[0].toString());
+                        backup.renameTo(new File(newName));
+                    }
+                    ArrayList<String> paths = new ArrayList<>(List.of(sendingFile));
+                    SendMessagesHelper.prepareSendingDocuments(AccountInstance.getInstance(currentAccount), paths, paths, null, null, null, key, null, replyTopMsg, null, null, withSound, 0, null);
+                }
             }
             onSend(selectedDialogs, 1, selectedDialogTopics.get(selectedDialogs.valueAt(0)));
         }
@@ -2432,10 +2435,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            if (holder.getItemViewType() == 1) {
-                return false;
-            }
-            return true;
+            return false;
         }
 
         @Override
@@ -2500,7 +2500,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            return holder.getItemViewType() != 1;
+            return false;
         }
 
         @Override
@@ -2952,10 +2952,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            if (holder.getItemViewType() == 1 || holder.getItemViewType() == 4) {
-                return false;
-            }
-            return true;
+            return false;
         }
 
 
