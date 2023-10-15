@@ -40,6 +40,9 @@ import android.widget.FrameLayout;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.dynamicanimation.animation.FloatPropertyCompat;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.utils.AppUtils;
@@ -68,6 +71,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     private VelocityTracker velocityTracker;
     private boolean beginTrackingSent;
     private AnimatorSet currentAnimation;
+    private SpringAnimation currentSpringAnimation;
 
     private Rect rect = new Rect();
 
@@ -229,9 +233,15 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     public void cancelCurrentAnimation() {
-        if (currentAnimation != null) {
-            currentAnimation.cancel();
-            currentAnimation = null;
+        if (currentAnimation != null || currentSpringAnimation != null) {
+            if (currentAnimation != null) {
+                currentAnimation.cancel();
+                currentAnimation = null;
+            }
+            if (currentSpringAnimation != null) {
+                currentSpringAnimation.cancel();
+                currentSpringAnimation = null;
+            }
         }
     }
 
@@ -242,6 +252,19 @@ public class DrawerLayoutContainer extends FrameLayout {
         return drawerLayout.getMeasuredWidth();
     }
 
+    private static final FloatPropertyCompat<DrawerLayoutContainer> DRAWER_POSITION =
+            new FloatPropertyCompat<>("drawerPosition") {
+                @Override
+                public float getValue(DrawerLayoutContainer object) {
+                    return object.getDrawerPosition();
+                }
+
+                @Override
+                public void setValue(DrawerLayoutContainer object, float value) {
+                    object.setDrawerPosition(value);
+                }
+            };
+
     public void openDrawer(boolean fast) {
         if (!allowOpenDrawer || drawerLayout == null) {
             return;
@@ -250,22 +273,33 @@ public class DrawerLayoutContainer extends FrameLayout {
             AndroidUtilities.hideKeyboard(parentActionBarLayout.getParentActivity().getCurrentFocus());
         }
         cancelCurrentAnimation();
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(ObjectAnimator.ofFloat(this, "drawerPosition", drawerLayout.getMeasuredWidth()));
-        animatorSet.setInterpolator(new DecelerateInterpolator());
-        if (fast) {
-            animatorSet.setDuration(Math.max((int) (200.0f / drawerLayout.getMeasuredWidth() * (drawerLayout.getMeasuredWidth() - drawerPosition)), 50));
+        if (ExteraConfig.useLNavigation) {
+            SpringAnimation springAnimation = new SpringAnimation(this, DRAWER_POSITION);
+            springAnimation.setSpring(new SpringForce()
+                    .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY)
+                    .setStiffness(fast ? 1000f : 1200f));
+            springAnimation.addEndListener((dynamicAnimation, canceled, value, velocity) -> onDrawerAnimationEnd(true));
+            springAnimation.animateToFinalPosition(drawerLayout.getMeasuredWidth());
+
+            currentSpringAnimation = springAnimation;
         } else {
-            animatorSet.setDuration(250);
-        }
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                onDrawerAnimationEnd(true);
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(ObjectAnimator.ofFloat(this, "drawerPosition", drawerLayout.getMeasuredWidth()));
+            animatorSet.setInterpolator(new DecelerateInterpolator());
+            if (fast) {
+                animatorSet.setDuration(Math.max((int) (200.0f / drawerLayout.getMeasuredWidth() * (drawerLayout.getMeasuredWidth() - drawerPosition)), 50));
+            } else {
+                animatorSet.setDuration(250);
             }
-        });
-        animatorSet.start();
-        currentAnimation = animatorSet;
+            animatorSet.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    onDrawerAnimationEnd(true);
+                }
+            });
+            animatorSet.start();
+            currentAnimation = animatorSet;
+        }
     }
 
     public void closeDrawer(boolean fast) {
@@ -273,23 +307,32 @@ public class DrawerLayoutContainer extends FrameLayout {
             return;
         }
         cancelCurrentAnimation();
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(
-                ObjectAnimator.ofFloat(this, "drawerPosition", 0)
-        );
-        animatorSet.setInterpolator(new DecelerateInterpolator());
-        if (fast) {
-            animatorSet.setDuration(Math.max((int) (200.0f / drawerLayout.getMeasuredWidth() * drawerPosition), 50));
+        if (ExteraConfig.useLNavigation) {
+            SpringAnimation springAnimation = new SpringAnimation(this, DRAWER_POSITION);
+            springAnimation.setSpring(new SpringForce()
+                    .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY)
+                    .setStiffness(fast ? 1000f : 1200f));
+            springAnimation.addEndListener((dynamicAnimation, canceled, value, velocity) -> onDrawerAnimationEnd(false));
+            springAnimation.animateToFinalPosition(0);
         } else {
-            animatorSet.setDuration(250);
-        }
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                onDrawerAnimationEnd(false);
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.playTogether(
+                    ObjectAnimator.ofFloat(this, "drawerPosition", 0)
+            );
+            animatorSet.setInterpolator(new DecelerateInterpolator());
+            if (fast) {
+                animatorSet.setDuration(Math.max((int) (200.0f / drawerLayout.getMeasuredWidth() * drawerPosition), 50));
+            } else {
+                animatorSet.setDuration(250);
             }
-        });
-        animatorSet.start();
+            animatorSet.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    onDrawerAnimationEnd(false);
+                }
+            });
+            animatorSet.start();
+        }
     }
 
     private void onDrawerAnimationEnd(boolean opened) {

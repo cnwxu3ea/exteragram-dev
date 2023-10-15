@@ -11827,7 +11827,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void setFragmentIsSliding(boolean sliding) {
-        if (SharedConfig.getDevicePerformanceClass() <= SharedConfig.PERFORMANCE_CLASS_AVERAGE || !LiteMode.isEnabled(LiteMode.FLAG_CHAT_SCALE)) {
+        if (SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW || !LiteMode.isEnabled(LiteMode.FLAG_CHAT_SCALE)) {
             return;
         }
         if (sliding) {
@@ -11893,7 +11893,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return;
         }
 
-        slideFragmentLite = SharedConfig.getDevicePerformanceClass() <= SharedConfig.PERFORMANCE_CLASS_AVERAGE || !LiteMode.isEnabled(LiteMode.FLAG_CHAT_SCALE);
+        slideFragmentLite = SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW || !LiteMode.isEnabled(LiteMode.FLAG_CHAT_SCALE);
         slideFragmentProgress = progress;
         if (fragmentView != null) {
             fragmentView.invalidate();
@@ -11942,10 +11942,22 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 dialogStoriesCell.setTranslationX(getSlideAmplitude() * (1f - slideFragmentProgress));
             }
             if (floatingButtonContainer != null) {
+                if (allowToScale()) {
+                    floatingButtonContainer.setScaleX(s);
+                    floatingButtonContainer.setScaleY(s);
+                    floatingButtonContainer.setPivotX(isDrawerTransition ? floatingButtonContainer.getMeasuredWidth() : 0);
+                    floatingButtonContainer.setPivotY(0);
+                }
                 floatingButtonContainer.setTranslationX(getSlideAmplitude() * (1f - slideFragmentProgress));
                 floatingButtonContainer.invalidate();
             }
             if (floatingButton2Container != null) {
+                if (allowToScale()) {
+                    floatingButton2Container.setScaleX(s);
+                    floatingButton2Container.setScaleY(s);
+                    floatingButton2Container.setPivotX(isDrawerTransition ? floatingButton2Container.getMeasuredWidth() : 0);
+                    floatingButton2Container.setPivotY(0);
+                }
                 floatingButton2Container.setTranslationX(getSlideAmplitude() * (1f - slideFragmentProgress));
                 floatingButton2Container.invalidate();
             }
