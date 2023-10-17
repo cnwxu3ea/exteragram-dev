@@ -64,7 +64,6 @@ import org.telegram.ui.Components.FloatingDebug.FloatingDebugController;
 import org.telegram.ui.Components.FloatingDebug.FloatingDebugProvider;
 import org.telegram.ui.Components.GroupCallPip;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.SeekBar;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.SlideChooseView;
 import org.telegram.ui.Stories.StoryViewer;
@@ -642,7 +641,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             int widthOffset = overrideWidthOffset != -1 ? overrideWidthOffset : width - translationX;
             if (child == containerViewBack) {
                 float opacity = MathUtils.clamp(widthOffset / (float) width, 0, 0.8f);
-                scrimPaint.setColor(Color.argb((int) ((ExteraConfig.useLNavigation ? 0x66 : 0x99) * opacity), 0x00, 0x00, 0x00));
+                scrimPaint.setColor(Color.argb((int) ((ExteraConfig.springAnimations ? 0x66 : 0x99) * opacity), 0x00, 0x00, 0x00));
                 if (overrideWidthOffset != -1) {
                     canvas.drawRect(0, 0, getWidth(), getHeight(), scrimPaint);
                 } else {
@@ -864,7 +863,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                             beginTrackingSent = true;
                         }
                         containerView.setTranslationX(dx);
-                        if (ExteraConfig.useLNavigation) {
+                        if (ExteraConfig.springAnimations) {
                             containerViewBack.setTranslationX(-(containerView.getMeasuredWidth() - dx) * 0.35f);
                         }
                         setInnerTranslationX(dx);
@@ -897,7 +896,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                         float distToMove;
                         boolean overrideTransition = currentFragment.shouldOverrideSlideTransition(false, backAnimation);
 
-                        if (ExteraConfig.useLNavigation) {
+                        if (ExteraConfig.springAnimations) {
                             FloatValueHolder valueHolder = new FloatValueHolder((x / containerView.getMeasuredWidth()) * SPRING_MULTIPLIER);
                             if (!backAnimation) {
                                 currentSpringAnimation = new SpringAnimation(valueHolder)
@@ -947,7 +946,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                                         ObjectAnimator.ofFloat(containerView, View.TRANSLATION_X, containerView.getMeasuredWidth()).setDuration(duration),
                                         ObjectAnimator.ofFloat(this, "innerTranslationX", (float) containerView.getMeasuredWidth()).setDuration(duration)
                                 );
-                                if (ExteraConfig.useLNavigation) {
+                                if (ExteraConfig.springAnimations) {
                                     animatorSet.play(ObjectAnimator.ofFloat(containerViewBack, View.TRANSLATION_X, 0).setDuration(duration));
                                 }
                             }
@@ -959,7 +958,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                                         ObjectAnimator.ofFloat(containerView, View.TRANSLATION_X, 0).setDuration(duration),
                                         ObjectAnimator.ofFloat(this, "innerTranslationX", 0.0f).setDuration(duration)
                                 );
-                                if (ExteraConfig.useLNavigation) {
+                                if (ExteraConfig.springAnimations) {
                                     animatorSet.play(ObjectAnimator.ofFloat(containerViewBack, View.TRANSLATION_X, -(containerView.getMeasuredWidth() - x) * 0.35f).setDuration(duration));
                                 }
                             }
@@ -1149,7 +1148,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             animationProgress = 0.0f;
             lastFrameTime = System.nanoTime() / 1000000;
         }
-        if (ExteraConfig.useLNavigation) {
+        if (ExteraConfig.springAnimations) {
             FloatValueHolder valueHolder = new FloatValueHolder(0);
             currentSpringAnimation = new SpringAnimation(valueHolder)
                     .setSpring(new SpringForce(SPRING_MULTIPLIER)
@@ -1553,7 +1552,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                     animation = fragment.onCustomTransitionAnimation(true, () -> onAnimationEndCheck(false));
                 }
                 if (animation == null) {
-                    if (ExteraConfig.useLNavigation) {
+                    if (ExteraConfig.springAnimations) {
                         if (preview) {
                             containerView.setAlpha(0.0f);
                             containerView.setTranslationX(0.0f);
@@ -1794,7 +1793,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         layoutParams.height = LayoutHelper.MATCH_PARENT;
         fragment.fragmentView.setLayoutParams(layoutParams);
 
-        if (ExteraConfig.useLNavigation) {
+        if (ExteraConfig.springAnimations) {
             var view = fragment.fragmentView;
             rect.set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
             float fromMenuY;

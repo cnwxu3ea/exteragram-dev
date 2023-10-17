@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">Sistem emojisini istifadə et</string>
     <string name="NewSwitchStyle">MD3 keçid üslubu</string>
     <string name="DisableDividers">Bölücüləri deaktiv et</string>
-    <string name="AlternativeNavigation">Alternativ naviqasiya</string>
-    <string name="AlternativeNavigationInfo">Ekranlar arasında yeni, daha hamar keçid animasiyalarını ehtiva edən eksperimental seçim.</string>
     <string name="DrawerOptions">Çəkməcə Seçimləri</string>
     <string name="DrawerIconSet">İkon dəsti</string>
-    <string name="DrawerAlternativeOpeningAnimation">Alternativ açılış animasiyası</string>
     <string name="DependsOnTheDate">Tarixdən asılıdır</string>
     <string name="NewYear">Yeni il</string>
     <string name="ValentinesDay">Sevgililər günü</string>

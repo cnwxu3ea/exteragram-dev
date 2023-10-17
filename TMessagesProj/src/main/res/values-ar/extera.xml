@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">استخدام رموز النظام التعبيرية</string>
     <string name="NewSwitchStyle">نمط تبديل MD3</string>
     <string name="DisableDividers">تعطيل المقسمات</string>
-    <string name="AlternativeNavigation">التنقل البديل</string>
-    <string name="AlternativeNavigationInfo">خيار تجريبي يحتوي على رسوم متحركة جديدة وسلسة للتنقل بين الشاشات.</string>
     <string name="DrawerOptions">خيارات القائمة</string>
     <string name="DrawerIconSet">تعيين الأيقونة</string>
-    <string name="DrawerAlternativeOpeningAnimation">حركة فتح بديلة</string>
     <string name="DependsOnTheDate">يعتمد على التاريخ</string>
     <string name="NewYear">السنة الجديدة</string>
     <string name="ValentinesDay">عيد الحب</string>

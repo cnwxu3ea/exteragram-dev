@@ -25,7 +25,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.util.Log;
 import android.view.DisplayCutout;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -50,7 +49,6 @@ import com.exteragram.messenger.utils.AppUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 
 public class DrawerLayoutContainer extends FrameLayout {
@@ -273,7 +271,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             AndroidUtilities.hideKeyboard(parentActionBarLayout.getParentActivity().getCurrentFocus());
         }
         cancelCurrentAnimation();
-        if (ExteraConfig.useLNavigation) {
+        if (ExteraConfig.springAnimations) {
             SpringAnimation springAnimation = new SpringAnimation(this, DRAWER_POSITION);
             springAnimation.setSpring(new SpringForce()
                     .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY)
@@ -307,7 +305,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             return;
         }
         cancelCurrentAnimation();
-        if (ExteraConfig.useLNavigation) {
+        if (ExteraConfig.springAnimations) {
             SpringAnimation springAnimation = new SpringAnimation(this, DRAWER_POSITION);
             springAnimation.setSpring(new SpringForce()
                     .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY)
@@ -769,7 +767,7 @@ public class DrawerLayoutContainer extends FrameLayout {
 
         if (scrimOpacity > 0 && drawingContent) {
             if (indexOfChild(child) == lastVisibleChild) {
-                scrimPaint.setColor((int) ((((ExteraConfig.alternativeOpenAnimation ? 0x66000000 : 0x99000000) & 0xff000000) >>> 24) * scrimOpacity) << 24);
+                scrimPaint.setColor((int) ((((ExteraConfig.immersiveDrawerAnimation ? 0x66000000 : 0x99000000) & 0xff000000) >>> 24) * scrimOpacity) << 24);
                 canvas.drawRect(clipLeft, 0, clipRight, getHeight(), scrimPaint);
             }
         }

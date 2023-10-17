@@ -68,12 +68,12 @@
     <string name="UseSystemEmoji">Системные эмодзи</string>
     <string name="NewSwitchStyle">Переключатели в стиле MD3</string>
     <string name="DisableDividers">Отключить разделители</string>
-    <string name="AlternativeNavigation">Альтернативная навигация</string>
-    <string name="AlternativeNavigationInfo">Экспериментальная опция, включающая новые, более плавные анимации перехода между экранами.</string>
+    <string name="SpringAnimations">\"Spring\" анимации</string>
+    <string name="SpringAnimationsInfo">Более плавные анимации при переключении между экранами и открытии бокового меню.</string>
 
     <string name="DrawerOptions">Настройки бокового меню</string>
     <string name="DrawerIconSet">Cтиль иконок</string>
-    <string name="DrawerAlternativeOpeningAnimation">Новая анимация открытия</string>
+    <string name="DrawerImmersiveAnimation">Иммерсивная анимация</string>
     <string name="ForceSnow">Принудительный снег</string>
     <string name="ForceSnowInfo">Снег появится в заголовке, боковом меню и на заднем фоне чатов.</string>
     <string name="DependsOnTheDate">Зависит от даты</string>

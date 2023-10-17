@@ -125,7 +125,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
     private int useSystemEmojiRow;
     private int newSwitchStyleRow;
     private int disableDividersRow;
-    private int alternativeNavigationRow;
+    private int springAnimationsRow;
     private int appearanceDividerRow;
 
     private int blurOptionsHeaderRow;
@@ -139,7 +139,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
     private int drawerOptionsHeaderRow;
     private int eventChooserRow;
-    private int alternativeOpenAnimationRow;
+    private int immersiveAnimationRow;
     private int drawerOptionsDividerRow;
 
     private int drawerHeaderRow;
@@ -196,7 +196,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         newSwitchStyleRow = newRow();
         disableDividersRow = newRow();
         forceSnowRow = newRow();
-        alternativeNavigationRow = newRow();
+        springAnimationsRow = newRow();
         appearanceDividerRow = newRow();
 
         blurOptionsHeaderRow = newRow();
@@ -216,7 +216,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
         drawerOptionsHeaderRow = newRow();
         eventChooserRow = newRow();
-        alternativeOpenAnimationRow = newRow();
+        immersiveAnimationRow = newRow();
         drawerOptionsDividerRow = newRow();
 
         drawerHeaderRow = newRow();
@@ -293,16 +293,16 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                 SharedConfig.toggleChatBlur();
             }
             listAdapter.notifyItemChanged(blurElementsRow, payload);
-        } else if (position == alternativeOpenAnimationRow) {
-            ExteraConfig.editor.putBoolean("alternativeOpenAnimation", ExteraConfig.alternativeOpenAnimation ^= true).apply();
-            ((TextCheckCell) view).setChecked(ExteraConfig.alternativeOpenAnimation);
-        } else if (position == alternativeNavigationRow) {
-            ExteraConfig.editor.putBoolean("useLNavigation", ExteraConfig.useLNavigation ^= true).apply();
-            if (ExteraConfig.useLNavigation) {
+        } else if (position == immersiveAnimationRow) {
+            ExteraConfig.editor.putBoolean("immersiveDrawerAnimation", ExteraConfig.immersiveDrawerAnimation ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.immersiveDrawerAnimation);
+        } else if (position == springAnimationsRow) {
+            ExteraConfig.editor.putBoolean("springAnimations", ExteraConfig.springAnimations ^= true).apply();
+            if (ExteraConfig.springAnimations) {
                 MessagesController.getGlobalMainSettings().edit().putBoolean("view_animations", true).apply();
                 SharedConfig.setAnimationsEnabled(true);
             }
-            ((TextCheckCell) view).setChecked(ExteraConfig.useLNavigation);
+            ((TextCheckCell) view).setChecked(ExteraConfig.springAnimations);
         } else if (position == centerTitleRow) {
             ExteraConfig.editor.putBoolean("centerTitle", ExteraConfig.centerTitle ^= true).apply();
             chatListPreviewCell.updateCenteredTitle(true);
@@ -547,8 +547,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.UseSystemEmoji), SharedConfig.useSystemEmoji, true);
                     } else if (position == forceSnowRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("ForceSnow", R.string.ForceSnow), LocaleController.getString(R.string.ForceSnowInfo), ExteraConfig.forceSnow, true, true);
-                    } else if (position == alternativeNavigationRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.AlternativeNavigation), ExteraConfig.useLNavigation, false);
+                    } else if (position == springAnimationsRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.SpringAnimations), ExteraConfig.springAnimations, false);
                     } else if (position == singleCornerRadiusRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.SingleCornerRadius), ExteraConfig.singleCornerRadius, false);
                     } else if (position == centerTitleRow) {
@@ -567,8 +567,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.HideStories), ExteraConfig.hideStories, true);
                     } else if (position == solarIconsRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.SolarIcons), ExteraConfig.useSolarIcons, false);
-                    } else if (position == alternativeOpenAnimationRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.DrawerAlternativeOpeningAnimation), ExteraConfig.alternativeOpenAnimation, false);
+                    } else if (position == immersiveAnimationRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.DrawerImmersiveAnimation), ExteraConfig.immersiveDrawerAnimation, false);
                     } else if (position == forceBlurRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ForceBlur), ExteraConfig.forceBlur, false);
                     }
@@ -620,7 +620,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                 case 8 -> {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == appearanceDividerRow) {
-                        cell.setText(LocaleController.getString(R.string.AlternativeNavigationInfo));
+                        cell.setText(LocaleController.getString(R.string.SpringAnimationsInfo));
                     } else if (position == solarIconsInfoRow) {
                         cell.setText(LocaleUtils.formatWithUsernames(LocaleController.getString(R.string.SolarIconsInfo), AppearancePreferencesActivity.this));
                     } else if (position == foldersDividerRow) {

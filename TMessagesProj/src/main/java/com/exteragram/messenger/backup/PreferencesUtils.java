@@ -76,31 +76,17 @@ public class PreferencesUtils {
             "mainconfig"
     };
 
-    private final static int CONFIG_EXTERA = 0;
-    private final static int CONFIG_GPT = 1;
-    private final static int CONFIG_MAIN = 2;
-
     private static class BackupItem implements Serializable {
         public String key;
         public Class<?> clazz;
-        public int config;
 
         public BackupItem(String key) {
-            this(key, Boolean.class, CONFIG_EXTERA);
+            this(key, Boolean.class);
         }
 
         public BackupItem(String key, Class<?> clazz) {
-            this(key, clazz, CONFIG_EXTERA);
-        }
-
-        public BackupItem(String key, int config) {
-            this(key, Boolean.class, config);
-        }
-
-        public BackupItem(String key, Class<?> clazz, int config) {
             this.key = key;
             this.clazz = clazz;
-            this.config = config;
         }
 
         @Override
@@ -122,7 +108,7 @@ public class PreferencesUtils {
     private final BackupItem[] backup = {
             new BackupItem("addCommaAfterMention"),
             new BackupItem("administratorsShortcut"),
-            new BackupItem("alternativeOpenAnimation"),
+            new BackupItem("immersiveDrawerAnimation"),
             new BackupItem("archiveOnPull"),
             new BackupItem("archivedChats"),
             new BackupItem("avatarCorners", Float.class),
@@ -205,38 +191,38 @@ public class PreferencesUtils {
             new BackupItem("useCameraXOptimizedMode"),
             new BackupItem("useGoogleAnalytics"),
             new BackupItem("useGoogleCrashlytics"),
-            new BackupItem("useLNavigation"),
+            new BackupItem("springAnimations"),
             new BackupItem("useSolarIcons"),
             new BackupItem("useSystemFonts"),
             new BackupItem("videoMessagesCamera"),
             new BackupItem("voiceHintShowcases"),
 
             // gpt
-            // new BackupItem("apiKey", CONFIG_GPT),
-            // new BackupItem("conversationHistory", CONFIG_GPT),
-            new BackupItem("roles", String.class, CONFIG_GPT),
-            new BackupItem("selectedRole", String.class, CONFIG_GPT),
-            new BackupItem("saveHistory", CONFIG_GPT),
-            new BackupItem("use16KModel", CONFIG_GPT),
-            new BackupItem("responseStreaming", CONFIG_GPT),
-            new BackupItem("showResponseOnly", CONFIG_GPT),
+            // new BackupItem("apiKey"),
+            // new BackupItem("conversationHistory"),
+            new BackupItem("roles", String.class),
+            new BackupItem("selectedRole", String.class),
+            new BackupItem("saveHistory"),
+            new BackupItem("use16KModel"),
+            new BackupItem("responseStreaming"),
+            new BackupItem("showResponseOnly"),
 
             // main
-            new BackupItem("ChatSwipeAction", CONFIG_MAIN),
-            new BackupItem("allowBigEmoji", CONFIG_MAIN),
-            new BackupItem("archiveHidden", CONFIG_MAIN),
-            new BackupItem("bubbleRadius", CONFIG_MAIN),
-            new BackupItem("font_size", CONFIG_MAIN),
-            new BackupItem("mediaColumnsCount", CONFIG_MAIN),
-            new BackupItem("next_media_on_tap", CONFIG_MAIN),
-            new BackupItem("pauseMusicOnMedia", CONFIG_MAIN),
-            new BackupItem("pauseMusicOnRecord", CONFIG_MAIN),
-            new BackupItem("raise_to_listen", CONFIG_MAIN),
-            new BackupItem("raise_to_speak", CONFIG_MAIN),
-            new BackupItem("record_via_sco", CONFIG_MAIN),
-            new BackupItem("suggestAnimatedEmoji", CONFIG_MAIN),
-            new BackupItem("suggestStickers", CONFIG_MAIN),
-            new BackupItem("useThreeLinesLayout", CONFIG_MAIN)
+            new BackupItem("ChatSwipeAction"),
+            new BackupItem("allowBigEmoji"),
+            new BackupItem("archiveHidden"),
+            new BackupItem("bubbleRadius"),
+            new BackupItem("font_size"),
+            new BackupItem("mediaColumnsCount"),
+            new BackupItem("next_media_on_tap"),
+            new BackupItem("pauseMusicOnMedia"),
+            new BackupItem("pauseMusicOnRecord"),
+            new BackupItem("raise_to_listen"),
+            new BackupItem("raise_to_speak"),
+            new BackupItem("record_via_sco"),
+            new BackupItem("suggestAnimatedEmoji"),
+            new BackupItem("suggestStickers"),
+            new BackupItem("useThreeLinesLayout")
     };
 
     private boolean isExceptedValue(String key, Object value) {

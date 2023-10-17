@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">使用系統表情符號</string>
     <string name="NewSwitchStyle">MD3 開關樣式</string>
     <string name="DisableDividers">停用分隔線</string>
-    <string name="AlternativeNavigation">替代導覽</string>
-    <string name="AlternativeNavigationInfo">一個實驗性選項，包含在螢幕切換中的更加平滑的動畫。\n\n使用此選項，聊天中的導覽列色彩將會與訊息面板相同。</string>
     <string name="DrawerOptions">導覽匣選項</string>
     <string name="DrawerIconSet">圖示集</string>
-    <string name="DrawerAlternativeOpeningAnimation">新版動畫</string>
     <string name="DependsOnTheDate">依據日期</string>
     <string name="NewYear">新年</string>
     <string name="ValentinesDay">情人節</string>

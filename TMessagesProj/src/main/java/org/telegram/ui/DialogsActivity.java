@@ -90,8 +90,6 @@ import com.exteragram.messenger.utils.LocaleUtils;
 import com.exteragram.messenger.utils.TranslatorUtils;
 import com.exteragram.messenger.utils.VibratorUtils;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
@@ -175,7 +173,6 @@ import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.ChatActivityEnterView;
 import org.telegram.ui.Components.ChatAvatarContainer;
-import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.DialogsItemAnimator;
 import org.telegram.ui.Components.EditTextBoldCursor;
@@ -206,7 +203,6 @@ import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.ScaleStateListAnimator;
 import org.telegram.ui.Components.SearchViewPager;
 import org.telegram.ui.Components.SharedMediaLayout;
 import org.telegram.ui.Components.SimpleThemeDescription;
@@ -12075,14 +12071,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     public int getSlideAmplitude() {
-        if (isDrawerTransition && ExteraConfig.alternativeOpenAnimation) {
+        if (isDrawerTransition && ExteraConfig.immersiveDrawerAnimation) {
             return parentLayout.getDrawerLayoutContainer().getDrawerWidth();
         }
         return AndroidUtilities.dp(slideFragmentLite ? slideAmplitudeDp : 20) * (!slideFragmentLite ? (isDrawerTransition ? 1 : -1) : 1);
     }
 
     public boolean allowToScale() {
-        return !isDrawerTransition || !ExteraConfig.alternativeOpenAnimation;
+        return !isDrawerTransition || !ExteraConfig.immersiveDrawerAnimation;
     }
 
     public void updateStoriesVisibility(boolean animated) {

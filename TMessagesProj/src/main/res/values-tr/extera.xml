@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">Sistem emojileri</string>
     <string name="NewSwitchStyle">MD3 anahtar stili</string>
     <string name="DisableDividers">Ayırıcıyı devre dışı bırak</string>
-    <string name="AlternativeNavigation">Alternatif Gezinti</string>
-    <string name="AlternativeNavigationInfo">Ekranlar arasında daha yumuşak ve yeni animasyonlar gösteren deneysel bir özellik.\n\nBu ayar ile, sohbetlerdeki gezinme çubuğu mesaj paneli ile aynı renge sahip olur.</string>
     <string name="DrawerOptions">Çekmece ayarları</string>
     <string name="DrawerIconSet">Simge Seti</string>
-    <string name="DrawerAlternativeOpeningAnimation">Alternatif Açılış Animasyonu</string>
     <string name="DependsOnTheDate">Tarihe bağlı</string>
     <string name="NewYear">Yeni Yıl</string>
     <string name="ValentinesDay">Sevgililer Günü</string>

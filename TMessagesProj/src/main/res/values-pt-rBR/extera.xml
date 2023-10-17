@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">Usar emojis do sistema</string>
     <string name="NewSwitchStyle">Estilo do switch Material 3</string>
     <string name="DisableDividers">Desativar divisores</string>
-    <string name="AlternativeNavigation">Navegação alternativa</string>
-    <string name="AlternativeNavigationInfo">Uma opção experimental que inclui novas animações de transição mais suaves entre as telas.\n\n Com essa opção, a barra de navegação nas conversas será a mesma cor do painel de mensagens.</string>
     <string name="DrawerOptions">Opções do menu</string>
     <string name="DrawerIconSet">Conjunto de Ícones</string>
-    <string name="DrawerAlternativeOpeningAnimation">Animação de abertura alternativa</string>
     <string name="DependsOnTheDate">Depende da data</string>
     <string name="NewYear">Ano Novo</string>
     <string name="ValentinesDay">Dia dos Namorados</string>

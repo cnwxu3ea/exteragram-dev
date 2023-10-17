@@ -41,8 +41,6 @@
     <string name="UseSystemEmoji">Używaj systemowych emoji</string>
     <string name="NewSwitchStyle">Styl przełączników MD3</string>
     <string name="DisableDividers">Wyłącz separatory</string>
-    <string name="AlternativeNavigation">Alternatywna nawigacja</string>
-    <string name="AlternativeNavigationInfo">Eksperymentalna opcja, która obejmuje nowe, płynniejsze animacje przejścia między ekranami.</string>
     <string name="DrawerOptions">Opcje szuflady</string>
     <string name="DrawerIconSet">Zestaw ikon</string>
     <string name="ForceSnow">Wymuś śnieg</string>

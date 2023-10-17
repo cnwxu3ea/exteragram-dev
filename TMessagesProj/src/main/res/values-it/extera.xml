@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">Usa le emoji di sistema</string>
     <string name="NewSwitchStyle">Commutatori in stile MD3</string>
     <string name="DisableDividers">Disattiva divisori</string>
-    <string name="AlternativeNavigation">Navigazione alternativa</string>
-    <string name="AlternativeNavigationInfo">Una funzione sperimentale che include una nuova e fluida animazione di transizione tra le schermate.</string>
     <string name="DrawerOptions">Opzioni del menu laterale</string>
     <string name="DrawerIconSet">Set di icone</string>
-    <string name="DrawerAlternativeOpeningAnimation">Animazione di apertura alternativa</string>
     <string name="DependsOnTheDate">A seconda della data</string>
     <string name="NewYear">Anno nuovo</string>
     <string name="ValentinesDay">San Valentino</string>

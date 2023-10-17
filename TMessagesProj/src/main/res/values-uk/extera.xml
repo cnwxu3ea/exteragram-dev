@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">Використовувати системні емодзі</string>
     <string name="NewSwitchStyle">Перемикачі в стилі MD3</string>
     <string name="DisableDividers">Відключити розділювачі</string>
-    <string name="AlternativeNavigation">Альтернативна навігація</string>
-    <string name="AlternativeNavigationInfo">Експериментальна опція, яка включає нові, більш плавні анімації переходу між екранами.\n\nУ цьому режимі навігаційна панель в чатах буде мати такий самий колір, як і панель повідомлення.</string>
     <string name="DrawerOptions">Параметри меню</string>
     <string name="DrawerIconSet">Набір Іконок</string>
-    <string name="DrawerAlternativeOpeningAnimation">Альтернативна анімація відкриття</string>
     <string name="DependsOnTheDate">Залежить від дати</string>
     <string name="NewYear">Новий рік</string>
     <string name="ValentinesDay">День Святого Валентина</string>

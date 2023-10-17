@@ -54,7 +54,7 @@
 
     <string name="IconPack">Icons</string>
     <string name="SolarIcons">Use \"Solar\" Icons</string>
-    <string name="SolarIconsInfo" translatable="false">Powered by @Design480 × @TierOhneNation</string>
+    <string name="SolarIconsInfo" translatable="false">Powered by @Design480</string>
 
     <string name="BlurOptions">Blur Options</string>
     <string name="ForceBlur">Force Blur</string>
@@ -72,12 +72,12 @@
     <string name="UseSystemEmoji">Use System Emoji</string>
     <string name="NewSwitchStyle">MD3 Switch Style</string>
     <string name="DisableDividers">Disable Dividers</string>
-    <string name="AlternativeNavigation">Alternative Navigation</string>
-    <string name="AlternativeNavigationInfo">An experimental option that includes new, smoother transition animations between screens.</string>
+    <string name="SpringAnimations">Spring Animations</string>
+    <string name="SpringAnimationsInfo">Enables smoother animations when switching between screens and opening the side menu.</string>
 
     <string name="DrawerOptions">Drawer Options</string>
     <string name="DrawerIconSet">Icon Set</string>
-    <string name="DrawerAlternativeOpeningAnimation">Alternative Opening Animation</string>
+    <string name="DrawerImmersiveAnimation">Immersive Animation</string>
 
     <string name="DependsOnTheDate">Depends on the Date</string>
     <string name="NewYear">New Year</string>

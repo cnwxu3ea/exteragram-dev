@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">Tizim emojisidan foydalanish</string>
     <string name="NewSwitchStyle">MD3 almashtirish uslubi</string>
     <string name="DisableDividers">Ajratuvchilarni o‘chirish</string>
-    <string name="AlternativeNavigation">Muqobil navigatsiya</string>
-    <string name="AlternativeNavigationInfo">Ekranlar orasidagi yangi silliq o‘tish animatsiyalarini o‘z ichiga oluvchi tajribaviy variant.</string>
     <string name="DrawerOptions">Tortish amallari</string>
     <string name="DrawerIconSet">Belgilar to‘plami</string>
-    <string name="DrawerAlternativeOpeningAnimation">Muqobil ochilish animatsiyasi</string>
     <string name="DependsOnTheDate">Sanaga bog‘liq</string>
     <string name="NewYear">Yangi yil</string>
     <string name="ValentinesDay">Sevishganlar kuni</string>

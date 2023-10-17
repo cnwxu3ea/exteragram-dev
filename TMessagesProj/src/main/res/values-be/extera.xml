@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">Выкарыстоўваць сістэмныя эмодзі</string>
     <string name="NewSwitchStyle">Пераключальнікі ў стылле MD3</string>
     <string name="DisableDividers">Адключыць падзельнікі</string>
-    <string name="AlternativeNavigation">Альтэрнатыўная навігацыя</string>
-    <string name="AlternativeNavigationInfo">Эксперыментальная опцыя, якая ўключае ў сябе новую, больш плыўную анімацыю пераходу паміж экранамі.\ n \ n пры выкарыстанні гэтай опцыі панэль навігацыі ў чатах будзе таго ж колеру, што і панэль паведамленняў.</string>
     <string name="DrawerOptions">Налады скрыні</string>
     <string name="DrawerIconSet">Набор абразкоў</string>
-    <string name="DrawerAlternativeOpeningAnimation">Альтэрнатыўная анімацыя адкрыцця</string>
     <string name="DependsOnTheDate">Залежыць ад даты</string>
     <string name="NewYear">Новы год</string>
     <string name="ValentinesDay">Дзень Святога Валянціна</string>

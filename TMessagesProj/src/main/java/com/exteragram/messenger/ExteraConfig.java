@@ -59,7 +59,7 @@ public class ExteraConfig {
     public static boolean useSystemFonts;
     public static boolean newSwitchStyle;
     public static boolean disableDividers;
-    public static boolean useLNavigation;
+    public static boolean springAnimations;
 
     // Blur Preferences
     public static int blurSmoothness;
@@ -69,7 +69,7 @@ public class ExteraConfig {
     public static boolean blurDialogs;
 
     public static int eventType;
-    public static boolean alternativeOpenAnimation;
+    public static boolean immersiveDrawerAnimation;
     public static boolean changeStatus, myStories, menuBots, newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr;
 
     // General
@@ -226,7 +226,7 @@ public class ExteraConfig {
             useSystemFonts = preferences.getBoolean("useSystemFonts", true);
             newSwitchStyle = preferences.getBoolean("newSwitchStyle", true);
             disableDividers = preferences.getBoolean("disableDividers", false);
-            useLNavigation = preferences.getBoolean("useLNavigation", true);
+            springAnimations = preferences.getBoolean("springAnimations", true);
 
             blurSmoothness = preferences.getInt("blurSmoothness", SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_HIGH ? 2 : 0);
             forceBlur = preferences.getBoolean("forceBlur", false);
@@ -237,7 +237,7 @@ public class ExteraConfig {
             blurDialogs = preferences.getBoolean("blurDialogs", blur);
 
             eventType = preferences.getInt("eventType", 0);
-            alternativeOpenAnimation = preferences.getBoolean("alternativeOpenAnimation", true);
+            immersiveDrawerAnimation = preferences.getBoolean("immersiveDrawerAnimation", false);
 
             changeStatus = preferences.getBoolean("changeStatus", true);
             myStories = preferences.getBoolean("myStories", true);

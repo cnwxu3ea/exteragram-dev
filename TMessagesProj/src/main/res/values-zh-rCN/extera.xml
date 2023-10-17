@@ -61,11 +61,8 @@
     <string name="UseSystemEmoji">使用系统Emoji</string>
     <string name="NewSwitchStyle">Material Design 3 开关样式</string>
     <string name="DisableDividers">禁用分隔线</string>
-    <string name="AlternativeNavigation">备选导航动画</string>
-    <string name="AlternativeNavigationInfo">一个实验性选项，包括屏幕切换过程中新的、更加舒适的过渡动画。\n\n通过此选项，聊天中的导航栏颜色将与消息面板相同。</string>
     <string name="DrawerOptions">侧栏选项</string>
     <string name="DrawerIconSet">图标集</string>
-    <string name="DrawerAlternativeOpeningAnimation">备选打开动画</string>
     <string name="DependsOnTheDate">根据日期</string>
     <string name="NewYear">新年</string>
     <string name="ValentinesDay">情人节</string>

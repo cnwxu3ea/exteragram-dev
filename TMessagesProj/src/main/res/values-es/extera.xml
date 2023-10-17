@@ -51,11 +51,8 @@
     <string name="UseSystemEmoji">Usar emojis del sistema</string>
     <string name="NewSwitchStyle">Estilo del interruptor MD3</string>
     <string name="DisableDividers">Desactivar separadores</string>
-    <string name="AlternativeNavigation">Navegación alternativa</string>
-    <string name="AlternativeNavigationInfo">Una opción experimental que incluye nuevas animaciones de transición más suaves entre pantallas.\n\nCon esta opción, la barra de navegación en chats será del mismo color que el panel de mensajes.</string>
     <string name="DrawerOptions">Opciones del cajón</string>
     <string name="DrawerIconSet">Conjunto de iconos</string>
-    <string name="DrawerAlternativeOpeningAnimation">Animación de apertura alternativa</string>
     <string name="DependsOnTheDate">Depende de la fecha</string>
     <string name="NewYear">Año nuevo</string>
     <string name="ValentinesDay">Día de San Valentín</string>
