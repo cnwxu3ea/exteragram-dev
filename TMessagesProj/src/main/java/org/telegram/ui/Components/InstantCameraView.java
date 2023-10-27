@@ -72,8 +72,8 @@ import androidx.core.graphics.ColorUtils;
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.camera.CameraXController;
 import com.exteragram.messenger.camera.CameraXUtils;
-import com.exteragram.messenger.utils.VoiceEnhancer;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -1979,7 +1979,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
                 }
                 try {
-                    VoiceEnhancer.release();
                     audioRecorder.release();
                 } catch (Exception e) {
                     FileLog.e(e);
@@ -2578,7 +2577,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     buffers.add(new AudioBufferInfo());
                 }
                 audioRecorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, audioSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
-                VoiceEnhancer.init(audioRecorder);
                 audioRecorder.startRecording();
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("InstantCamera initied audio record with channels " + audioRecorder.getChannelCount() + " sample rate = " + audioRecorder.getSampleRate() + " bufferSize = " + bufferSize);

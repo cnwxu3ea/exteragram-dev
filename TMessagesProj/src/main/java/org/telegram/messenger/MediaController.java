@@ -61,7 +61,6 @@ import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.FrameLayout;
 
-import com.exteragram.messenger.utils.VoiceEnhancer;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
@@ -3831,7 +3830,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 recordReplyingStory = replyStory;
                 fileBuffer.rewind();
 
-                VoiceEnhancer.init(audioRecorder);
                 audioRecorder.startRecording();
             } catch (Exception e) {
                 FileLog.e(e);
@@ -3841,7 +3839,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 recordingAudioFile.delete();
                 recordingAudioFile = null;
                 try {
-                    VoiceEnhancer.release();
                     audioRecorder.release();
                     audioRecorder = null;
                 } catch (Exception e2) {
@@ -3959,7 +3956,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
         try {
             if (audioRecorder != null) {
-                VoiceEnhancer.release();
                 audioRecorder.release();
                 audioRecorder = null;
             }
