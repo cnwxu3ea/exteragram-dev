@@ -29,6 +29,7 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -44,6 +45,8 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.ForegroundDetector;
+import org.telegram.ui.Components.Premium.boosts.BoostRepository;
+import org.telegram.ui.IUpdateLayout;
 import org.telegram.ui.LauncherIconController;
 
 import java.io.File;
@@ -121,6 +124,10 @@ public class ApplicationLoader extends Application {
 
     public static String getApplicationId() {
         return BuildConfig.APPLICATION_ID;
+    }
+
+    protected boolean isStandalone() {
+        return false;
     }
 
     public static File getFilesDirFixed() {
@@ -583,4 +590,13 @@ public class ApplicationLoader extends Application {
         }
         return exists;
     }
+
+    public boolean showUpdateAppPopup(Context context, TLRPC.TL_help_appUpdate update, int account) {
+        return false;
+    }
+
+    public IUpdateLayout takeUpdateLayout(Activity activity, ViewGroup sideMenu, ViewGroup sideMenuContainer) {
+        return null;
+    }
+
 }

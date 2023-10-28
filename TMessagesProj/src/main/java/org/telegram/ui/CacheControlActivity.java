@@ -116,6 +116,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Objects;
 
 public class CacheControlActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -1220,24 +1221,28 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         actionModeTitle.setTextSize(AndroidUtilities.dp(18));
         actionModeTitle.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
         actionModeTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        actionModeLayout.addView(actionModeTitle, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 18, Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, -11, 0, 0));
+        actionModeLayout.addView(actionModeTitle, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 18, Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, -11, 18, 0));
 
         actionModeSubtitle = new AnimatedTextView(context, true, true, true);
         actionModeSubtitle.setAnimationProperties(.35f, 0, 350, CubicBezierInterpolator.EASE_OUT_QUINT);
         actionModeSubtitle.setTextSize(AndroidUtilities.dp(14));
         actionModeSubtitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        actionModeLayout.addView(actionModeSubtitle, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 18, Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 10, 0, 0));
+        actionModeLayout.addView(actionModeSubtitle, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 18, Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 10, 18, 0));
 
         actionModeClearButton = new TextView(context);
         actionModeClearButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         actionModeClearButton.setPadding(AndroidUtilities.dp(14), 0, AndroidUtilities.dp(14), 0);
         actionModeClearButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         actionModeClearButton.setBackground(Theme.AdaptiveRipple.filledRectByKey(Theme.key_featuredStickers_addButton, 6));
-        actionModeClearButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        actionModeClearButton.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
         actionModeClearButton.setGravity(Gravity.CENTER);
         actionModeClearButton.setText(LocaleController.getString("CacheClear", R.string.CacheClear));
         actionModeClearButton.setOnClickListener(e -> clearSelectedFiles());
-        actionModeLayout.addView(actionModeClearButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 28, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 14, 0));
+        if (LocaleController.isRTL) {
+            actionModeLayout.addView(actionModeClearButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 28, Gravity.LEFT | Gravity.CENTER_VERTICAL, 0, 0, 0, 0));
+        } else {
+            actionModeLayout.addView(actionModeClearButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 28, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 14, 0));
+        }
 
         ActionBarMenuItem otherItem = actionBar.createMenu().addItem(other_id, R.drawable.ic_ab_other);
         clearDatabaseItem = otherItem.addSubItem(clear_database_id, R.drawable.msg_delete, LocaleController.getString("ClearLocalDatabase", R.string.ClearLocalDatabase));
@@ -1823,7 +1828,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             loadingDrawable.setAlpha((int) (0xFF * barAlpha * loading));
             loadingDrawable.draw(canvas);
 
-            usedPercentPaint.setColor(Theme.getActiveTheme().isMonet() ? Theme.getColor(Theme.key_statisticChartLine_red) : Theme.percentSV(Theme.getColor(Theme.key_radioBackgroundChecked), Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), .922f, 1.8f));
+            usedPercentPaint.setColor(Theme.getActiveTheme().isMonet() ? Theme.getColor(Theme.key_statisticChartLine_red) : ColorUtils.blendARGB(Theme.getColor(Theme.key_radioBackgroundChecked), Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), .75f));
             usedPercentPaint.setAlpha((int) (usedPercentPaint.getAlpha() * barAlpha));
             AndroidUtilities.rectTmp.set(
                 progressRect.left + (1f - loading) * Math.max(AndroidUtilities.dp(4), percent * progressRect.width()) + AndroidUtilities.dp(1),
@@ -2135,7 +2140,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             valueTextView.setCallback(button);
             valueTextView.setTextSize(AndroidUtilities.dp(14));
             valueTextView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
-            valueTextView.setTextColor(Theme.adaptHSV(Theme.getColor(Theme.key_featuredStickers_buttonText), -.46f, +.08f));
+            valueTextView.setTextColor(Theme.blendOver(Theme.getColor(Theme.key_featuredStickers_addButton), Theme.multAlpha(Theme.getColor(Theme.key_featuredStickers_buttonText), .7f)));
             valueTextView.setText("");
 
             button.setContentDescription(TextUtils.concat(textView.getText(), "\t", valueTextView.getText()));
@@ -2675,8 +2680,8 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                     filesString = LocaleController.formatPluralString("Files", cacheModel.getSelectedFiles(), cacheModel.getSelectedFiles());
                 }
                 String sizeString = AndroidUtilities.formatFileSize(cacheModel.getSelectedFilesSize());
-                actionModeTitle.setText(sizeString);
-                actionModeSubtitle.setText(filesString);
+                actionModeTitle.setText(sizeString, !LocaleController.isRTL);
+                actionModeSubtitle.setText(filesString, !LocaleController.isRTL);
                 cachedMediaLayout.showActionMode(true);
             }
         } else {
@@ -2936,7 +2941,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 checkBox.setColor(-1, Theme.key_windowBackgroundWhite, Theme.key_checkboxCheck);
                 checkBox.setDrawUnchecked(false);
                 checkBox.setDrawBackgroundAsArc(3);
-                addView(checkBox, LayoutHelper.createFrame(24, 24, 0, 38, 25, 0, 0));
+                addView(checkBox, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 38, 25, 38, 0));
             }
             checkBox.setChecked(checked, animated);
         }

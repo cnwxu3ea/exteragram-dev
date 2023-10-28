@@ -58,11 +58,11 @@ public class BuildVars {
         return false;
     }
 
-    public static boolean isStandaloneApp() {
-        return true;
-    }
-
     public static boolean isBetaApp() {
         return DEBUG_VERSION;
+    }
+
+    public static String getSmsHash() {
+        return DEBUG_VERSION ? "O2P2z+/jBpJ" : "oLeq9AcOZkT";
     }
 }

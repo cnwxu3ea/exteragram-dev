@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Point;
 import org.telegram.ui.Components.Rect;
@@ -22,7 +23,7 @@ public class LocationView extends EntityView {
     private int currentType;
 
     public TLRPC.MessageMedia location;
-    public TLRPC.MediaArea mediaArea;
+    public TL_stories.MediaArea mediaArea;
 
     @Override
     protected float getStickyPaddingLeft() {
@@ -67,7 +68,7 @@ public class LocationView extends EntityView {
         return deg(Lat) + (Lat > 0 ? "N" : "S") + " " + deg(Long) + (Long > 0 ? "E" : "W");
     }
 
-    public LocationView(Context context, Point position, int currentAccount, TLRPC.MessageMedia location, TLRPC.MediaArea mediaArea, float density, int maxWidth, int type, int color) {
+    public LocationView(Context context, Point position, int currentAccount, TLRPC.MessageMedia location, TL_stories.MediaArea mediaArea, float density, int maxWidth, int type, int color) {
         super(context, position);
 
         marker = new LocationMarker(context, density);
@@ -82,7 +83,7 @@ public class LocationView extends EntityView {
         updatePosition();
     }
 
-    public void setLocation(int currentAccount, TLRPC.MessageMedia location, TLRPC.MediaArea area) {
+    public void setLocation(int currentAccount, TLRPC.MessageMedia location, TL_stories.MediaArea area) {
         this.location = location;
         this.mediaArea = area;
 

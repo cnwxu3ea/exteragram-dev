@@ -636,7 +636,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         if (emojiView != null) {
             return;
         }
-        emojiView = new EmojiView(null, UserConfig.getInstance(currentAccount).isPremium(), false, false, getContext(), false, null, null, true, resourcesProvider);
+        emojiView = new EmojiView(null, UserConfig.getInstance(currentAccount).isPremium(), false, false, getContext(), false, null, null, true, resourcesProvider, false);
         emojiView.emojiCacheType = AnimatedEmojiDrawable.CACHE_TYPE_ALERT_PREVIEW;
         emojiView.setDelegate(new EmojiView.EmojiViewDelegate() {
             @Override

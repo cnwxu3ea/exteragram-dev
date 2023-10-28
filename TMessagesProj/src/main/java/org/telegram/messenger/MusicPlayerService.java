@@ -35,6 +35,7 @@ import android.widget.RemoteViews;
 
 import com.exteragram.messenger.utils.AppUtils;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.ui.LaunchActivity;
@@ -63,6 +64,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
     private Bitmap albumArtPlaceholder;
     private int notificationMessageID;
     private ImageReceiver imageReceiver;
+    private boolean foregroundServiceIsStarted;
 
     private String loadingFilePath;
 
@@ -404,6 +406,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
     public void onDestroy() {
         unregisterReceiver(headsetPlugReceiver);
         super.onDestroy();
+        stopForeground(true);
         if (remoteControlClient != null) {
             RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
             metadataEditor.clear();

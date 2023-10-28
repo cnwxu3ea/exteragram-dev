@@ -283,6 +283,10 @@ public interface INavigationLayout {
 
     boolean isSheet();
 
+    void updateTitleOverlay();
+
+    void setWindow(Window window);
+
     interface INavigationLayoutDelegate {
         @SuppressWarnings("deprecation")
         default boolean needPresentFragment(INavigationLayout layout, NavigationParams params) {
