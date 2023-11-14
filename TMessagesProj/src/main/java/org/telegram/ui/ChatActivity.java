@@ -8535,6 +8535,36 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             @Override
+            protected void viewInChat() {
+                if (messagePreviewParams != null) {
+                    var messageObject = getReplyMessage();
+                    var id = messageObject.getId();
+                    String quote = replyingQuote != null ? replyingQuote.text : null;
+                    long did = DialogObject.getPeerDialogId(messageObject.messageOwner.peer_id);
+                    boolean couldBeDifferentTopic = messageObject.messageOwner.peer_id instanceof TLRPC.TL_peerChannel;
+                    if (did != dialog_id || ChatObject.isForum(currentChat) && couldBeDifferentTopic) {
+                        dismiss(false);
+                        int quoteOffset = -1;
+                        if (messageObject.messageOwner != null && messageObject.messageOwner.reply_to != null && messageObject.messageOwner.reply_to.quote) {
+                            if ((messageObject.messageOwner.reply_to.flags & 1024) != 0) {
+                                quoteOffset = messageObject.messageOwner.reply_to.quote_offset;
+                            }
+                        }
+                        if (LaunchActivity.instance != null) {
+                            LaunchActivity.instance.openMessage(did, id, quote, null, 0, quoteOffset);
+                        }
+                    } else {
+                        dismiss(true);
+                        if (quote != null) {
+                            highlightMessageQuote = quote;
+                            showNoQuoteAlert = true;
+                        }
+                        scrollToMessageId(id, 0, true, messageObject.getDialogId() == mergeDialogId ? 1 : 0, true, 0);
+                    }
+                }
+            }
+
+            @Override
             protected void selectAnotherChat(boolean forward) {
                 dismiss(false);
                 if (messagePreviewParams != null) {

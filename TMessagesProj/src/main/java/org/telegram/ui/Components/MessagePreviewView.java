@@ -936,6 +936,11 @@ public class MessagePreviewView extends FrameLayout {
                 applyChanges.setOnClickListener(v -> dismiss(true));
                 menu.addView(applyChanges, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
 
+                ActionBarMenuSubItem viewInChat = new ActionBarMenuSubItem(context, true, false, false, resourcesProvider);
+                viewInChat.setTextAndIcon(LocaleController.getString(R.string.ViewInChat), R.drawable.msg_view_file);
+                viewInChat.setOnClickListener(v -> viewInChat());
+                menu.addView(viewInChat, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+
                 deleteReplyButton = new ActionBarMenuSubItem(context, true, false, true, resourcesProvider);
                 deleteReplyButton.setTextAndIcon(LocaleController.getString(showOutdatedQuote ? R.string.DoNotQuote : R.string.DoNotReply), R.drawable.msg_delete);
                 deleteReplyButton.setColors(getThemedColor(Theme.key_text_RedBold), getThemedColor(Theme.key_text_RedRegular));
@@ -984,6 +989,11 @@ public class MessagePreviewView extends FrameLayout {
                 applyChanges.setTextAndIcon(LocaleController.getString(R.string.ApplyChanges), R.drawable.msg_select);
                 applyChanges.setOnClickListener(v -> dismiss(true));
                 menu.addView(applyChanges, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+
+                ActionBarMenuSubItem sendMessagesView = new ActionBarMenuSubItem(context, false, false, resourcesProvider);
+                sendMessagesView.setTextAndIcon(LocaleController.getString("ForwardSendMessages", R.string.ForwardSendMessages), R.drawable.msg_send);
+                menu.addView(sendMessagesView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+                sendMessagesView.setOnClickListener(View -> didSendPressed());
 
                 ActionBarMenuSubItem deleteLink = new ActionBarMenuSubItem(context, true, false, true, resourcesProvider);
                 deleteLink.setTextAndIcon(LocaleController.getString(R.string.DoNotForward), R.drawable.msg_delete);
@@ -1909,6 +1919,10 @@ public class MessagePreviewView extends FrameLayout {
     }
 
     protected void selectAnotherChat(boolean forward) {
+
+    }
+
+    protected void viewInChat() {
 
     }
 
