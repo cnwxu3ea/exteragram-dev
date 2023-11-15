@@ -44,7 +44,7 @@ public class CanvasUtils {
 
     public static Drawable createFabBackground(boolean altColor, int size) {
         int r = !ExteraConfig.squareFab ? 100 : (int) Math.ceil(16 * size / 56f);
-        int c = Theme.getColor(altColor ? Theme.key_dialogFloatingButton : Theme.key_chats_actionBackground);
+        int c = Theme.getColor(altColor ? Theme.key_chat_editMediaButton : Theme.key_chats_actionBackground);
         int pc = Theme.getColor(altColor ? Theme.key_dialogFloatingButtonPressed : Theme.key_chats_actionPressedBackground);
         if (size == 40) {
             c = ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhite), Color.WHITE, 0.1f);

@@ -2630,7 +2630,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         writeButton = new ImageView(context);
         writeButtonDrawable = CanvasUtils.createFabBackground(true);
-        // writeButtonDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), getThemedColor(Theme.key_chat_attachCheckBoxBackground), getThemedColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_chat_attachCheckBoxBackground));
         writeButton.setBackgroundDrawable(writeButtonDrawable);
         writeButton.setImageResource(R.drawable.attach_send);
         writeButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
@@ -3796,10 +3795,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             }
         }
 
-        Theme.setSelectorDrawableColor(writeButtonDrawable, getThemedColor(Theme.key_chat_attachCheckBoxBackground), false);
-        Theme.setSelectorDrawableColor(writeButtonDrawable, getThemedColor(Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_chat_attachCheckBoxBackground), true);
-        //Theme.setSelectorDrawableColor(writeButtonDrawable, getThemedColor(Theme.key_dialogFloatingButton), false);
-        //Theme.setSelectorDrawableColor(writeButtonDrawable, getThemedColor(Theme.key_dialogFloatingButtonPressed), true);
+        Theme.setSelectorDrawableColor(writeButtonDrawable, getThemedColor(Theme.key_dialogFloatingButton), false);
+        Theme.setSelectorDrawableColor(writeButtonDrawable, getThemedColor(Theme.key_dialogFloatingButtonPressed), true);
         writeButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
 
         actionBarShadow.setBackgroundColor(getThemedColor(Theme.key_dialogShadowLine));
