@@ -33,7 +33,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -141,7 +140,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -2629,7 +2627,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         } else {
             addView(bottomTabContainer, LayoutHelper.createFrame(40 + 16, 40 + 8, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 0, 0, 2, 0));
 
-            Drawable drawable = CanvasUtils.createFabBackground(false, 36);
+            Drawable drawable = CanvasUtils.createFabBackground(36, getThemedColor(Theme.key_chats_actionBackground), getThemedColor(Theme.key_chats_actionPressedBackground));
             StateListAnimator animator = new StateListAnimator();
             animator.addState(new int[]{android.R.attr.state_pressed}, ObjectAnimator.ofFloat(floatingButton, View.TRANSLATION_Z, AndroidUtilities.dp(2), AndroidUtilities.dp(4)).setDuration(200));
             animator.addState(new int[]{}, ObjectAnimator.ofFloat(floatingButton, View.TRANSLATION_Z, AndroidUtilities.dp(4), AndroidUtilities.dp(2)).setDuration(200));
@@ -7523,7 +7521,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         public int getItemViewType(int position) {
             if (position == 0) {
                 return VIEW_TYPE_SEARCHFIELD;
-            } else if (position == 1 && searchWas && result.isEmpty()) {
+            } else if (position == 1 && searchWas && result.isEmpty() && packs.isEmpty()) {
                 return VIEW_TYPE_HELP;
             }
             if (!packs.isEmpty()) {

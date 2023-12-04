@@ -6183,7 +6183,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         pickerViewSendButton = new ImageView(parentActivity);
         pickerViewSendButton.setScaleType(ImageView.ScaleType.CENTER);
-        pickerViewSendDrawable = CanvasUtils.createFabBackground(true, 48);
+        pickerViewSendDrawable = CanvasUtils.createFabBackground(48, getThemedColor(Theme.key_chat_editMediaButton), getThemedColor(Theme.key_dialogFloatingButtonPressed));
         pickerViewSendButton.setBackgroundDrawable(pickerViewSendDrawable);
         pickerViewSendButton.setImageResource(R.drawable.msg_input_send_mini);
         pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_dialogFloatingIcon), PorterDuff.Mode.MULTIPLY));
@@ -6985,7 +6985,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             parentChatActivity.getFragmentView().requestLayout();
         }
         final boolean finalOpenKeyboardOnShareAlertClose = openKeyboardOnShareAlertClose;
-        ShareAlert alert = new ShareAlert(parentActivity, parentChatActivity, messages, null, null, null, false, null, null, false, true, null) {
+        ShareAlert alert = new ShareAlert(parentActivity, parentChatActivity, messages, null, null, null, false, null, null, false, true, false, null) {
             @Override
             protected void onSend(LongSparseArray<TLRPC.Dialog> dids, int count, TLRPC.TL_forumTopic topic) {
                 AndroidUtilities.runOnUIThread(() -> {
@@ -13595,8 +13595,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     return;
                 }
                 ImageLocation location = imagesArrLocationsVideo.get(index);
-                f1 = FileLoader.getInstance(currentAccount).getPathToAttach(location.location, getFileLocationExt(location), false);
-                f2 = FileLoader.getInstance(currentAccount).getPathToAttach(location.location, getFileLocationExt(location), true);
+                if (location != null) {
+                    f1 = FileLoader.getInstance(currentAccount).getPathToAttach(location.location, getFileLocationExt(location), false);
+                    f2 = FileLoader.getInstance(currentAccount).getPathToAttach(location.location, getFileLocationExt(location), true);
+                }
             } else if (currentSecureDocument != null) {
                 if (index < 0 || index >= secureDocuments.size()) {
                     photoProgressViews[a].setBackgroundState(PROGRESS_NONE, animated, true);

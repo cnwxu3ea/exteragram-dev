@@ -170,6 +170,7 @@ import org.telegram.ui.Components.ArchiveHelp;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.BlurredRecyclerView;
+import org.telegram.ui.Components.BotWebViewSheet;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.ChatActivityEnterView;
@@ -2867,6 +2868,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     @Override
+    public boolean dismissDialogOnPause(Dialog dialog) {
+        return !(dialog instanceof BotWebViewSheet) && super.dismissDialogOnPause(dialog);
+    }
+
+    @Override
     public ActionBar createActionBar(Context context) {
         ActionBar actionBar = new ActionBar(context) {
 
@@ -3530,7 +3536,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             switchItem.addView(imageView, LayoutHelper.createFrame(36, 36, Gravity.CENTER));
 
             TLRPC.User user = getUserConfig().getCurrentUser();
-            avatarDrawable.setInfo(user);
+            avatarDrawable.setInfo(currentAccount, user);
             imageView.getImageReceiver().setCurrentAccount(currentAccount);
             Drawable thumb = user != null && user.photo != null && user.photo.strippedBitmap != null ? user.photo.strippedBitmap : avatarDrawable;
             imageView.setImage(ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_STRIPPED), "50_50", thumb, user);
@@ -4817,7 +4823,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
 
             FrameLayout writeButtonBackground = new FrameLayout(context);
-            Drawable writeButtonDrawable = CanvasUtils.createFabBackground(true);
+            Drawable writeButtonDrawable = CanvasUtils.createFabBackground(56, getThemedColor(Theme.key_dialogFloatingButton), getThemedColor(Theme.key_dialogFloatingButtonPressed));
             writeButtonBackground.setBackgroundDrawable(writeButtonDrawable);
             writeButtonBackground.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             writeButtonBackground.setOutlineProvider(new ViewOutlineProvider() {
@@ -7752,22 +7758,36 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 slowedReloadAfterDialogClick = true;
                 if (getMessagesController().checkCanOpenChat(args, DialogsActivity.this)) {
                     TLRPC.Chat chat = getMessagesController().getChat(-dialogId);
+                    TLRPC.Dialog dialog = getMessagesController().getDialog(dialogId);
+                    boolean needOpenChatActivity = dialog != null && dialog.view_forum_as_messages;
                     if (chat != null && chat.forum && topicId == 0) {
                         if (!LiteMode.isEnabled(LiteMode.FLAG_CHAT_FORUM_TWOCOLUMN)) {
-                            presentFragment(new TopicsFragment(args));
+                            if (needOpenChatActivity) {
+                                presentFragment(new ChatActivity(args));
+                            } else {
+                                presentFragment(new TopicsFragment(args));
+                            }
                         } else {
                             if (!canOpenInRightSlidingView) {
-                                presentFragment(new TopicsFragment(args));
-                            } else if (!searching) {
-                                if (rightSlidingDialogContainer.currentFragment != null && ((TopicsFragment) rightSlidingDialogContainer.currentFragment).getDialogId() == dialogId) {
-                                    rightSlidingDialogContainer.finishPreview();
+                                if (needOpenChatActivity) {
+                                    presentFragment(new ChatActivity(args));
                                 } else {
-                                    viewPages[0].listView.prepareSelectorForAnimation();
-                                    TopicsFragment topicsFragment = new TopicsFragment(args);
-                                    topicsFragment.parentDialogsActivity = this;
-                                    rightSlidingDialogContainer.presentFragment(getParentLayout(), topicsFragment);
+                                    presentFragment(new TopicsFragment(args));
                                 }
-                                searchViewPager.updateTabs();
+                            } else if (!searching) {
+                                if (needOpenChatActivity) {
+                                    presentFragment(new ChatActivity(args));
+                                } else {
+                                    if (rightSlidingDialogContainer.currentFragment != null && ((TopicsFragment) rightSlidingDialogContainer.currentFragment).getDialogId() == dialogId) {
+                                        rightSlidingDialogContainer.finishPreview();
+                                    } else {
+                                        viewPages[0].listView.prepareSelectorForAnimation();
+                                        TopicsFragment topicsFragment = new TopicsFragment(args);
+                                        topicsFragment.parentDialogsActivity = this;
+                                        rightSlidingDialogContainer.presentFragment(getParentLayout(), topicsFragment);
+                                    }
+                                    searchViewPager.updateTabs();
+                                }
                             }
                         }
                     } else {
@@ -11835,13 +11855,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (floatingButton2Container != null) {
-            drawable = Theme.createSimpleSelectorCircleDrawable(
-                    AndroidUtilities.dp(36),
-                    ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhite), Color.WHITE, 0.1f),
-                    Theme.blendOver(Theme.getColor(Theme.key_windowBackgroundWhite), Theme.getColor(Theme.key_listSelector))
-            );
-            drawable = CanvasUtils.createFabBackground(false, 40);
-            floatingButton2Container.setBackground(drawable);
+            floatingButton2Container.setBackground(CanvasUtils.createFabBackground(40, getThemedColor(Theme.key_chats_actionBackground), getThemedColor(Theme.key_chats_actionPressedBackground)));
         }
     }
 

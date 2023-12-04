@@ -307,10 +307,10 @@ public class AvatarsDrawable {
             long id = MessageObject.getPeerId(participant.peer);
             if (DialogObject.isUserDialog(id)) {
                 currentUser = MessagesController.getInstance(account).getUser(id);
-                animatingStates[index].avatarDrawable.setInfo(currentUser);
+                animatingStates[index].avatarDrawable.setInfo(account, currentUser);
             } else {
                 currentChat = MessagesController.getInstance(account).getChat(-id);
-                animatingStates[index].avatarDrawable.setInfo(currentChat);
+                animatingStates[index].avatarDrawable.setInfo(account, currentChat);
             }
             if (currentStyle == 4) {
                 if (id == AccountInstance.getInstance(account).getUserConfig().getClientUserId()) {
@@ -334,14 +334,14 @@ public class AvatarsDrawable {
             } else {
                 animatingStates[index].avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_NORMAL);
                 animatingStates[index].avatarDrawable.setScaleSize(1f);
-                animatingStates[index].avatarDrawable.setInfo(currentUser);
+                animatingStates[index].avatarDrawable.setInfo(account, currentUser);
             }
             animatingStates[index].id = currentUser.id;
         } else {
             currentChat = (TLRPC.Chat) object;
             animatingStates[index].avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_NORMAL);
             animatingStates[index].avatarDrawable.setScaleSize(1f);
-            animatingStates[index].avatarDrawable.setInfo(currentChat);
+            animatingStates[index].avatarDrawable.setInfo(account, currentChat);
             animatingStates[index].id = -currentChat.id;
         }
         if (currentUser != null) {

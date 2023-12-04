@@ -35,22 +35,16 @@ import java.util.Objects;
 public class CanvasUtils {
 
     public static Drawable createFabBackground() {
-        return createFabBackground(false, 56);
+        return createFabBackground(56, Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
     }
 
-    public static Drawable createFabBackground(boolean altColor) {
-        return createFabBackground(altColor, 56);
-    }
-
-    public static Drawable createFabBackground(boolean altColor, int size) {
+    public static Drawable createFabBackground(int size, int color, int pressedColor) {
         int r = !ExteraConfig.squareFab ? 100 : (int) Math.ceil(16 * size / 56f);
-        int c = Theme.getColor(altColor ? Theme.key_chat_editMediaButton : Theme.key_chats_actionBackground);
-        int pc = Theme.getColor(altColor ? Theme.key_dialogFloatingButtonPressed : Theme.key_chats_actionPressedBackground);
         if (size == 40) {
-            c = ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhite), Color.WHITE, 0.1f);
-            pc = Theme.blendOver(Theme.getColor(Theme.key_windowBackgroundWhite), Theme.getColor(Theme.key_listSelector));
+            color = ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhite), Color.WHITE, 0.1f);
+            pressedColor = Theme.blendOver(Theme.getColor(Theme.key_windowBackgroundWhite), Theme.getColor(Theme.key_listSelector));
         }
-        return Theme.createSimpleSelectorRoundRectDrawable(dp(r), c, pc);
+        return Theme.createSimpleSelectorRoundRectDrawable(dp(r), color, pressedColor);
     }
 
     public static CombinedDrawable createCircleDrawableWithIcon(Context context, int iconRes, int size) {

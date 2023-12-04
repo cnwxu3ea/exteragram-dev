@@ -310,7 +310,7 @@ public class PreferencesUtils {
             writer.flush();
             writer.close();
 
-            fragment.showDialog(new ShareAlert(fragment.getParentActivity(), null, null, file.getAbsolutePath(), null, null, false, null, null, false, false, null) {
+            fragment.showDialog(new ShareAlert(fragment.getParentActivity(), null, null, file.getAbsolutePath(), null, null, false, null, null, false, false, false, null) {
                 @Override
                 protected void onSend(LongSparseArray<TLRPC.Dialog> dids, int count, TLRPC.TL_forumTopic topic) {
                     AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(fragment).createSimpleBulletin(R.raw.contact_check, LocaleController.getString(R.string.SettingsSaved)).show(), 250);
