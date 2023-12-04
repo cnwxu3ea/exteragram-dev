@@ -538,7 +538,7 @@ public class PreferencesUtils {
                 for (String key : newConfig.keySet()) {
                     Object v1 = newConfig.get(key), v2 = currentConfig.get(key);
                     if (!currentConfig.has(key) || !v1.equals(v2)) {
-                        if (isExceptedValue(key, v1) && isExceptedValue(key, v2)) {
+                        if (isExceptedValue(key, v1)) {
                             differenceCount++;
                         }
                     }

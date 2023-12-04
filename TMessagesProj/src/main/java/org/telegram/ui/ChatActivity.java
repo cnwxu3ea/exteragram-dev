@@ -4169,7 +4169,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 Drawable replyIconDrawable = getThemedDrawable(Theme.key_drawable_replyIcon);
                 //replyIconDrawable.setAlpha(alpha);
                 replyIconDrawable.setColorFilter(new PorterDuffColorFilter(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_chat_serviceIcon), alpha), PorterDuff.Mode.MULTIPLY));
-                replyIconDrawable.setBounds((int) (x - AndroidUtilities.dp(12) * scale), (int) (y - AndroidUtilities.dp(12) * scale), (int) (x + AndroidUtilities.dp(12) * scale), (int) (y + AndroidUtilities.dp(12) * scale));
+                replyIconDrawable.setBounds((int) (x - AndroidUtilities.dp(10) * scale), (int) (y - AndroidUtilities.dp(10) * scale), (int) (x + AndroidUtilities.dp(10) * scale), (int) (y + AndroidUtilities.dp(10) * scale));
                 replyIconDrawable.draw(canvas);
                 //replyIconDrawable.setAlpha(255);
                 // костыль пиздец че поделать
@@ -6246,14 +6246,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         chatActivityEnterView.replaceWithText(start, len, "@" + UserObject.getPublicUsername(user) + (!user.bot && ExteraConfig.addCommaAfterMention ? ", " : " "), false);
                     } else {
                         String name = UserObject.getFirstName(user, false);
-                        Spannable spannable;
-                        if (!user.bot && ExteraConfig.addCommaAfterMention) {
-                            spannable = new SpannableString(name + ", ");
-                            spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        } else {
-                            spannable = new SpannableString(name + " ");
-                            spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
+                        Spannable spannable = new SpannableString(name + (!user.bot && ExteraConfig.addCommaAfterMention ? ", " : " "));
+                        spannable.setSpan(new URLSpanUserMention(String.valueOf(user.id), 3), 0, spannable.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         chatActivityEnterView.replaceWithText(start, len, spannable, false);
                     }
                 }
@@ -6381,14 +6375,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 TLRPC.User user = (TLRPC.User) object;
                 if (!(searchingForUser && searchContainer.getVisibility() == View.VISIBLE)) {
                     String name = UserObject.getFirstName(user, false);
-                    Spannable spannable;
-                    if (!user.bot && ExteraConfig.addCommaAfterMention) {
-                        spannable = new SpannableString(name + ", ");
-                        spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    } else {
-                        spannable = new SpannableString(name + " ");
-                        spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
+                    Spannable spannable = new SpannableString(name + (!user.bot && ExteraConfig.addCommaAfterMention ? ", " : " "));
+                    spannable.setSpan(new URLSpanUserMention(String.valueOf(user.id), 3), 0, spannable.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     chatActivityEnterView.replaceWithText(start, len, spannable, false);
                     return true;
                 }

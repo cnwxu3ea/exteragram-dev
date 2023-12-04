@@ -12340,23 +12340,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (index < 0 || index >= imagesArrLocations.size()) {
                 return;
             }
-            boolean isIndexInvalid = (switchingToIndex < 0 || switchingToIndex >= avatarsArr.size());
-            if (!avatarsArr.isEmpty() && !isIndexInvalid) {
-                if (avatarsArr.get(switchingToIndex).date != 0) {
-                    String dateString = LocaleController.formatDateAudio(avatarsArr.get(switchingToIndex).date, false);
-                    actionBarContainer.setSubtitle(dateString + ", DC" + avatarsArr.get(switchingToIndex).dc_id);
-                    if (avatarsDialogId != 0) {
-                        if (avatarsDialogId > 0) {
-                            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(avatarsDialogId);
-                            actionBarContainer.setTitle(ContactsController.formatName(user.first_name, user.last_name));
-                        } else {
-                            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-avatarsDialogId);
-                            actionBarContainer.setTitle(chat.title);
-                        }
-                    }
-                }
-            }
-
             menuItem.hideSubItem(gallery_menu_translate);
             menuItem.hideSubItem(gallery_menu_hide_translation);
             if (canEditAvatar && !avatarsArr.isEmpty()) {
@@ -12394,7 +12377,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
                 ImageLocation imageLocation = imagesArrLocations.get(index);
                 if (imageLocation != null && imageLocation.photo != null) {
-                    actionBarContainer.setSubtitle(LocaleController.formatDateTime(imageLocation.photo.date), animated);
+                    actionBarContainer.setSubtitle(LocaleController.formatDateTime(imageLocation.photo.date) + ", DC" + (imageLocation.photo.dc_id > 0 ? imageLocation.photo.dc_id : ""), animated);
                 } else {
                     actionBarContainer.setSubtitle("", animated);
                 }

@@ -151,10 +151,10 @@ public class CameraXView extends BaseCameraView {
 
     @Override
     public boolean isFrontface() {
-        if (controller != null) {
-            return controller.isFrontface();
+        if (controller == null) {
+            return frontface;
         }
-        return false;
+        return controller.isFrontface();
     }
 
     //ugly api behaviour after permission check

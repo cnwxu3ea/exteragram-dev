@@ -2021,7 +2021,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         }
                     }, 1000);
                     evControlView.setSliderValue(0.5f, true);
-                    cameraZoom = cameraView.resetZoom();
+                    cameraZoom = cameraView != null ? cameraView.resetZoom() : 0;
                     zoomControlView.setSliderValue(cameraZoom, false);
                     if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
                         CameraController.getInstance().startPreview(((CameraView) cameraView).getCameraSession());

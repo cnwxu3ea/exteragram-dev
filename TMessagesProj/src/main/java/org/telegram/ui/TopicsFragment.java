@@ -705,7 +705,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         deleteChatSubmenu = other.addSubItem(delete_chat_id, R.drawable.msg_leave, LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu), themeDelegate);
 
         avatarContainer = new ChatAvatarContainer(context, this, false);
-        avatarContainer.getAvatarImageView().setRoundRadius(AndroidUtilities.dp(16));
+        avatarContainer.getAvatarImageView().setRoundRadius(ExteraConfig.getAvatarCorners(42, false, true)); //AndroidUtilities.dp(16));
         avatarContainer.setOccupyStatusBar(!AndroidUtilities.isTablet() && !inPreviewMode);
         actionBar.addView(avatarContainer, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 56, 0, 86, 0));
 
@@ -1394,7 +1394,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             if (parentAvatarImageView == null) {
                 parentAvatarImageView = new BackupImageView(getContext());
                 parentAvatarDrawable = new AvatarDrawable();
-                parentAvatarImageView.setRoundRadius(AndroidUtilities.dp(16));
+                parentAvatarImageView.setRoundRadius(ExteraConfig.getAvatarCorners(42, false, true)); //AndroidUtilities.dp(16));
                 parentAvatarDrawable.setInfo(getCurrentChat());
                 parentAvatarImageView.setForUserOrChat(getCurrentChat(), parentAvatarDrawable);
             }
