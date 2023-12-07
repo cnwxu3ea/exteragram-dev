@@ -271,6 +271,8 @@
     <string name="ResetPreferencesInfo">Вы точно хотите сбросить **все** настройки exteraGram?</string>
     <string name="UserNotFound">Пользователь с этим **ID** не найден.</string>
     <string name="PhotoCopied">Фото скопировано в буфер обмена.</string>
+    <string name="ProfileUsesEmojiPacks">В качестве фона профиля используется эмодзи из набора %s.</string>
+    <string name="ReplyUsesEmojiPacks">В качестве фона ответа используется эмодзи из набора %s.</string>
 
     <string name="MutualContactInfo">Этот контакт является взаимным.</string>
     <string name="ToBeginning">В начало</string>

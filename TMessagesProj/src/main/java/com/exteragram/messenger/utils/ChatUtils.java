@@ -22,6 +22,7 @@ import android.util.Base64;
 import com.exteragram.messenger.ExteraConfig;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.Emoji;
@@ -40,6 +41,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.TranscribeButton;
 
 import java.io.File;
@@ -471,5 +473,35 @@ public class ChatUtils {
             }
         }
         return false;
+    }
+
+    public static long getEmojiIdFrom(MessageObject messageObject, TLRPC.User currentUser) {
+        if (messageObject != null && messageObject.messageOwner != null && messageObject.replyMessageObject != null && messageObject.replyMessageObject.messageOwner != null && messageObject.replyMessageObject.messageOwner.from_id != null) {
+            if (DialogObject.isEncryptedDialog(messageObject.replyMessageObject.getDialogId())) {
+                TLRPC.User user = messageObject.replyMessageObject.isOutOwner() ? UserConfig.getInstance(messageObject.replyMessageObject.currentAccount).getCurrentUser() : currentUser;
+                if (user != null) {
+                    return UserObject.getEmojiId(user);
+                }
+            } else if (messageObject.replyMessageObject.isFromUser()) {
+                TLRPC.User user = MessagesController.getInstance(messageObject.currentAccount).getUser(messageObject.replyMessageObject.messageOwner.from_id.user_id);
+                if (user != null) {
+                    return UserObject.getEmojiId(user);
+                }
+            } else if (messageObject.replyMessageObject.isFromChannel()) {
+                TLRPC.Chat chat = MessagesController.getInstance(messageObject.currentAccount).getChat(messageObject.replyMessageObject.messageOwner.from_id.channel_id);
+                if (chat != null) {
+                    return ChatObject.getEmojiId(chat);
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static TLRPC.InputStickerSet getSetFrom(MessageObject messageObject, TLRPC.User currentUser) {
+        return AnimatedEmojiDrawable.findStickerSet(UserConfig.selectedAccount, getEmojiIdFrom(messageObject, currentUser));
+    }
+
+    public static TLRPC.InputStickerSet getSetFrom(TLRPC.User user) {
+        return AnimatedEmojiDrawable.findStickerSet(UserConfig.selectedAccount, UserObject.getProfileEmojiId(user));
     }
 }

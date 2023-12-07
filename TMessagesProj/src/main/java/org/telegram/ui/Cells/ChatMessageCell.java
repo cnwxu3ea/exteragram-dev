@@ -86,6 +86,7 @@ import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.ChatUtils;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
@@ -539,6 +540,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
 
         default void didPressBotButton(ChatMessageCell cell, TLRPC.KeyboardButton button) {
+        }
+
+        default void didLongPressReply(ChatMessageCell cell, float touchX, float touchY) {
         }
 
         default void didLongPressBotButton(ChatMessageCell cell, TLRPC.KeyboardButton button) {
@@ -8760,6 +8764,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
         resetPressedLink(-1);
+
+        if (replyPressed) {
+            if (ChatUtils.getEmojiIdFrom(currentMessageObject, currentUser) > 0) {
+                delegate.didLongPressReply(this, replyTouchX, replyTouchY);
+                return true;
+            }
+        }
 
         if (pressedBotButton != -1) {
             var button = botButtons.get(pressedBotButton);

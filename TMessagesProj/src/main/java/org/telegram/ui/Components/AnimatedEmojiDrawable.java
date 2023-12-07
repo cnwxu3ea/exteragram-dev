@@ -405,8 +405,11 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public static TLRPC.InputStickerSet findStickerSet(int account, long documentId) {
-        TLRPC.Document document = findDocument(account, documentId);
-        return document == null ? null : MessageObject.getInputStickerSet(document);
+        EmojiDocumentFetcher fetcher = getDocumentFetcher(account);
+        if (fetcher == null || fetcher.emojiDocumentsCache == null) {
+            return null;
+        }
+        return fetcher.findStickerSet(documentId);
     }
 
     private boolean attached;

@@ -274,6 +274,8 @@
     <string name="ResetPreferencesInfo">Are you sure you want to reset **all** exteraGram Preferences to default?</string>
     <string name="UserNotFound">User with this **ID** not found.</string>
     <string name="PhotoCopied">Photo copied to clipboard.</string>
+    <string name="ProfileUsesEmojiPacks">This profile uses emoji from %s pack for background.</string>
+    <string name="ReplyUsesEmojiPacks">This reply uses emoji from %s pack for background.</string>
 
     <string name="MutualContactInfo">This contact is mutual.</string>
     <string name="ToBeginning">To Beginning</string>

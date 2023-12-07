@@ -214,6 +214,7 @@ import org.telegram.ui.Components.ItemOptions;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.MediaActivity;
+import org.telegram.ui.Components.MessageContainsEmojiButton;
 import org.telegram.ui.Components.Paint.PersistColorPalette;
 import org.telegram.ui.Components.Premium.GiftPremiumBottomSheet;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
@@ -4333,6 +4334,100 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         info.setText(getText() + ", " + nameTextViewRightDrawableContentDescription);
                     }
                 }
+
+                @Override
+                public boolean performLongClick(float x, float y) {
+                    if (this.equals(nameTextView[1])) {
+                        if (getParentActivity() == null) {
+                            return false;
+                        }
+
+                        AtomicReference<ActionBarPopupWindow> popupWindowRef = new AtomicReference<>();
+                        ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), R.drawable.popup_fixed_alert, getResourceProvider()) {
+                            final Path path = new Path();
+
+                            @Override
+                            protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+                                canvas.save();
+                                path.rewind();
+                                AndroidUtilities.rectTmp.set(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
+                                path.addRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Path.Direction.CW);
+                                canvas.clipPath(path);
+                                boolean draw = super.drawChild(canvas, child, drawingTime);
+                                canvas.restore();
+                                return draw;
+                            }
+                        };
+                        popupLayout.setFitItems(true);
+
+                        ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_copy, LocaleController.getString("Copy", R.string.Copy), false, getResourceProvider()).setOnClickListener(v -> {
+                            popupWindowRef.get().dismiss();
+                            AndroidUtilities.addToClipboard(nameTextView[1].getText());
+                            BulletinFactory.of(ProfileActivity.this).createCopyBulletin(LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
+                        });
+
+                        if (userId != 0) {
+                            TLRPC.User user = getMessagesController().getUser(userId);
+                            if (UserObject.getProfileEmojiId(user) > 0) {
+                                ArrayList<TLRPC.InputStickerSet> inputSet = new ArrayList<>(1);
+                                inputSet.add(ChatUtils.getSetFrom(user));
+                                if (inputSet.get(0) != null) {
+                                    View gap = new FrameLayout(contentView.getContext());
+                                    gap.setBackgroundColor(getThemedColor(Theme.key_actionBarDefaultSubmenuSeparator));
+                                    popupLayout.addView(gap, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
+
+                                    View button = new MessageContainsEmojiButton(currentAccount, contentView.getContext(), resourcesProvider, inputSet, MessageContainsEmojiButton.PROFILE_BACKGROUND);
+                                    button.setOnClickListener(e -> {
+                                        EmojiPacksAlert alert = new EmojiPacksAlert(ProfileActivity.this, getParentActivity(), resourcesProvider, inputSet) {
+                                            @Override
+                                            public void dismiss() {
+                                                super.dismiss();
+                                                dimBehindView(false);
+                                            }
+                                        };
+                                        popupWindowRef.get().dismiss();
+                                        alert.setCalcMandatoryInsets(false);
+                                        alert.setDimBehind(false);
+                                        dimBehindView(true);
+                                        showDialog(alert);
+                                    });
+                                    popupLayout.addView(button, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+                                }
+                            }
+                        }
+
+                        ActionBarPopupWindow popupWindow = new ActionBarPopupWindow(popupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
+                        popupWindow.setPauseNotifications(true);
+                        popupWindow.setDismissAnimationDuration(220);
+                        popupWindow.setOutsideTouchable(true);
+                        popupWindow.setClippingEnabled(true);
+                        popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
+                        popupWindow.setFocusable(true);
+                        popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST));
+                        popupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
+                        popupWindow.getContentView().setFocusableInTouchMode(true);
+                        popupWindowRef.set(popupWindow);
+
+                        float px = x, py = y;
+                        View v = this;
+                        while (v != getFragmentView() && v != null) {
+                            px += v.getX();
+                            py += v.getY();
+                            v = (View) v.getParent();
+                        }
+                        if (AndroidUtilities.isTablet()) {
+                            View pv = parentLayout.getView();
+                            px += pv.getX() + pv.getPaddingLeft();
+                            py += pv.getY() + pv.getPaddingTop();
+                        }
+                        popupWindow.showAtLocation(getFragmentView(), 0, (int) px, (int) py);
+                        popupWindow.dimBehind();
+
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                        return true;
+                    }
+                    return false;
+                }
             };
             if (a == 1) {
                 nameTextView[a].setTextColor(getThemedColor(Theme.key_profile_title));
@@ -4349,17 +4444,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             nameTextView[a].setAlpha(a == 0 ? 0.0f : 1.0f);
             if (a == 1) {
                 nameTextView[a].setScrollNonFitText(true);
-                nameTextView[a].setOnLongClickListener(v -> {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
-                        if (i == 0) {
-                            AndroidUtilities.addToClipboard(((SimpleTextView) v).getText());
-                            BulletinFactory.of(this).createCopyBulletin(LocaleController.formatString("TextCopied", R.string.TextCopied, resourcesProvider)).show();
-                        }
-                    });
-                    showDialog(builder.create());
-                    return false;
-                });
+                nameTextView[a].setLongClickable(true);
                 nameTextView[a].setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             }
             nameTextView[a].setFocusable(a == 0);
