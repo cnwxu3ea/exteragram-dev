@@ -8227,6 +8227,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (verifiedCrossfadeDrawable[a] == null) {
             verifiedDrawable[a] = Theme.profile_verifiedDrawable.getConstantState().newDrawable().mutate();
             verifiedCheckDrawable[a] = Theme.profile_verifiedCheckDrawable.getConstantState().newDrawable().mutate();
+            if (ExteraConfig.useSolarIcons) {
+                verifiedDrawable[a].setColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY);
+                verifiedCheckDrawable[a].setColorFilter(getThemedColor(Theme.key_profile_verifiedCheck), PorterDuff.Mode.MULTIPLY);
+            }
             verifiedCrossfadeDrawable[a] = new CrossfadeDrawable(
                 new CombinedDrawable(verifiedDrawable[a], verifiedCheckDrawable[a]),
                 ContextCompat.getDrawable(getParentActivity(), R.drawable.verified_profile)
@@ -11908,7 +11912,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         float p = photoDescriptionProgress;
         if (playProfileAnimation == 1 && (!fragmentOpened || openAnimationInProgress)) {
             photoDescriptionProgress = 0;
-        } else if (playProfileAnimation == 2 && (!fragmentOpened || openAnimationInProgress)) {
+        } else if (playProfileAnimation == 2 && (!fragmentOpened || openAnimationInProgress) && onlineTextView[1] != null) {
             photoDescriptionProgress = onlineTextView[1].getAlpha();
         } else {
             if (userId == UserConfig.getInstance(currentAccount).clientUserId) {

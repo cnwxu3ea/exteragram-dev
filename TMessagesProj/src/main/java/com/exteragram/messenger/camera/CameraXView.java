@@ -80,7 +80,7 @@ public class CameraXView extends BaseCameraView {
 
         @Override
         public void onDisplayChanged(int displayId) {
-            if (getRootView().getDisplay().getDisplayId() == displayId) {
+            if (getRootView().getDisplay() != null && getRootView().getDisplay().getDisplayId() == displayId) {
                 displayOrientation = getRootView().getDisplay().getRotation();
                 if (controller != null) {
                     controller.setTargetOrientation(displayOrientation);

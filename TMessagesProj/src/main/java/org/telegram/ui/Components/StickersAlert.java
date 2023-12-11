@@ -1062,7 +1062,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                         args.putLong("user_id", user.id);
                         ProfileActivity fragment = new ProfileActivity(args);
                         AndroidUtilities.runOnUIThread(() -> {
-                            parentFragment.presentFragment(fragment, false, false);
+                            if (parentFragment != null) {
+                                parentFragment.presentFragment(fragment, false, false);
+                            } else if (getContext() instanceof LaunchActivity) {
+                                ((LaunchActivity) getContext()).presentFragment(fragment, false, false);
+                            }
                             dismiss();
                         });
                     } else {

@@ -12403,7 +12403,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             } else {
                 menuItem.showSubItem(gallery_menu_save);
             }
-            if (!noforwards && avatarsArr.get(switchingToIndex).video_sizes.isEmpty()) {
+            if (!noforwards && avatarsArr.get(switchingToIndex) != null && avatarsArr.get(switchingToIndex).video_sizes.isEmpty()) {
                 menuItem.showSubItem(gallery_menu_copy);
             } else {
                 menuItem.hideSubItem(gallery_menu_copy);

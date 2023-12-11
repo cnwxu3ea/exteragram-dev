@@ -12383,7 +12383,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void moveScrollToLastMessage(boolean skipSponsored) {
-        if (chatListView != null && !messages.isEmpty() && !pinchToZoomHelper.isInOverlayMode()) {
+        if (chatListView != null && !messages.isEmpty() && pinchToZoomHelper != null && !pinchToZoomHelper.isInOverlayMode()) {
             int position = 0;
             if (skipSponsored) {
                 position += getSponsoredMessagesCount();
@@ -31446,9 +31446,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             px -= popupLayout.getMeasuredWidth() / 2f;
             py -= popupLayout.getMeasuredHeight() / 2f;
 
-            int keyboardHeight = contentView.measureKeyboardHeight();
-            if (keyboardHeight > AndroidUtilities.dp(20)) {
-                py -= keyboardHeight;
+            int keyboardOffset = contentView.getKeyboardHeight();
+            if (keyboardOffset < AndroidUtilities.dp(20) && chatActivityEnterView.isPopupShowing() || chatActivityEnterView.panelAnimationInProgress()) {
+                keyboardOffset = chatActivityEnterView.getEmojiPadding();
+            }
+            if (keyboardOffset > AndroidUtilities.dp(20)) {
+                py -= keyboardOffset;
             }
 
             popupWindow.showAtLocation(getFragmentView(), 0, (int) px, (int) py);
