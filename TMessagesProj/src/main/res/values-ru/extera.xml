@@ -281,7 +281,6 @@
     <string name="OpenPremiumBot">Открыть официального бота</string>
     <string name="CopyPhoto">Копировать фото</string>
     <string name="StickerSavedHint">Стикер сохранен в галерею.</string>
-    <string name="SaveMessage">Сохранить сообщение</string>
 
     <string name="TrackSaved">Трек сохранен в **%1$s**.</string>
     <string name="ChannelToSaveChanged">Треки будут сохраняться в **%1$s**.</string>

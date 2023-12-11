@@ -166,7 +166,6 @@
     <string name="BoldItalic">Negrita Cursiva</string>
     <string name="OpenPremiumBot">Abrir bot oficial</string>
     <string name="CopyPhoto">Copiar foto</string>
-    <string name="SaveMessage">Guardar mensaje</string>
     <string name="TrackSaved">Pista guardada en **%1$s**.</string>
     <string name="ChannelToSaveChanged">Las pistas se guardarán en **%1$s**.</string>
     <string name="ConfirmCall">Confirmar llamada</string>

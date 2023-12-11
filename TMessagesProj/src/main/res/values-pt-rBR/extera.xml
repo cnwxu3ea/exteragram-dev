@@ -225,7 +225,6 @@
     <string name="OpenPremiumBot">Abrir bot oficial</string>
     <string name="CopyPhoto">Copiar foto</string>
     <string name="StickerSavedHint">Sticker salvo na galeria</string>
-    <string name="SaveMessage">Salvar mensagem</string>
     <string name="TrackSaved">Áudio salvo em **%1$s**.</string>
     <string name="ChannelToSaveChanged">Os áudios serão salvos em **%1$s**.</string>
     <string name="ConfirmCall">Confirmar ligação</string>

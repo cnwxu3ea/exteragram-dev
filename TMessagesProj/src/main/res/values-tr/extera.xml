@@ -225,7 +225,6 @@
     <string name="OpenPremiumBot">Resmi botu aç</string>
     <string name="CopyPhoto">Fotoğraf Kopyala</string>
     <string name="StickerSavedHint">Çıkartma galeriye kaydedildi</string>
-    <string name="SaveMessage">Mesajı Kaydet</string>
     <string name="TrackSaved">Parça **%1$s** konumuna kaydedildi.</string>
     <string name="ChannelToSaveChanged">Parçalar **%1$s** konumuna kaydedilecektir.</string>
     <string name="ConfirmCall">Aramayı onayla</string>

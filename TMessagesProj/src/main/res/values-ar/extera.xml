@@ -225,7 +225,6 @@
     <string name="OpenPremiumBot">فتح البوت الرسمي</string>
     <string name="CopyPhoto">نسخ الصورة</string>
     <string name="StickerSavedHint">Sticker saved to gallery</string>
-    <string name="SaveMessage">حفظ الرسالة</string>
     <string name="TrackSaved">تم حفظ الموسيقى في **%1$s**.</string>
     <string name="ChannelToSaveChanged">سيتم حفظ الأصوات في **%1$s**.</string>
     <string name="ConfirmCall">قبول المكالمة</string>

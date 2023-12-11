@@ -226,7 +226,6 @@
     <string name="OpenPremiumBot">Rasmiy botni ochish</string>
     <string name="CopyPhoto">Rasmdan nusxa olish</string>
     <string name="StickerSavedHint">Sticker saved to gallery</string>
-    <string name="SaveMessage">Xabarni saqlash</string>
     <string name="TrackSaved">Yozuv bu yerga **%1$s** saqlandi.</string>
     <string name="ChannelToSaveChanged">Yozuvlar **%1$s** ichiga saqlanadi.</string>
     <string name="ConfirmCall">Chaqiruvni tasdiqlash</string>

@@ -130,7 +130,6 @@ CameraX wspierana jest tylko na
     <string name="MessageHistory">Historia wiadomości</string>
     <string name="BoldItalic">Pogrubiona kursywa</string>
     <string name="OpenPremiumBot">Otwórz oficjalnego bota</string>
-    <string name="SaveMessage">Zapisz wiadomość</string>
     <string name="TrackSaved">Utwór zapisany do **%1$s**.</string>
     <string name="ConfirmCall">Potwierdź połączenie</string>
     <string name="CallTo">Zadzwonić do **%1$s**?</string>

@@ -130,7 +130,6 @@ CameraX wird nur auf
     <string name="MessageHistory">Nachrichtenverlauf</string>
     <string name="BoldItalic">Fett Kursiv</string>
     <string name="OpenPremiumBot">Offiziellen Bot öffnen</string>
-    <string name="SaveMessage">Nachricht speichern</string>
     <string name="TrackSaved">Track wurde in **%1$s ** gespeichert.</string>
     <string name="ConfirmCall">Anruf bestätigen</string>
     <string name="CallTo">Anruf an **%1$s**?</string>

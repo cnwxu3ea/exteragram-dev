@@ -225,7 +225,6 @@
     <string name="OpenPremiumBot">Rəsmi Bot-u aç</string>
     <string name="CopyPhoto">Şəkilləri kopyala</string>
     <string name="StickerSavedHint">Stiker qalereyada saxlanıldı</string>
-    <string name="SaveMessage">Mesajı saxla</string>
     <string name="TrackSaved">Trek **%1$s** ünvanında yadda saxlanıldı.</string>
     <string name="ChannelToSaveChanged">Treklər **%1$s** ünvanında yadda saxlanılacaq.</string>
     <string name="ConfirmCall">Zəngi təstiq et</string>

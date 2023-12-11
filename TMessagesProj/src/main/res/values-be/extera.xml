@@ -225,7 +225,6 @@
     <string name="OpenPremiumBot">Адкрыць афіцыйнага бота</string>
     <string name="CopyPhoto">Капіраваць фота</string>
     <string name="StickerSavedHint">Налепка захавана ў галерэі</string>
-    <string name="SaveMessage">Захаваць паведамленне</string>
     <string name="TrackSaved">Трэк захаваны ў **%1$s**.</string>
     <string name="ChannelToSaveChanged">Трэк захаваны ў **%1$s**.</string>
     <string name="ConfirmCall">Пацвердзіць выклік</string>

@@ -225,7 +225,6 @@
     <string name="OpenPremiumBot">打开官方Premium Bot</string>
     <string name="CopyPhoto">复制图片</string>
     <string name="StickerSavedHint">贴纸已保存至相册</string>
-    <string name="SaveMessage">我的收藏</string>
     <string name="TrackSaved">ID超链接已保存</string>
     <string name="ChannelToSaveChanged">曲目将被保存到 **%1$s**。</string>
     <string name="ConfirmCall">呼叫前确认</string>

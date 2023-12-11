@@ -225,7 +225,6 @@
     <string name="OpenPremiumBot">開啟官方 Bot</string>
     <string name="CopyPhoto">複製圖片</string>
     <string name="StickerSavedHint">貼圖已儲存到您的手機相簿</string>
-    <string name="SaveMessage">儲存訊息</string>
     <string name="TrackSaved">追蹤已儲存至 **%1$s**。</string>
     <string name="ChannelToSaveChanged">曲目將會儲存至 **%1$s**</string>
     <string name="ConfirmCall">確認撥打</string>

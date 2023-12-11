@@ -225,7 +225,6 @@
     <string name="OpenPremiumBot">Відкрити офіційного бота</string>
     <string name="CopyPhoto">Копіювати фото</string>
     <string name="StickerSavedHint">Наліпка збережена в галереї</string>
-    <string name="SaveMessage">Зберегти повідомлення</string>
     <string name="TrackSaved">Пісню збережено</string>
     <string name="ChannelToSaveChanged">Треки будуть збережені в **%1$s**.</string>
     <string name="ConfirmCall">Підтвердити дзвінок</string>

@@ -284,7 +284,6 @@
     <string name="OpenPremiumBot">Open Official Bot</string>
     <string name="CopyPhoto">Copy Photo</string>
     <string name="StickerSavedHint">Sticker saved to gallery</string>
-    <string name="SaveMessage">Save Message</string>
 
     <string name="TrackSaved">Track saved to **%1$s**.</string>
     <string name="ChannelToSaveChanged">Tracks will be saved to **%1$s**.</string>
