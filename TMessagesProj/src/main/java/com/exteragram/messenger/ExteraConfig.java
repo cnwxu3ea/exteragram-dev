@@ -167,6 +167,8 @@ public class ExteraConfig {
     public static boolean useGoogleCrashlytics;
     public static boolean useGoogleAnalytics;
 
+    public static float flashWarmth, flashIntensity;
+
     private static boolean configLoaded;
 
     public static SharedPreferences preferences;
@@ -304,6 +306,9 @@ public class ExteraConfig {
             voiceHintShowcases = preferences.getInt("voiceHintShowcases", 0);
             useGoogleCrashlytics = preferences.getBoolean("useGoogleCrashlytics", BuildVars.isBetaApp());
             useGoogleAnalytics = preferences.getBoolean("useGoogleAnalytics", false);
+
+            flashWarmth = preferences.getFloat("flashWarmth", 0.75f);
+            flashIntensity = preferences.getFloat("flashIntensity", 1f);
 
             configLoaded = true;
         }

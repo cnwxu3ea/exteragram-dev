@@ -136,6 +136,8 @@ public class PreferencesUtils {
             new BackupItem("downloadSpeedBoost"),
             new BackupItem("eventType"),
             new BackupItem("filterZalgo"),
+            new BackupItem("flashIntensity"),
+            new BackupItem("flashWarmth"),
             new BackupItem("forceBlur"),
             new BackupItem("forceSnow"),
             new BackupItem("formatTimeWithSeconds"),

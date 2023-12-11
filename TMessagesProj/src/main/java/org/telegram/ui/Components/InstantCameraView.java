@@ -8,6 +8,8 @@
 
 package org.telegram.ui.Components;
 
+import static org.telegram.messenger.AndroidUtilities.dp;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -15,7 +17,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
@@ -50,7 +51,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -104,6 +104,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.voip.CellFlickerDrawable;
+import org.telegram.ui.Stories.recorder.SliderView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -135,6 +136,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private Paint paint;
     private RectF rect;
     private final ImageView switchCameraButton;
+    private ItemOptions itemOptions;
     private final ImageView flashlightButton;
     private CrossOutDrawable flashlightButtonDrawable;
     AnimatedVectorDrawable switchCameraDrawable = null;
@@ -301,6 +303,46 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (isCameraReady()) {
                 toggleTorch();
             }
+        });
+
+        flashlightButton.setOnLongClickListener(e -> {
+            if (!isCameraReady() || !isFrontface) {
+                return false;
+            }
+            boolean wasEnabled = enabled;
+            if (!enabled) {
+                toggleTorch();
+            }
+            itemOptions = ItemOptions.makeOptions(this, resourcesProvider, flashlightButton)
+                    .addView(
+                            new SliderView(getContext(), SliderView.TYPE_WARMTH)
+                                    .setValue(ExteraConfig.flashWarmth)
+                                    .setOnValueChange(v -> {
+                                        ExteraConfig.editor.putFloat("flashWarmth", ExteraConfig.flashWarmth = v).apply();
+                                        blurBehindDrawable.invalidate();
+                                    })
+                    )
+                    .addSpaceGap()
+                    .addView(
+                            new SliderView(getContext(), SliderView.TYPE_INTENSITY)
+                                    .setMinMax(.5f, 1f)
+                                    .setValue(ExteraConfig.flashIntensity)
+                                    .setOnValueChange(v -> {
+                                        ExteraConfig.editor.putFloat("flashIntensity", ExteraConfig.flashIntensity = v).apply();
+                                        blurBehindDrawable.invalidate();
+                                    })
+                    )
+                    .setOnDismiss(() -> {
+                        if (!wasEnabled) {
+                            toggleTorch();
+                        }
+                    })
+                    .setDimAlpha(50)
+                    .setGravity(Gravity.RIGHT)
+                    .translate(dp(46), dp(4))
+                    .setBackgroundColor(0xbb1b1b1b)
+                    .show();
+            return true;
         });
 
         switchCameraButton = new ImageView(context);
@@ -3205,6 +3247,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public void disableTorch() {
         if (enabled) {
             toggleTorch();
+            if (itemOptions != null) {
+                itemOptions.dismiss();
+            }
         }
     }
 

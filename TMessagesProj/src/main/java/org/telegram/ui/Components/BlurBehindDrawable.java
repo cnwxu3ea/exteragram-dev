@@ -13,6 +13,8 @@ import android.view.View;
 
 import androidx.core.graphics.ColorUtils;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
@@ -59,6 +61,17 @@ public class BlurBehindDrawable {
     private float panTranslationY;
 
     private float flashProgress = 0f;
+
+    public int getColor() {
+        int color;
+        float warmth = ExteraConfig.flashWarmth;
+        if (warmth < .5f) {
+            color = ColorUtils.blendARGB(0xff8cdfff, 0xffffffff, Utilities.clamp(warmth / .5f, 1, 0));
+        } else {
+            color = ColorUtils.blendARGB(0xffffffff, 0xfffeee8c, Utilities.clamp((warmth - .5f) / .5f, 1, 0));
+        }
+        return ColorUtils.setAlphaComponent(color, (int) (ExteraConfig.flashIntensity * 255));
+    }
 
     public void showFlash(boolean show) {
         float to = show ? 1f : 0f;
@@ -138,7 +151,8 @@ public class BlurBehindDrawable {
             canvas.drawBitmap(bitmap[0], 0, 0, emptyPaint);
             canvas.restore();
             wasDraw = true;
-            canvas.drawColor(ColorUtils.blendARGB(0x1a000000, Color.WHITE, flashProgress));
+
+            canvas.drawColor(ColorUtils.blendARGB(0x1a000000, getColor(), flashProgress));
         }
         canvas.restore();
 
