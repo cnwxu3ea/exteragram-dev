@@ -5116,14 +5116,13 @@ public class Theme {
             calendar.setTimeInMillis(System.currentTimeMillis());
             int monthOfYear = calendar.get(Calendar.MONTH);
             int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            canStartHolidayAnimation = monthOfYear == 0 && dayOfMonth == 1 && hour <= 23 || ExteraConfig.forceSnow;
+            canStartHolidayAnimation = ((monthOfYear == Calendar.DECEMBER && dayOfMonth >= (BuildVars.DEBUG_PRIVATE_VERSION ? 29 : 31)) || (monthOfYear == Calendar.JANUARY && dayOfMonth == 1)) || ExteraConfig.forceSnow;
             if (dialogs_holidayDrawable == null) {
-                if (canStartHolidayAnimation && (monthOfYear == 11 && dayOfMonth >= (BuildVars.DEBUG_PRIVATE_VERSION ? 29 : 31) && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1)) {
+                if (canStartHolidayAnimation) {
                     boolean isUpperCase;
                     try {
                         isUpperCase = Character.isUpperCase(LocaleUtils.getActionBarTitle().charAt(0));
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         isUpperCase = false;
                     }
                     dialogs_holidayDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.newyear);

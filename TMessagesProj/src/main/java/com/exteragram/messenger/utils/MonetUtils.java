@@ -115,7 +115,7 @@ public class MonetUtils {
     private final static String SATURATION = "s";
 
     public static int harmonize(int color) {
-        return Blend.harmonize(color, getColor("a1_400"));
+        return Blend.harmonize(color, getColor("a1_600"));
     }
 
     public static int getColor(String color) {

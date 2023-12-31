@@ -117,6 +117,7 @@ public class IconSetsController {
         solar.put(R.drawable.media_settings, R.drawable.msg_photo_settings_solar);
         solar.put(R.drawable.media_share, R.drawable.msg_share_solar);
         solar.put(R.drawable.menu_devices, R.drawable.msg_devices_solar);
+        solar.put(R.drawable.menu_gift, R.drawable.msg_gift_premium_solar);
         solar.put(R.drawable.menu_quote_delete, R.drawable.menu_quote_delete_solar);
         solar.put(R.drawable.menu_quote_specific, R.drawable.menu_quote_solar);
         solar.put(R.drawable.menu_select_quote, R.drawable.menu_select_quote_solar);

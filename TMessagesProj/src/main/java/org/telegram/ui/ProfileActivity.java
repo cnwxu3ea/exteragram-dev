@@ -4409,8 +4409,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 inputSet.add(ChatUtils.getSetFrom(user));
                             }
 
-
-                            if (inputSet.get(0) != null) {
+                            if (!inputSet.isEmpty() && inputSet.get(0) != null) {
                                 View gap = new FrameLayout(contentView.getContext());
                                 gap.setBackgroundColor(getThemedColor(Theme.key_actionBarDefaultSubmenuSeparator));
                                 popupLayout.addView(gap, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));

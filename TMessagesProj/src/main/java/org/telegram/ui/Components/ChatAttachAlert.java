@@ -4785,7 +4785,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     private boolean shouldShowFloatingCamera() {
-        return currentAttachLayout != null && currentAttachLayout == photoLayout && ExteraConfig.hideCameraTile && photosEnabled && videosEnabled && !isStoryLocationPicker && !isSoundPicker && !isPhotoPicker;
+        return currentAttachLayout != null && currentAttachLayout == photoLayout && ExteraConfig.hideCameraTile && photosEnabled && videosEnabled && !isStoryLocationPicker && !isSoundPicker && !isPhotoPicker && !isStoryAudioPicker;
     }
 
     public void setAllowEnterCaption(boolean allowEnterCaption) {

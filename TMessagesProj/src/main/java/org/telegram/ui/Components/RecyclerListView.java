@@ -2936,4 +2936,9 @@ public class RecyclerListView extends RecyclerView {
     public void setDrawSelection(boolean drawSelection) {
         this.drawSelection = drawSelection;
     }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
 }

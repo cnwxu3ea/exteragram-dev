@@ -76,7 +76,6 @@ public class ShareDialogCell extends FrameLayout {
     private RepostStoryDrawable repostStoryDrawable;
     private TLRPC.User user;
     private final int currentType;
-    private boolean isForum;
 
     private float onlineProgress;
     private long lastUpdateTime;
@@ -200,7 +199,7 @@ public class ShareDialogCell extends FrameLayout {
             }
             avatarDrawable.setInfo(currentAccount, chat);
             imageView.setForUserOrChat(chat, avatarDrawable);
-            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(56, false, isForum = (chat != null && chat.forum)));
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(56, false, chat != null && chat.forum));
         }
         currentDialog = uid;
         checkBox.setChecked(checked, false);
@@ -319,9 +318,8 @@ public class ShareDialogCell extends FrameLayout {
         Theme.checkboxSquare_checkPaint.setColor(getThemedColor(Theme.key_dialogRoundCheckBox));
         Theme.checkboxSquare_checkPaint.setAlpha((int) (checkBox.getProgress() * 255));
         int radius = dp(currentType == TYPE_CREATE ? 24 : 28);
-        int r = currentType == TYPE_CREATE ? 48 : 56;
         AndroidUtilities.rectTmp.set(cx - radius, cy - radius, cx + radius, cy + radius);
-        canvas.drawRoundRect(AndroidUtilities.rectTmp, ExteraConfig.getAvatarCorners(r, false, isForum), ExteraConfig.getAvatarCorners(r, false, isForum), Theme.checkboxSquare_checkPaint);
+        canvas.drawRoundRect(AndroidUtilities.rectTmp, imageView.getRoundRadius()[0], imageView.getRoundRadius()[0], Theme.checkboxSquare_checkPaint);
         super.onDraw(canvas);
     }
 

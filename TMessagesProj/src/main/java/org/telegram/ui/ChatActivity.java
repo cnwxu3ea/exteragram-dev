@@ -26660,7 +26660,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     Runnable updateReactionRunnable;
 
     private void showMultipleReactionsPromo(ChatMessageCell cell, ReactionsLayoutInBubble.VisibleReaction visibleReaction, int currentChosenReactions) {
-        if (SharedConfig.multipleReactionsPromoShowed || cell == null || cell.getMessageObject() == null || visibleReaction == null || getUserConfig().isPremium()) {
+        if (true || SharedConfig.multipleReactionsPromoShowed || cell == null || cell.getMessageObject() == null || visibleReaction == null || getUserConfig().isPremium()) {
             return;
         }
         if (currentChosenReactions == 1) {
