@@ -45,6 +45,7 @@ import androidx.annotation.NonNull;
 import com.exteragram.messenger.ExteraConfig;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChannelBoostsController;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.Emoji;
@@ -891,11 +892,15 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             }
 
             if (ChatObject.isChannelAndNotMegaGroup(currentChat) && ChatObject.canChangeChatInfo(currentChat)) {
-                colorCell = new PeerColorActivity.ChangeNameColorCell(currentAccount, true, context, getResourceProvider());
+                colorCell = new PeerColorActivity.ChangeNameColorCell(currentAccount, -currentChat.id, context, getResourceProvider());
                 colorCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                 typeEditContainer.addView(colorCell, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 colorCell.setOnClickListener(v -> {
-                    presentFragment(new PeerColorActivity(-currentChat.id).setOnApplied(this));
+                    presentFragment(new ChannelColorActivity(-currentChat.id).setOnApplied(this));
+
+                    MessagesController.getInstance(currentAccount).getMainSettings().edit().putInt("boostingappearance",
+                        MessagesController.getInstance(currentAccount).getMainSettings().getInt("boostingappearance", 0) + 1
+                    ).apply();
                 });
             }
 
@@ -1964,7 +1969,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         getConnectionsManager().bindRequestToGuid(reqId, classGuid);
     }
 
-    private void updateColorCell() {
+    public void updateColorCell() {
         if (colorCell != null) {
             colorCell.set(currentChat, (historyCell != null && historyCell.getVisibility() == View.VISIBLE) || (signCell != null && signCell.getVisibility() == View.VISIBLE) || (forumsCell != null && forumsCell.getVisibility() == View.VISIBLE));
         }
@@ -2073,11 +2078,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         } else {
             finalString = LocaleController.getString("ReactionsAll", R.string.ReactionsAll);
         }
-        if (isChannelAndNotMegaGroup) {
-            reactionsCell.setTextAndValueAndIcon(TextCell.applyNewSpan(LocaleController.getString("Reactions", R.string.Reactions)), finalString, animated, R.drawable.msg_reactions2, true);
-        } else {
-            reactionsCell.setTextAndValueAndIcon(LocaleController.getString("Reactions", R.string.Reactions), finalString, animated, R.drawable.msg_reactions2, true);
-        }
+        reactionsCell.setTextAndValueAndIcon(LocaleController.getString("Reactions", R.string.Reactions), finalString, animated, R.drawable.msg_reactions2, true);
     }
 
     @Override

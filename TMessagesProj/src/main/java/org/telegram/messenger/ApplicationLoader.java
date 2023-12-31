@@ -17,6 +17,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -37,6 +39,8 @@ import androidx.multidex.MultiDex;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.camera.CameraXUtils;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
@@ -253,7 +257,11 @@ public class ApplicationLoader extends Application {
 
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app start time = " + (startTime = SystemClock.elapsedRealtime()));
-            FileLog.d("buildVersion = " + BuildVars.BUILD_VERSION);
+            try {
+                FileLog.d("buildVersion = " + ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0).versionCode);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         }
         if (applicationContext == null) {
             applicationContext = getApplicationContext();
@@ -373,6 +381,23 @@ public class ApplicationLoader extends Application {
         }, 1000);
     }
 
+    private boolean checkPlayServices() {
+        try {
+            int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+            return resultCode == ConnectionResult.SUCCESS;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return true;
+    }
+
+    private static long lastNetworkCheck = -1;
+    private static void ensureCurrentNetworkGet() {
+        final long now = System.currentTimeMillis();
+        ensureCurrentNetworkGet(now - lastNetworkCheck > 5000);
+        lastNetworkCheck = now;
+    }
+
     private static void ensureCurrentNetworkGet(boolean force) {
         if (force || currentNetworkInfo == null) {
             try {
@@ -437,6 +462,11 @@ public class ApplicationLoader extends Application {
             FileLog.e(e);
         }
         return false;
+    }
+
+    public static boolean useLessData() {
+        ensureCurrentNetworkGet();
+        return BuildVars.DEBUG_PRIVATE_VERSION && (SharedConfig.forceLessData || isConnectionSlow());
     }
 
     public static boolean isConnectionSlow() {

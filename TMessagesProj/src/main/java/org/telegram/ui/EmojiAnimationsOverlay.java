@@ -791,7 +791,7 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
         if (chatActivity == null) {
             return;
         }
-        if (MessagesController.getInstance(currentAccount).premiumLocked || chatActivity.getParentActivity() == null || stickerSet == null) {
+        if (MessagesController.getInstance(currentAccount).premiumFeaturesBlocked() || chatActivity.getParentActivity() == null || stickerSet == null) {
             return;
         }
         StickerSetBulletinLayout layout = new StickerSetBulletinLayout(contentLayout.getContext(), null, StickerSetBulletinLayout.TYPE_EMPTY, messageObject.getDocument(), chatActivity.getResourceProvider());

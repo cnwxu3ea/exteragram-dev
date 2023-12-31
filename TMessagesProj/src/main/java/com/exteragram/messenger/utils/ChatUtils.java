@@ -504,4 +504,8 @@ public class ChatUtils {
     public static TLRPC.InputStickerSet getSetFrom(TLRPC.User user) {
         return AnimatedEmojiDrawable.findStickerSet(UserConfig.selectedAccount, UserObject.getProfileEmojiId(user));
     }
+
+    public static TLRPC.InputStickerSet getSetFrom(TLRPC.Chat chat) {
+        return AnimatedEmojiDrawable.findStickerSet(UserConfig.selectedAccount, ChatObject.getProfileEmojiId(chat));
+    }
 }

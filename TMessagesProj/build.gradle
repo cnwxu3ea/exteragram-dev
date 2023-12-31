@@ -18,12 +18,12 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.2.0'
     implementation 'androidx.core:core:1.12.0'
     implementation 'androidx.palette:palette:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.3.6'
+    implementation 'androidx.exifinterface:exifinterface:1.3.7'
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.sharetarget:sharetarget:1.2.0"
     implementation 'androidx.interpolator:interpolator:1.0.0'
-    implementation 'androidx.annotation:annotation-jvm:1.7.0'
+    implementation 'androidx.annotation:annotation-jvm:1.7.1'
     implementation 'com.google.android.gms:play-services-measurement:21.3.0'
 
     compileOnly 'org.checkerframework:checker-qual:2.5.2'
@@ -32,11 +32,11 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.1.0')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-messaging:23.2.1'
-    implementation 'com.google.firebase:firebase-config:21.4.1'
+    implementation 'com.google.firebase:firebase-messaging:23.4.0'
+    implementation 'com.google.firebase:firebase-config:21.6.0'
     implementation 'com.google.firebase:firebase-datatransport:18.2.0'
     implementation 'com.google.firebase:firebase-appindexing:20.0.0'
-    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
     implementation 'com.google.android.gms:play-services-wearable:18.1.0'
@@ -49,7 +49,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.guava:guava:32.0.0-jre'
 
-    def camerax_version = '1.3.0'
+    def camerax_version = '1.3.1'
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-extensions:${camerax_version}"
@@ -58,9 +58,21 @@ dependencies {
     implementation "androidx.camera:camera-video:${camerax_version}"
     implementation 'androidx.interpolator:interpolator:1.0.0'
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 
     implementation files('libs/libgsaverification-client.aar')
+
+    implementation 'com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1'
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
+            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+        }
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
+            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+        }
+    }
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 }
 
 def isPmBuild = "false"
@@ -149,6 +161,7 @@ android {
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             ndk.debugSymbolLevel = 'FULL'
+            buildConfigField "String", "BUILD_VERSION_STRING", "\"" + APP_VERSION_NAME + "\""
             buildConfigField "boolean", "DEBUG_VERSION", "true"
             buildConfigField "boolean", "IS_PM_BUILD", isPmBuild
         }
@@ -162,6 +175,7 @@ android {
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             ndk.debugSymbolLevel = 'FULL'
+            buildConfigField "String", "BUILD_VERSION_STRING", "\"" + APP_VERSION_NAME + "\""
             buildConfigField "boolean", "DEBUG_VERSION", "false"
             buildConfigField "boolean", "IS_PM_BUILD", isPmBuild
         }

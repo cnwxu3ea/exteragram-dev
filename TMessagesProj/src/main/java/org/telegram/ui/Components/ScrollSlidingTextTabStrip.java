@@ -377,7 +377,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         activeTextColorKey = active;
         unactiveTextColorKey = unactive;
         selectorColorKey = selector;
-        selectorDrawable.setColor(processColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF)));
+        selectorDrawable.setColor(ColorUtils.setAlphaComponent(processColor(Theme.getColor(tabLineColorKey, resourcesProvider)), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF));
     }
 
     public void updateColors() {
@@ -387,7 +387,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
             tab.setTextColor(processColor(Theme.getColor(currentPosition == a ? activeTextColorKey : unactiveTextColorKey, resourcesProvider)));
             if (ExteraConfig.tabStyle < 3) tab.setBackground(Theme.createSelectorDrawable(Theme.multAlpha(processColor(Theme.getColor(activeTextColorKey, resourcesProvider)), .15f), 3));
         }
-        selectorDrawable.setColor(processColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF)));
+        selectorDrawable.setColor(ColorUtils.setAlphaComponent(processColor(Theme.getColor(tabLineColorKey, resourcesProvider)), ExteraConfig.tabStyle >= 3 ? 0x1F : 0xFF));
         invalidate();
     }
 
