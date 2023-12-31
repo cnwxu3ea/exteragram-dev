@@ -17632,7 +17632,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
                 alpha = AndroidUtilities.lerp(0.35f, 1f, progress);
             }
-            paint.setAlpha((int) (oldAlpha * timeAlpha * alpha * .6f));
+            paint.setAlpha((int) (oldAlpha * timeAlpha * alpha * (Theme.isCurrentThemeMonet() ? 1f : .6f)));
 
             int r;
             if ((documentAttachType != DOCUMENT_ATTACH_TYPE_ROUND && documentAttachType != DOCUMENT_ATTACH_TYPE_STICKER && currentMessageObject.type != MessageObject.TYPE_EMOJIS) || (documentAttachType == DOCUMENT_ATTACH_TYPE_STICKER && ExteraConfig.stickerShape == 2)) {
@@ -18572,7 +18572,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
                             canvas.save();
                             int oldAlpha = getThemedPaint(Theme.key_paint_chatTimeBackground).getAlpha();
-                            getThemedPaint(Theme.key_paint_chatTimeBackground).setAlpha((int) (oldAlpha * controlsAlpha * loadingProgressAlpha * (currentMessageObject.needDrawBluredPreview() ? .4f : 1f)));
+                            getThemedPaint(Theme.key_paint_chatTimeBackground).setAlpha((int) (oldAlpha * controlsAlpha * loadingProgressAlpha * (!Theme.isCurrentThemeMonet() && currentMessageObject.needDrawBluredPreview() ? .4f : 1f)));
                             rect.set(x1, y1, x1 + w, y1 + AndroidUtilities.dp(16.5f + 15.5f * alpha));
                             int[] rad = photoImage.getRoundRadius();
                             int r = Math.min(AndroidUtilities.dp(8), Math.max(rad[0], rad[1]));

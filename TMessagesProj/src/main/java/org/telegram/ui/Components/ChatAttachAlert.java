@@ -1220,8 +1220,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             break;
                     }
                 }
-                textColor = ColorUtils.setAlphaComponent(Theme.getCurrentTheme().isMonet() ? getThemedColor(Theme.key_chat_attachFileText) : textColor, 0xFF);
-                iconBackgroundColor = ColorUtils.setAlphaComponent(Theme.getCurrentTheme().isMonet() ? getThemedColor(Theme.key_chat_attachFileBackground) : iconBackgroundColor, 0xFF);
+                textColor = ColorUtils.setAlphaComponent(Theme.isCurrentThemeMonet() ? getThemedColor(Theme.key_chat_attachFileText) : textColor, 0xFF);
+                iconBackgroundColor = ColorUtils.setAlphaComponent(Theme.isCurrentThemeMonet() ? getThemedColor(Theme.key_chat_attachFileBackground) : iconBackgroundColor, 0xFF);
 
                 TLRPC.Document iconDoc = icon.icon;
                 imageView.getImageReceiver().setAllowStartLottieAnimation(false);

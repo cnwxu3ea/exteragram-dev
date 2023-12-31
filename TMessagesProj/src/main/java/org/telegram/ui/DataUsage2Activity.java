@@ -1024,8 +1024,8 @@ public class DataUsage2Activity extends BaseFragment {
                 imageView.setVisibility(View.GONE);
             } else {
                 imageView.setVisibility(View.VISIBLE);
-                imageView.setColorFilter(new PorterDuffColorFilter(Theme.getActiveTheme().isMonet() ? Theme.getColor(Theme.key_chats_actionIcon) : Color.WHITE, PorterDuff.Mode.SRC_IN));
-                imageView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(9), Theme.getActiveTheme().isMonet() ? Theme.getColor(Theme.key_chats_actionBackground) : imageColor));
+                imageView.setColorFilter(new PorterDuffColorFilter(Theme.isCurrentThemeMonet() ? Theme.getColor(Theme.key_chats_actionIcon) : Color.WHITE, PorterDuff.Mode.SRC_IN));
+                imageView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(9), Theme.isCurrentThemeMonet() ? Theme.getColor(Theme.key_chats_actionBackground) : imageColor));
                 imageView.setImageResource(imageResId);
             }
 

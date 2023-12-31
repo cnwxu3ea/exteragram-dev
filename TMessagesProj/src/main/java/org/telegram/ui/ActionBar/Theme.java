@@ -136,7 +136,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -6784,6 +6783,10 @@ public class Theme {
         return currentTheme.isDark();
     }
 
+    public static boolean isCurrentThemeMonet() {
+        return currentTheme.isMonet();
+    }
+
     public static ThemeInfo getActiveTheme() {
         return currentTheme;
     }
@@ -7934,7 +7937,11 @@ public class Theme {
                                 String key = line.substring(0, idx);
                                 String param = line.substring(idx + 1);
                                 int value;
-                                if (param.length() > 0 && param.charAt(0) == '#') {
+                                boolean harmonize = param.endsWith("h");
+                                if (harmonize) {
+                                    param = param.substring(0, param.length() - 1);
+                                }
+                                if (param.length() > 0 && param.startsWith("#")) {
                                     try {
                                         value = Color.parseColor(param);
                                     } catch (Exception ignore) {
@@ -7944,6 +7951,9 @@ public class Theme {
                                     value = MonetUtils.getColor(param.trim());
                                 } else {
                                     value = Utilities.parseInt(param);
+                                }
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && harmonize) {
+                                    value = MonetUtils.harmonize(value);
                                 }
                                 int keyFromString = ThemeColors.stringKeyToInt(key);
                                 if (keyFromString >= 0) {

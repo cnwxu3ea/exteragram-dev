@@ -253,7 +253,7 @@ public class ReplyMessageLine {
         if (messageObject.shouldDrawWithoutBackground()) {
             hasColor2 = false;
             hasColor3 = false;
-            color1 = color2 = color3 = Color.WHITE;
+            color1 = color2 = color3 = Theme.isCurrentThemeMonet() ? Theme.getColor(Theme.key_chat_inReplyLine, resourcesProvider) : Color.WHITE;
             backgroundColor = Color.TRANSPARENT;
             nameColor = Theme.getColor(Theme.key_chat_stickerReplyNameText, resourcesProvider);
         } else if (messageObject.isOutOwner()) {

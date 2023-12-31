@@ -1,4 +1,13 @@
-// all credits to @Nekogram
+/*
+
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, 2023
+
+*/
 
 package com.exteragram.messenger.utils;
 
@@ -12,6 +21,8 @@ import android.os.PatternMatcher;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.graphics.ColorUtils;
+
+import com.google.android.material.color.blend.Blend;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -103,6 +114,10 @@ public class MonetUtils {
     private final static String ALPHA = "a";
     private final static String SATURATION = "s";
 
+    public static int harmonize(int color) {
+        return Blend.harmonize(color, getColor("a1_400"));
+    }
+
     public static int getColor(String color) {
         try {
             int alpha = 100, saturation = 100;
@@ -131,10 +146,16 @@ public class MonetUtils {
             int colorId = ids.getOrDefault(color, 0);
             int colorValue = ApplicationLoader.applicationContext.getColor(colorId);
 
-            int adjustedColor = ColorUtils.blendARGB(Color.WHITE, colorValue, saturation / 100f);
-            adjustedColor = ColorUtils.setAlphaComponent(adjustedColor, (int) (alpha * 2.55f));
+            if (alpha != 100 || saturation != 100) {
+                colorValue = ColorUtils.blendARGB(Color.WHITE, colorValue, saturation / 100f);
+                colorValue = ColorUtils.setAlphaComponent(colorValue, (int) (alpha * 2.55f));
+            }
 
-            return adjustedColor;
+            if (color.startsWith("mR") || color.startsWith("mG")) {
+                colorValue = harmonize(colorValue);
+            }
+
+            return colorValue;
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -157,7 +178,7 @@ public class MonetUtils {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (ACTION_OVERLAY_CHANGED.equals(intent.getAction())) {
-                if (Theme.getActiveTheme().isMonet()) {
+                if (Theme.isCurrentThemeMonet()) {
                     String themeToReset = "monet_" + (Theme.getActiveTheme().isDark() ? "dark" : "light") + ".attheme";
                     File theme = new File(ApplicationLoader.getFilesDirFixed(), themeToReset);
                     if (theme.exists()) {

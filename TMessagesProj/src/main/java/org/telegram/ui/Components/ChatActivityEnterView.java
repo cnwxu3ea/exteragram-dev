@@ -3143,7 +3143,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         waveFormTimerLayout.addView(recordedAudioSeekBar, LayoutHelper.createLinear(0, 32, 1f, Gravity.CENTER_VERTICAL, 0, 0, 4, 0));
 
         recordedAudioTimeTextView = new TextView(getContext());
-        recordedAudioTimeTextView.setTextColor(getThemedColor(Theme.getActiveTheme().isMonet() ? Theme.key_chat_recordedVoiceProgress : Theme.key_chat_messagePanelVoiceDuration));
+        recordedAudioTimeTextView.setTextColor(getThemedColor(Theme.isCurrentThemeMonet() ? Theme.key_chat_recordedVoiceProgress : Theme.key_chat_messagePanelVoiceDuration));
         recordedAudioTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         waveFormTimerLayout.addView(recordedAudioTimeTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0f, Gravity.CENTER_VERTICAL));
     }

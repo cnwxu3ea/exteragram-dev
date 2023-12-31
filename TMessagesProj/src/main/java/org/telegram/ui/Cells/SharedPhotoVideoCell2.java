@@ -505,7 +505,7 @@ public class SharedPhotoVideoCell2 extends FrameLayout {
         if (drawVideoIcon) {
             canvas.save();
             canvas.translate(videoInfoLayot == null ? dp(5) : dp(4), (dp(17) - sharedResources.playDrawable.getIntrinsicHeight()) / 2f);
-            if (Theme.getActiveTheme().isMonet()) {
+            if (Theme.isCurrentThemeMonet()) {
                 sharedResources.playDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_mediaTimeText), PorterDuff.Mode.MULTIPLY));
             } else {
                 sharedResources.playDrawable.setAlpha((int) (255 * imageAlpha * alpha));
@@ -794,7 +794,7 @@ public class SharedPhotoVideoCell2 extends FrameLayout {
 
         public SharedResources(Context context, Theme.ResourcesProvider resourcesProvider) {
             textPaint.setTextSize(AndroidUtilities.dp(12));
-            textPaint.setColor(Theme.getActiveTheme().isMonet() ? Theme.getColor(Theme.key_chat_mediaTimeText) : 0xffffffff);
+            textPaint.setColor(Theme.isCurrentThemeMonet() ? Theme.getColor(Theme.key_chat_mediaTimeText) : 0xffffffff);
             textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             playDrawable = ContextCompat.getDrawable(context, R.drawable.play_mini_video);
             playDrawable.setBounds(0, 0, playDrawable.getIntrinsicWidth(), playDrawable.getIntrinsicHeight());
