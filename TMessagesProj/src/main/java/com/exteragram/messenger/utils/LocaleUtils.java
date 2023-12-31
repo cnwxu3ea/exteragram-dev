@@ -14,6 +14,7 @@ package com.exteragram.messenger.utils;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.exteragram.messenger.ExteraConfig;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LinkifyPort;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
@@ -29,7 +31,9 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.URLSpanNoUnderline;
+import org.telegram.ui.Components.URLSpanReplacement;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -168,5 +172,24 @@ public class LocaleUtils {
             return output.append(text, lastEnd, text.length()).toString();
         }
         return text;
+    }
+
+    private static final Pattern MARKDOWN_LINK_PATTERN = Pattern.compile("\\[([^]]+?)]\\(" + LinkifyPort.WEB_URL_REGEX + "\\)");
+
+    public static void parseMarkdownLinks(CharSequence[] message) {
+        Spannable spannable = message[0] instanceof Spannable ? (Spannable) message[0] : Spannable.Factory.getInstance().newSpannable(message[0]);
+        Matcher matcher = MARKDOWN_LINK_PATTERN.matcher(spannable);
+        ArrayList<String> sources = new ArrayList<>();
+        ArrayList<CharSequence> destinations = new ArrayList<>();
+        while (matcher.find()) {
+            SpannableStringBuilder destination = new SpannableStringBuilder(spannable.subSequence(matcher.start(1), matcher.end(1)));
+            destination.setSpan(new URLSpanReplacement(matcher.group(2)), 0, destination.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sources.add(matcher.group(0));
+            destinations.add(destination);
+        }
+        for (int j = 0; j < sources.size(); j++) {
+            spannable = (Spannable) TextUtils.replace(spannable, new String[]{sources.get(j)}, new CharSequence[]{destinations.get(j)});
+        }
+        message[0] = spannable;
     }
 }

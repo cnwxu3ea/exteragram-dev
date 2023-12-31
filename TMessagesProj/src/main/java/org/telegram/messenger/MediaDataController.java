@@ -95,6 +95,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.LocaleUtils;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
@@ -6372,6 +6373,8 @@ public class MediaDataController extends BaseController {
             entity.length = 1;
             entities.add(entity);
         }
+
+        LocaleUtils.parseMarkdownLinks(message);
 
         if (message[0] instanceof Spanned) {
             Spanned spannable = (Spanned) message[0];
