@@ -3221,7 +3221,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             frozenEmojiPacks = new ArrayList<>(mediaDataController.getStickerSets(showStickers ? MediaDataController.TYPE_IMAGE : MediaDataController.TYPE_EMOJIPACKS));
         }
         ArrayList<TLRPC.TL_messages_stickerSet> installedEmojipacks = frozenEmojiPacks;
-        ArrayList<TLRPC.StickerSetCovered> featuredEmojiPacks = UserConfig.getInstance(UserConfig.selectedAccount).isPremium() ? new ArrayList<>(mediaDataController.getFeaturedEmojiSets()) : null;
+        ArrayList<TLRPC.StickerSetCovered> featuredEmojiPacks = UserConfig.getInstance(UserConfig.selectedAccount).isPremium() || type == TYPE_AVATAR_CONSTRUCTOR ? new ArrayList<>(mediaDataController.getFeaturedEmojiSets()) : null;
 
         ArrayList<Long> prevRowHashCodes = new ArrayList<>(rowHashCodes);
         totalCount = 0;

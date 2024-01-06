@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
@@ -217,9 +219,15 @@ public class ReplyMessageLine {
             } else {
                 colorId = 0;
             }
-            resolveColor(messageObject, colorId, resourcesProvider);
+            if (!ExteraConfig.replyColors) {
+                hasColor2 = hasColor3 = false;
+                color1 = color2 = color3 = Theme.getColor(Theme.key_chat_inReplyLine, resourcesProvider);
+                nameColor = Theme.getColor(Theme.key_chat_inReplyNameText, resourcesProvider);
+            } else {
+                resolveColor(messageObject, colorId, resourcesProvider);
+                nameColor = color1;
+            }
             backgroundColor = Theme.multAlpha(color1, 0.10f);
-            nameColor = color1;
         } else if (type == TYPE_REPLY && (
             messageObject.overrideLinkColor >= 0 ||
             messageObject.messageOwner != null &&
@@ -261,9 +269,15 @@ public class ReplyMessageLine {
             } else {
                 colorId = 0;
             }
-            resolveColor(messageObject.replyMessageObject, colorId, resourcesProvider);
-            backgroundColor = Theme.multAlpha(color1, 0.10f);
-            nameColor = color1;
+            if (!ExteraConfig.replyColors) {
+                hasColor2 = hasColor3 = false;
+                color1 = color2 = color3 = Theme.getColor(Theme.key_chat_inReplyLine, resourcesProvider);
+                nameColor = Theme.getColor(Theme.key_chat_inReplyNameText, resourcesProvider);
+            } else {
+                resolveColor(messageObject.replyMessageObject, colorId, resourcesProvider);
+                nameColor = color1;
+            }
+            backgroundColor = !ExteraConfig.replyBackground ? Color.TRANSPARENT : Theme.multAlpha(color1, 0.10f);
         } else {
             hasColor2 = false;
             hasColor3 = false;
@@ -291,7 +305,7 @@ public class ReplyMessageLine {
                 reversedOut = true;
                 color1 = Theme.multAlpha(color1, .35f);
             }
-            backgroundColor = Theme.multAlpha(color3, dark ? 0.12f : 0.10f);
+            backgroundColor = !ExteraConfig.replyBackground && type == TYPE_REPLY ? Color.TRANSPARENT : Theme.multAlpha(color3, dark ? 0.12f : 0.10f);
             nameColor = Theme.getColor(Theme.key_chat_outReplyNameText, resourcesProvider);
         }
         if ((type == TYPE_REPLY || type == TYPE_LINK) && messageObject != null && messageObject.overrideLinkEmoji != -1) {
@@ -487,7 +501,7 @@ public class ReplyMessageLine {
             canvas.drawPath(backgroundPath, backgroundPaint);
         }
 
-        if (emoji != null) {
+        if (emoji != null && ExteraConfig.replyEmoji) {
             final float loadedScale = emojiLoadedT.set(isEmojiLoaded());
 
             if (loadedScale > 0) {

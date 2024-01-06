@@ -19,10 +19,10 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
@@ -40,7 +40,17 @@ public class StickerSizePreviewCell extends LinearLayout {
     private final Drawable shadowDrawable;
     private final INavigationLayout parentLayout;
 
-    public StickerSizePreviewCell(Context context, BaseFragment fragment, INavigationLayout layout) {
+    private int progress = -1;
+    private final Runnable cancelProgress = () -> {
+        progress = -1;
+        for (ChatMessageCell cell : cells) {
+            if (cell != null) {
+                cell.invalidate();
+            }
+        }
+    };
+
+    public StickerSizePreviewCell(Context context, INavigationLayout layout) {
         super(context);
 
         parentLayout = layout;
@@ -97,12 +107,16 @@ public class StickerSizePreviewCell extends LinearLayout {
         message.message = LocaleController.getString("StickerSizeDialogMessage", R.string.StickerSizeDialogMessage);
         message.date = date + 120;
         message.dialog_id = -1;
-        message.flags = 259;
+        message.flags = 257 + 8;
         message.id = 2;
         message.media = new TLRPC.TL_messageMediaEmpty();
         message.out = false;
         message.peer_id = new TLRPC.TL_peerUser();
         message.peer_id.user_id = 1;
+        message.from_id = new TLRPC.TL_peerUser();
+        message.reply_to = new TLRPC.TL_messageReplyHeader();
+        message.reply_to.flags |= 16;
+        message.reply_to.reply_to_msg_id = 5;
         messageObjects[1] = new MessageObject(UserConfig.selectedAccount, message, true, false);
         //TLRPC.User currentUser = MessagesController.getInstance(UserConfig.selectedAccount).getUser(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId());
         messageObjects[1].customReplyName = "8055";//ContactsController.formatName(currentUser.first_name, currentUser.last_name);
@@ -111,6 +125,25 @@ public class StickerSizePreviewCell extends LinearLayout {
         for (int a = 0; a < cells.length; a++) {
             cells[a] = new ChatMessageCell(context);
             cells[a].setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
+
+                @Override
+                public boolean canPerformActions() {
+                    return true;
+                }
+
+                @Override
+                public void didPressReplyMessage(ChatMessageCell cell, int id) {
+                    progress = ChatActivity.PROGRESS_REPLY;
+                    cell.invalidate();
+
+                    AndroidUtilities.cancelRunOnUIThread(cancelProgress);
+                    AndroidUtilities.runOnUIThread(cancelProgress, 5000);
+                }
+
+                @Override
+                public boolean isProgressLoading(ChatMessageCell cell, int type) {
+                    return type == progress;
+                }
             });
             cells[a].isChat = false;
             cells[a].setFullyDraw(true);
@@ -154,14 +187,12 @@ public class StickerSizePreviewCell extends LinearLayout {
             }
             if (drawable instanceof ColorDrawable || drawable instanceof GradientDrawable || drawable instanceof MotionBackgroundDrawable) {
                 drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                if (drawable instanceof BackgroundGradientDrawable) {
-                    final BackgroundGradientDrawable backgroundGradientDrawable = (BackgroundGradientDrawable) drawable;
+                if (drawable instanceof BackgroundGradientDrawable backgroundGradientDrawable) {
                     backgroundGradientDisposable = backgroundGradientDrawable.drawExactBoundsSize(canvas, this);
                 } else {
                     drawable.draw(canvas);
                 }
-            } else if (drawable instanceof BitmapDrawable) {
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            } else if (drawable instanceof BitmapDrawable bitmapDrawable) {
                 if (bitmapDrawable.getTileModeX() == Shader.TileMode.REPEAT) {
                     canvas.save();
                     float scale = 2.0f / AndroidUtilities.density;
@@ -211,12 +242,12 @@ public class StickerSizePreviewCell extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return false;
+        return super.onInterceptTouchEvent(ev);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        return false;
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -227,6 +258,6 @@ public class StickerSizePreviewCell extends LinearLayout {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return false;
+        return super.onTouchEvent(event);
     }
 }

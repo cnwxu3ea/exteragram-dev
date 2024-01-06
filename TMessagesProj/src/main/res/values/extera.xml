@@ -129,6 +129,8 @@
     <string name="StickerSizeDialogMessageReplyTo">wow</string>
     <string name="StickerSizeDialogMessage">woah, he is so cute!</string>
 
+    <string name="ReplyBackground">Background</string>
+
     <string name="ChatSettingsInfo">Media Settings, App Icon and other</string>
 
     <string name="StickerShape">Stickers Shape</string>

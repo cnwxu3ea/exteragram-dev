@@ -8830,7 +8830,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         resetPressedLink(-1);
 
         if (replyPressed) {
-            if (ChatUtils.getEmojiIdFrom(currentMessageObject, currentUser) > 0) {
+            if (delegate != null && ExteraConfig.replyEmoji && ChatUtils.getEmojiIdFrom(currentMessageObject, currentUser) > 0) {
                 delegate.didLongPressReply(this, replyTouchX, replyTouchY);
                 return true;
             }

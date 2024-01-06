@@ -95,6 +95,10 @@ public class ExteraConfig {
     // Chats
     public static float stickerSize;
 
+    public static boolean replyColors;
+    public static boolean replyEmoji;
+    public static boolean replyBackground;
+
     public static int stickerShape;
 
     public static boolean hideStickerTime;
@@ -257,6 +261,10 @@ public class ExteraConfig {
             // Chats
             stickerSize = preferences.getFloat("stickerSize", 12.0f);
             stickerShape = preferences.getInt("stickerShape", 1);
+
+            replyColors = preferences.getBoolean("replyColors", true);
+            replyEmoji = preferences.getBoolean("replyEmoji", true);
+            replyBackground = preferences.getBoolean("replyBackground", true);
 
             hideStickerTime = preferences.getBoolean("hideStickerTime", false);
             unlimitedRecentStickers = preferences.getBoolean("unlimitedRecentStickers", false);

@@ -97,6 +97,12 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     };
 
     private int stickerSizeRow;
+    private int hideStickerTimeRow;
+    private int replyElementsRow;
+    private int replyColorsRow;
+    private int replyEmojiRow;
+    private int replyBackgroundRow;
+    private int stickerSizeDividerRow;
 
     private int stickerShapeHeaderRow;
     private int stickerShapeRow;
@@ -107,7 +113,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private int otherDividerRow;
 
     private int stickersHeaderRow;
-    private int hideStickerTimeRow;
     private int unlimitedRecentStickersRow;
     private int hideReactionsRow;
     private int stickersDividerRow;
@@ -160,6 +165,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private int doubleTapSeekDurationRow;
     private int videosDividerRow;
 
+    private boolean replyElementsExpanded;
     private boolean adminShortcutsExpanded;
     private boolean messageMenuExpanded;
 
@@ -186,7 +192,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             seekBar.setProgress((ExteraConfig.stickerSize - startStickerSize) / (float) (endStickerSize - startStickerSize));
             addView(seekBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-            messagesCell = new StickerSizePreviewCell(context, ChatsPreferencesActivity.this, parentLayout);
+            messagesCell = new StickerSizePreviewCell(context, parentLayout);
             messagesCell.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
             addView(messagesCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 112, 0, 0));
         }
@@ -261,6 +267,18 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         super.updateRowsId();
 
         stickerSizeRow = newRow();
+        hideStickerTimeRow = newRow();
+        replyElementsRow = newRow();
+        if (replyElementsExpanded) {
+            replyColorsRow = newRow();
+            replyEmojiRow = newRow();
+            replyBackgroundRow = newRow();
+        } else {
+            replyColorsRow = -1;
+            replyEmojiRow = -1;
+            replyBackgroundRow = -1;
+        }
+        stickerSizeDividerRow = newRow();
 
         stickerShapeHeaderRow = newRow();
         stickerShapeRow = newRow();
@@ -271,7 +289,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         otherDividerRow = newRow();
 
         stickersHeaderRow = newRow();
-        hideStickerTimeRow = newRow();
         unlimitedRecentStickersRow = newRow();
         hideReactionsRow = newRow();
         stickersDividerRow = newRow();
@@ -476,6 +493,15 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                 listView.smoothScrollBy(0, (int) Math.abs(view.getY()));
             }
             DoubleTapCell.SetReactionCell.showSelectStatusDialog((DoubleTapCell.SetReactionCell) view, this);
+        } else if (position == replyElementsRow) {
+            replyElementsExpanded ^= true;
+            updateRowsId();
+            listAdapter.notifyItemChanged(replyElementsRow, payload);
+            if (replyElementsExpanded) {
+                listAdapter.notifyItemRangeInserted(replyElementsRow + 1, 3);
+            } else {
+                listAdapter.notifyItemRangeRemoved(replyElementsRow + 1, 3);
+            }
         } else if (position == adminShortcutsRow) {
             adminShortcutsExpanded ^= true;
             updateRowsId();
@@ -495,6 +521,19 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             } else {
                 listAdapter.notifyItemRangeRemoved(messageMenuRow + 1, itemCount);
             }
+        } else if (position >= replyColorsRow && position <= replyBackgroundRow) {
+            if (position == replyColorsRow) {
+                ExteraConfig.editor.putBoolean("replyColors", ExteraConfig.replyColors ^= true).apply();
+                listAdapter.notifyItemChanged(replyColorsRow, payload);
+            } else if (position == replyEmojiRow) {
+                ExteraConfig.editor.putBoolean("replyEmoji", ExteraConfig.replyEmoji ^= true).apply();
+                listAdapter.notifyItemChanged(replyEmojiRow, payload);
+            } else if (position == replyBackgroundRow) {
+                ExteraConfig.editor.putBoolean("replyBackground", ExteraConfig.replyBackground ^= true).apply();
+                listAdapter.notifyItemChanged(replyBackgroundRow, payload);
+            }
+            stickerSizeCell.invalidate();
+            listAdapter.notifyItemChanged(replyElementsRow, payload);
         } else if (position >= permissionsRow && position <= recentActionsRow) {
             if (position == permissionsRow) {
                 ExteraConfig.editor.putBoolean("permissionsShortcut", ExteraConfig.permissionsShortcut ^= true).apply();
@@ -549,6 +588,24 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     @Override
     protected BaseListAdapter createAdapter(Context context) {
         return new ListAdapter(context);
+    }
+
+    private void setReplyElementsEnabled(boolean enabled) {
+        ExteraConfig.editor.putBoolean("replyColors", ExteraConfig.replyColors = enabled).apply();
+        ExteraConfig.editor.putBoolean("replyEmoji", ExteraConfig.replyEmoji = enabled).apply();
+        ExteraConfig.editor.putBoolean("replyBackground", ExteraConfig.replyBackground = enabled).apply();
+        AndroidUtilities.updateVisibleRows(listView);
+    }
+
+    private int getReplyElementsSelectedCount() {
+        int i = 0;
+        if (ExteraConfig.replyColors)
+            i++;
+        if (ExteraConfig.replyEmoji)
+            i++;
+        if (ExteraConfig.replyBackground)
+            i++;
+        return i;
     }
 
     private void setShortcutsEnabled(boolean enabled) {
@@ -765,7 +822,16 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                 }
                 case 18 -> {
                     TextCheckCell2 checkCell = (TextCheckCell2) holder.itemView;
-                    if (position == adminShortcutsRow) {
+                    if (position == replyElementsRow) {
+                        int replyElementsSelectedCount = getReplyElementsSelectedCount();
+                        checkCell.setTextAndCheck(LocaleController.getString("RepliesTitle", R.string.RepliesTitle), replyElementsSelectedCount > 0, true, true);
+                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/3", replyElementsSelectedCount), !replyElementsExpanded, () -> {
+                            boolean checked = !checkCell.isChecked();
+                            checkCell.setChecked(checked);
+                            setReplyElementsEnabled(checked);
+                            stickerSizeCell.invalidate();
+                        });
+                    } else if (position == adminShortcutsRow) {
                         int shortcutsSelectedCount = getShortcutsSelectedCount();
                         checkCell.setTextAndCheck(LocaleController.getString("AdminShortcuts", R.string.AdminShortcuts), shortcutsSelectedCount > 0, true, true);
                         checkCell.setCollapseArrow(String.format(Locale.US, "%d/4", shortcutsSelectedCount), !adminShortcutsExpanded, () -> {
@@ -787,7 +853,13 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                 }
                 case 19 -> {
                     CheckBoxCell checkBoxCell = (CheckBoxCell) holder.itemView;
-                    if (position == permissionsRow) {
+                    if (position == replyColorsRow) {
+                        checkBoxCell.setText(LocaleController.getString("BackgroundColors", R.string.BackgroundColors), "", ExteraConfig.replyColors, true, true);
+                    } else if (position == replyEmojiRow) {
+                        checkBoxCell.setText(LocaleController.getString("Emoji", R.string.Emoji), "", ExteraConfig.replyEmoji, true, true);
+                    } else if (position == replyBackgroundRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.ReplyBackground), "", ExteraConfig.replyBackground, false, true);
+                    } else if (position == permissionsRow) {
                         checkBoxCell.setText(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), "", ExteraConfig.permissionsShortcut, true, true);
                     } else if (position == administratorsRow) {
                         checkBoxCell.setText(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), "", ExteraConfig.administratorsShortcut, true, true);
@@ -817,7 +889,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
         @Override
         public int getItemViewType(int position) {
-            if (position == stickerShapeDividerRow || position == otherDividerRow) {
+            if (position == stickerSizeDividerRow || position == stickerShapeDividerRow || position == otherDividerRow) {
                 return 1;
             } else if (position == gptRow || position == chatSettingsRow) {
                 return 2;
@@ -838,9 +910,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                 return 15;
             } else if (position == doubleTapReactionRow) {
                 return 16;
-            } else if (position == adminShortcutsRow || position == messageMenuRow) {
+            } else if (position == adminShortcutsRow || position == messageMenuRow || position == replyElementsRow) {
                 return 18;
-            } else if (position >= permissionsRow && position <= recentActionsRow || position >= copyPhotoRow && position <= detailsRow) {
+            } else if (position >= replyColorsRow && position <= replyBackgroundRow || position >= permissionsRow && position <= recentActionsRow || position >= copyPhotoRow && position <= detailsRow) {
                 return 19;
             }
             return 5;
