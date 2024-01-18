@@ -402,10 +402,15 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             }
 
             @Override
-            public void setFrontface(boolean frontface) {
+            public void toggleVideoRecordingPause() {
 
             }
 
+            @Override
+            public void setFrontface(boolean frontface) {
+
+            }
+            
             @Override
             public void needStartRecordAudio(int state) {
 
