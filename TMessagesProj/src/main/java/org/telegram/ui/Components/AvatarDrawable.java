@@ -495,8 +495,8 @@ public class AvatarDrawable extends Drawable {
             if (archivedAvatarProgress != 0) {
                 backgroundPaint.setColor(ColorUtils.setAlphaComponent(getThemedColor(Theme.key_avatar_backgroundArchived), alpha));
                 canvas.drawRoundRect(0, 0, size * archivedAvatarProgress, size * archivedAvatarProgress,
-                        ExteraConfig.getAvatarCorners(size, 2, true, false) * archivedAvatarProgress,
-                        ExteraConfig.getAvatarCorners(size, 2, true, false) * archivedAvatarProgress,
+                        ExteraConfig.getAvatarCorners(size, true, false) * archivedAvatarProgress,
+                        ExteraConfig.getAvatarCorners(size, true, false) * archivedAvatarProgress,
                         backgroundPaint
                 );
                 if (Theme.dialogs_archiveAvatarDrawableRecolored) {

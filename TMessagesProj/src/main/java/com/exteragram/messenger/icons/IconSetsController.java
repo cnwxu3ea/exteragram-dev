@@ -64,6 +64,7 @@ public class IconSetsController {
         solar.put(R.drawable.filled_forward, R.drawable.filled_forward_solar);
         solar.put(R.drawable.filled_link, R.drawable.filled_link_solar);
         solar.put(R.drawable.filled_button_reply, R.drawable.msg_panel_reply_solar);
+        solar.put(R.drawable.filled_open_message, R.drawable.filled_open_message_solar);
         solar.put(R.drawable.filled_reply_quote, R.drawable.filled_reply_quote_solar);
         solar.put(R.drawable.filled_reply_settings, R.drawable.filled_reply_settings_solar);
         solar.put(R.drawable.filled_button_share, R.drawable.filled_button_share_solar);

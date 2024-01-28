@@ -1824,20 +1824,52 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
 
         public int setLockTranslation(float value) {
-            if (sendButtonVisible) {
-                return 2;
-            }
-            if (lockAnimatedTranslation == -1) {
-                startTranslation = value;
-            }
-            lockAnimatedTranslation = value;
-            invalidate();
-            if (canceledByGesture || slideToCancelProgress < 0.7f) {
-                return 1;
-            }
-            if (startTranslation - lockAnimatedTranslation >= dp(57)) {
+            if (value == 10000) {
+                sendButtonVisible = false;
+                lockAnimatedTranslation = -1;
+                startTranslation = -1;
+                invalidate();
+                snapAnimationProgress = 0;
+                transformToSeekbar = 0;
+                exitTransition = 0;
+                iconScale = 1f;
+                scale = 0f;
+                tooltipAlpha = 0f;
+                showTooltip = false;
+                progressToSendButton = 0f;
+                slideToCancelProgress = 1f;
+                slideToCancelLockProgress = 1f;
+                canceledByGesture = false;
+                return 0;
+            } else if (value == 666) {
                 sendButtonVisible = true;
-                return 2;
+                lockAnimatedTranslation = 1;
+                startTranslation = 1;
+                invalidate();
+                snapAnimationProgress = 1;
+                progressToSendButton = 1f;
+                if (slideText != null) {
+                    slideText.setCancelToProgress(1);
+                }
+                slideToCancelProgress = 1f;
+                slideToCancelLockProgress = 1f;
+                return 0;
+            } else {
+                if (sendButtonVisible) {
+                    return 2;
+                }
+                if (lockAnimatedTranslation == -1) {
+                    startTranslation = value;
+                }
+                lockAnimatedTranslation = value;
+                invalidate();
+                if (canceledByGesture || slideToCancelProgress < 0.7f) {
+                    return 1;
+                }
+                if (startTranslation - lockAnimatedTranslation >= dp(57)) {
+                    sendButtonVisible = true;
+                    return 2;
+                }
             }
             return 1;
         }

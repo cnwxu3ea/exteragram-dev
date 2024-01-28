@@ -824,7 +824,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     TextCheckCell2 checkCell = (TextCheckCell2) holder.itemView;
                     if (position == replyElementsRow) {
                         int replyElementsSelectedCount = getReplyElementsSelectedCount();
-                        checkCell.setTextAndCheck(LocaleController.getString("RepliesTitle", R.string.RepliesTitle), replyElementsSelectedCount > 0, true, true);
+                        checkCell.setTextAndCheck(LocaleController.getString("RepliesTitle", R.string.RepliesTitle), replyElementsSelectedCount > 0, false, true);
                         checkCell.setCollapseArrow(String.format(Locale.US, "%d/3", replyElementsSelectedCount), !replyElementsExpanded, () -> {
                             boolean checked = !checkCell.isChecked();
                             checkCell.setChecked(checked);

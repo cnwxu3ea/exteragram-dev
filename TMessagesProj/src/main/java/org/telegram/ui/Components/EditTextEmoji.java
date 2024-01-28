@@ -238,9 +238,9 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
             editText.setHintTextColor(getThemedColor(Theme.key_windowBackgroundWhiteHintText));
             editText.setTextColor(getThemedColor(Theme.key_windowBackgroundWhiteBlackText));
             editText.setHandlesColor(getThemedColor(Theme.key_chat_TextSelectionCursor));
-            editText.setPadding(padding, padding, AndroidUtilities.dp(53), padding);
+            editText.setPadding(0, padding, 0, padding);
             editText.setOnFocusChangeListener((v, hasFocus) -> editTextFieldContainer.animateSelection(hasFocus ? 1 : 0));
-            editTextFieldContainer.addView(editText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+            editTextFieldContainer.addView(editText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.CENTER_VERTICAL, 16, 0, 53, 0));
             editTextFieldContainer.attachEditText(editText);
         } else if (style == STYLE_STORY || style == STYLE_PHOTOVIEWER) {
             editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);

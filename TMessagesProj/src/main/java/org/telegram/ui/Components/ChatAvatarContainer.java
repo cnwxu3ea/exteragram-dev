@@ -256,7 +256,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             animatedSubtitleTextView.setTag(Theme.key_actionBarDefaultSubtitle);
             animatedSubtitleTextView.setTextSize(AndroidUtilities.dp(14));
             animatedSubtitleTextView.setGravity(Gravity.LEFT);
-            subtitleTextView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_REGULAR));
+            animatedSubtitleTextView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_REGULAR));
             animatedSubtitleTextView.setPadding(0, 0, AndroidUtilities.dp(10), 0);
             animatedSubtitleTextView.setTranslationY(-AndroidUtilities.dp(1));
             addView(animatedSubtitleTextView);
@@ -264,6 +264,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             subtitleTextView = new SimpleTextConnectedView(context, subtitleTextLargerCopyView);
             subtitleTextView.setEllipsizeByGradient(true);
             subtitleTextView.setTextColor(getThemedColor(Theme.key_actionBarDefaultSubtitle));
+            subtitleTextView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_REGULAR));
             subtitleTextView.setTag(Theme.key_actionBarDefaultSubtitle);
             subtitleTextView.setTextSize(14);
             subtitleTextView.setGravity(Gravity.LEFT);
@@ -706,6 +707,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             titleTextView.setRightDrawable2(verifiedDrawable);
             rightDrawableIsScamOrVerified = true;
             rightDrawable2ContentDescription = LocaleController.getString("AccDescrVerified", R.string.AccDescrVerified);
+        } else if (arrow) {
+            Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.ic_status_arrow).mutate();
+            drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
+            titleTextView.setRightDrawable2(drawable);
+            titleTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
+            rightDrawableIsScamOrVerified = true;
         } else if (titleTextView.getRightDrawable() instanceof ScamDrawable) {
             titleTextView.setRightDrawable2(null);
             rightDrawableIsScamOrVerified = false;
@@ -719,12 +726,16 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             if (DialogObject.getEmojiStatusDocumentId(emojiStatus) != 0) {
                 emojiStatusDrawable.set(DialogObject.getEmojiStatusDocumentId(emojiStatus), animated);
             } else if (premium) {
-                Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_liststar).mutate();
-                drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
-                emojiStatusDrawable.set(drawable, animated);
-            } else if (arrow) {
-                Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.ic_status_arrow).mutate();
-                drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
+                Drawable drawable;
+                if (arrow) {
+                    drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.ic_status_arrow).mutate();
+                    drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
+                    titleTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
+                    titleTextView.setRightDrawable2(null);
+                } else {
+                    drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_liststar).mutate();
+                    drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
+                }
                 emojiStatusDrawable.set(drawable, animated);
             } else {
                 emojiStatusDrawable.set((Drawable) null, animated);
@@ -733,12 +744,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             titleTextView.setRightDrawable(emojiStatusDrawable);
             rightDrawableIsScamOrVerified = false;
             rightDrawableContentDescription = LocaleController.getString("AccDescrPremium", R.string.AccDescrPremium);
-        } else if (arrow) {
-            Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.ic_status_arrow).mutate();
-            drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
-            titleTextView.setRightDrawable(drawable);
-            titleTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
-            rightDrawableIsScamOrVerified = true;
         } else {
             titleTextView.setRightDrawable(null);
             rightDrawableContentDescription = null;

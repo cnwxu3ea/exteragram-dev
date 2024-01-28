@@ -603,6 +603,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     public void togglePause() {
         if (recording) {
+            disableTorch();
             cancelled = recordedTime < 800;
             recording = false;
             if (cameraThread != null) {
@@ -673,12 +674,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         selectedCamera = null;
         if (!fromPaused) {
-            isFrontface = true;
+            if (ExteraConfig.videoMessagesCamera != 2) {
+                isFrontface = ExteraConfig.videoMessagesCamera == 0;
+            }
             recordedTime = 0;
             progress = 0;
-        }
-        if (ExteraConfig.videoMessagesCamera != 2) {
-            isFrontface = ExteraConfig.videoMessagesCamera == 0;
         }
         cancelled = false;
         file = null;
@@ -2689,6 +2689,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(
+                    ObjectAnimator.ofFloat(flashlightButton, View.ALPHA, 0.0f),
                     ObjectAnimator.ofFloat(switchCameraButton, View.ALPHA, 0.0f),
                     ObjectAnimator.ofInt(paint, AnimationProperties.PAINT_ALPHA, 0),
                     ObjectAnimator.ofFloat(muteImageView, View.ALPHA, 1.0f));

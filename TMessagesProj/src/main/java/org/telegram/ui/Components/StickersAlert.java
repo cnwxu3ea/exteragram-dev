@@ -1062,12 +1062,12 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                         args.putLong("user_id", user.id);
                         ProfileActivity fragment = new ProfileActivity(args);
                         AndroidUtilities.runOnUIThread(() -> {
+                            dismiss();
                             if (parentFragment != null) {
                                 parentFragment.presentFragment(fragment, false, false);
                             } else if (getContext() instanceof LaunchActivity) {
                                 ((LaunchActivity) getContext()).presentFragment(fragment, false, false);
                             }
-                            dismiss();
                         });
                     } else {
                         AndroidUtilities.addToClipboard(ChatUtils.getOwnerIds(stickerSet.set.id));

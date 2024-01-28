@@ -374,7 +374,7 @@ public class MessageObject {
         return getTopicId(message.currentAccount, message.messageOwner, false);
     }
 
-    private static long getTopicId(int currentAccount, TLRPC.Message message) {
+    public static long getTopicId(int currentAccount, TLRPC.Message message) {
         return getTopicId(currentAccount, message, false);
     }
 

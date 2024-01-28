@@ -231,7 +231,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     public void reloadIcons() {
-        res.getActiveIconPack();
+        res.updateActiveIconPack();
     }
 
     public final static String EXTRA_FORCE_NOT_INTERNAL_APPS = "force_not_internal_apps";

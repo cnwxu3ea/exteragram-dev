@@ -1544,11 +1544,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 MessageObject message = cell.getMessageObject();
                 MessageObject.GroupedMessages messageGroup = getValidGroupedMessage(message);
                 boolean noForwards = getMessagesController().isChatNoForwards(currentChat) || message.messageOwner.noforwards;
-                boolean allowChatActions = chatMode != MODE_SCHEDULED && (threadMessageObjects == null || !threadMessageObjects.contains(message)) &&
+                boolean allowChatActions = !message.isExpiredStory() && chatMode != MODE_SCHEDULED && (threadMessageObjects == null || !threadMessageObjects.contains(message)) &&
                         !message.isSponsored() && (getMessageType(message) != 1 || message.getDialogId() != mergeDialogId) &&
                         !(message.messageOwner.action instanceof TLRPC.TL_messageActionSecureValuesSent) &&
                         (currentEncryptedChat != null || message.getId() >= 0) &&
-                        (bottomOverlayChat == null || bottomOverlayChat.getVisibility() != View.VISIBLE || bottomOverlayChatWaitsReply && selectedObject != null && (MessageObject.getTopicId(selectedObject.messageOwner, ChatObject.isForum(currentChat)) != 0 || selectedObject.wasJustSent)) &&
+                        (bottomOverlayChat == null || bottomOverlayChat.getVisibility() != View.VISIBLE || bottomOverlayChatWaitsReply && selectedObject != null && (MessageObject.getTopicId(currentAccount, selectedObject.messageOwner, ChatObject.isForum(currentChat)) != 0 || selectedObject.wasJustSent)) &&
                         (currentChat == null || ((!ChatObject.isNotInChat(currentChat) || isThreadChat()) && (!ChatObject.isChannel(currentChat) || ChatObject.canPost(currentChat) || currentChat.megagroup) && ChatObject.canSendMessages(currentChat)));
                 boolean allowEdit = message.canEditMessage(currentChat) && !chatActivityEnterView.hasAudioToSend() && message.getDialogId() != mergeDialogId;
                 if (allowEdit && messageGroup != null) {
@@ -6317,7 +6317,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else {
                         String name = UserObject.getFirstName(user, false);
                         Spannable spannable = new SpannableString(name + (!user.bot && ExteraConfig.addCommaAfterMention ? ", " : " "));
-                        spannable.setSpan(new URLSpanUserMention(String.valueOf(user.id), 3), 0, spannable.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        spannable.setSpan(new URLSpanUserMention(String.valueOf(user.id), 3), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         chatActivityEnterView.replaceWithText(start, len, spannable, false);
                     }
                 }
@@ -8311,7 +8311,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         instantCameraView = new InstantCameraView(getContext(), this, themeDelegate) {
             @Override
             protected void clipBlur(Canvas canvas) {
-                canvas.clipRect(0, 0, getWidth(), getHeight() - dp(1.5f));
+                canvas.clipRect(0, 0, getWidth(), getHeight() - dp(1));
             }
         };
         contentView.addView(instantCameraView, 21, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));

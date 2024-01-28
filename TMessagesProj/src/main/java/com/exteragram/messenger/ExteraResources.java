@@ -24,7 +24,7 @@ public class ExteraResources extends Resources {
     private final Resources mResources;
     private BaseIconSet current = ExteraConfig.getIconPack();
 
-    public void getActiveIconPack() {
+    public void updateActiveIconPack() {
         current = ExteraConfig.getIconPack();
     }
 

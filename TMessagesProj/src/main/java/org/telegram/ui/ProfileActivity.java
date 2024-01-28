@@ -8319,6 +8319,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (arrowDrawable[a] == null) {
             Drawable arrow = Theme.profile_exteraArrowDrawable.getConstantState().newDrawable().mutate();
             arrow.setColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY);
+            if (a == 1 && peerColor != null) {
+                int color = Theme.adaptHSV(ColorUtils.blendARGB(peerColor.getColor2(), peerColor.hasColor6(Theme.isCurrentThemeDark()) ? peerColor.getColor5() : peerColor.getColor3(), .4f), +.1f, Theme.isCurrentThemeDark() ? -.1f : -.08f);
+                arrow.setColorFilter(AndroidUtilities.getOffsetColor(color, getThemedColor(Theme.key_player_actionBarTitle), mediaHeaderAnimationProgress, 1.0f), PorterDuff.Mode.MULTIPLY);
+            }
             arrowDrawable[a] = new CrossfadeDrawable(
                 arrow,
                 ContextCompat.getDrawable(getParentActivity(), R.drawable.ic_status_arrow)
@@ -8573,6 +8577,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (user.verified) {
                         nameTextView[a].setRightDrawable2(getVerifiedCrossfadeDrawable(a));
                         nameTextViewRightDrawable2ContentDescription = LocaleController.getString(R.string.AccDescrVerified);
+                    } else if (ExteraConfig.isExteraDev(user)){
+                        nameTextView[a].setRightDrawable2(getArrowDrawable(a));
                     } else if (getMessagesController().isDialogMuted(dialogId != 0 ? dialogId : userId, topicId)) {
                         nameTextView[a].setRightDrawable2(getThemedDrawable(Theme.key_drawable_muteIconDrawable));
                         nameTextViewRightDrawable2ContentDescription = LocaleController.getString(R.string.NotificationsMuted);
@@ -8587,10 +8593,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         nameTextViewRightDrawableContentDescription = LocaleController.getString(R.string.AccDescrPremium);
                     } else if (getMessagesController().isPremiumUser(user)) {
                         rightIconIsPremium = true;
-                        nameTextView[a].setRightDrawable(getEmojiStatusDrawable(null, false, false, a));
-                        nameTextViewRightDrawableContentDescription = LocaleController.getString( R.string.AccDescrPremium);
-                    } else if (ExteraConfig.isExteraDev(user)){
-                        nameTextView[a].setRightDrawable(getArrowDrawable(a));
+                        if (ExteraConfig.isExteraDev(user)) {
+                            nameTextView[a].setRightDrawable2(null);
+                            nameTextView[a].setRightDrawable(getArrowDrawable(a));
+                        } else {
+                            nameTextView[a].setRightDrawable(getEmojiStatusDrawable(null, false, false, a));
+                            nameTextViewRightDrawableContentDescription = LocaleController.getString( R.string.AccDescrPremium);
+                        }
                     } else {
                         nameTextView[a].setRightDrawable(null);
                         nameTextViewRightDrawableContentDescription = null;
@@ -8600,6 +8609,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         nameTextView[a].setRightDrawable2(getScamDrawable(user.scam ? 0 : 1));
                     } else if (user.verified) {
                         nameTextView[a].setRightDrawable2(getVerifiedCrossfadeDrawable(a));
+                    } else if (ExteraConfig.isExteraDev(user)){
+                        nameTextView[a].setRightDrawable2(getArrowDrawable(a));
                     } else {
                         nameTextView[a].setRightDrawable2(null);
                     }
@@ -8609,9 +8620,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         nameTextView[a].setRightDrawable(getEmojiStatusDrawable(user.emoji_status, true, true, a));
                     } else if (getMessagesController().isPremiumUser(user)) {
                         rightIconIsPremium = true;
-                        nameTextView[a].setRightDrawable(getEmojiStatusDrawable(null, true, true, a));
-                    } else if (ExteraConfig.isExteraDev(user)){
-                        nameTextView[a].setRightDrawable(getArrowDrawable(a));
+                        if (ExteraConfig.isExteraDev(user)) {
+                            nameTextView[a].setRightDrawable2(null);
+                            nameTextView[a].setRightDrawable(getArrowDrawable(a));
+                        } else {
+                            nameTextView[a].setRightDrawable(getEmojiStatusDrawable(null, true, true, a));
+                        }
                     } else {
                         nameTextView[a].setRightDrawable(null);
                     }
