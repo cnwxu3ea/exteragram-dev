@@ -91,8 +91,6 @@ import androidx.core.math.MathUtils;
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.utils.ChatUtils;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -1289,7 +1287,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     public int timeWidth;
     private int timeTextWidth;
     protected int timeX;
-    private CharSequence currentTimeString;
+    private SpannableStringBuilder currentTimeString;
     private boolean drawTime = true;
     private boolean forceNotDrawTime;
     private Paint drillHolePaint;
@@ -14275,7 +14273,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else {
             signString = null;
         }
-        String timeString;
+        CharSequence timeString;
         TLRPC.User author = null;
         if (currentMessageObject.isFromUser()) {
             author = MessagesController.getInstance(currentAccount).getUser(fromId);
@@ -14304,21 +14302,31 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             timeString = "";
         } else if (currentMessageObject.isRepostPreview) {
             timeString = LocaleController.formatSmallDateChat(messageObject.messageOwner.date) + ", " + LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
+        } else if (edited && ExteraConfig.replaceEditedWithIcon) {
+            timeString = new SpannableStringBuilder()
+                    .append(ChatUtils.getEditedIcon())
+                    .append(" ")
+                    .append(LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000));
         } else if (edited) {
             timeString = LocaleController.getString("EditedMessage", R.string.EditedMessage) + " " + LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         } else {
             timeString = LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         }
+
+        int additionalDrawableWidth = 0;
+        if (edited && ExteraConfig.replaceEditedWithIcon) {
+            additionalDrawableWidth = Theme.chat_pencilIconDrawable.getIntrinsicWidth();
+        }
+
+        currentTimeString = new SpannableStringBuilder(timeString);
         if (signString != null) {
             if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.imported) {
-                currentTimeString = " " + timeString;
+                currentTimeString.insert(0, " ");
             } else {
-                currentTimeString = ", " + timeString;
+                currentTimeString.insert(0, ", ");
             }
-        } else {
-            currentTimeString = timeString;
         }
-        timeTextWidth = timeWidth = (int) Math.ceil(Theme.chat_timePaint.measureText(currentTimeString, 0, currentTimeString == null ? 0 : currentTimeString.length()));
+        timeTextWidth = timeWidth = (int) Math.ceil(Theme.chat_timePaint.measureText(currentTimeString, 0, currentTimeString == null ? 0 : currentTimeString.length())) + additionalDrawableWidth;
         if (currentMessageObject.scheduled && currentMessageObject.messageOwner.date == 0x7FFFFFFE) {
             timeWidth -= AndroidUtilities.dp(8);
         }
@@ -14526,22 +14534,23 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 nameWidth = AndroidUtilities.dp(100);
             }
             int adminWidth;
-            String adminString;
+            CharSequence adminString;
             String adminLabel;
             if (isMegagroup && currentChat != null && messageObject.messageOwner.post_author != null && currentChat.id == -currentMessageObject.getFromChatId()) {
-                adminString = messageObject.messageOwner.post_author.replace("\n", "");
-                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
+                var s = messageObject.messageOwner.post_author.replace("\n", "");
+                adminString = s;
+                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(s));
                 nameWidth -= adminWidth;
             } else if (isMegagroup && currentChat != null && (currentMessageObject.isForwardedChannelPost() || currentMessageObject.messageOwner.peer_id != null && currentMessageObject.messageOwner.peer_id.channel_id != 0 && !currentMessageObject.isOutOwner())) {
-                adminString = LocaleController.getString("DiscussChannel", R.string.DiscussChannel);
-                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
+                adminString = new SpannableStringBuilder().append(ChatUtils.getChannelIcon());
+                adminWidth = Theme.chat_channelIconDrawable.getIntrinsicWidth();
                 nameWidth -= adminWidth;
             } else if ((currentUser != null || currentChat != null) && !currentMessageObject.isOutOwner() && !currentMessageObject.isAnyKindOfSticker() && currentMessageObject.type != MessageObject.TYPE_ROUND_VIDEO && delegate != null && (adminLabel = delegate.getAdminRank(currentUser != null ? currentUser.id : currentChat.id)) != null) {
                 if (adminLabel.length() == 0) {
                     adminLabel = LocaleController.getString("ChatAdmin", R.string.ChatAdmin);
                 }
                 adminString = adminLabel;
-                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
+                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminLabel));
                 nameWidth -= adminWidth;
             } else {
                 adminString = null;

@@ -21,6 +21,8 @@ public class IconSetsController {
     static {
 
         // static
+        solar.put(R.drawable.pencil, R.drawable.pencil_solar);
+        solar.put(R.drawable.channel, R.drawable.channel_solar);
 
         solar.put(R.drawable.arrow_more, R.drawable.arrow_more_solar);
         solar.put(R.drawable.attach_send, R.drawable.attach_send_solar);

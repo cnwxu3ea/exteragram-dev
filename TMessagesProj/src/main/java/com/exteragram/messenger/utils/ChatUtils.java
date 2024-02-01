@@ -16,10 +16,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Base64;
-
 import com.exteragram.messenger.ExteraConfig;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -45,7 +46,9 @@ import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
+import org.telegram.ui.Components.ColoredImageSpan;
 import org.telegram.ui.Components.TranscribeButton;
 
 import java.io.BufferedReader;
@@ -75,6 +78,27 @@ public class ChatUtils {
         for (int i = 0; i < UserConfig.MAX_ACCOUNT_COUNT; i++) {
             lockObjects[i] = new Object();
         }
+    }
+
+    private static SpannableStringBuilder editedIcon;
+    private static SpannableStringBuilder channelIcon;
+
+    public static CharSequence getEditedIcon() {
+        if (editedIcon == null) {
+            editedIcon = new SpannableStringBuilder("\u200D");
+            var pencil = new ColoredImageSpan(Theme.chat_pencilIconDrawable);
+            pencil.setTranslateX(-AndroidUtilities.dp(1));
+            editedIcon.setSpan(pencil, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return editedIcon;
+    }
+
+    public static CharSequence getChannelIcon() {
+        if (channelIcon == null) {
+            channelIcon = new SpannableStringBuilder("\u200D");
+            channelIcon.setSpan(new ColoredImageSpan(Theme.chat_channelIconDrawable), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return channelIcon;
     }
 
     public ChatUtils(int num) {

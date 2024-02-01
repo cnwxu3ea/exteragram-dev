@@ -480,12 +480,7 @@ public class AvatarDrawable extends Drawable {
                 canvas.rotate(-45, size / 2.0f, size / 2.0f);
             }
             AndroidUtilities.rectTmp.set(0, 0, size, size);
-            if (roundRadius > 0) {
-                AndroidUtilities.rectTmp.set(0, 0, size, size);
-                canvas.drawRoundRect(AndroidUtilities.rectTmp, roundRadius, roundRadius, backgroundPaint);
-            } else {
-                canvas.drawCircle(size / 2.0f, size / 2.0f, size / 2.0f, backgroundPaint);
-            }
+            canvas.drawRoundRect(AndroidUtilities.rectTmp, roundRadius, roundRadius, backgroundPaint);
             if (rotate45Background) {
                 canvas.restore();
             }

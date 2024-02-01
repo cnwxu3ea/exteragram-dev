@@ -153,6 +153,7 @@
     <string name="DisableJumpToNextChannel">Disable \"Jump to the Next Channel\"</string>
     <string name="ShowActionTimestamps">Show Timestamps for Actions</string>
     <string name="HideShareButton">Hide Side \"%1$s\" Button</string>
+    <string name="ReplaceEditedWithIcon">Replace \"%1$s\" with Icon</string>
     <string name="MessageMenu">Message Menu</string>
     <string name="AddCommaAfterMention">Add Comma after Mention</string>
     <string name="HideSendAsPeer">Hide \"Send as…\" Button</string>

@@ -140,6 +140,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
     private int messagesHeaderRow;
     private int hideShareButtonRow;
+    private int replaceEditedWithIcon;
     private int messageMenuRow;
     private int copyPhotoRow;
     private int saveRow;
@@ -322,6 +323,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
         messagesHeaderRow = newRow();
         hideShareButtonRow = newRow();
+        replaceEditedWithIcon = newRow();
         messageMenuRow = newRow();
         if (messageMenuExpanded) {
             copyPhotoRow = newRow();
@@ -383,6 +385,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         } else if (position == hideShareButtonRow) {
             ExteraConfig.editor.putBoolean("hideShareButton", ExteraConfig.hideShareButton ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.hideShareButton);
+        } else if (position == replaceEditedWithIcon) {
+            ExteraConfig.editor.putBoolean("replaceEditedWithIcon", ExteraConfig.replaceEditedWithIcon ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.replaceEditedWithIcon);
         } else if (position == bottomButtonRow) {
             if (getParentActivity() == null) {
                 return;
@@ -759,6 +764,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         textCheckCell.setTextAndCheck(LocaleController.getString("HideKeyboardOnScroll", R.string.HideKeyboardOnScroll), ExteraConfig.hideKeyboardOnScroll, true);
                     } else if (position == hideShareButtonRow) {
                         textCheckCell.setTextAndCheck(LocaleController.formatString("HideShareButton", R.string.HideShareButton, LocaleController.getString("ShareFile", R.string.ShareFile)), ExteraConfig.hideShareButton, true);
+                    } else if (position == replaceEditedWithIcon) {
+                        textCheckCell.setTextAndCheck(LocaleController.formatString("ReplaceEditedWithIcon", R.string.ReplaceEditedWithIcon, LocaleController.getString("EditedMessage", R.string.EditedMessage)), ExteraConfig.replaceEditedWithIcon, true);
                     } else if (position == disableJumpToNextChannelRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DisableJumpToNextChannel", R.string.DisableJumpToNextChannel), ExteraConfig.disableJumpToNextChannel, true);
                     } else if (position == showActionTimestampsRow) {

@@ -119,6 +119,7 @@ public class ExteraConfig {
     public static boolean disableJumpToNextChannel;
     public static boolean showActionTimestamps;
     public static boolean hideShareButton;
+    public static boolean replaceEditedWithIcon;
     public static boolean showCopyPhotoButton;
     public static boolean showClearButton;
     public static boolean showSaveMessageButton;
@@ -283,6 +284,7 @@ public class ExteraConfig {
             disableJumpToNextChannel = preferences.getBoolean("disableJumpToNextChannel", false);
             showActionTimestamps = preferences.getBoolean("showActionTimestamps", true);
             hideShareButton = preferences.getBoolean("hideShareButton", true);
+            replaceEditedWithIcon = preferences.getBoolean("replaceEditedWithIcon", true);
             showDetailsButton = preferences.getBoolean("showDetailsButton", false);
             showGenerateButton = preferences.getBoolean("showGenerateButton", true);
             showSaveMessageButton = preferences.getBoolean("showSaveMessageButton", false);

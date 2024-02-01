@@ -301,7 +301,7 @@ public class ReplyMessageLine {
             hasColor2 = false;
             hasColor3 = false;
             color1 = color2 = color3 = Theme.getColor(Theme.key_chat_inReplyLine, resourcesProvider);
-            backgroundColor = Theme.multAlpha(color1, 0.10f);
+            backgroundColor = !ExteraConfig.replyBackground && type != TYPE_QUOTE && type != TYPE_LINK ? Color.TRANSPARENT : Theme.multAlpha(color1, 0.10f);
             nameColor = Theme.getColor(Theme.key_chat_inReplyNameText, resourcesProvider);
         }
         if (messageObject.shouldDrawWithoutBackground()) {
@@ -329,6 +329,9 @@ public class ReplyMessageLine {
         }
         if ((type == TYPE_REPLY || type == TYPE_LINK || type == TYPE_CONTACT) && messageObject != null && messageObject.overrideLinkEmoji != -1) {
             emojiDocumentId = messageObject.overrideLinkEmoji;
+        }
+        if (!ExteraConfig.replyEmoji) {
+            emojiDocumentId = 0;
         }
         if (emojiDocumentId != 0 && emoji == null) {
             emoji = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(parentView, false, dp(20), AnimatedEmojiDrawable.CACHE_TYPE_ALERT_PREVIEW_STATIC);
@@ -520,7 +523,7 @@ public class ReplyMessageLine {
             canvas.drawPath(backgroundPath, backgroundPaint);
         }
 
-        if (emoji != null && ExteraConfig.replyEmoji) {
+        if (emoji != null) {
             final float loadedScale = emojiLoadedT.set(isEmojiLoaded());
 
             if (loadedScale > 0) {

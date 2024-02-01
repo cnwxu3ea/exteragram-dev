@@ -3224,6 +3224,11 @@ public class Theme {
     public static TextPaint chat_contextResult_descriptionTextPaint;
     public static TextPaint chat_msgCodeBgPaint;
 
+    // exteraGram
+    public static Drawable chat_pencilIconDrawable;
+    public static Drawable chat_channelIconDrawable;
+    // exteraGram
+
     public static Drawable chat_msgNoSoundDrawable;
     public static Drawable chat_composeShadowDrawable;
     public static Drawable chat_composeShadowRoundDrawable;
@@ -8567,6 +8572,11 @@ public class Theme {
                 chat_pollHintDrawable[a] = resources.getDrawable(R.drawable.msg_emoji_objects).mutate();
                 chat_psaHelpDrawable[a] = resources.getDrawable(R.drawable.msg_psa).mutate();
             }
+
+            // exteraGram
+            chat_pencilIconDrawable = resources.getDrawable(R.drawable.pencil).mutate();
+            chat_channelIconDrawable = resources.getDrawable(R.drawable.channel).mutate();
+            // exteraGram
 
             calllog_msgCallUpRedDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
             calllog_msgCallUpGreenDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();

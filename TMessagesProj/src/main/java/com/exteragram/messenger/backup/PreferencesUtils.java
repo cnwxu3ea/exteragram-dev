@@ -165,6 +165,7 @@ public class PreferencesUtils {
             new BackupItem("permissionsShortcut"),
             new BackupItem("recentActionsShortcut"),
             new BackupItem("rememberLastUsedCamera"),
+            new BackupItem("replaceEditedWithIcon"),
             new BackupItem("replyColors"),
             new BackupItem("replyEmoji"),
             new BackupItem("replyBackground"),

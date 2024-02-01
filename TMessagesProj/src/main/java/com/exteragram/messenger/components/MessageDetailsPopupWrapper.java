@@ -82,7 +82,7 @@ public class MessageDetailsPopupWrapper {
         if (messageObject.messageOwner.forwards > 0) {
             items.add(new Item(R.drawable.msg_forward, String.format(LocaleController.getPluralString("Shares", messageObject.messageOwner.forwards), AndroidUtilities.formatCount(messageObject.messageOwner.forwards)), null));
         }
-        if (items.size() > 0) {
+        if (!items.isEmpty()) {
             items.add(null);
         }
         items.add(new Item(R.drawable.msg_info, "ID", messageObject.messageOwner.id));
