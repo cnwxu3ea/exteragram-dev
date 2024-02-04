@@ -284,6 +284,10 @@
     <string name="CopyPhoto">Копировать фото</string>
     <string name="StickerSavedHint">Стикер сохранен в галерею.</string>
 
+    <string name="SearchPhotoInfo">Сервисы могут использовать изображения в рамках своих политик конфиденциальности и условий использования.</string>
+    <string name="PhotoUploadFailed">Не удалось загрузить фото.</string>
+    <string name="InstallGoogleLens">Установите **Google Lens**, чтобы воспользоваться этой функцией.</string>>
+
     <string name="TrackSaved">Трек сохранен в **%1$s**.</string>
     <string name="ChannelToSaveChanged">Треки будут сохраняться в **%1$s**.</string>
 

@@ -13,9 +13,11 @@ package com.exteragram.messenger.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.biometrics.BiometricManager;
 import android.hardware.fingerprint.FingerprintManager;
@@ -160,4 +162,31 @@ public class SystemUtils {
             FileLog.e(e);
         }
     }
+
+    public static boolean isLensInstalled() {
+        try {
+            ApplicationLoader.applicationContext.getPackageManager().getApplicationInfo("com.google.ar.lens", 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    public static boolean isLensSupported() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    }
+
+    public static void shareImageWithGoogleLens(Activity activity, Uri imageUri) {
+        Intent intent = new Intent(Intent.ACTION_SEND)
+                .setClassName("com.google.ar.lens", "com.google.vr.apps.ornament.app.lens.LensLauncherActivity")
+                .setType("image/*")
+                .putExtra(Intent.EXTRA_STREAM, imageUri);
+
+        try {
+            activity.startActivityForResult(intent, 500);
+        } catch (ActivityNotFoundException e) {
+            FileLog.e(e);
+        }
+    }
+
 }

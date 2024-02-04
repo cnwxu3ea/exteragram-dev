@@ -20,11 +20,15 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
+import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -44,8 +48,16 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.TranscribeButton;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
@@ -165,7 +177,7 @@ public class ChatUtils {
     }
 
     public void saveStickerToGallery(Activity activity, String path, boolean isVideo, Utilities.Callback<Uri> callback) {
-        Utilities.globalQueue.postRunnable(() -> {
+        utilsQueue.postRunnable(() -> {
             if (!TextUtils.isEmpty(path)) {
                 try {
                     FileLog.e(path);
@@ -508,4 +520,71 @@ public class ChatUtils {
     public static TLRPC.InputStickerSet getSetFrom(TLRPC.Chat chat) {
         return AnimatedEmojiDrawable.findStickerSet(UserConfig.selectedAccount, ChatObject.getProfileEmojiId(chat));
     }
+
+    public static final DispatchQueue utilsQueue = new DispatchQueue("utilsQueue");
+
+    public static void uploadImage(File file, Utilities.Callback<String> callback) {
+        utilsQueue.postRunnable(() -> {
+            try {
+                URL url = new URL("https://telegra.ph/upload");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(5000);
+                connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + "*****");
+
+                try (OutputStream os = connection.getOutputStream()) {
+                    writeFormField(os, file.getName(), new FileInputStream(file));
+                }
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    try (InputStream is = connection.getInputStream()) {
+                        callback.run("https://telegra.ph" + extractUrlFromResponse(is));
+                    }
+                } else {
+                    callback.run(null);
+                }
+            } catch (Exception e) {
+                callback.run(null);
+            }
+        });
+    }
+
+    private static void writeFormField(OutputStream os, String fileName, InputStream inputStream) throws IOException {
+        os.write(("--*****\r\n").getBytes());
+        os.write(("Content-Disposition: form-data; name=file; filename=\"" + fileName + "\"\r\n").getBytes());
+        os.write(("Content-Type: application/octet-stream\r\n\r\n").getBytes());
+
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            os.write(buffer, 0, bytesRead);
+        }
+
+        os.write(("\r\n--*****--\r\n").getBytes());
+    }
+
+    private static String extractUrlFromResponse(InputStream is) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+
+            JsonArray jsonArray = JsonParser.parseString(response.toString()).getAsJsonArray();
+
+            if (!jsonArray.isEmpty()) {
+                JsonObject jsonObject = jsonArray.get(0).getAsJsonObject();
+                return jsonObject.get("src").getAsString();
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return null;
+    }
+
 }
