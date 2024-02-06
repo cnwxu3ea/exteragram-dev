@@ -71,6 +71,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.SlideChooseView;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.LogoutActivity;
 import org.telegram.ui.Stories.StoryViewer;
 
 import java.util.ArrayList;
@@ -1763,6 +1764,12 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             fragmentsStack.add(position, fragment);
             onFragmentStackChanged("addFragmentToStack");
         }
+        if (!useAlphaAnimations) {
+            setVisibility(VISIBLE);
+            if (backgroundView != null) {
+                backgroundView.setVisibility(VISIBLE);
+            }
+        }
         return true;
     }
 
@@ -2207,6 +2214,11 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         for (int a = 0; a < fragmentsStack.size(); a++) {
             removeFragmentFromStackInternal(fragmentsStack.get(a), false);
             a--;
+        }
+        if (backgroundView != null) {
+            backgroundView.animate().alpha(0.0f).setDuration(180).withEndAction(() -> {
+                backgroundView.setVisibility(View.GONE);
+            }).start();
         }
     }
 
