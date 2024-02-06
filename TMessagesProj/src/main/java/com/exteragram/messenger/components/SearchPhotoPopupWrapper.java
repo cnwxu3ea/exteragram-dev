@@ -20,6 +20,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.PopupSwipeBackLayout;
+import org.telegram.ui.Stories.DarkThemeResourceProvider;
 
 public class SearchPhotoPopupWrapper {
 
@@ -108,9 +109,9 @@ public class SearchPhotoPopupWrapper {
         textView.setTag(R.id.fit_width_tag, 1);
         textView.setPadding(AndroidUtilities.dp(13), 0, AndroidUtilities.dp(13), AndroidUtilities.dp(8));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-        textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+        textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem, new DarkThemeResourceProvider()));
         textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
+        textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText, new DarkThemeResourceProvider()));
         textView.setText(LocaleController.getString(R.string.SearchPhotoInfo));
         searchSwipeBackLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 8, 0, 0));
     }

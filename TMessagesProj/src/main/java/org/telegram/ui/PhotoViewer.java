@@ -12233,8 +12233,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                     menuItem.checkHideMenuItem();
                 } else {
-                    speedItem.setVisibility(View.GONE);
-                    speedGap.setVisibility(View.GONE);
                     menuItem.hideSubItem(gallery_menu_openin);
                     final boolean pipItemVisible = pipItem.getVisibility() == View.VISIBLE || menuItem.isSubItemVisible(gallery_menu_pip2);
                     final boolean shouldMasksItemBeVisible = newMessageObject.hasAttachedStickers() && !DialogObject.isEncryptedDialog(newMessageObject.getDialogId());
@@ -13015,8 +13013,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
                 if (canZoom && allowShare && !isVideo) {
                     menuItem.showSubItem(gallery_menu_copy);
+                    searchItem.setVisibility(View.VISIBLE);
+                    searchGap.setVisibility(View.VISIBLE);
                 } else {
                     menuItem.hideSubItem(gallery_menu_copy);
+                    searchItem.setVisibility(View.GONE);
+                    searchGap.setVisibility(View.GONE);
                 }
             }
             if (hasAudioFocus && !isVideo) {
@@ -13026,13 +13028,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 speedItem.setVisibility(View.VISIBLE);
                 menuItem.showSubItem(gallery_menu_speed);
                 speedGap.setVisibility(menuItem.getVisibleSubItemsCount() > 1 ? View.VISIBLE : View.GONE);
-                searchItem.setVisibility(View.GONE);
-                searchGap.setVisibility(View.GONE);
             } else {
                 speedItem.setVisibility(View.GONE);
                 speedGap.setVisibility(View.GONE);
-                searchItem.setVisibility(View.VISIBLE);
-                searchGap.setVisibility(View.VISIBLE);
             }
             menuItem.checkHideMenuItem();
         } else if (!secureDocuments.isEmpty()) {
