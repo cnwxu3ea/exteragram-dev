@@ -88,6 +88,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,6 +114,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.preferences.MainPreferencesActivity;
 import com.exteragram.messenger.utils.AppUtils;
+import com.exteragram.messenger.utils.BankingUtils;
 import com.exteragram.messenger.utils.CanvasUtils;
 import com.exteragram.messenger.utils.ChatUtils;
 import com.exteragram.messenger.utils.LocaleUtils;
@@ -280,7 +282,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int PHONE_OPTION_CALL = 0,
         PHONE_OPTION_COPY = 1,
         PHONE_OPTION_TELEGRAM_CALL = 2,
-        PHONE_OPTION_TELEGRAM_VIDEO_CALL = 3;
+        PHONE_OPTION_TELEGRAM_VIDEO_CALL = 3,
+        PHONE_OPTION_TRANSFER = 4;
 
     private RecyclerListView listView;
     private RecyclerListView searchListView;
@@ -5690,7 +5693,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             ArrayList<Integer> actions = new ArrayList<>();
             List<Integer> icons = new ArrayList<>();
             if (position == phoneRow) {
-                if (userInfo != null && userInfo.phone_calls_available) {
+                if (false && userInfo != null && userInfo.phone_calls_available) {
                     icons.add(R.drawable.msg_calls);
                     items.add(LocaleController.getString("CallViaTelegram", R.string.CallViaTelegram));
                     actions.add(PHONE_OPTION_TELEGRAM_CALL);
@@ -5710,8 +5713,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             items.add(LocaleController.getString("Copy", R.string.Copy));
             actions.add(PHONE_OPTION_COPY);
 
+            if (!BankingUtils.getBanks().isEmpty()) {
+                icons.add(R.drawable.msg_payment_card);
+                items.add(LocaleController.getString(R.string.Transfer));
+                actions.add(PHONE_OPTION_TRANSFER);
+            }
+
             AtomicReference<ActionBarPopupWindow> popupWindowRef = new AtomicReference<>();
-            ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), R.drawable.popup_fixed_alert, resourcesProvider) {
+            ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), R.drawable.popup_fixed_alert, resourcesProvider, ActionBarPopupWindow.ActionBarPopupWindowLayout.FLAG_USE_SWIPEBACK) {
                 Path path = new Path();
 
                 @Override
@@ -5728,11 +5737,53 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             };
             popupLayout.setFitItems(true);
 
+            LinearLayout swipeBack = new LinearLayout(getContext());
+            swipeBack.setOrientation(LinearLayout.VERTICAL);
+            ScrollView swipeBackScrollView = new ScrollView(getContext()) {
+                final AnimatedFloat alphaFloat = new AnimatedFloat(this, 350, CubicBezierInterpolator.EASE_OUT_QUINT);
+                private boolean wasCanScrollVertically;
+
+                @Override
+                public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+                    super.onNestedScroll(target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
+                    boolean canScrollVertically = canScrollVertically(-1);
+                    if (wasCanScrollVertically != canScrollVertically) {
+                        invalidate();
+                        wasCanScrollVertically = canScrollVertically;
+                    }
+                }
+
+                @Override
+                protected void dispatchDraw(@NonNull Canvas canvas) {
+                    super.dispatchDraw(canvas);
+
+                    float alpha = .5f * alphaFloat.set(canScrollVertically(-1) ? 1 : 0);
+                    if (alpha > 0) {
+                        int a = Theme.dividerPaint.getAlpha();
+                        if (alpha > a) alpha = a;
+                        Theme.dividerPaint.setAlpha((int) (alpha * 100));
+                        canvas.drawLine(0, getScrollY(), getWidth(), getScrollY(), Theme.dividerPaint);
+                        Theme.dividerPaint.setAlpha(a);
+                    }
+                }
+            };
+            LinearLayout swipeBackScroll = new LinearLayout(getContext());
+            swipeBackScrollView.addView(swipeBackScroll);
+            swipeBackScroll.setOrientation(LinearLayout.VERTICAL);
+            popupLayout.swipeBackGravityRight = true;
+            final int swipeBackIndex = popupLayout.addViewToSwipeBack(swipeBack);
+
             for (int i = 0; i < icons.size(); i++) {
                 int action = actions.get(i);
-                ActionBarMenuItem.addItem(popupLayout, icons.get(i), items.get(i), false, resourcesProvider).setOnClickListener(v -> {
-                    popupWindowRef.get().dismiss();
+                var item = ActionBarMenuItem.addItem(popupLayout, icons.get(i), items.get(i), false, resourcesProvider);
+                item.setOnClickListener(v -> {
+                    if (action != PHONE_OPTION_TRANSFER) {
+                        popupWindowRef.get().dismiss();
+                    }
                     switch (action) {
+                        case PHONE_OPTION_TRANSFER:
+                            popupLayout.getSwipeBack().openForeground(swipeBackIndex);
+                            break;
                         case PHONE_OPTION_CALL:
                             try {
                                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:+" + user.phone));
@@ -5763,7 +5814,28 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             break;
                     }
                 });
+                if (action == PHONE_OPTION_TRANSFER) {
+                    item.setRightIcon(R.drawable.msg_arrowright);
+                }
             }
+
+            ActionBarMenuSubItem backButton = new ActionBarMenuSubItem(getContext(), true, false, resourcesProvider);
+            backButton.setTextAndIcon(LocaleController.getString("Back", R.string.Back), R.drawable.ic_ab_back);
+            backButton.setOnClickListener(e -> popupLayout.getSwipeBack().closeForeground());
+            swipeBack.addView(backButton);
+            swipeBack.addView(swipeBackScrollView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            swipeBackScroll.addView(new ActionBarPopupWindow.GapView(getContext(), resourcesProvider), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
+            for (BankingUtils.BankingApp app : BankingUtils.getBanks()) {
+                ActionBarMenuSubItem item = new ActionBarMenuSubItem(getContext(), 0, false, false, resourcesProvider);
+                item.setTextAndIcon(app.getName(), 0, app.getIcon());
+                item.setIconColor(Color.WHITE);
+                item.setOnClickListener(v -> {
+                    app.open(getParentActivity(), user.phone);
+                    popupWindowRef.get().dismiss();
+                });
+                swipeBackScroll.addView(item);
+            }
+
             if (isFragmentPhoneNumber) {
                 FrameLayout gap = new FrameLayout(getContext());
                 gap.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuSeparator, resourcesProvider));

@@ -163,13 +163,17 @@ public class SystemUtils {
         }
     }
 
-    public static boolean isLensInstalled() {
+    public static boolean isAppInstalled(String pkg) {
         try {
-            ApplicationLoader.applicationContext.getPackageManager().getApplicationInfo("com.google.ar.lens", 0);
+            ApplicationLoader.applicationContext.getPackageManager().getApplicationInfo(pkg, 0);
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    public static boolean isLensInstalled() {
+        return isAppInstalled("com.google.ar.lens");
     }
 
     public static boolean isLensSupported() {

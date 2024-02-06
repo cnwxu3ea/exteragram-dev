@@ -287,6 +287,7 @@
     <string name="OpenPremiumBot">Open Official Bot</string>
     <string name="CopyPhoto">Copy Photo</string>
     <string name="StickerSavedHint">Sticker saved to gallery</string>
+    <string name="Transfer">Transfer</string>
 
     <string name="SearchPhotoInfo">Services can use images following their privacy policies and terms of use.</string>
     <string name="PhotoUploadFailed">Failed to upload photo.</string>
