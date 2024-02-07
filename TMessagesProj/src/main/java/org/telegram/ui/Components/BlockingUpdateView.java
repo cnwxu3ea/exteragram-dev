@@ -10,7 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -152,7 +151,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
 //                    Browser.openUrl(getContext(), appUpdate.url);
 //                }
             } else {
-                Browser.openUrl(context, BuildVars.PLAYSTORE_APP_URL);
+                Browser.openUrl(context, BuildVars.GITHUB_APP_URL);
             }
         });
 

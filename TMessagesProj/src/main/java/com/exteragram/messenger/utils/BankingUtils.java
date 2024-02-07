@@ -29,10 +29,6 @@ public class BankingUtils {
     // array of banks, that doesn't work for now and idk why
     private static final String[] skip = new String[]{"ru.raiffeisennews"};
 
-    static {
-        updateBanks();
-    }
-
     public static List<BankingApp> getBanks() {
         updateBanks();
         return banks;

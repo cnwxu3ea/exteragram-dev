@@ -28,7 +28,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.Html;
@@ -594,7 +593,7 @@ public class AlertsCreator {
         builder.setMessage(text);
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         if (updateApp) {
-            builder.setNegativeButton(LocaleController.getString("UpdateApp", R.string.UpdateApp), (dialog, which) -> Browser.openUrl(context, BuildVars.PLAYSTORE_APP_URL));
+            builder.setNegativeButton(LocaleController.getString("UpdateApp", R.string.UpdateApp), (dialog, which) -> Browser.openUrl(context, BuildVars.GITHUB_APP_URL));
         }
         return builder.show();
     }

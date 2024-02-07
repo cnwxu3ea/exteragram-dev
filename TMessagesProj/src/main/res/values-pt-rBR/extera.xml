@@ -55,14 +55,17 @@
     <string name="BlurDialogs">Diálogos</string>
     <string name="BlurSmoothnessSmooth">Suave</string>
     <string name="BlurSmoothnessSmoothest">Ultra suave</string>
-    <string name="ForceSnow">Forçar efeitos de neve</string>
-    <string name="ForceSnowInfo">A neve também aparecerá na barra de ação e no fundo das conversas.</string>
+    <string name="ForceSnow">Forçar flocos de neve</string>
+    <string name="ForceSnowInfo">Flocos de neve aparecerão na barra de ação, menu lateral e fundo dos chats.</string>
     <string name="UseSystemFonts">Usar fontes do sistema</string>
     <string name="UseSystemEmoji">Usar emojis do sistema</string>
     <string name="NewSwitchStyle">Estilo do switch Material 3</string>
     <string name="DisableDividers">Desativar divisores</string>
+    <string name="SpringAnimations">Animações suaves</string>
+    <string name="SpringAnimationsInfo">Permite animações mais suaves ao alternar entre as telas e abrir o menu lateral.</string>
     <string name="DrawerOptions">Opções do menu</string>
     <string name="DrawerIconSet">Conjunto de Ícones</string>
+    <string name="DrawerImmersiveAnimation">Animação imersiva</string>
     <string name="DependsOnTheDate">Depende da data</string>
     <string name="NewYear">Ano Novo</string>
     <string name="ValentinesDay">Dia dos Namorados</string>
@@ -104,6 +107,7 @@
     <string name="StickerSizeRight">Grande</string>
     <string name="StickerSizeDialogMessageReplyTo">uau</string>
     <string name="StickerSizeDialogMessage">uau, ele é tão fofo!</string>
+    <string name="ReplyBackground">Plano de fundo da resposta</string>
     <string name="ChatSettingsInfo">Configurações de mídia, ícone do aplicativo e outros</string>
     <string name="StickerShape">Formato dos Stickers</string>
     <string name="StickerShapeRounded">Arredondado</string>
@@ -122,6 +126,7 @@
     <string name="DisableJumpToNextChannel">Desativar \"Ir para o próximo canal\"</string>
     <string name="ShowActionTimestamps">Mostrar data e hora de ações</string>
     <string name="HideShareButton">Ocultar botão \"%1$s\"</string>
+    <string name="ReplaceEditedWithIcon">Substituir \"%1$s\" pelo ícone</string>
     <string name="MessageMenu">Menu da mensagem</string>
     <string name="AddCommaAfterMention">Adicionar vírgula após a menção</string>
     <string name="HideSendAsPeer">Ocultar botão \"Enviar como…\"</string>
@@ -165,7 +170,7 @@
     <!-- Message Details -->
     <string name="Details">Detalhes</string>
     <string name="Date">Data</string>
-    <string name="EditedDate">Editar data</string>
+    <string name="EditedDate">Data de edição</string>
     <string name="ForwardedDate">Data de encaminhamento</string>
     <string name="FileSize">Tamanho do arquivo</string>
     <string name="FileName">Nome do arquivo</string>
@@ -174,6 +179,21 @@
     <string name="Bitrate">Taxa de Bits</string>
     <string name="MimeType">Tipo de Mime</string>
     <string name="Datacenter">Central de dados</string>
+    <!-- Backup -->
+    <string name="WriteFileName">Escreva o nome do arquivo…</string>
+    <string name="ExportSettings">Exportar configurações</string>
+    <string name="ApplySettings">Aplicar configurações</string>
+    <string name="ImportTitle">Você tem certeza de que deseja aplicar essas configurações?</string>
+    <string name="ImportConfirm">Sim, aplicar</string>
+    <string name="CancelConfirm">Não, deixe como está</string>
+    <string name="SettingsSaved">Arquivo de configuração salvo com sucesso.</string>
+    <string name="SettingsImported">Configurações aplicadas com sucesso.</string>
+    <string name="ImportChanges_one">A alteração **1** será aplicada às configurações atuais.</string>
+    <string name="ImportChanges_two">As alterações **%1$d** serão aplicadas às configurações atuais.</string>
+    <string name="ImportChanges_few">As alterações **%1$d** serão aplicadas às configurações atuais.</string>
+    <string name="ImportChanges_many">As alterações **%1$d** serão aplicadas às configurações atuais.</string>
+    <string name="ImportChanges_other">As alterações **%1$d** serão aplicadas às configurações atuais.</string>
+    <string name="SameSettings">Parece que as configurações são as mesmas que as atuais.</string>
     <!-- GPT -->
     <string name="ChatGPTInfo">Configurar Chave de API, Funções e Histórico</string>
     <string name="ApiKey">Chave API</string>
@@ -218,6 +238,8 @@
     <string name="ResetPreferencesInfo">Tem certeza que deseja redefinir **todas** as configurações do exteraGram para o padrão?</string>
     <string name="UserNotFound">Usuário com esse **ID** não encontrado.</string>
     <string name="PhotoCopied">Foto copiada para área de transferência.</string>
+    <string name="ProfileUsesEmojiPacks">Este perfil usa emojis do pacote %s para plano de fundo.</string>
+    <string name="ReplyUsesEmojiPacks">Esta resposta usa emojis do pacote %s para plano de fundo.</string>
     <string name="MutualContactInfo">Este contato é mútuo.</string>
     <string name="ToBeginning">Para o início</string>
     <string name="MessageHistory">Histórico</string>
@@ -225,14 +247,20 @@
     <string name="OpenPremiumBot">Abrir bot oficial</string>
     <string name="CopyPhoto">Copiar foto</string>
     <string name="StickerSavedHint">Sticker salvo na galeria</string>
+    <string name="Transfer">Transferir</string>
+    <string name="SearchPhotoInfo">Os serviços podem usar imagens seguindo suas políticas de privacidade e termos de uso.</string>
+    <string name="PhotoUploadFailed">Falha ao fazer upload da imagem.</string>
+    <string name="InstallGoogleLens">Instale **Google Lens** para usar este recurso.</string>
     <string name="TrackSaved">Áudio salvo em **%1$s**.</string>
     <string name="ChannelToSaveChanged">Os áudios serão salvos em **%1$s**.</string>
     <string name="ConfirmCall">Confirmar ligação</string>
     <string name="CallTo">Ligar para **%1$s**?</string>
+    <string name="AppIconOrigins">Origins</string>
     <string name="AppIconGradient">Gradiente</string>
     <string name="AppIconAurora">Aurora</string>
     <string name="AppIconNeo">Neo</string>
     <string name="AppIconAmethyst">Ametista</string>
+    <string name="AppIconSapphire">Safira</string>
     <string name="AppIconSpace">Space</string>
     <string name="AppIconOrbit">Órbita</string>
     <string name="AppIconSus">Impostor</string>

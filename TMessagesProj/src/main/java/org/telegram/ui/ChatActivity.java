@@ -3504,18 +3504,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             @Override
             protected void openSearch() {
-                openSearchWithText(isSupportedTags() ? "" : null);
+                if (!isInPreviewMode() && !isComments) {
+                    openSearchWithText(isSupportedTags() ? "" : null);
+                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                }
             }
         };
         avatarContainer.allowShorterStatus = true;
         avatarContainer.premiumIconHiddable = true;
-        avatarContainer.setOnLongClickListener(v -> {
-            if (!isInPreviewMode() && !isComments) {
-                openSearchWithText(null);
-                return true;
-            }
-            return false;
-        });
         avatarContainer.allowDrawStories = dialog_id < 0;
         avatarContainer.setClipChildren(false);
         AndroidUtilities.updateViewVisibilityAnimated(avatarContainer, true, 1f, false);
@@ -10192,7 +10188,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         return liteModeChat;
     }
 
-
     private void showProgressView(boolean show) {
         if (progressView == null) {
             return;
@@ -15664,7 +15659,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     child.measure(contentWidthSpec, contentHeightSpec);
                 } else if (child == chatListView || child == chatListThanosEffect) {
                     int contentWidthSpec = View.MeasureSpec.makeMeasureSpec(widthSize, View.MeasureSpec.EXACTLY);
-                    int h = heightSize - listViewTopHeight - (inPreviewMode ? AndroidUtilities.statusBarHeight : 0) + blurredViewTopOffset + blurredViewBottomOffset;
+                    int h = heightSize - listViewTopHeight - (inPreviewMode ? AndroidUtilities.statusBarHeight : 0) + blurredViewTopOffset + blurredViewBottomOffset + (isBottomOverlaysInvisible() ? AndroidUtilities.dp(50) : 0);
                     if (keyboardSize > AndroidUtilities.dp(20) && getLayoutParams().height < 0 && !isInsideContainer) {
                         h += keyboardSize;
                     }
@@ -27978,8 +27973,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 popupY = inBubbleMode ? 0 : AndroidUtilities.statusBarHeight;
             }
-            final int finalPopupX = scrimPopupX = popupX;
-            final int finalPopupY = scrimPopupY = popupY;
+            final int finalPopupX = popupX;
+            final int finalPopupY = popupY;
             scrimPopupContainerLayout.setMaxHeight(maxY + height - popupY);
             ReactionsContainerLayout finalReactionsLayout = reactionsLayout;
             Runnable showMenu = () -> {
@@ -34254,34 +34249,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 };
                 BoostDialogs.openGiveAwayStatusDialog(messageObject, progressDialogCurrent, getContext(), getResourceProvider());
             } else if (type == 21) {
-                if (ApplicationLoader.isStandaloneBuild()) {
-                    if (LaunchActivity.instance != null) {
-                        if (progressDialogCurrent != null) {
-                            progressDialogCurrent.cancel(true);
-                        }
-                        progressDialogCurrent = cell == null || cell.getMessageObject() == null ? null : new Browser.Progress() {
-                            @Override
-                            public void init() {
-                                progressDialogAtMessageId = cell.getMessageObject().getId();
-                                progressDialogAtMessageType = PROGRESS_INSTANT;
-                                progressDialogLinkSpan = null;
-                                cell.invalidate();
-                            }
-
-                            @Override
-                            public void end(boolean replaced) {
-                                if (!replaced) {
-                                    AndroidUtilities.runOnUIThread(ChatActivity.this::resetProgressDialogLoading, 250);
-                                }
-                            }
-                        };
-                        LaunchActivity.instance.checkAppUpdate(true, progressDialogCurrent);
-                    }
-                } else if (BuildVars.isHuaweiStoreApp()){
-                    Browser.openUrl(getContext(), BuildVars.HUAWEI_STORE_URL);
-                } else {
-                    Browser.openUrl(getContext(), BuildVars.PLAYSTORE_APP_URL);
-                }
+                Browser.openUrl(getContext(), BuildVars.GITHUB_APP_URL);
             } else if (type == 8) {
                 PollVotesAlert.showForPoll(ChatActivity.this, messageObject);
             } else if (type == 0) {

@@ -260,7 +260,7 @@ public class ReactionsLayoutInBubble {
         for (int i = 0; i < oldButtons.size(); i++) {
             oldButtons.get(i).detach();
         }
-        isEmpty = ExteraConfig.hideReactions || reactionButtons.isEmpty();
+        isEmpty = ExteraConfig.hideReactions && !tags || reactionButtons.isEmpty();
     }
 
     public void measure(int availableWidth, int gravity) {

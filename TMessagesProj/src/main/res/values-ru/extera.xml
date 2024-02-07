@@ -150,7 +150,7 @@
     <string name="DisableJumpToNextChannel">Отключить \"Перейти в новый канал\"</string>
     <string name="ShowActionTimestamps">Показывать время у действий</string>
     <string name="HideShareButton">Скрыть боковую кнопку \"%1$s\"</string>
-    <string name="ReplaceEditedWithIcon">Заменить \"%1$s\" на иконку</string>
+    <string name="ReplaceEditedWithIcon">Заменить \"%1$s\" иконкой</string>
     <string name="MessageMenu">Меню сообщения</string>
     <string name="AddCommaAfterMention">Запятая после упоминания</string>
     <string name="HideSendAsPeer">Скрыть \"Отправить как…\"</string>

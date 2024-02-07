@@ -1393,7 +1393,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         if (UserConfig.getInstance(account).unacceptedTermsOfService != null) {
             showTosActivity(account, UserConfig.getInstance(account).unacceptedTermsOfService);
         }
-        updateCurrentConnectionState(currentAccount);
+        updateCurrentConnectionState();
 
         switchingAccount = false;
     }
