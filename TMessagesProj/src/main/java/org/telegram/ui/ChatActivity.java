@@ -36769,4 +36769,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         getMessagesController().invalidateUserPremiumBlocked(getDialogId(), classGuid);
     }
+
+    public InstantCameraView getInstantCameraView() {
+        return instantCameraView;
+    }
 }

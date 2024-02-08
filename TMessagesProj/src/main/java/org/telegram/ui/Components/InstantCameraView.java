@@ -53,6 +53,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
@@ -1044,9 +1045,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     private void switchCameraX(){
         saveLastCameraBitmap();
-        if (cameraZoom > 0) {
-            cameraZoom = 0;
-        }
         if (lastBitmap != null) {
             needDrawFlickerStub = false;
             textureOverlayView.setImageBitmap(lastBitmap);
@@ -1062,9 +1060,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     private void switchCamera() {
         saveLastCameraBitmap();
-        if (cameraZoom > 0) {
-            cameraZoom = 0;
-        }
         if (lastBitmap != null) {
             needDrawFlickerStub = false;
             textureOverlayView.setImageBitmap(lastBitmap);
@@ -3613,10 +3608,59 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
+    private ValueAnimator zoomAnimator;
+
+    private void adjustZoom(boolean increase) {
+        float targetZoom = cameraZoom;
+
+        targetZoom += 0.125f * (increase ? 1 : -1);
+        if (targetZoom > 1.0f) {
+            targetZoom = 1.0f;
+        } else if (targetZoom < 0.0f) {
+            targetZoom = 0.0f;
+        }
+
+        if (zoomAnimator != null && zoomAnimator.isRunning()) {
+            zoomAnimator.cancel();
+        }
+
+        zoomAnimator = ValueAnimator.ofFloat(cameraZoom, targetZoom);
+        zoomAnimator.setDuration(175);
+        zoomAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
+        zoomAnimator.addUpdateListener(animation -> {
+            cameraZoom = (float) animation.getAnimatedValue();
+            if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
+                if (cameraSession != null) {
+                    cameraSession.setZoom(cameraZoom);
+                }
+            } else {
+                cameraXController.setZoom(cameraZoom);
+            }
+        });
+        zoomAnimator.start();
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+            adjustZoom(true);
+            return true;
+        } else if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            adjustZoom(false);
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
     private static float originalBrightness = 1f;
     private static boolean enabled = false;
 
     public void disableTorch() {
+        if (cameraZoom > 0) {
+            cameraZoom = 0;
+        }
         if (enabled) {
             toggleTorch();
             if (itemOptions != null) {
@@ -3696,7 +3740,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         flashlightButtonDrawable.invertColor(enabled);
     }
 
-    private boolean isCameraReady() {
+    public boolean isCameraReady() {
         if (!CameraXUtils.isCameraXSupported() || ExteraConfig.cameraType != 1) {
             return cameraReady && cameraSession != null && cameraSession.isInitied() && cameraThread != null;
         } else {

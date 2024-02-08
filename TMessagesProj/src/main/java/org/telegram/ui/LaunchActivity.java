@@ -7427,6 +7427,13 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 return true;
             }
         }
+        if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            BaseFragment baseFragment = getLastFragment();
+            if (baseFragment instanceof ChatActivity c && c.getInstantCameraView() != null && c.getInstantCameraView().isCameraReady()) {
+                c.getInstantCameraView().onKeyDown(keyCode, event);
+                return true;
+            }
+        }
         if (event.getAction() == KeyEvent.ACTION_DOWN && (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN)) {
             if (VoIPService.getSharedInstance() != null) {
                 if (Build.VERSION.SDK_INT >= 32) {
