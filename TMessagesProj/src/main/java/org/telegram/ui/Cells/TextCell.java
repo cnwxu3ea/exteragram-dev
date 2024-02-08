@@ -132,6 +132,7 @@ public class TextCell extends FrameLayout {
         addView(checkBox, LayoutHelper.createFrame(37, 20, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 22, 0, 22, 0));
 
         setFocusable(true);
+        setClipChildren(false);
     }
 
     public boolean isChecked() {

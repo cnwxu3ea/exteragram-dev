@@ -116,6 +116,9 @@ public class TextCheckCell2 extends FrameLayout {
         checkBox = new Switch(context);
         checkBox.setDrawIconType(1);
         addView(checkBox, LayoutHelper.createFrame(37, 40, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 22, 0, 22, 0));
+
+        setClipChildren(false);
+
     }
 
     @Override
@@ -206,7 +209,9 @@ public class TextCheckCell2 extends FrameLayout {
                 collapseViewContainer.setAlpha(1.0f);
             }
         } else {
-            checkBox.setAlpha(0.5f);
+            if (!ExteraConfig.newSwitchStyle) {
+                checkBox.setAlpha(0.5f);
+            }
             textView.setAlpha(0.5f);
             valueTextView.setAlpha(0.5f);
             if (animatedTextView != null) {
@@ -236,7 +241,9 @@ public class TextCheckCell2 extends FrameLayout {
             }
             textView.animate().alpha(value ? 1 : .5f).start();
             valueTextView.animate().alpha(value ? 1 : .5f).start();
-            checkBox.animate().alpha(value ? 1 : .5f).start();
+            if (!ExteraConfig.newSwitchStyle) {
+                checkBox.animate().alpha(value ? 1 : .5f).start();
+            }
         } else {
             if (value) {
                 textView.setAlpha(1.0f);
@@ -246,7 +253,9 @@ public class TextCheckCell2 extends FrameLayout {
                     collapseViewContainer.setAlpha(1.0f);
                 }
             } else {
-                checkBox.setAlpha(0.5f);
+                if (!ExteraConfig.newSwitchStyle) {
+                    checkBox.setAlpha(0.5f);
+                }
                 textView.setAlpha(0.5f);
                 valueTextView.setAlpha(0.5f);
                 if (collapseViewContainer != null) {

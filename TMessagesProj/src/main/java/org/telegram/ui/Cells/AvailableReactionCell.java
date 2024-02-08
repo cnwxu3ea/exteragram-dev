@@ -74,6 +74,7 @@ public class AvailableReactionCell extends FrameLayout {
         overlaySelectorView.setBackground(Theme.getSelectorDrawable(false));
         addView(overlaySelectorView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         setWillNotDraw(false);
+        setClipChildren(false);
     }
 
     @Override

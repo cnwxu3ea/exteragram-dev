@@ -518,6 +518,7 @@ public class LiteModeSettingsActivity extends BaseFragment {
             addView(checkBoxView, LayoutHelper.createFrame(21, 21, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), LocaleController.isRTL ? 0 : 64, 0, LocaleController.isRTL ? 64 : 0, 0));
 
             setFocusable(true);
+            setClipChildren(false);
         }
 
         private boolean disabled;

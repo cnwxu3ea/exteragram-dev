@@ -420,6 +420,8 @@ public class SessionBottomSheet extends BottomSheet {
                 switchView.setDrawIconType(1);
                 addView(switchView, LayoutHelper.createFrame(37, 40, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 21, 0, 21, 0));
             }
+
+            setClipChildren(false);
         }
 
         @Override

@@ -26,18 +26,14 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.util.StateSet;
-import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.Keep;
 
 import com.exteragram.messenger.ExteraConfig;
-
-import java.lang.reflect.Method;
+import com.exteragram.messenger.utils.MonetUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -239,6 +235,7 @@ public class Switch extends View {
     private void animateToCheckedState(boolean newCheckedState) {
         checkAnimator = ObjectAnimator.ofFloat(this, "progress", newCheckedState ? 1 : 0);
         checkAnimator.setDuration(200);
+        checkAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
         checkAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -378,15 +375,15 @@ public class Switch extends View {
         int x;
         float y;
         int width = AndroidUtilities.dp(31);
-        int thumb = AndroidUtilities.dp(20);
+        int thumb = AndroidUtilities.dp(26);
         if (ExteraConfig.newSwitchStyle) {
             x = 0;
-            y = getMeasuredHeight() / 2 - thumb / 2;
+            y = getMeasuredHeight() / 2f - thumb / 2f;
         } else {
             x = (getMeasuredWidth() - width) / 2;
             y = (getMeasuredHeight() - AndroidUtilities.dpf2(14)) / 2;
         }
-        int tx = ((getMeasuredWidth() - width) / 2) + AndroidUtilities.dp(7) + (int) (AndroidUtilities.dp(17) * progress);
+        int tx = ((getMeasuredWidth() - width) / 2) + AndroidUtilities.dp(8) + (int) (AndroidUtilities.dp(16) * progress);
         int ty = getMeasuredHeight() / 2;
 
 
@@ -451,9 +448,8 @@ public class Switch extends View {
             paint2.setColor(color);
 
             if (ExteraConfig.newSwitchStyle) {
-                rectF.set(x, y, getMeasuredWidth(), getMeasuredHeight() / 2 + thumb / 2);
+                rectF.set(x - AndroidUtilities.dp(2), y, getMeasuredWidth() + AndroidUtilities.dp(3), getMeasuredHeight() / 2f + thumb / 2f);
                 canvasToDraw.drawRoundRect(rectF, AndroidUtilities.dpf2(14), AndroidUtilities.dpf2(14), paint);
-                canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dpf2(9), paint);
             } else {
                 rectF.set(x, y, x + width, y + AndroidUtilities.dpf2(14));
                 canvasToDraw.drawRoundRect(rectF, AndroidUtilities.dpf2(7), AndroidUtilities.dpf2(7), paint);
@@ -487,8 +483,17 @@ public class Switch extends View {
                 colorProgress = progress;
             }
 
-            color1 = processColor(Theme.getColor(thumbColorKey, resourcesProvider));
-            color2 = processColor(Theme.getColor(thumbCheckedColorKey, resourcesProvider));
+            if (Theme.isCurrentThemeMonet() && ExteraConfig.newSwitchStyle && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (Theme.isCurrentThemeDark()) {
+                    color1 = MonetUtils.getColor("n1_800");
+                    color2 = MonetUtils.getColor("a1_800");
+                } else {
+                    color1 = color2 = Color.WHITE;
+                }
+            } else {
+                color1 = processColor(Theme.getColor(thumbColorKey, resourcesProvider));
+                color2 = processColor(Theme.getColor(thumbCheckedColorKey, resourcesProvider));
+            }
             r1 = Color.red(color1);
             r2 = Color.red(color2);
             g1 = Color.green(color1);
@@ -505,12 +510,12 @@ public class Switch extends View {
             paint.setColor(((alpha & 0xff) << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff));
 
             if (ExteraConfig.newSwitchStyle) {
-                canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dp(2) * progress + AndroidUtilities.dp(5), paint);
+                canvasToDraw.drawCircle(tx, ty, hasIcon() || drawIconType == 1 || drawIconType == 2 || iconAnimator != null ? AndroidUtilities.dp(9) : AndroidUtilities.dp(2) * progress + AndroidUtilities.dp(7), paint);
             } else {
                 canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dp(8), paint);
             }
 
-            if (a == 0 && !ExteraConfig.newSwitchStyle) {
+            if (a == 0) {
                 if (iconDrawable != null) {
                     iconDrawable.setBounds(tx - iconDrawable.getIntrinsicWidth() / 2, ty - iconDrawable.getIntrinsicHeight() / 2, tx + iconDrawable.getIntrinsicWidth() / 2, ty + iconDrawable.getIntrinsicHeight() / 2);
                     iconDrawable.draw(canvasToDraw);
