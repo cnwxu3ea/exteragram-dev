@@ -1633,6 +1633,9 @@ public class LocaleController {
     }
 
     public static String formatSmallDateChat(long date) {
+        return formatSmallDateChat(date, false);
+    }
+    public static String formatSmallDateChat(long date, boolean full) {
         try {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
@@ -1640,7 +1643,7 @@ public class LocaleController {
             date *= 1000;
 
             calendar.setTimeInMillis(date);
-            if (currentYear == calendar.get(Calendar.YEAR)) {
+            if (!full && currentYear == calendar.get(Calendar.YEAR)) {
                 return getInstance().formatterDayMonth.format(date);
             }
             return getInstance().formatterDayMonth.format(date) + ", " + calendar.get(Calendar.YEAR);
