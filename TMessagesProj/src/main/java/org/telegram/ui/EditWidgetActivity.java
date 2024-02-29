@@ -45,6 +45,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -310,6 +312,7 @@ public class EditWidgetActivity extends BaseFragment {
                             } else {
                                 avatarDrawable = new AvatarDrawable(chat);
                             }
+                            avatarDrawable.setRoundRadius(ExteraConfig.getAvatarCorners(size, true, chat != null && chat.forum));
                             avatarDrawable.setBounds(0, 0, size, size);
                             avatarDrawable.draw(canvas);
                         } else {
@@ -321,9 +324,10 @@ public class EditWidgetActivity extends BaseFragment {
                             float scale = size / (float) bitmap.getWidth();
                             canvas.save();
                             canvas.scale(scale, scale);
+                            float cornerRadius = ExteraConfig.getAvatarCorners(bitmap.getWidth(), true, chat != null && chat.forum);
                             roundPaint.setShader(shader);
                             bitmapRect.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                            canvas.drawRoundRect(bitmapRect, bitmap.getWidth(), bitmap.getHeight(), roundPaint);
+                            canvas.drawRoundRect(bitmapRect, cornerRadius, cornerRadius, roundPaint);
                             canvas.restore();
                         }
                         canvas.setBitmap(null);
@@ -573,15 +577,17 @@ public class EditWidgetActivity extends BaseFragment {
                                     avatarDrawable = new AvatarDrawable(chat);
                                 }
                                 avatarDrawable.setBounds(0, 0, size, size);
+                                avatarDrawable.setRoundRadius(ExteraConfig.getAvatarCorners(size, true, chat != null && chat.forum));
                                 avatarDrawable.draw(canvas);
                             } else {
                                 BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                                 float scale = size / (float) bitmap.getWidth();
                                 canvas.save();
                                 canvas.scale(scale, scale);
+                                float cornerRadius = ExteraConfig.getAvatarCorners(bitmap.getWidth(), true, chat != null && chat.forum);
                                 roundPaint.setShader(shader);
                                 bitmapRect.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                                canvas.drawRoundRect(bitmapRect, bitmap.getWidth(), bitmap.getHeight(), roundPaint);
+                                canvas.drawRoundRect(bitmapRect, cornerRadius, cornerRadius, roundPaint);
                                 canvas.restore();
                             }
                             canvas.setBitmap(null);

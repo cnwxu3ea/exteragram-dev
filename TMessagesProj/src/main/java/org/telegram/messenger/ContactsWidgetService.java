@@ -20,6 +20,7 @@ import android.widget.RemoteViewsService;
 
 import androidx.collection.LongSparseArray;
 
+import com.exteragram.messenger.ExteraConfig;
 import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.tgnet.TLRPC;
@@ -159,6 +160,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                             avatarDrawable.setInfo(accountInstance.getCurrentAccount(), chat);
                         }
                         avatarDrawable.setBounds(0, 0, size, size);
+                        avatarDrawable.setRoundRadius(ExteraConfig.getAvatarCorners(size, true, chat != null && chat.forum));
                         avatarDrawable.draw(canvas);
                     } else {
                         BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
@@ -169,9 +171,10 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                         float scale = size / (float) bitmap.getWidth();
                         canvas.save();
                         canvas.scale(scale, scale);
+                        float cornerRadius = ExteraConfig.getAvatarCorners(bitmap.getWidth(), true, chat != null && chat.forum);
                         roundPaint.setShader(shader);
                         bitmapRect.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                        canvas.drawRoundRect(bitmapRect, bitmap.getWidth(), bitmap.getHeight(), roundPaint);
+                        canvas.drawRoundRect(bitmapRect, cornerRadius, cornerRadius, roundPaint);
                         canvas.restore();
                     }
                     canvas.setBitmap(null);

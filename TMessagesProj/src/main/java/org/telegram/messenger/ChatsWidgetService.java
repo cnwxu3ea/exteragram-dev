@@ -155,7 +155,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                     avatarDrawable = new AvatarDrawable();
                     avatarDrawable.setInfo(accountInstance.getCurrentAccount(), chat);
                 }
-                avatarDrawable.setRoundRadius(ExteraConfig.getAvatarCorners(48));
+                avatarDrawable.setRoundRadius(ExteraConfig.getAvatarCorners(size, true, chat != null && chat.forum));
                 avatarDrawable.setBounds(0, 0, size, size);
                 avatarDrawable.draw(canvas);
             } else {
@@ -167,9 +167,10 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                 float scale = size / (float) bitmap.getWidth();
                 canvas.save();
                 canvas.scale(scale, scale);
+                float cornerRadius = ExteraConfig.getAvatarCorners(bitmap.getWidth(), true, chat != null && chat.forum);
                 roundPaint.setShader(shader);
                 bitmapRect.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                canvas.drawRoundRect(bitmapRect, ExteraConfig.getAvatarCorners(bitmap.getWidth(), true), ExteraConfig.getAvatarCorners(bitmap.getHeight(), true), roundPaint);
+                canvas.drawRoundRect(bitmapRect, cornerRadius, cornerRadius, roundPaint);
                 canvas.restore();
             }
             canvas.setBitmap(null);
