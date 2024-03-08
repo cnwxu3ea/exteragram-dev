@@ -93,7 +93,7 @@ public class ActionBar extends FrameLayout {
     private String actionModeTag;
     private boolean ignoreLayoutRequest;
     protected boolean occupyStatusBar = true;
-    private boolean actionModeVisible;
+    protected boolean actionModeVisible;
     private boolean addToContainer = true;
     private boolean clipContent;
     private boolean interceptTouches = true;

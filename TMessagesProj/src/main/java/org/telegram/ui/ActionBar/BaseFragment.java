@@ -61,7 +61,7 @@ import java.util.ArrayList;
 
 public abstract class BaseFragment {
 
-    private boolean isFinished;
+    protected boolean isFinished;
     protected boolean finishing;
     protected Dialog visibleDialog;
     protected int currentAccount = UserConfig.selectedAccount;

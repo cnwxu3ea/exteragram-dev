@@ -1979,6 +1979,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
                 updateCover(messageObject);
                 updateStyle(STYLE_AUDIO_PLAYER);
+                
+                //TypefaceSpan span = new TypefaceSpan(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM), 0, getThemedColor(Theme.key_inappPlayerPerformer));
+                //stringBuilder.setSpan(span, 0, messageObject.getMusicAuthor().length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                //titleTextView.setText(stringBuilder, !create && wasVisible && isMusic);
             }
         }
     }
