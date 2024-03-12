@@ -4894,6 +4894,8 @@ public class Theme {
                     if (accent != null) {
                         info.overrideWallpaper = accent.overrideWallpaper;
                     }
+                } else if (info.isMonet()) {
+                    info.loadWallpapers(themeConfig);
                 }
             }
             if (oldEditor != null) {
