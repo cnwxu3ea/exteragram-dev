@@ -50,6 +50,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -57,8 +58,6 @@ import androidx.core.graphics.ColorUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import com.google.zxing.common.detector.MathUtils;
-
-import com.exteragram.messenger.camera.BaseCameraView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -99,7 +98,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 
 @SuppressLint("NewApi")
-public class CameraView extends BaseCameraView implements TextureView.SurfaceTextureListener, CameraController.ICameraView, CameraController.ErrorCallback  {
+public class CameraView extends FrameLayout implements TextureView.SurfaceTextureListener, CameraController.ICameraView, CameraController.ErrorCallback  {
 
     public boolean WRITE_TO_FILE_IN_BACKGROUND = false;
 

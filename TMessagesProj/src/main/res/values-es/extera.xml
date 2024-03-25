@@ -59,14 +59,6 @@
     <string name="Halloween">Halloween</string>
     <string name="DrawerElements">Elementos del cajón</string>
     <!-- General -->
-    <string name="CameraType">Tipo de cámara</string>
-    <string name="CameraTypeSystem">Sistema</string>
-    <string name="DefaultCameraInfo">Usa la cámara integrada de Telegram.</string>
-    <string name="CameraXInfo">CameraX solo es compatible con <![CDATA[<a href="https://developer.android.com/training/camerax/devices">dispositivos seleccionados</a>]]>, el soporte para efectos y lentes depende de tu fabricante.</string>
-    <string name="SystemCameraInfo">Accede directamente a la cámara del sistema (no aplica para videomensajes).</string>
-    <string name="PerformanceMode">Modo rendimiento</string>
-    <string name="PerformanceModeInfo">La calidad de CameraX se reducirá en favor del rendimiento.</string>
-    <string name="CameraQuality">Calidad de la cámara</string>
     <string name="DisableNumberRounding">Desactivar redondeo numérico</string>
     <string name="FormatTimeWithSeconds">Formato de tiempo con segundos</string>
     <string name="TabletMode">Modo tablet</string>

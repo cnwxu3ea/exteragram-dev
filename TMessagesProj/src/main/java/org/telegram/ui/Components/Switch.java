@@ -569,4 +569,11 @@ public class Switch extends View {
         info.setChecked(isChecked);
         //info.setContentDescription(isChecked ? LocaleController.getString("NotificationsOn", R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", R.string.NotificationsOff));
     }
+
+    @Override
+    public void setAlpha(float alpha) {
+        if (!ExteraConfig.newSwitchStyle) {
+            super.setAlpha(alpha);
+        }
+    }
 }

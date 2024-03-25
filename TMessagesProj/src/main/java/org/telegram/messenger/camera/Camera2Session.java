@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.ImageFormat;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
+import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
@@ -20,13 +21,10 @@ import android.media.ImageReader;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.util.Size;
-import android.util.SizeF;
 import android.view.Surface;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -535,4 +533,59 @@ public class Camera2Session {
         }
     }
 
+    public boolean isTorchEnabled() {
+        if (captureRequestBuilder != null) {
+            Integer flashMode = captureRequestBuilder.get(CaptureRequest.FLASH_MODE);
+            if (flashMode != null) {
+                return flashMode == CaptureRequest.FLASH_MODE_TORCH;
+            }
+        }
+        return false;
+    }
+
+    public void setTorchEnabled(boolean enabled) {
+        if (captureRequestBuilder != null) {
+            Integer flashMode = captureRequestBuilder.get(CaptureRequest.FLASH_MODE);
+            if (flashMode != null) {
+                captureRequestBuilder.set(CaptureRequest.FLASH_MODE, enabled ? CaptureRequest.FLASH_MODE_TORCH : CaptureRequest.FLASH_MODE_OFF);
+                try {
+                    captureSession.setRepeatingRequest(captureRequestBuilder.build(), null, handler);
+                } catch (CameraAccessException e) {
+                    FileLog.e(e);
+                }
+            }
+        }
+    }
+
+    public boolean isTorchAvailable(boolean isFront) {
+        String cameraId = findCameraId(isFront);
+        if (cameraId != null) {
+            try {
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+                return Boolean.TRUE.equals(characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE));
+            } catch (CameraAccessException e) {
+                FileLog.e(e);
+            }
+        }
+        return false;
+    }
+
+    private String findCameraId(boolean isFront) {
+        try {
+            for (String cameraId : cameraManager.getCameraIdList()) {
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+                Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
+                if (facing != null) {
+                    if (isFront && facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                        return cameraId;
+                    } else if (!isFront && facing == CameraCharacteristics.LENS_FACING_BACK) {
+                        return cameraId;
+                    }
+                }
+            }
+        } catch (CameraAccessException e) {
+            FileLog.e(e);
+        }
+        return null;
+    }
 }

@@ -69,14 +69,6 @@
     <string name="Halloween">Хеллоуїн</string>
     <string name="DrawerElements">Елементи меню</string>
     <!-- General -->
-    <string name="CameraType">Тип камери</string>
-    <string name="CameraTypeSystem">Система</string>
-    <string name="DefaultCameraInfo">Використовувати камеру Telegram.</string>
-    <string name="CameraXInfo">CameraX підтримується тільки на <![CDATA[<a href="https://developer.android.com/training/camerax/devices"> обраних пристроях</a>]]>, підтримка ефектів і лінз залежить від вашого виробника.</string>
-    <string name="SystemCameraInfo">Прямий доступ до системної камери (не застосовується в відеоповідомленнях).</string>
-    <string name="PerformanceMode">Режим Продуктивності</string>
-    <string name="PerformanceModeInfo">Якість CameraX буде знижена на користь продуктивності.</string>
-    <string name="CameraQuality">Якість камери</string>
     <string name="DisableNumberRounding">Вимкнути округлення чисел</string>
     <string name="FormatTimeWithSeconds">Форматувати час з секундами</string>
     <string name="InAppVibration">Вібрація в додатку</string>

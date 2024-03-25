@@ -69,14 +69,6 @@
     <string name="Halloween">Hellouin</string>
     <string name="DrawerElements">Çəkməcə Elementləri</string>
     <!-- General -->
-    <string name="CameraType">Kamera tipi</string>
-    <string name="CameraTypeSystem">Sistem</string>
-    <string name="DefaultCameraInfo">Telegram-ın daxili kamerasından istifadə edin.</string>
-    <string name="CameraXInfo">CameraX yalnız <![CDATA[<a href="https://developer.android.com/training/camerax/devices">seçilmiş cihazlarda</a>]]> dəstəklənir, effektlər və linzalar dəstəyi istehsalçınızdan asılıdır.</string>
-    <string name="SystemCameraInfo">Birbaşa sistem kamerasına daxil olun (video mesajlar üçün uyğun deyil).</string>
-    <string name="PerformanceMode">Performans rejimi</string>
-    <string name="PerformanceModeInfo">CameraX-in keyfiyyəti performansın xeyrinə azalacaq.</string>
-    <string name="CameraQuality">Kamera keyfiyyəti</string>
     <string name="DisableNumberRounding">Nömrələrin yuvarlaqlaşdırılmasını bağla</string>
     <string name="FormatTimeWithSeconds">Vaxtı Saniyələrlə Formatlaşdırın</string>
     <string name="InAppVibration">Tətbiqdaxili Vibrasiya</string>

@@ -69,14 +69,6 @@
     <string name="Halloween">万圣节</string>
     <string name="DrawerElements">侧栏元素</string>
     <!-- General -->
-    <string name="CameraType">相机类型</string>
-    <string name="CameraTypeSystem">系统</string>
-    <string name="DefaultCameraInfo">使用Telegram的官方内置相机</string>
-    <string name="CameraXInfo">CameraX仅支持<![CDATA[<a href="https://developer.android.com/training/camerax/devices">该列表</a>]]>中的设备，拍摄质量与兼容性取决于硬件性能。</string>
-    <string name="SystemCameraInfo">直接使用系统相机(不适用于视频消息)</string>
-    <string name="PerformanceMode">性能模式</string>
-    <string name="PerformanceModeInfo">CameraX的拍摄质量会有所降低，以提高性能</string>
-    <string name="CameraQuality">相机清晰度</string>
     <string name="DisableNumberRounding">禁用数字舍入</string>
     <string name="FormatTimeWithSeconds">时间精确到秒</string>
     <string name="InAppVibration">应用内振动效果</string>

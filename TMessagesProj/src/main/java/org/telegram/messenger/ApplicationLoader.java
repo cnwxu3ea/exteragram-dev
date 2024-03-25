@@ -17,8 +17,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -38,7 +36,6 @@ import androidx.core.content.FileProvider;
 import androidx.multidex.MultiDex;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.camera.CameraXUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -51,7 +48,6 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.ForegroundDetector;
-import org.telegram.ui.Components.Premium.boosts.BoostRepository;
 import org.telegram.ui.IUpdateLayout;
 import org.telegram.ui.LauncherIconController;
 
@@ -212,7 +208,6 @@ public class ApplicationLoader extends Application {
         }
 
         SharedConfig.loadConfig();
-        CameraXUtils.loadCameraXSizes();
         SharedPrefsHelper.init(applicationContext);
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) { //TODO improve account
             UserConfig.getInstance(a).loadConfig();

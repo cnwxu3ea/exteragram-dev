@@ -19,7 +19,6 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 
 import com.exteragram.messenger.backup.PreferencesUtils;
-import com.exteragram.messenger.camera.CameraXUtils;
 import com.exteragram.messenger.icons.BaseIconSet;
 import com.exteragram.messenger.icons.EmptyIconSet;
 import com.exteragram.messenger.icons.SolarIconSet;
@@ -73,10 +72,6 @@ public class ExteraConfig {
     public static boolean changeStatus, myStories, menuBots, newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr;
 
     // General
-    public static int cameraType;
-    public static boolean useCameraXOptimizedMode;
-    public static int cameraResolution;
-
     public static boolean disableNumberRounding;
     public static boolean formatTimeWithSeconds;
     public static boolean inAppVibration;
@@ -157,11 +152,8 @@ public class ExteraConfig {
             963080346,
             1282540315,
             1374434073,
-            388099852,
             1972014627,
             168769611,
-            480000401,
-            639891381,
             1773117711,
             5330087923L,
             666154369,
@@ -193,10 +185,6 @@ public class ExteraConfig {
             editor = preferences.edit();
 
             // General
-            cameraType = preferences.getInt("cameraType", CameraXUtils.isCameraXSupported() ? 1 : 0);
-            useCameraXOptimizedMode = preferences.getBoolean("useCameraXOptimizedMode", SharedConfig.getDevicePerformanceClass() != SharedConfig.PERFORMANCE_CLASS_HIGH);
-            cameraResolution = preferences.getInt("cameraResolution", CameraXUtils.getCameraResolution());
-
             disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
             formatTimeWithSeconds = preferences.getBoolean("formatTimeWithSeconds", false);
             inAppVibration = preferences.getBoolean("inAppVibration", true);

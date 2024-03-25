@@ -4228,7 +4228,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         };
         fallbackImage = new ImageReceiver(avatarContainer2);
-        fallbackImage.setRoundRadius(ExteraConfig.getAvatarCorners(22));
+        fallbackImage.setRoundRadius(ExteraConfig.getAvatarCorners(22, false, isForum()));
         AndroidUtilities.updateViewVisibilityAnimated(avatarContainer2, true, 1f, false);
         frameLayout.addView(avatarContainer2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.START, 0, 0, 0, 0));
         avatarContainer.setPivotX(0);
@@ -4256,7 +4256,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         };
         avatarImage.getImageReceiver().setAllowDecodeSingleFrame(true);
-        avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(42, false, isForum()));
+        avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(needInsetForStories() ? 36 : 42, false, isForum()));
         avatarImage.setPivotX(0);
         avatarImage.setPivotY(0);
         avatarContainer.addView(avatarImage, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
@@ -4319,7 +4319,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             protected void onDraw(Canvas canvas) {
                 if (avatarImage != null && avatarImage.getImageReceiver().hasNotThumb()) {
                     paint.setAlpha((int) (0x55 * avatarImage.getImageReceiver().getCurrentAlpha()));
-                    canvas.drawRoundRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), ExteraConfig.getAvatarCorners(42), ExteraConfig.getAvatarCorners(42), paint);
+                    canvas.drawRoundRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), ExteraConfig.getAvatarCorners(42, false, isForum()), ExteraConfig.getAvatarCorners(42, false, isForum()), paint);
                 }
                 super.onDraw(canvas);
             }
@@ -4855,6 +4855,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             waitCanSendStoryRequest = false;
             showBoostsAlert = !canSend;
             hideFloatingButton(false);
+            floatingButtonContainer.setVisibility(!canSend ? View.GONE : View.VISIBLE);
         }, false, resourcesProvider);
     }
 
@@ -4971,15 +4972,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         Drawable drawable;
         if (floatingButtonContainer != null) {
-            drawable = CanvasUtils.createFabBackground();
-            drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), applyPeerColor(Theme.getColor(Theme.key_chats_actionBackground), false), applyPeerColor(Theme.getColor(Theme.key_chats_actionPressedBackground), false));
-            if (Build.VERSION.SDK_INT < 21) {
-                Drawable shadowDrawable = ContextCompat.getDrawable(getParentActivity(), R.drawable.floating_shadow).mutate();
-                shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));
-                CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable, drawable, 0, 0);
-                combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
-                drawable = combinedDrawable;
-            }
+            drawable = CanvasUtils.createFabBackground(56, applyPeerColor(Theme.getColor(Theme.key_chats_actionBackground), false), applyPeerColor(Theme.getColor(Theme.key_chats_actionPressedBackground), false));
             floatingButtonContainer.setBackground(drawable);
         }
     }
@@ -5041,7 +5034,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         avatarContainer.setScaleY(avatarScale);
         avatarContainer.setTranslationX(AndroidUtilities.lerp(avatarX, 0f, value));
         avatarContainer.setTranslationY(AndroidUtilities.lerp((float) Math.ceil(avatarY), 0f, value));
-        avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(42, false, isForum()), 0f, value));
+        avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(needInsetForStories() ? 36 : 42, false, isForum()), 0f, value));
         if (storyView != null) {
             storyView.setExpandProgress(value);
         }
@@ -6765,7 +6758,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     storyView.setExpandProgress(1f);
                 }
 
-                avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(42, false, isForum()), 0f, avatarAnimationProgress));
+                avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(needInsetForStories() ? 36 : 42, false, isForum()), 0f, avatarAnimationProgress));
                 avatarContainer.setTranslationX(AndroidUtilities.lerp(avX, 0, avatarAnimationProgress));
                 avatarContainer.setTranslationY(AndroidUtilities.lerp((float) Math.ceil(avY), 0f, avatarAnimationProgress));
                 float extra = (avatarContainer.getMeasuredWidth() - AndroidUtilities.dp(42)) * avatarScale;

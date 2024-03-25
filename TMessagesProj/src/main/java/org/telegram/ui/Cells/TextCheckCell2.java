@@ -209,9 +209,7 @@ public class TextCheckCell2 extends FrameLayout {
                 collapseViewContainer.setAlpha(1.0f);
             }
         } else {
-            if (!ExteraConfig.newSwitchStyle) {
-                checkBox.setAlpha(0.5f);
-            }
+            checkBox.setAlpha(0.5f);
             textView.setAlpha(0.5f);
             valueTextView.setAlpha(0.5f);
             if (animatedTextView != null) {
@@ -241,9 +239,7 @@ public class TextCheckCell2 extends FrameLayout {
             }
             textView.animate().alpha(value ? 1 : .5f).start();
             valueTextView.animate().alpha(value ? 1 : .5f).start();
-            if (!ExteraConfig.newSwitchStyle) {
-                checkBox.animate().alpha(value ? 1 : .5f).start();
-            }
+            checkBox.animate().alpha(value ? 1 : .5f).start();
         } else {
             if (value) {
                 textView.setAlpha(1.0f);
@@ -253,9 +249,7 @@ public class TextCheckCell2 extends FrameLayout {
                     collapseViewContainer.setAlpha(1.0f);
                 }
             } else {
-                if (!ExteraConfig.newSwitchStyle) {
-                    checkBox.setAlpha(0.5f);
-                }
+                checkBox.setAlpha(0.5f);
                 textView.setAlpha(0.5f);
                 valueTextView.setAlpha(0.5f);
                 if (collapseViewContainer != null) {

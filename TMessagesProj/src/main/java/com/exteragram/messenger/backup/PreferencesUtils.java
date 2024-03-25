@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.collection.LongSparseArray;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.camera.CameraXUtils;
 import com.exteragram.messenger.gpt.core.Config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -118,8 +117,6 @@ public class PreferencesUtils {
             new BackupItem("blurSmoothness"),
             new BackupItem("bottomButton"),
             new BackupItem("calls"),
-            new BackupItem("cameraResolution"),
-            new BackupItem("cameraType"),
             new BackupItem("centerTitle"),
             new BackupItem("changeStatus"),
             new BackupItem("channelToSave", Long.class),
@@ -194,7 +191,6 @@ public class PreferencesUtils {
             new BackupItem("titleText"),
             new BackupItem("unlimitedRecentStickers"),
             new BackupItem("uploadSpeedBoost"),
-            new BackupItem("useCameraXOptimizedMode"),
             new BackupItem("useGoogleAnalytics"),
             new BackupItem("useGoogleCrashlytics"),
             new BackupItem("springAnimations"),
@@ -386,7 +382,6 @@ public class PreferencesUtils {
         SharedConfig.reloadConfig();
 
         LocaleController.getInstance().recreateFormatters();
-        CameraXUtils.loadSuggestedResolution();
         ((LaunchActivity) activity).reloadIcons();
         Theme.reloadAllResources(activity);
 

@@ -69,14 +69,6 @@
     <string name="Halloween">عيد الهالوين</string>
     <string name="DrawerElements">عناصر القائمة</string>
     <!-- General -->
-    <string name="CameraType">نوع الكاميرا</string>
-    <string name="CameraTypeSystem">النظام</string>
-    <string name="DefaultCameraInfo">استخدم كاميرا تيليجرام المدمجة.</string>
-    <string name="CameraXInfo">CameraX مدعوم فقط على <![CDATA[<a href="https://developer.android.com/training/camerax/devices">الأجهزة المحددة</a>]]>، يعتمد دعم المؤثرات والعدسات على الشركة المصنعة الخاصة بك.</string>
-    <string name="SystemCameraInfo">الوصول مباشرة إلى كاميرا النظام (لا تنطبق على رسائل الفيديو).</string>
-    <string name="PerformanceMode">وضع الأداء</string>
-    <string name="PerformanceModeInfo">سيتم خفض جودة CameraX لصالح الأداء.</string>
-    <string name="CameraQuality">جودة الكاميرا</string>
     <string name="DisableNumberRounding">تعطيل تقريب الأرقام</string>
     <string name="FormatTimeWithSeconds">تنسيق الوقت بالثواني</string>
     <string name="InAppVibration">In-App Vibration</string>

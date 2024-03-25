@@ -87,15 +87,6 @@
     <string name="DrawerElements">Drawer Elements</string>
 
     <!-- General -->
-    <string name="CameraType">Camera Type</string>
-    <string name="CameraTypeSystem">System</string>
-    <string name="DefaultCameraInfo">Use the Telegram\'s built-in Camera.</string>
-    <string name="CameraXInfo">CameraX is only supported on <![CDATA[<a href="https://developer.android.com/training/camerax/devices">selected devices</a>]]>, effects and lenses support depends on your manufacturer.</string>
-    <string name="SystemCameraInfo">Access directly the system camera (not applicable for video messages).</string>
-    <string name="PerformanceMode">Performance Mode</string>
-    <string name="PerformanceModeInfo">CameraX\'s Quality will be reduced in favor of performance.</string>
-    <string name="CameraQuality">Camera Quality</string>
-
     <string name="DisableNumberRounding">Disable Number Rounding</string>
     <string name="FormatTimeWithSeconds">Format Time with Seconds</string>
     <string name="InAppVibration">In-App Vibration</string>

@@ -1297,7 +1297,7 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
             params.originalAvatarRect.set(x, y, x + finalSize, y + finalSize);
             avatarImage.setAlpha(1f);
             //avatarImage.setRoundRadius((int) radius);
-            avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(radius * 2 + AndroidUtilities.dp(8), true));
+            avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(radius * 2, true));
 
             cx = x + radius;
             cy = y + radius;
@@ -1308,7 +1308,7 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
             }
             if (progressToCollapsed != 0) {
                 float r = radius + AndroidUtilities.dp(3);
-                canvas.drawRoundRect(cx - r, cy - r, cx + r, cy + r, ExteraConfig.getAvatarCorners(radius * 2 + AndroidUtilities.dp(22), true), ExteraConfig.getAvatarCorners(radius * 2 + AndroidUtilities.dp(22), true), backgroundPaint);
+                canvas.drawRoundRect(cx - r, cy - r, cx + r, cy + r, ExteraConfig.getAvatarCorners(radius * 2 + AndroidUtilities.dp(8f), true), ExteraConfig.getAvatarCorners(radius * 2 + AndroidUtilities.dp(8f), true), backgroundPaint);
                 //canvas.drawCircle(cx, cy, radius + AndroidUtilities.dp(3), backgroundPaint);
             }
 

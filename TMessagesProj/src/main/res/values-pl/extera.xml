@@ -51,18 +51,6 @@
     <string name="Halloween">Halloween</string>
     <string name="DrawerElements">Elementy szuflady</string>
     <!--  General  -->
-    <string name="CameraType">Typ aparatu</string>
-    <string name="CameraTypeSystem">Systemowy</string>
-    <string name="DefaultCameraInfo">Używaj wbudowanego w Telegram aparatu.</string>
-    <string name="CameraXInfo">
-CameraX wspierana jest tylko na
-<![CDATA[ <a href="https://developer.android.com/training/camerax/devices">wybranych urządzeniach</a> ]]>
-, wsparcie efektów i obiektywów zależy od twojego producenta.
-</string>
-    <string name="SystemCameraInfo">Bezpośredni dostęp do aparatu systemowego (nie dotyczy wiadomości wideo).</string>
-    <string name="PerformanceMode">Tryb wydajności</string>
-    <string name="PerformanceModeInfo">Jakość CameraX zostanie obniżona na korzyść wydajności.</string>
-    <string name="CameraQuality">Jakość aparatu</string>
     <string name="DisableNumberRounding">Wyłącz zaokrąglanie liczb</string>
     <string name="FormatTimeWithSeconds">Formatuj czas z sekundami</string>
     <string name="TabletMode">Tryb tabletu</string>

@@ -69,14 +69,6 @@
     <string name="Halloween">Cadılar Bayramı</string>
     <string name="DrawerElements">Çekmece elemanları</string>
     <!-- General -->
-    <string name="CameraType">Kamera Türü</string>
-    <string name="CameraTypeSystem">Sistem</string>
-    <string name="DefaultCameraInfo">Telegram\'ın yerleşik Kamerasını kullan.</string>
-    <string name="CameraXInfo">CameraX sadece <![CDATA[<a href="https://developer.android.com/training/camerax/devices">selected devices</a>]]>\'de desteklenir. Efektler ve lens desteği üreticiye bağlıdır.</string>
-    <string name="SystemCameraInfo">Sistem kamerasına doğrudan eriş (video mesajlar için geçerli değildir).</string>
-    <string name="PerformanceMode">Performans Modu</string>
-    <string name="PerformanceModeInfo">Daha iyi peformans için CameraX\'in kalitesini azaltır.</string>
-    <string name="CameraQuality">Kamera Kalitesi</string>
     <string name="DisableNumberRounding">Sayı yuvarlamayı devre dışı bırak</string>
     <string name="FormatTimeWithSeconds">Saati saniye ile göster</string>
     <string name="InAppVibration">Uygulama İçi Titreşim</string>

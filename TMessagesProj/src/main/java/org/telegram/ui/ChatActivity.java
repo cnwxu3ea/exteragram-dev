@@ -3538,7 +3538,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         };
         avatarContainer.allowShorterStatus = true;
         avatarContainer.premiumIconHiddable = true;
-        avatarContainer.allowDrawStories = dialog_id < 0;
+        avatarContainer.allowDrawStories = dialog_id < 0 && !isForumInViewAsMessagesMode();
         avatarContainer.setClipChildren(false);
         AndroidUtilities.updateViewVisibilityAnimated(avatarContainer, true, 1f, false);
         updateTopicTitleIcon();

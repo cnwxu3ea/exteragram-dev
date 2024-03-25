@@ -67,7 +67,6 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.camera.CameraXView;
 import com.exteragram.messenger.utils.VibratorUtils;
 
 import java.util.ArrayList;
@@ -744,7 +743,7 @@ public class BottomSheet extends Dialog {
 
         @Override
         protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-            if (child instanceof CameraView || child instanceof CameraXView) {
+            if (child instanceof CameraView) {
                 if (shouldOverlayCameraViewOverNavBar()) {
                     drawNavigationBar(canvas, 1f);
                 }

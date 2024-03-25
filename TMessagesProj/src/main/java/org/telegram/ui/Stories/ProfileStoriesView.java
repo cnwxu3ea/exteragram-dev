@@ -34,6 +34,7 @@ import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.zxing.common.detector.MathUtils;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -628,19 +629,26 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
                         canvas.scale(bounceScale, bounceScale, rect2.centerX(), rect2.centerY());
                     }
 
+                    boolean isForum = ChatObject.isForum(currentAccount, dialogId);
                     if (read < 1) {
                         unreadPaint = gradientTools.getPaint(rect2);
                         unreadPaint.setAlpha((int) (0xFF * (1f - read) * segmentsAlpha));
                         unreadPaint.setStrokeWidth(dpf2(2.33f));
-                        canvas.drawRoundRect(rect2, ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(2), true), ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(2), true), unreadPaint);
-                        //canvas.drawArc(rect2, a, -widthAngle * appear, false, unreadPaint);
+                        if (ExteraConfig.avatarCorners != 28) {
+                            canvas.drawRoundRect(rect2, ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(4), true, isForum), ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(4), true, isForum), unreadPaint);
+                        } else {
+                            canvas.drawArc(rect2, a, -widthAngle * appear, false, unreadPaint);
+                        }
                     }
 
                     if (read > 0) {
                         readPaint.setAlpha((int) (readPaintAlpha * read * segmentsAlpha));
                         readPaint.setStrokeWidth(dpf2(1.5f));
-                        canvas.drawRoundRect(rect3, ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(2), true), ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(2), true), readPaint);
-                        //canvas.drawArc(rect3, a, -widthAngle * appear, false, readPaint);
+                        if (ExteraConfig.avatarCorners != 28) {
+                            canvas.drawRoundRect(rect3, ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(3), true, isForum), ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(3), true, isForum), readPaint);
+                        } else {
+                            canvas.drawArc(rect3, a, -widthAngle * appear, false, readPaint);
+                        }
                     }
 
                     if (bounceScale != 1) {

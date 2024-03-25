@@ -84,15 +84,6 @@
     <string name="DrawerElements">Элементы бокового меню</string>
 
     <!-- General -->
-    <string name="CameraType">Тип камеры</string>
-    <string name="CameraTypeSystem">Системная</string>
-    <string name="DefaultCameraInfo">Встроенная камера Telegram.</string>
-    <string name="CameraXInfo">CameraX поддерживается только на <![CDATA[<a href="https://developer.android.com/training/camerax/devices">выбранных устройствах</a>]]>, эффекты и линзы зависят от вашего производителя.</string>
-    <string name="SystemCameraInfo">Позволяет получить доступ напрямую к системной камере (не применимо к видеосообщениям).</string>
-    <string name="PerformanceMode">Производительный режим</string>
-    <string name="PerformanceModeInfo">Качество CameraX будет снижено в пользу производительности.</string>
-    <string name="CameraQuality">Качество камеры</string>
-
     <string name="DownloadSpeedBoost">Увеличение скорости загрузки</string>
     <string name="UploadSpeedBoost">Увеличение скорости отправки</string>
     <string name="Ultra">Ультра</string>

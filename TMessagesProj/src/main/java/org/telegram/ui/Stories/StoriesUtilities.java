@@ -29,6 +29,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
@@ -59,7 +60,7 @@ import java.util.Collections;
 
 public class StoriesUtilities {
 
-    private final static int ANIMATION_SEGMENT_COUNT = ExteraConfig.avatarCorners == 28 ? 16 : 1;
+    private final static int ANIMATION_SEGMENT_COUNT = 16;
     public static final int STATE_EMPTY = 0;
     public static final int STATE_HAS_UNREAD = 1;
     public static final int STATE_READ = 2;
@@ -103,8 +104,7 @@ public class StoriesUtilities {
 
     public static void drawAvatarWithStory(long dialogId, Canvas canvas, ImageReceiver avatarImage, boolean hasStories, AvatarStoryParams params) {
         StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
-        boolean isCircle = ExteraConfig.avatarCorners == 28;
-        boolean animated = params.animate = params.drawSegments = isCircle;
+        boolean animated = params.animate = params.drawSegments;
         if (params.dialogId != dialogId) {
             params.dialogId = dialogId;
             params.reset();
@@ -115,6 +115,7 @@ public class StoriesUtilities {
         int unreadState = 0;
         boolean showProgress = storiesController.isLoading(dialogId);
         boolean isForum = ChatObject.isForum(UserConfig.selectedAccount, dialogId) && !params.isStoryCell;
+        FileLog.e("isforum " + isForum);
         if (params.drawHiddenStoriesAsSegments) {
             hasStories = storiesController.hasHiddenStories();
         }
@@ -499,10 +500,10 @@ public class StoriesUtilities {
             float startAngle = i * len + 10;
             float endAngle = startAngle + len - 10;
             float segmentLen = endAngle - startAngle;
-            if (ANIMATION_SEGMENT_COUNT == 1) {
+            if (ANIMATION_SEGMENT_COUNT == 1 || ExteraConfig.avatarCorners != 28) {
                 Paint mPaint = new Paint(paint);
                 mPaint.setStrokeWidth(paint.getStrokeWidth() * params.sweepAngle);
-                canvas.drawRoundRect(rectTmp, ExteraConfig.getAvatarCorners(rectTmp.width() + AndroidUtilities.dp(12), true), ExteraConfig.getAvatarCorners(rectTmp.width() + AndroidUtilities.dp(12), true), mPaint);
+                canvas.drawRoundRect(rectTmp, ExteraConfig.getAvatarCorners(rectTmp.width(), true), ExteraConfig.getAvatarCorners(rectTmp.width(), true), mPaint);
             } else {
                 canvas.drawArc(rectTmp, params.globalAngle + startAngle, segmentLen, false, paint);
             }
@@ -564,7 +565,7 @@ public class StoriesUtilities {
         if (isForum || ExteraConfig.avatarCorners != 28) {
             forumRect.set(rectTmp);
             forumRect.inset(AndroidUtilities.dp(0.5f), AndroidUtilities.dp(0.5f));
-            canvas.drawRoundRect(forumRect, AndroidUtilities.dp(18), AndroidUtilities.dp(18), paint);
+            canvas.drawRoundRect(forumRect, ExteraConfig.getAvatarCorners(forumRect.width() + (params.isStoryCell ? AndroidUtilities.dp(4f) : getInset(params.currentState, params.animateFromUnreadState) * 2), true, isForum), ExteraConfig.getAvatarCorners(forumRect.width() + (params.isStoryCell ? AndroidUtilities.dp(4f) : getInset(params.currentState, params.animateFromUnreadState) * 2), true, isForum), paint);
             return;
         }
         if (params.progressToArc == 0) {
@@ -575,10 +576,10 @@ public class StoriesUtilities {
     }
 
     private static void drawSegment(Canvas canvas, RectF rectTmp, Paint paint, float startAngle, float endAngle, AvatarStoryParams params, boolean isForum) {
-        if (isForum) {
+        if (isForum || ExteraConfig.avatarCorners != 28) {
             forumRect.set(rectTmp);
             forumRect.inset(AndroidUtilities.dp(0.5f), AndroidUtilities.dp(0.5f));
-            canvas.drawRoundRect(forumRect, AndroidUtilities.dp(18), AndroidUtilities.dp(18), paint);
+            canvas.drawRoundRect(forumRect, ExteraConfig.getAvatarCorners(forumRect.width() + (params.isStoryCell ? AndroidUtilities.dp(4f) : getInset(params.currentState, params.animateFromUnreadState) * 2), true, isForum), ExteraConfig.getAvatarCorners(forumRect.width() + (params.isStoryCell ? AndroidUtilities.dp(4f) : getInset(params.currentState, params.animateFromUnreadState) * 2), true, isForum), paint);
             return;
         }
         if (!params.isFirst && !params.isLast) {

@@ -407,7 +407,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
                     WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
                             WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
                             WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                            FLAG_KEEP_SCREEN_ON;
         }
         isClosed = false;
         unreadStateChanged = false;
@@ -741,8 +741,15 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
                             }
                             if (animateAvatar) {
                                 boolean crossfade = transitionViewHolder != null && transitionViewHolder.crossfadeToAvatarImage != null;
+                                TLRPC.Chat chat = null;
+                                PeerStoriesView peerView = storiesViewPager.getCurrentPeerView();
+                                if (peerView != null && peerView.currentStory != null) {
+                                    chat = MessagesController.getInstance(currentAccount).getChat(-peerView.currentStory.storyItem.dialogId);
+                                }
+                                boolean isForum = chat != null && chat.forum;
                                 if (!crossfade || progressToOpen != 0) {
-                                    headerView.backupImageView.getImageReceiver().setImageCoords(rect3);                                    headerView.backupImageView.getImageReceiver().setRoundRadius(ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(8), true));
+                                    headerView.backupImageView.getImageReceiver().setImageCoords(rect3);
+                                    headerView.backupImageView.getImageReceiver().setRoundRadius(ExteraConfig.getAvatarCorners(rect3.width(), true, isForum));
                                     headerView.backupImageView.getImageReceiver().setVisible(true, false);
                                     final float alpha = crossfade ? progressToOpen : 1f;
                                     float thisAlpha = alpha;
@@ -767,7 +774,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
                                     int oldRadius = transitionViewHolder.crossfadeToAvatarImage.getRoundRadius()[0];
                                     boolean isVisible = transitionViewHolder.crossfadeToAvatarImage.getVisible();
                                     transitionViewHolder.crossfadeToAvatarImage.setImageCoords(rect3);
-                                    transitionViewHolder.crossfadeToAvatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(8), true));
+                                    transitionViewHolder.crossfadeToAvatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(rect3.width(), true, isForum));
                                     transitionViewHolder.crossfadeToAvatarImage.setVisible(true, false);
                                     canvas.saveLayerAlpha(rect3, (int) (255 * (1f - progressToOpen)), Canvas.ALL_SAVE_FLAG);
                                     transitionViewHolder.crossfadeToAvatarImage.draw(canvas);
@@ -1128,7 +1135,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                     aspectRatioFrameLayout.getLayoutParams().height = viewPagerHeight + 1;
                     aspectRatioFrameLayout.getLayoutParams().width = width;
-                    FrameLayout.LayoutParams layoutParams = (LayoutParams) aspectRatioFrameLayout.getLayoutParams();
+                    LayoutParams layoutParams = (LayoutParams) aspectRatioFrameLayout.getLayoutParams();
                     layoutParams.topMargin = AndroidUtilities.statusBarHeight;
                     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 }

@@ -5550,7 +5550,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
             }
         }
-        allowAnimatedEmoji = needAnimatedEmoji && (UserConfig.getInstance(currentAccount).isPremium() || parentFragment != null && UserObject.isUserSelf(parentFragment.getCurrentUser()));
+        allowAnimatedEmoji = needAnimatedEmoji;
         allowStickers = needStickers;
         allowGifs = needGifs;
         if (emojiView != null) {
@@ -8286,7 +8286,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                 ObjectAnimator.ofFloat(audioVideoSendButton, View.SCALE_X, 1),
                                 ObjectAnimator.ofFloat(audioVideoSendButton, View.SCALE_Y, 1)
                         );
-                        audioVideoSendButton.setState(isInVideoMode() ? ChatActivityEnterViewAnimatedIconView.State.VIDEO : ChatActivityEnterViewAnimatedIconView.State.VOICE, true);
+                        if (!ExteraConfig.useSolarIcons)
+                            ((ChatActivityEnterViewAnimatedIconView) audioVideoSendButton).setState(isInVideoMode() ? ChatActivityEnterViewAnimatedIconView.State.VIDEO : ChatActivityEnterViewAnimatedIconView.State.VOICE, true);
+                        else
+                            ((ChatActivityEnterViewStaticIconView) audioVideoSendButton).setState(isInVideoMode() ? ChatActivityEnterViewStaticIconView.State.VIDEO : ChatActivityEnterViewStaticIconView.State.VOICE, true);
                     }
                     if (botCommandsMenuButton != null) {
                         iconsAnimator.playTogether(
@@ -12516,7 +12519,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         delegate.needStartRecordVideo(0, true, 0, 0);
         if (!recordingAudioVideo) {
             recordingAudioVideo = true;
-            updateRecordInterface(RECORD_STATE_ENTER);
+            updateRecordInterface(RECORD_STATE_ENTER, true);
             if (recordCircle != null) {
                 recordCircle.showWaves(false, false);
                 recordCircle.setLockTranslation(666);

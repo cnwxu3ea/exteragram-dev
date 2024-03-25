@@ -12,21 +12,12 @@
 package com.exteragram.messenger.preferences;
 
 import android.content.Context;
-import android.os.Build;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.util.Size;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.camera.video.Quality;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.camera.CameraXUtils;
-import com.exteragram.messenger.preferences.components.CameraTypeSelector;
 import com.exteragram.messenger.utils.LocaleUtils;
 import com.exteragram.messenger.utils.PopupUtils;
 
@@ -38,14 +29,7 @@ import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SlideChooseView;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GeneralPreferencesActivity extends BasePreferencesActivity {
 
@@ -54,12 +38,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
             "Telegram API",
             "Bot API"
     };
-
-    private int cameraTypeHeaderRow;
-    private int cameraTypeSelectorRow;
-    private int cameraXOptimizeRow;
-    private int cameraXQualityRow;
-    private int cameraTypeDividerRow;
 
     private int speedBoostersHeaderRow;
     private int downloadSpeedChooserRow;
@@ -86,22 +64,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
     @Override
     protected void updateRowsId() {
         super.updateRowsId();
-
-        cameraTypeHeaderRow = -1;
-        cameraTypeSelectorRow = -1;
-        cameraXOptimizeRow = -1;
-        cameraXQualityRow = -1;
-        cameraTypeDividerRow = -1;
-
-        if (CameraXUtils.isCameraXSupported()) {
-            cameraTypeHeaderRow = newRow();
-            cameraTypeSelectorRow = newRow();
-            if (ExteraConfig.cameraType == 1) {
-                cameraXOptimizeRow = newRow();
-                cameraXQualityRow = newRow();
-            }
-            cameraTypeDividerRow = newRow();
-        }
 
         generalHeaderRow = newRow();
         disableNumberRoundingRow = newRow();
@@ -170,18 +132,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         } else if (position == uploadSpeedBoostRow) {
             ExteraConfig.editor.putBoolean("uploadSpeedBoost", ExteraConfig.uploadSpeedBoost ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.uploadSpeedBoost);
-        } else if (position == cameraXOptimizeRow) {
-            ExteraConfig.editor.putBoolean("useCameraXOptimizedMode", ExteraConfig.useCameraXOptimizedMode ^= true).apply();
-            ((TextCheckCell) view).setChecked(ExteraConfig.useCameraXOptimizedMode);
-        } else if (position == cameraXQualityRow) {
-            Map<Quality, Size> availableSizes = CameraXUtils.getAvailableVideoSizes();
-            Stream<Integer> tmp = availableSizes.values().stream().sorted(Comparator.comparingInt(Size::getWidth).reversed()).map(Size::getHeight);
-            ArrayList<Integer> types = tmp.collect(Collectors.toCollection(ArrayList::new));
-            ArrayList<String> arrayList = types.stream().map(p -> p + "p").collect(Collectors.toCollection(ArrayList::new));
-            PopupUtils.showDialog(arrayList, LocaleController.getString("CameraQuality", R.string.CameraQuality), types.indexOf(ExteraConfig.cameraResolution), getContext(), i -> {
-                ExteraConfig.editor.putInt("cameraResolution", ExteraConfig.cameraResolution = types.get(i)).apply();
-                listAdapter.notifyItemChanged(cameraXQualityRow, payload);
-            });
         }
     }
 
@@ -201,35 +151,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
             super(context);
         }
 
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
-            if (type == 17) {
-                CameraTypeSelector cameraTypeSelector = new CameraTypeSelector(mContext) {
-                    @Override
-                    protected void onSelectedCamera(int cameraSelected) {
-                        super.onSelectedCamera(cameraSelected);
-                        int oldValue = ExteraConfig.cameraType;
-                        ExteraConfig.editor.putInt("cameraType", ExteraConfig.cameraType = cameraSelected).apply();
-                        if (cameraSelected == 1) {
-                            updateRowsId();
-                            listAdapter.notifyItemRangeInserted(cameraXOptimizeRow, 2);
-                            listAdapter.notifyItemChanged(cameraTypeDividerRow);
-                        } else if (oldValue == 1) {
-                            listAdapter.notifyItemRangeRemoved(cameraXOptimizeRow, 2);
-                            listAdapter.notifyItemChanged(cameraTypeDividerRow - 2);
-                            updateRowsId();
-                        } else {
-                            listAdapter.notifyItemChanged(cameraTypeDividerRow);
-                        }
-                    }
-                };
-                cameraTypeSelector.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                return new RecyclerListView.Holder(cameraTypeSelector);
-            }
-            return super.onCreateViewHolder(parent, type);
-        }
-
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean payload) {
             switch (holder.getItemViewType()) {
@@ -245,8 +166,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                         headerCell.setText(LocaleController.getString("Profile", R.string.Profile));
                     } else if (position == speedBoostersHeaderRow) {
                         headerCell.setText(LocaleController.getString("DownloadSpeedBoost", R.string.DownloadSpeedBoost));
-                    } else if (position == cameraTypeHeaderRow) {
-                        headerCell.setText(LocaleController.getString("CameraType", R.string.CameraType));
                     }
                 }
                 case 5 -> {
@@ -267,38 +186,17 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                     } else if (position == hidePhoneNumberRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HidePhoneNumber", R.string.HidePhoneNumber), ExteraConfig.hidePhoneNumber, true);
                     } else if (position == uploadSpeedBoostRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("UploadSpeedBoost", R.string.UploadSpeedBoost), ExteraConfig.uploadSpeedBoost, false);
-                    } else if (position == cameraXOptimizeRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("PerformanceMode", R.string.PerformanceMode), LocaleController.getString("PerformanceModeInfo", R.string.PerformanceModeInfo), ExteraConfig.useCameraXOptimizedMode, true, true);
-                    }
+                        textCheckCell.setTextAndCheck(LocaleController.getString("UploadSpeedBoost", R.string.UploadSpeedBoost), ExteraConfig.uploadSpeedBoost, false);}
                 }
                 case 7 -> {
                     TextSettingsCell textSettingsCell = (TextSettingsCell) holder.itemView;
-                    if (position == cameraXQualityRow) {
-                        textSettingsCell.setTextAndValue(LocaleController.getString("CameraQuality", R.string.CameraQuality), ExteraConfig.cameraResolution + "p", payload, false);
-                    } else if (position == showIdAndDcRow) {
+                    if (position == showIdAndDcRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("ShowIdAndDc", R.string.ShowIdAndDc), id[ExteraConfig.showIdAndDc], payload, false);
                     }
                 }
                 case 8 -> {
                     TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) holder.itemView;
-                    if (position == cameraTypeDividerRow) {
-                        String advise = switch (ExteraConfig.cameraType) {
-                            case 0 ->
-                                    LocaleController.getString("DefaultCameraInfo", R.string.DefaultCameraInfo);
-                            case 1 ->
-                                    LocaleController.getString("CameraXInfo", R.string.CameraXInfo);
-                            default ->
-                                    LocaleController.getString("SystemCameraInfo", R.string.SystemCameraInfo);
-                        };
-                        Spannable htmlParsed;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            htmlParsed = new SpannableString(Html.fromHtml(advise, Html.FROM_HTML_MODE_LEGACY));
-                        } else {
-                            htmlParsed = new SpannableString(Html.fromHtml(advise));
-                        }
-                        textInfoPrivacyCell.setText(LocaleUtils.formatWithURLs(htmlParsed));
-                    } else if (position == speedBoostersDividerRow) {
+                    if (position == speedBoostersDividerRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("SpeedBoostInfo", R.string.SpeedBoostInfo));
                     } else if (position == profileDividerRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("ShowIdAndDcInfo", R.string.ShowIdAndDcInfo));
@@ -323,16 +221,14 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         @Override
         public int getItemViewType(int position) {
             if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow ||
-                    position == speedBoostersHeaderRow || position == cameraTypeHeaderRow) {
+                    position == speedBoostersHeaderRow) {
                 return 3;
-            } else if (position == cameraXQualityRow || position == showIdAndDcRow) {
+            } else if (position == showIdAndDcRow) {
                 return 7;
-            } else if (position == cameraTypeDividerRow || position == speedBoostersDividerRow || position == profileDividerRow  || position == archiveDividerRow || position == generalDividerRow) {
+            } else if (position == speedBoostersDividerRow || position == profileDividerRow  || position == archiveDividerRow || position == generalDividerRow) {
                 return 8;
             } else if (position == downloadSpeedChooserRow) {
                 return 13;
-            } else if (position == cameraTypeSelectorRow) {
-                return 17;
             }
             return 5;
         }

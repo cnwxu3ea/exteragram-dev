@@ -69,14 +69,6 @@
     <string name="Halloween">萬聖節</string>
     <string name="DrawerElements">導覽匣元素</string>
     <!-- General -->
-    <string name="CameraType">相機類型</string>
-    <string name="CameraTypeSystem">系統</string>
-    <string name="DefaultCameraInfo">使用 Telegram 內建相機。</string>
-    <string name="CameraXInfo">CameraX 僅支援 <![CDATA[<a href="https://developer.android.com/training/camerax/devices">選取的裝置</a>]]>，效果和鏡頭支援取決於您的製造商。</string>
-    <string name="SystemCameraInfo">使用系統相機 (無法套用至視訊訊息)</string>
-    <string name="PerformanceMode">效能模式</string>
-    <string name="PerformanceModeInfo">CameraX 的品質會有所降低，以提高效能</string>
-    <string name="CameraQuality">相機品質</string>
     <string name="DisableNumberRounding">停用四捨五入</string>
     <string name="FormatTimeWithSeconds">格式化為帶秒數的時間</string>
     <string name="InAppVibration">應用程式內震動</string>
