@@ -309,9 +309,7 @@ public class SeekBarView extends FrameLayout {
         if (separatorsCount > 1) {
             int value = Math.round((separatorsCount - 1) * progress);
             if (!stop && value != lastValue) {
-                try {
-                    performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
-                } catch (Exception ignore) {}
+                AndroidUtilities.vibrateCursor(this);
             }
             lastValue = value;
         }
@@ -697,9 +695,7 @@ public class SeekBarView extends FrameLayout {
         if (timestampIndex != currentTimestamp) {
             timestampLabel[1] = timestampLabel[0];
             if (pressed) {
-                try {
-                    performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
-                } catch (Exception ignore) {}
+                AndroidUtilities.vibrateCursor(this);
             }
             if (timestampIndex >= 0 && timestampIndex < timestamps.size()) {
                 CharSequence label = timestamps.get(timestampIndex).second;

@@ -466,10 +466,8 @@ public class SeekBar {
         lastWidth = width;
 
         if (timestampIndex != currentTimestamp) {
-            if (pressed && parentView != null) {
-                try {
-                    parentView.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.TEXT_HANDLE_MOVE), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
-                } catch (Exception ignore) {}
+            if (pressed) {
+                AndroidUtilities.vibrateCursor(parentView);
             }
             currentTimestamp = timestampIndex;
             if (currentTimestamp >= 0 && currentTimestamp < timestamps.size()) {

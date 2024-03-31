@@ -2248,7 +2248,7 @@ public class FilterCreateActivity extends BaseFragment {
         }
 
         @Override
-        protected RecyclerListView.SelectionAdapter createAdapter() {
+        protected RecyclerListView.SelectionAdapter createAdapter(RecyclerListView listView) {
             return adapter = new AdapterWithDiffUtils() {
 
                 private RecyclerListView.Adapter realAdapter() {

@@ -14,3 +14,8 @@ API_KEYS
 *.iml
 *.apk
 *.so
+TMessagesProj/.cxx/
+TMessagesProj/jniLibs/
+TMessagesProj/jniRes/
+**/.DS_Store
+TMessagesProj/afat/

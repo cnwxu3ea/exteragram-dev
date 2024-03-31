@@ -214,6 +214,7 @@ public class MessageObject {
     public TLRPC.TL_sponsoredWebPage sponsoredWebPage;
     public TLRPC.BotApp sponsoredBotApp;
     public String sponsoredButtonText;
+    public boolean sponsoredCanReport;
     public boolean replyTextEllipsized;
     public boolean replyTextRevealed;
     public int overrideLinkColor = -1;
@@ -3654,7 +3655,7 @@ public class MessageObject {
         boolean notReadyYet = videoEditedInfo != null && videoEditedInfo.notReadyYet;
         if (messageOwner.message != null && (messageOwner.id < 0 || isEditing()) && messageOwner.params != null) {
             String param;
-            if ((param = messageOwner.params.get("ve")) != null && (isVideo() || isNewGif() || isRoundVideo())) {
+            if ((param = messageOwner.params.get("ve")) != null && (isVideo() || isNewGif() || isRoundVideo() || isVideoSticker())) {
                 videoEditedInfo = new VideoEditedInfo();
                 if (!videoEditedInfo.parseString(param)) {
                     videoEditedInfo = null;
@@ -5044,6 +5045,10 @@ public class MessageObject {
         return document != null && document.mime_type.equals("video/webm");
     }
 
+    public static boolean isStaticStickerDocument(TLRPC.Document document) {
+        return document != null && document.mime_type.equals("image/webp");
+    }
+
     public static boolean isGifDocument(WebFile document) {
         return document != null && (document.mime_type.equals("image/gif") || isNewGifDocument(document));
     }
@@ -5946,13 +5951,20 @@ public class MessageObject {
             return;
         }
         for (Emoji.EmojiSpan emojiSpan : spans) {
-            TLRPC.Document lottieDocument = MediaDataController.getInstance(currentAccount).getEmojiAnimatedSticker(emojiSpan.emoji);
+            CharSequence emoji = emojiSpan.emoji;
+            boolean invert = false;
+            if (Emoji.endsWithRightArrow(emoji)) {
+                emoji = emoji.subSequence(0, emoji.length() - 2);
+                invert = true;
+            }
+            TLRPC.Document lottieDocument = MediaDataController.getInstance(currentAccount).getEmojiAnimatedSticker(emoji);
             if (lottieDocument != null) {
                 int start = spannable.getSpanStart(emojiSpan);
                 int end = spannable.getSpanEnd(emojiSpan);
                 spannable.removeSpan(emojiSpan);
                 AnimatedEmojiSpan span = new AnimatedEmojiSpan(lottieDocument, emojiSpan.fontMetrics);
                 span.standard = true;
+                span.invert = invert;
                 spannable.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
@@ -7930,18 +7942,6 @@ public class MessageObject {
         return false;
     }
 
-    public static boolean isStaticStickerDocument(TLRPC.Document document) {
-        if (document != null) {
-            for (int a = 0; a < document.attributes.size(); a++) {
-                TLRPC.DocumentAttribute attribute = document.attributes.get(a);
-                if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
-                    return "image/webp".equals(document.mime_type);
-                }
-            }
-        }
-        return false;
-    }
-
     public static boolean isVideoStickerDocument(TLRPC.Document document) {
         if (document != null) {
             for (int a = 0; a < document.attributes.size(); a++) {
@@ -8894,7 +8894,7 @@ public class MessageObject {
             if (fromId >= 0) {
                 fromId = DialogObject.getPeerDialogId(messageOwner.fwd_from.from_id);
             }
-            if (fromId == 0) return savedId != UserObject.ANONYMOUS;
+            if (fromId == 0) return savedId >= 0 && savedId != UserObject.ANONYMOUS;
             return savedId != fromId && fromId != selfId;
         }
         return (messageOwner.flags & TLRPC.MESSAGE_FLAG_FWD) != 0 && messageOwner.fwd_from != null && !messageOwner.fwd_from.imported && (messageOwner.fwd_from.saved_from_peer == null || !(messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerChannel) || messageOwner.fwd_from.saved_from_peer.channel_id != messageOwner.fwd_from.from_id.channel_id) && UserConfig.getInstance(currentAccount).getClientUserId() != getDialogId();

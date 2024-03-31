@@ -60,6 +60,7 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
     public final static int SINGLE_REACTION_TYPE = 3;
     public final static int REPLY_BACKGROUND = 4;
     public final static int PROFILE_BACKGROUND = 5;
+    public final static int STICKERS_BOT_TYPE = 6;
 
     int type;
 
@@ -168,6 +169,13 @@ public class MessageContainsEmojiButton extends FrameLayout implements Notificat
                     loadingDrawable.colorKey2 = Theme.key_listSelector;
                     loadingDrawable.setRadiiDp(4);
                 }
+            }
+        } else {
+            if (type == STICKERS_BOT_TYPE) {
+                mainText = AndroidUtilities.replaceSingleTag(LocaleController.getString(R.string.StickersCheckStickersBotForMoreOptions),
+                        Theme.key_chat_messageLinkIn, AndroidUtilities.REPLACING_TAG_TYPE_LINKBOLD,
+                        null,
+                        resourcesProvider);
             }
         }
     }
