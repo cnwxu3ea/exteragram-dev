@@ -408,7 +408,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
                     WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
                             WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
                             WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                            FLAG_KEEP_SCREEN_ON;
+                            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         }
         isClosed = false;
         unreadStateChanged = false;
@@ -748,7 +748,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
                                 boolean crossfade = transitionViewHolder != null && transitionViewHolder.crossfadeToAvatarImage != null;
                                 TLRPC.Chat chat = null;
                                 PeerStoriesView peerView = storiesViewPager.getCurrentPeerView();
-                                if (peerView != null && peerView.currentStory != null) {
+                                if (peerView != null && peerView.currentStory != null && peerView.currentStory.storyItem != null) {
                                     chat = MessagesController.getInstance(currentAccount).getChat(-peerView.currentStory.storyItem.dialogId);
                                 }
                                 boolean isForum = chat != null && chat.forum;
@@ -756,7 +756,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
                                     headerView.backupImageView.getImageReceiver().setImageCoords(rect3);
 
                                     Integer cellAvatarImageRadius = transitionViewHolder != null ? transitionViewHolder.getAvatarImageRoundRadius() : null;
-                                    int newRoundRadius = (int) (AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(rect3.width(), true, isForum), cellAvatarImageRadius != null ? cellAvatarImageRadius : ExteraConfig.getAvatarCorners(rect3.width(), true, isForum), 1f - progressToOpen));
+                                    int newRoundRadius = AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(rect3.width(), true, isForum), cellAvatarImageRadius != null ? cellAvatarImageRadius : ExteraConfig.getAvatarCorners(rect3.width(), true, isForum), 1f - progressToOpen);
 
                                     headerView.backupImageView.getImageReceiver().setRoundRadius(newRoundRadius);
                                     headerView.backupImageView.getImageReceiver().setVisible(true, false);
@@ -1144,7 +1144,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                     aspectRatioFrameLayout.getLayoutParams().height = viewPagerHeight + 1;
                     aspectRatioFrameLayout.getLayoutParams().width = width;
-                    LayoutParams layoutParams = (LayoutParams) aspectRatioFrameLayout.getLayoutParams();
+                    FrameLayout.LayoutParams layoutParams = (LayoutParams) aspectRatioFrameLayout.getLayoutParams();
                     layoutParams.topMargin = AndroidUtilities.statusBarHeight;
                     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 }

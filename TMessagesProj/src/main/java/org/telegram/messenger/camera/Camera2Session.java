@@ -86,14 +86,12 @@ public class Camera2Session {
         String cameraId = null;
         try {
             String[] cameraIds = cameraManager.getCameraIdList();
-            for (int i = 0; i < cameraIds.length; ++i) {
-                final String id = cameraIds[i];
+            for (final String id : cameraIds) {
                 CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
-                if (characteristics == null) continue;
                 if (characteristics.get(CameraCharacteristics.LENS_FACING) != (front ? CameraCharacteristics.LENS_FACING_FRONT : CameraCharacteristics.LENS_FACING_BACK)) {
                     continue;
                 }
-                StreamConfigurationMap confMap = (StreamConfigurationMap) characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+                StreamConfigurationMap confMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                 Size pixelSize = characteristics.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE);
                 float cameraAspectRatio = pixelSize == null ? 0 : (float) pixelSize.getWidth() / pixelSize.getHeight();
                 if ((viewWidth / (float) viewHeight >= 1f) != (cameraAspectRatio >= 1f)) {
@@ -116,7 +114,7 @@ public class Camera2Session {
             FileLog.e(e);
         }
 
-        if (cameraId == null || bestSize == null) {
+        if (cameraId == null) {
             return null;
         }
         return new Camera2Session(context, front, cameraId, bestSize);

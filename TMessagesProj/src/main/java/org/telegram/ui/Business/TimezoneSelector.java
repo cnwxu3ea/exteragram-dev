@@ -183,6 +183,7 @@ public class TimezoneSelector extends BaseFragment implements NotificationCenter
                 }
             }
             ((TextCheckCell) view).setChecked(useSystem);
+            ((TextCheckCell) view).setBackgroundColorAnimated(useSystem, Theme.getColor(useSystem ? Theme.key_windowBackgroundChecked : Theme.key_windowBackgroundUnchecked));
             listView.adapter.update(true);
         } else {
             if (!view.isEnabled()) return;

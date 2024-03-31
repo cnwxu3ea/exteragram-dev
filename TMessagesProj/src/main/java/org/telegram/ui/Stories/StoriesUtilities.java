@@ -32,7 +32,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
@@ -107,7 +106,7 @@ public class StoriesUtilities {
 
     public static void drawAvatarWithStory(long dialogId, Canvas canvas, ImageReceiver avatarImage, boolean hasStories, AvatarStoryParams params) {
         StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
-        boolean animated = params.animate = params.drawSegments;
+        boolean animated = params.animate;
         if (params.dialogId != dialogId) {
             params.dialogId = dialogId;
             params.reset();
@@ -498,17 +497,12 @@ public class StoriesUtilities {
                 canvas.drawArc(rectTmp, params.globalAngle + 360, -360 * (params.sweepAngle), false, paint);
             }
         }
+
         for (int i = 0; i < ANIMATION_SEGMENT_COUNT; i++) {
             float startAngle = i * len + 10;
             float endAngle = startAngle + len - 10;
             float segmentLen = endAngle - startAngle;
-            if (ANIMATION_SEGMENT_COUNT == 1 || ExteraConfig.avatarCorners != 28) {
-                Paint mPaint = new Paint(paint);
-                mPaint.setStrokeWidth(paint.getStrokeWidth() * params.sweepAngle);
-                canvas.drawRoundRect(rectTmp, ExteraConfig.getAvatarCorners(rectTmp.width(), true), ExteraConfig.getAvatarCorners(rectTmp.width(), true), mPaint);
-            } else {
-                canvas.drawArc(rectTmp, params.globalAngle + startAngle, segmentLen, false, paint);
-            }
+            canvas.drawArc(rectTmp, params.globalAngle + startAngle, segmentLen, false, paint);
         }
     }
 
@@ -584,7 +578,7 @@ public class StoriesUtilities {
 
     private static void drawSegment(Canvas canvas, RectF rectTmp, Paint paint, float startAngle, float endAngle, AvatarStoryParams params, boolean isForum) {
         if (isForum || ExteraConfig.avatarCorners != 28) {
-            float r = rectTmp.height() * 0.32f;
+            float r = ExteraConfig.getAvatarCorners(rectTmp.height() + (params.isStoryCell ? AndroidUtilities.dp(4f) : getInset(params.currentState, params.animateFromUnreadState) * 2), true, isForum);
             float rotateAngle = (((int)(startAngle)) / 90) * 90 + 90;
             float pathAngleStart = -199 + rotateAngle;
             float percentFrom = (startAngle - pathAngleStart) / 360;
@@ -603,9 +597,6 @@ public class StoriesUtilities {
             forumRoundRectPathMeasure.getSegment(length * percentFrom, length * percentTo, forumSegmentPath, true);
             forumSegmentPath.rLineTo(0, 0);
             canvas.drawPath(forumSegmentPath, paint);
-
-            //canvas.drawRoundRect(forumRect, ExteraConfig.getAvatarCorners(forumRect.width() + (params.isStoryCell ? AndroidUtilities.dp(4f) : getInset(params.currentState, params.animateFromUnreadState) * 2), true, isForum), ExteraConfig.getAvatarCorners(forumRect.width() + (params.isStoryCell ? AndroidUtilities.dp(4f) : getInset(params.currentState, params.animateFromUnreadState) * 2), true, isForum), paint);
-
             return;
         }
         if (!params.isFirst && !params.isLast) {

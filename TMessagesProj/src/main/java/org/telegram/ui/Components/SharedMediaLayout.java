@@ -68,6 +68,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.backup.BackupBottomSheet;
+import com.exteragram.messenger.backup.PreferencesUtils;
 import com.exteragram.messenger.utils.AppUtils;
 
 import com.google.android.exoplayer2.util.Log;
@@ -6227,7 +6229,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     SharedDocumentCell cell = (SharedDocumentCell) view;
                     TLRPC.Document document = message.getDocument();
                     if (cell.isLoaded()) {
-                        if (message.canPreviewDocument()) {
+                        if (PreferencesUtils.getInstance().isBackup(message)) {
+                            new BackupBottomSheet(profileActivity, message).showIfPossible();
+                            return;
+                        } else if (message.canPreviewDocument()) {
                             PhotoViewer.getInstance().setParentActivity(profileActivity);
                             index = sharedMediaData[selectedMode].messages.indexOf(message);
                             if (index < 0) {

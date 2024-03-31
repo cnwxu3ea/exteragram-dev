@@ -320,6 +320,9 @@ public class TextCheckCell extends FrameLayout {
     }
 
     public void setBackgroundColorAnimated(boolean checked, int color) {
+        if (ExteraConfig.newSwitchStyle) {
+            return;
+        }
         if (animator != null) {
             animator.cancel();
             animator = null;

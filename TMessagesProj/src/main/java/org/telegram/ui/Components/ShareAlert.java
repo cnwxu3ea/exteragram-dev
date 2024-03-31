@@ -2152,7 +2152,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         backup.renameTo(new File(newName));
                     }
                     ArrayList<String> paths = new ArrayList<>(List.of(sendingFile));
-                    SendMessagesHelper.prepareSendingDocuments(AccountInstance.getInstance(currentAccount), paths, paths, null, null, null, key, null, replyTopMsg, null, null, null, withSound, 0, null);
+                    SendMessagesHelper.prepareSendingDocuments(AccountInstance.getInstance(currentAccount), paths, paths, null, null, null, key, null, replyTopMsg, null, null, null, withSound, 0, null, null, 0);
                 }
             }
             onSend(selectedDialogs, 1, selectedDialogTopics.get(selectedDialogs.valueAt(0)));

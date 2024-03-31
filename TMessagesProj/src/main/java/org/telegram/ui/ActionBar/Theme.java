@@ -5434,115 +5434,36 @@ public class Theme {
     public static final int RIPPLE_MASK_ROUNDRECT_6DP = 7;
 
     public static Drawable createSelectorDrawable(int color, int maskType, int radius) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            Drawable maskDrawable = null;
-            if ((maskType == RIPPLE_MASK_CIRCLE_20DP || maskType == 5) && Build.VERSION.SDK_INT >= 23) {
-                maskDrawable = null;
-            } else if (
+        Drawable maskDrawable = null;
+        if ((maskType == RIPPLE_MASK_CIRCLE_20DP || maskType == 5) && Build.VERSION.SDK_INT >= 23) {
+            maskDrawable = null;
+        } else if (
                 maskType == RIPPLE_MASK_CIRCLE_20DP ||
-                maskType == RIPPLE_MASK_CIRCLE_TO_BOUND_EDGE ||
-                maskType == RIPPLE_MASK_CIRCLE_TO_BOUND_CORNER ||
-                maskType == RIPPLE_MASK_CIRCLE_AUTO ||
-                maskType == 6 ||
-                maskType == RIPPLE_MASK_ROUNDRECT_6DP
-            ) {
-                maskPaint.setColor(0xffffffff);
-                maskDrawable = new Drawable() {
-
-                    RectF rect;
-
-                    @Override
-                    public void draw(Canvas canvas) {
-                        android.graphics.Rect bounds = getBounds();
-                        if (maskType == RIPPLE_MASK_ROUNDRECT_6DP) {
-                            if (rect == null) {
-                                rect = new RectF();
-                            }
-                            rect.set(bounds);
-                            float rad = radius <= 0 ? dp(6) : radius;
-                            canvas.drawRoundRect(rect, rad, rad, maskPaint);
-                        } else {
-                            int rad;
-                            if (maskType == RIPPLE_MASK_CIRCLE_20DP || maskType == 6) {
-                                rad = radius <= 0 ? dp(20) : radius;
-                            } else if (maskType == RIPPLE_MASK_CIRCLE_TO_BOUND_EDGE) {
-                                rad = (Math.max(bounds.width(), bounds.height()) / 2);
-                            } else {
-                                // RIPPLE_MASK_CIRCLE_AUTO = 5
-                                // RIPPLE_MASK_CIRCLE_TO_BOUND_CORNER = 4
-                                rad = (int) Math.ceil(Math.sqrt((bounds.left - bounds.centerX()) * (bounds.left - bounds.centerX()) + (bounds.top - bounds.centerY()) * (bounds.top - bounds.centerY())));
-                            }
-                            canvas.drawCircle(bounds.centerX(), bounds.centerY(), rad, maskPaint);
-                        }
-                    }
-
-                    @Override
-                    public void setAlpha(int alpha) {
-
-                    }
-
-                    @Override
-                    public void setColorFilter(ColorFilter colorFilter) {
-
-                    }
-
-                    @Override
-                    public int getOpacity() {
-                        return PixelFormat.UNKNOWN;
-                    }
-                };
-            } else if (maskType == RIPPLE_MASK_ALL) {
-                maskDrawable = new ColorDrawable(0xffffffff);
-            }
-            ColorStateList colorStateList = new ColorStateList(
-                new int[][]{ StateSet.WILD_CARD },
-                new int[]{ color }
-            );
-            RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, null, maskDrawable);
-            if (Build.VERSION.SDK_INT >= 23) {
-                if (maskType == RIPPLE_MASK_CIRCLE_20DP) {
-                    rippleDrawable.setRadius(radius <= 0 ? dp(20) : radius);
-                } else if (maskType == RIPPLE_MASK_CIRCLE_AUTO) {
-                    rippleDrawable.setRadius(RippleDrawable.RADIUS_AUTO);
-                }
-            }
-            return rippleDrawable;
-        } else {
-            StateListDrawable stateListDrawable = new StateListDrawable();
-            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, new ColorDrawable(color));
-            stateListDrawable.addState(new int[]{android.R.attr.state_selected}, new ColorDrawable(color));
-            stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(0x00000000));
-            return stateListDrawable;
-        }
-    }
-
-    public static Drawable createCircleSelectorDrawable(int color, int leftInset, int rightInset) {
-        if (Build.VERSION.SDK_INT >= 21) {
+                        maskType == RIPPLE_MASK_CIRCLE_TO_BOUND_EDGE ||
+                        maskType == RIPPLE_MASK_CIRCLE_TO_BOUND_CORNER ||
+                        maskType == RIPPLE_MASK_CIRCLE_AUTO ||
+                        maskType == 6 ||
+                        maskType == RIPPLE_MASK_ROUNDRECT_6DP
+        ) {
             maskPaint.setColor(0xffffffff);
             maskDrawable = new Drawable() {
 
                 RectF rect;
 
                 @Override
-                public void draw(Canvas canvas) {
-                    Rect bounds = getBounds();
-                    if (maskType == 100) {
+                public void draw(@NonNull Canvas canvas) {
+                    android.graphics.Rect bounds = getBounds();
+                    if (maskType == RIPPLE_MASK_ROUNDRECT_6DP) {
                         if (rect == null) {
                             rect = new RectF();
                         }
                         rect.set(bounds);
-                        canvas.drawRoundRect(rect, radius, radius, maskPaint);
-                    } else if (maskType == RIPPLE_MASK_ROUNDRECT_6DP) {
-                        if (rect == null) {
-                            rect = new RectF();
-                        }
-                        rect.set(bounds);
-                        float rad = radius <= 0 ? AndroidUtilities.dp(6) : radius;
+                        float rad = radius <= 0 ? dp(6) : radius;
                         canvas.drawRoundRect(rect, rad, rad, maskPaint);
                     } else {
                         int rad;
                         if (maskType == RIPPLE_MASK_CIRCLE_20DP || maskType == 6) {
-                            rad = radius <= 0 ? AndroidUtilities.dp(20) : radius;
+                            rad = radius <= 0 ? dp(20) : radius;
                         } else if (maskType == RIPPLE_MASK_CIRCLE_TO_BOUND_EDGE) {
                             rad = (Math.max(bounds.width(), bounds.height()) / 2);
                         } else {
@@ -5573,13 +5494,13 @@ public class Theme {
             maskDrawable = new ColorDrawable(0xffffffff);
         }
         ColorStateList colorStateList = new ColorStateList(
-            new int[][]{ StateSet.WILD_CARD },
-            new int[]{ color }
+                new int[][]{StateSet.WILD_CARD},
+                new int[]{color}
         );
         RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, null, maskDrawable);
         if (Build.VERSION.SDK_INT >= 23) {
             if (maskType == RIPPLE_MASK_CIRCLE_20DP) {
-                rippleDrawable.setRadius(radius <= 0 ? AndroidUtilities.dp(20) : radius);
+                rippleDrawable.setRadius(radius <= 0 ? dp(20) : radius);
             } else if (maskType == RIPPLE_MASK_CIRCLE_AUTO) {
                 rippleDrawable.setRadius(RippleDrawable.RADIUS_AUTO);
             }
@@ -5593,7 +5514,7 @@ public class Theme {
 
             @Override
             public void draw(Canvas canvas) {
-                Rect bounds = getBounds();
+                android.graphics.Rect bounds = getBounds();
                 final int rad = (Math.max(bounds.width(), bounds.height()) / 2) + leftInset + rightInset;
                 canvas.drawCircle(bounds.centerX() - leftInset + rightInset, bounds.centerY(), rad, maskPaint);
             }

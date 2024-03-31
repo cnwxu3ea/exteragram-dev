@@ -284,6 +284,10 @@ public class AboutLinkCell extends FrameLayout {
         }
 
         container.draw(canvas);
+
+        if (needDivider) {
+            canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
+        }
     }
 
     final float SPACE = AndroidUtilities.dp(3f);
@@ -787,12 +791,7 @@ public class AboutLinkCell extends FrameLayout {
     private float easeInOutCubic(float x) {
         return x < 0.5 ? 4 * x * x * x : 1 - (float) Math.pow(-2 * x + 2, 3) / 2;
     }
-    @Override
-    protected void onDraw(Canvas canvas) {
-        if (needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
-        }
-    }
+
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);

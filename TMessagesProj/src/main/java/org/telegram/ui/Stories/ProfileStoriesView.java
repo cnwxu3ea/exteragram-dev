@@ -9,7 +9,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -20,7 +19,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -348,7 +346,7 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
                     break;
                 }
             }
-            
+
             if (index == -1) {
                 storyItem.dialogId = dialogId;
                 StoryCircle circle = new StoryCircle(storyItem);
@@ -463,12 +461,12 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
         newStoryBounce.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-            if (!vibrated[0]) {
-                vibrated[0] = true;
-                vibrateNewStory();
-            }
-            newStoryBounceT = 1;
-            invalidate();
+                if (!vibrated[0]) {
+                    vibrated[0] = true;
+                    vibrateNewStory();
+                }
+                newStoryBounceT = 1;
+                invalidate();
             }
         });
         newStoryBounce.setInterpolator(new OvershootInterpolator(3.0f));
@@ -514,7 +512,6 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
         }
 
         float segmentsAlpha = clamp(1f - expandProgress / 0.2f, 1, 0);
-        
         boolean isFailed = storiesController.isLastUploadingFailed(dialogId);
         boolean hasUploadingStories = storiesController.hasUploadingStories(dialogId);
         if (!hasUploadingStories && lastUploadingStory != null && lastUploadingStory.canceled) {
@@ -581,14 +578,8 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
         }
         if (progressToUploading < 1f) {
             segmentsAlpha = clamp(1f - expandProgress / 0.2f, 1, 0) * (1f - progressToUploading);
-            float segmentsCount = segmentsCountAnimated.set(count);
-            float segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount);
-
-            if (ExteraConfig.avatarCorners != 28) {
-                count = 1;
-                segmentsCount = segmentsCountAnimated.set(1);
-                segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount > 0 ? 1 : 0);
-            }
+            final float segmentsCount = segmentsCountAnimated.set(count);
+            final float segmentsUnreadCount = segmentsUnreadCountAnimated.set(unreadCount);
 
             if (isFailed) {
                 rect2.set(rect1);
@@ -643,26 +634,17 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
                         canvas.scale(bounceScale, bounceScale, rect2.centerX(), rect2.centerY());
                     }
 
-                    boolean isForum = ChatObject.isForum(currentAccount, dialogId);
                     if (read < 1) {
                         unreadPaint = gradientTools.getPaint(rect2);
                         unreadPaint.setAlpha((int) (0xFF * (1f - read) * segmentsAlpha));
                         unreadPaint.setStrokeWidth(dpf2(2.33f));
-                        if (ExteraConfig.avatarCorners != 28) {
-                            canvas.drawRoundRect(canvas, rect2, ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(4), true, isForum), ExteraConfig.getAvatarCorners(rect2.width() + AndroidUtilities.dp(4), true, isForum), unreadPaint);
-                        } else {
-                            canvas.drawArc(canvas, rect2, a, -widthAngle * appear, false, unreadPaint);
-                        }
+                        drawArc(canvas, rect2, a, -widthAngle * appear, false, unreadPaint);
                     }
 
                     if (read > 0) {
                         readPaint.setAlpha((int) (readPaintAlpha * read * segmentsAlpha));
                         readPaint.setStrokeWidth(dpf2(1.5f));
-                        if (ExteraConfig.avatarCorners != 28) {
-                            canvas.drawRoundRect(canvas, rect3, ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(3), true, isForum), ExteraConfig.getAvatarCorners(rect3.width() + AndroidUtilities.dp(3), true, isForum), readPaint);
-                        } else {
-                            canvas.drawArc(canvas, rect3, a, -widthAngle * appear, false, readPaint);
-                        }
+                        drawArc(canvas, rect3, a, -widthAngle * appear, false, readPaint);
                     }
 
                     if (bounceScale != 1) {
@@ -862,8 +844,8 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
 
     private void drawArc(Canvas canvas, RectF oval, float startAngle, float sweepAngle, boolean useCenter, Paint paint) {
         boolean isForum = ChatObject.isForum(UserConfig.selectedAccount, dialogId);
-        if (isForum) {
-            float r = oval.height() * 0.32f;
+        if (isForum || ExteraConfig.avatarCorners != 28) {
+            float r = ExteraConfig.getAvatarCorners(oval.height() + AndroidUtilities.dp(4), true, isForum);
             if (Math.abs(sweepAngle) == 360) {
                 canvas.drawRoundRect(oval, r, r, paint);
                 return;
@@ -967,9 +949,9 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
         float cx = lerp(a.centerX(), b.centerX(), t);
         float cy = lerp(a.centerY(), b.centerY(), t);
         float r = lerp(
-            Math.min(a.width(), a.height()),
-            Math.min(b.width(), b.height()),
-            t
+                Math.min(a.width(), a.height()),
+                Math.min(b.width(), b.height()),
+                t
         ) / 2f;
         c.set(cx - r, cy - r, cx + r, cy + r);
     }

@@ -1029,7 +1029,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                             filter.flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
                         }
                         filter.emoticon = TextUtils.isEmpty(suggested.filter.emoticon) ? FolderIcons.getEmoticonFromFlags(filter.flags).second : suggested.filter.emoticon;
-                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, true, true, true, true, true, FiltersSetupActivity.this, () -> {
+                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.color, filter.emoticon, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, true, true, true, true, true, FiltersSetupActivity.this, () -> {
                             getMessagesController().suggestedFilters.remove(suggested);
                             getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
                         });

@@ -268,7 +268,7 @@ public class UpdaterBottomSheet2 extends BottomSheet {
         checkUpdates.setOnClickListener(v -> {
             checkUpdates.setText(LocaleController.getString("CheckingForUpdates", R.string.CheckingForUpdates));
             UpdaterUtils.checkUpdates(fragment, true, () -> {
-                headerCell.getTimeView().setText(LocaleController.getString("LastCheck", R.string.LastCheck) + ": " + LocaleController.formatDateTime(ExteraConfig.lastUpdateCheckTime / 1000));
+                headerCell.getTimeView().setText(LocaleController.getString("LastCheck", R.string.LastCheck) + ": " + LocaleController.formatDateTime(ExteraConfig.lastUpdateCheckTime / 1000, false));
                 checkUpdates.setText(LocaleController.getString("CheckForUpdates", R.string.CheckForUpdates));
                 BulletinFactory.of(getContainer(), null).createErrorBulletin(LocaleController.getString("NoUpdates", R.string.NoUpdates)).show();
             }, this::dismiss);
@@ -421,7 +421,7 @@ public class UpdaterBottomSheet2 extends BottomSheet {
             timeView.setTextSize(AndroidUtilities.dp(13));
             timeView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_REGULAR));
             timeView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            timeView.setText(available ? args[4] : LocaleController.getString("LastCheck", R.string.LastCheck) + ": " + LocaleController.formatDateTime(ExteraConfig.lastUpdateCheckTime / 1000));
+            timeView.setText(available ? args[4] : LocaleController.getString("LastCheck", R.string.LastCheck) + ": " + LocaleController.formatDateTime(ExteraConfig.lastUpdateCheckTime / 1000, false));
             frame.addView(timeView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, Gravity.LEFT, available ? 75 : 0, 35, 0, 0));
 
             addView(frame, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 21, 10, 0, 10));

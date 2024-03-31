@@ -3728,12 +3728,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     fragment.setMessageObject(new MessageObject(UserConfig.selectedAccount, message, false, false));
                     presentFragment(fragment);
                 } else {
-                    String domain;
-                    if (BuildVars.isHuaweiStoreApp()) {
-                        domain = "mapapp://navigation";
-                    } else {
-                        domain = "http://maps.google.com/maps";
-                    }
+                    String domain = "http://maps.google.com/maps";
 //                    if (myLocation != null) {
 //                        try {
 //                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.US, domain + "?saddr=%f,%f&daddr=%f,%f", myLocation.getLatitude(), myLocation.getLongitude(), daddrLat, daddrLong)));
@@ -4936,7 +4931,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void updateAvatarRoundRadius() {
-        avatarImage.setRoundRadius((int) AndroidUtilities.lerp(getSmallAvatarRoundRadius(), 0f, currentExpandAnimatorValue));
+        avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(needInsetForStories() ? 36 : 42, false, isForum()), 0f, currentExpandAnimatorValue));
     }
 
     private void createFloatingActionButton(Context context) {
@@ -10646,7 +10641,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             value = "";
                             usernames = new ArrayList<>();
                         }
-                        detailCell.setTextAndValue(text, alsoUsernamesString(username, usernames, value), isTopic || bizHoursRow != -1 || bizLocationRow != -1);
+                        detailCell.setTextAndValue(text, alsoUsernamesString(username, usernames, value), isTopic || bizHoursRow != -1 || bizLocationRow != -1 || idDcRow != -1);
                     } else if (position == locationRow) {
                         if (chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation) {
                             TLRPC.TL_channelLocation location = (TLRPC.TL_channelLocation) chatInfo.location;
@@ -11005,7 +11000,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     textCheckCell.setTextAndCheck(LocaleController.getString("Notifications", R.string.Notifications), !getMessagesController().isDialogMuted(getDialogId(), topicId), false);
                     break;
                 case VIEW_TYPE_LOCATION:
-                    ((ProfileLocationCell) holder.itemView).set(userInfo != null ? userInfo.business_location : null, notificationsDividerRow < 0);
+                    ((ProfileLocationCell) holder.itemView).set(userInfo != null ? userInfo.business_location : null, true);
                     break;
                 case VIEW_TYPE_HOURS:
                     ProfileHoursCell hoursCell = (ProfileHoursCell) holder.itemView;
@@ -11021,7 +11016,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             layoutManager.scrollToPositionWithOffset(savedScrollPosition, savedScrollOffset - listView.getPaddingTop());
                         }
                     });
-                    hoursCell.set(userInfo != null ? userInfo.business_work_hours : null, hoursExpanded, hoursShownMine, notificationsDividerRow < 0 || bizLocationRow >= 0);
+                    hoursCell.set(userInfo != null ? userInfo.business_work_hours : null, hoursExpanded, hoursShownMine, bizLocationRow >= 0);
                     break;
             }
         }

@@ -2727,7 +2727,7 @@ public class StoryPrivacyBottomSheet extends BottomSheet implements Notification
 
         public void setUser(TLRPC.User user) {
             avatarDrawable.setInfo(user);
-            imageView.setRoundRadius(dp(20));
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(40));
             imageView.setForUserOrChat(user, avatarDrawable);
 
             CharSequence text = UserObject.getUserName(user);
@@ -2749,7 +2749,7 @@ public class StoryPrivacyBottomSheet extends BottomSheet implements Notification
 
         public void setChat(TLRPC.Chat chat, int participants_count) {
             avatarDrawable.setInfo(chat);
-            imageView.setRoundRadius(dp(ChatObject.isForum(chat) ? 12 : 20));
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(40, false, ChatObject.isForum(chat)));
             imageView.setForUserOrChat(chat, avatarDrawable);
 
             CharSequence text = chat.title;
@@ -2871,7 +2871,7 @@ public class StoryPrivacyBottomSheet extends BottomSheet implements Notification
             checkBox.setVisibility(View.GONE);
             radioButton.setVisibility(needCheck ? View.VISIBLE : View.GONE);
             imageView.setImageDrawable(avatarDrawable);
-            imageView.setRoundRadius(dp(20));
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(40));
         }
 
         private void setSubtitle(CharSequence text) {

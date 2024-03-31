@@ -528,7 +528,9 @@ public class LiteModeSettingsActivity extends BaseFragment {
                 if (animated) {
                     imageView.animate().alpha(disabled ? .5f : 1f).setDuration(220).start();
                     textViewLayout.animate().alpha(disabled ? .5f : 1f).setDuration(220).start();
-                    switchView.animate().alpha(disabled ? .5f : 1f).setDuration(220).start();
+                    if (!ExteraConfig.newSwitchStyle) {
+                        switchView.animate().alpha(disabled ? .5f : 1f).setDuration(220).start();
+                    }
                     checkBoxView.animate().alpha(disabled ? .5f : 1f).setDuration(220).start();
                 } else {
                     imageView.setAlpha(disabled ? .5f : 1f);

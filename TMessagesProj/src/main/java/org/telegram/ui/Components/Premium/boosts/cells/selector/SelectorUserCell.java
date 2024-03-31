@@ -7,6 +7,8 @@ import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;

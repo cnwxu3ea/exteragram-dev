@@ -1575,16 +1575,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         @Override
         public boolean hasDoubleTap(View view, int position) {
-            if (chatMode == MODE_QUICK_REPLIES) return false;
-            String reactionStringSetting = getMediaDataController().getDoubleTapReaction();
-            TLRPC.TL_availableReaction reaction = getMediaDataController().getReactionsMap().get(reactionStringSetting);
-            if (reaction == null && (reactionStringSetting == null || !reactionStringSetting.startsWith("animated_"))) {
+            if (!(view instanceof ChatMessageCell cell) || bottomMessagesActionContainer.getVisibility() == View.VISIBLE || chatMode == MODE_QUICK_REPLIES) {
                 return false;
             }
-            if (!(view instanceof ChatMessageCell) || bottomMessagesActionContainer.getVisibility() == View.VISIBLE) {
-                return false;
-            }
-            ChatMessageCell cell = (ChatMessageCell) view;
             boolean isOutOwner = cell.getMessageObject().isOutOwner();
             if ((ExteraConfig.doubleTapAction == 0 && !isOutOwner) || (ExteraConfig.doubleTapActionOutOwner == 0 && isOutOwner)) {
                 return false;

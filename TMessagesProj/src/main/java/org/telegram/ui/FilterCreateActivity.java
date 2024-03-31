@@ -28,7 +28,6 @@ import android.text.TextWatcher;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
 import android.text.style.ReplacementSpan;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -44,6 +43,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.exteragram.messenger.components.IconSelectorAlert;
+import com.exteragram.messenger.utils.FolderIcons;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -96,10 +98,6 @@ import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.utils.FolderIcons;
-import com.exteragram.messenger.components.IconSelectorAlert;
 
 public class FilterCreateActivity extends BaseFragment {
 
@@ -873,7 +871,7 @@ public class FilterCreateActivity extends BaseFragment {
     }
 
     private void save(boolean progress, Runnable after) {
-        saveFilterToServer(filter, newFilterFlags, newFilterEmoticon, newFilterName, newFilterColor, newAlwaysShow, newNeverShow, newPinned, creatingNew, false, hasUserChanged, true, progress, this, () -> {
+        saveFilterToServer(filter, newFilterFlags, newFilterName, newFilterColor, newFilterEmoticon, newAlwaysShow, newNeverShow, newPinned, creatingNew, false, hasUserChanged, true, progress, this, () -> {
 
             hasUserChanged = false;
             creatingNew = false;
@@ -920,7 +918,7 @@ public class FilterCreateActivity extends BaseFragment {
         }
     }
 
-    public static void saveFilterToServer(MessagesController.DialogFilter filter, int newFilterFlags, String newFilterEmoticon, String newFilterName, int newFilterColor, ArrayList<Long> newAlwaysShow, ArrayList<Long> newNeverShow, LongSparseIntArray newPinned, boolean creatingNew, boolean atBegin, boolean hasUserChanged, boolean resetUnreadCounter, boolean progress, BaseFragment fragment, Runnable onFinish) {
+    public static void saveFilterToServer(MessagesController.DialogFilter filter, int newFilterFlags, String newFilterName, int newFilterColor, String newFilterEmoticon, ArrayList<Long> newAlwaysShow, ArrayList<Long> newNeverShow, LongSparseIntArray newPinned, boolean creatingNew, boolean atBegin, boolean hasUserChanged, boolean resetUnreadCounter, boolean progress, BaseFragment fragment, Runnable onFinish) {
         if (fragment == null || fragment.getParentActivity() == null) {
             return;
         }
@@ -1522,6 +1520,7 @@ public class FilterCreateActivity extends BaseFragment {
                         checkDoneButton(true);
                     });
                     break;
+                }
                 case 2: {
                     PollEditTextCell cell = (PollEditTextCell) holder.itemView;
                     cell.setIcon(FolderIcons.getTabIcon(newFilterEmoticon), false);
