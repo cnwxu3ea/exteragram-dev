@@ -210,7 +210,7 @@ public class SurfaceTextureHelper {
 
   private static void setOnFrameAvailableListener(SurfaceTexture surfaceTexture,
       SurfaceTexture.OnFrameAvailableListener listener, Handler handler) {
-    surfaceTexture.setOnFrameAvailableListener(listener, handler);
+      surfaceTexture.setOnFrameAvailableListener(listener, handler);
   }
 
   /**

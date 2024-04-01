@@ -49,8 +49,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.exteragram.messenger.ExteraConfig;
-
 public class ImageReceiver implements NotificationCenter.NotificationCenterDelegate {
 
     List<ImageReceiver> preloadReceivers;

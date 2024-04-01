@@ -13800,7 +13800,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             if (bottom <= clipTopFinal || top > clipBottomFinal) {
                 if (messageCell != null) {
-                    messageCell.setVisibleOnScreen(blurEnabled, 0, 0);
+                    messageCell.setVisibleOnScreen(!blurEnabled, 0, 0);
                 }
                 continue;
             }
@@ -33773,7 +33773,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 showDialog(builder.create());
 
-                // todo: use here VibratorUtils.getType after merging
                 try {
                     cell.performHapticFeedback(VibratorUtils.getType(HapticFeedbackConstants.LONG_PRESS), HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
