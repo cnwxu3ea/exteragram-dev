@@ -5650,7 +5650,7 @@ public class AndroidUtilities {
 
     public static void vibrateCursor(View view) {
         try {
-            if (view == null || view.getContext() == null) return;
+            if (view == null || view.getContext() == null || !ExteraConfig.inAppVibration) return;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
             if (!((Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE)).hasAmplitudeControl()) return;
             view.performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
@@ -5659,7 +5659,7 @@ public class AndroidUtilities {
 
     public static void vibrate(View view) {
         try {
-            if (view == null || view.getContext() == null) return;
+            if (view == null || view.getContext() == null || !ExteraConfig.inAppVibration) return;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
             if (!((Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE)).hasAmplitudeControl()) return;
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);

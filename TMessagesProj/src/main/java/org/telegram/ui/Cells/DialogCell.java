@@ -3858,8 +3858,12 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 Theme.dialogs_verifiedDrawable.draw(canvas);
                 Theme.dialogs_verifiedCheckDrawable.draw(canvas);
             } else if (drawArrow && !drawPremium || drawArrow && emojiStatus == null || drawArrow && chat != null) {
+                float y = dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10f : 13f);
+                if ((!(useForceThreeLines || SharedConfig.useThreeLinesLayout) || isForumCell()) && hasTags()) {
+                    y -= dp(9);
+                }
                 Theme.dialogs_exteraArrowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider), PorterDuff.Mode.MULTIPLY));
-                setDrawableBounds(Theme.dialogs_exteraArrowDrawable, nameMuteLeft - AndroidUtilities.dp(3), AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10f : 13f));
+                setDrawableBounds(Theme.dialogs_exteraArrowDrawable, nameMuteLeft - AndroidUtilities.dp(3), y);
                 Theme.dialogs_exteraArrowDrawable.draw(canvas);
             } else if (drawPremium) {
                 int y = dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 12.5f : 15.5f);

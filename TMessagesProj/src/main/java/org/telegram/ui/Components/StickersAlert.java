@@ -1095,12 +1095,12 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     private void checkOptions() {
         final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
-        boolean notInstalled = !mediaDataController.isStickerPackInstalled(stickerSet.set.id);
+        boolean notInstalled = stickerSet == null || !mediaDataController.isStickerPackInstalled(stickerSet.set.id);
         if (stickerSet != null && stickerSet.set != null && stickerSet.set.creator && deleteItem == null && !DISABLE_STICKER_EDITOR) {
-            optionsButton.addSubItem(3, R.drawable.tabs_reorder, LocaleController.getString(R.string.StickersReorder));
-            optionsButton.addSubItem(4, R.drawable.msg_edit, LocaleController.getString(R.string.EditName));
+            optionsButton.addSubItem(4, R.drawable.tabs_reorder, LocaleController.getString(R.string.StickersReorder));
+            optionsButton.addSubItem(5, R.drawable.msg_edit, LocaleController.getString(R.string.EditName));
             if (notInstalled) {
-                deleteItem = optionsButton.addSubItem(5, R.drawable.msg_delete, LocaleController.getString(R.string.Delete));
+                deleteItem = optionsButton.addSubItem(6, R.drawable.msg_delete, LocaleController.getString(R.string.Delete));
             } else {
                 ActionBarPopupWindow.ActionBarPopupWindowLayout moreDeleteOptions = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext(), 0, resourcesProvider);
                 moreDeleteOptions.setFitItems(true);
@@ -2175,6 +2175,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             } else {
                 if (holder.getItemViewType() != TYPE_ADD_STICKER) {
                     StickerEmojiCell cell = (StickerEmojiCell) holder.itemView;
+                    if (stickerSet == null) return;
                     cell.setSticker(stickerSet.documents.get(position), null, stickerSet, null, showEmoji, isEditModeEnabled);
                     cell.editModeIcon.setOnClickListener(v -> {
                         ContentPreviewViewer.getInstance().showMenuFor(cell);

@@ -480,6 +480,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (photoLayout != null) {
             photoLayout.updateAvatarPicker();
         }
+        floatingButton.setTranslationY(AndroidUtilities.dp(84));
     }
 
     public void presentFragment(PhotoPickerActivity fragment) {
@@ -4468,6 +4469,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (photoLayout != null) {
             photoLayout.updateAvatarPicker();
         }
+        floatingButton.setTranslationY(AndroidUtilities.dp(84));
     }
 
     public void enableStickerMode() {
@@ -4478,6 +4480,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         avatarPicker = 1;
         isPhotoPicker = true;
         isStickerMode = true;
+        floatingButton.setTranslationY(AndroidUtilities.dp(84));
     }
 
     public void enableDefaultMode() {
