@@ -86,7 +86,7 @@ public class ChatUtils {
     public static CharSequence getEditedIcon() {
         if (editedIcon == null) {
             editedIcon = new SpannableStringBuilder("\u200D");
-            var pencil = new ColoredImageSpan(Theme.chat_pencilIconDrawable);
+            var pencil = new ColoredImageSpan(Theme.chat_pencilIconDrawable, true);
             pencil.setTranslateX(-AndroidUtilities.dp(1));
             editedIcon.setSpan(pencil, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -96,7 +96,7 @@ public class ChatUtils {
     public static CharSequence getChannelIcon() {
         if (channelIcon == null) {
             channelIcon = new SpannableStringBuilder("\u200D");
-            channelIcon.setSpan(new ColoredImageSpan(Theme.chat_channelIconDrawable), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            channelIcon.setSpan(new ColoredImageSpan(Theme.chat_channelIconDrawable, true), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return channelIcon;
     }

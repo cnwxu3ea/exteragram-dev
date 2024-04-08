@@ -21,6 +21,7 @@ public class ColoredImageSpan extends ReplacementSpan {
     int drawableColor;
     Drawable drawable;
 
+    boolean ignorePaintAlpha = false;
     boolean usePaintColor = true;
     public boolean useLinkPaintColor = false;
     int colorKey;
@@ -46,6 +47,11 @@ public class ColoredImageSpan extends ReplacementSpan {
 
     public ColoredImageSpan(Drawable drawable) {
         this(drawable, ALIGN_DEFAULT);
+    }
+
+    public ColoredImageSpan(Drawable drawable, boolean ignorePaintTextAlpha) {
+        this(drawable, ALIGN_DEFAULT);
+        this.ignorePaintAlpha = ignorePaintTextAlpha;
     }
 
     public ColoredImageSpan(int imageRes, int verticalAlignment) {
@@ -153,8 +159,9 @@ public class ColoredImageSpan extends ReplacementSpan {
             if (scaleX != 1f || scaleY != 1f) {
                 canvas.scale(scaleX, scaleY, 0, drawable.getBounds().centerY());
             }
-            if (alpha != 1f || paint.getAlpha() != 0xFF) {
-                drawable.setAlpha((int) (alpha * paint.getAlpha()));
+            if (alpha != 1f || paint.getAlpha() != 0xFF && !ignorePaintAlpha) {
+                var multiplier = ignorePaintAlpha ? 255 : paint.getAlpha();
+                drawable.setAlpha((int) (alpha * multiplier));
             }
             drawable.draw(canvas);
         }
