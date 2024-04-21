@@ -112,6 +112,7 @@
 
     <application
         android:name=".ApplicationLoader"
+        android:label="@string/exteraAppName"
         android:allowAudioPlaybackCapture="true"
         android:allowBackup="true"
         android:backupAgent=".BackupAgent"
@@ -386,6 +387,7 @@
             android:name="org.telegram.ui.LaunchActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:exported="true"
+            android:label="@string/exteraAppName"
             android:hardwareAccelerated="@bool/useHardwareAcceleration"
             android:launchMode="singleTask"
             android:theme="@style/Theme.TMessages.Start"
