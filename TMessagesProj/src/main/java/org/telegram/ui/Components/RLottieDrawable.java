@@ -582,12 +582,13 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         try {
             LottieMetadata lottieMetadata;
             if (file != null) {
-                FileReader reader = new FileReader(file.getAbsolutePath());
-                lottieMetadata = gson.fromJson(reader, LottieMetadata.class);
-                try {
-                    reader.close();
-                } catch (Exception e) {
-
+                try (FileReader reader = new FileReader(file.getAbsolutePath())) {
+                    lottieMetadata = gson.fromJson(reader, LottieMetadata.class);
+                    try {
+                        reader.close();
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
                 }
             } else {
                 lottieMetadata = gson.fromJson(json, LottieMetadata.class);
