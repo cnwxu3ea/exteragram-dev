@@ -21,7 +21,7 @@ import java.util.List;
 public class FontUtils {
 
     private static final String TEST_TEXT;
-    private static final int CANVAS_SIZE = AndroidUtilities.dp(12);
+    private static final int CANVAS_SIZE = AndroidUtilities.dp(20);
     private static final Paint PAINT = new Paint() {{
         setTextSize(CANVAS_SIZE);
         setAntiAlias(false);
@@ -37,7 +37,7 @@ public class FontUtils {
 
     static {
         if (List.of("zh", "ja", "ko").contains(LocaleController.getInstance().getCurrentLocale().getLanguage())) {
-            TEST_TEXT = "日";
+            TEST_TEXT = "好";
         } else {
             TEST_TEXT = "R";
         }
