@@ -14799,7 +14799,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             String adminLabel;
             if (isMegagroup && currentChat != null && messageObject.messageOwner.post_author != null && currentChat.id == -currentMessageObject.getFromChatId()) {
                 adminString = new SpannableStringBuilder(messageObject.messageOwner.post_author.replace("\n", ""));
-            } else if (isMegagroup && currentChat != null && currentMessageObject.isForwardedChannelPost()) {
+            } else if (isMegagroup && currentChat != null && (currentMessageObject.isForwardedChannelPost() || currentMessageObject.messageOwner.peer_id != null && currentMessageObject.messageOwner.peer_id.channel_id != 0 && !currentMessageObject.isOutOwner())) {
                 adminString = new SpannableStringBuilder().append(ChatUtils.getChannelIcon());
             } else if ((currentUser != null || currentChat != null) && !currentMessageObject.isOutOwner() && !currentMessageObject.isAnyKindOfSticker() && currentMessageObject.type != MessageObject.TYPE_ROUND_VIDEO && delegate != null && (adminLabel = delegate.getAdminRank(currentUser != null ? currentUser.id : currentChat.id)) != null) {
                 if (adminLabel.length() == 0) {
