@@ -220,8 +220,11 @@
 
     <!-- GPT -->
     <string name="ChatGPTInfo">API-Ключ, роли и история сообщений</string>
-    <string name="ApiKey">API-Ключ</string>
-    <string name="ApiKeyInfo">Этот API-ключ будет использоваться для отправки запросов на сервера OpenAI. Для генерации ключа API можно воспользоваться *официальным сайтом*.</string>
+    <string name="Endpoint">Сервис</string>
+    <string name="EndpointSetup">Настройка сервиса</string>
+    <string name="ApiKeyInfo">Этот API-ключ будет использоваться для отправки запросов на **%1$s**, используя **%2$s**.</string>
+    <string name="ApiKeyInfoOpenAI">Для генерации ключа API можно воспользоваться *официальным сайтом*.</string>
+    <string name="Model">Модель</string>
     <string name="Roles">Роли</string>
     <string name="RolesInfo">Создавайте роли для своих нужд!</string>
     <string name="Suggestions">Рекомендации</string>

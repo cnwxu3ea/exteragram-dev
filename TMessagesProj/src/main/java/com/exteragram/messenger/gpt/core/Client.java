@@ -14,9 +14,7 @@ package com.exteragram.messenger.gpt.core;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.widget.TextView;
-
-import com.exteragram.messenger.gpt.ui.EditKeyActivity;
-
+import com.exteragram.messenger.gpt.ui.EditEndpointConfigActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -50,11 +48,12 @@ public class Client {
     private ExecutorService executor;
     private HttpURLConnection connection;
 
-    private static final String API_URL = "https://api.openai.com/v1/chat/completions";
     public static final String SYSTEM_ROLE = "system";
     public static final String USER_ROLE = "user";
 
-    private String testKey;
+    private String urlOverride;
+    private String modelOverride;
+    private String keyOverride;
 
     private static final int STREAM_SYMBOLS_LIMIT = SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_HIGH ? 10 : 15; // decreasing this limit can f*ck off optimization
 
@@ -87,10 +86,13 @@ public class Client {
             String response = "";
 
             try {
-                URL url = new URL(API_URL);
+                URL url = new URL((urlOverride != null ? urlOverride : Config.getUrl()) + "/chat/completions");
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
-                connection.setRequestProperty("Authorization", "Bearer " + (testKey != null ? testKey : Config.getApiKey()));
+                connection.setRequestProperty("Authorization", "Bearer " + (keyOverride != null ? keyOverride : Config.getApiKey()));
+                // https://openrouter.ai/docs#quick-start
+                connection.setRequestProperty("HTTP-Referer", "exteragram.app");
+                connection.setRequestProperty("X-Title", "exteraGram");
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setDoOutput(true);
                 connection.setConnectTimeout(timeout);
@@ -101,7 +103,7 @@ public class Client {
                 JSONObject jsonObject = new JSONObject();
                 JSONArray messagesArray = new JSONArray();
 
-                if (testKey == null) {
+                if (urlOverride == null && modelOverride == null && keyOverride == null) {
                     roleList.fill();
                     Role role = roleList.getSelected();
                     if (role != null) {
@@ -137,9 +139,11 @@ public class Client {
 
                 jsonObject.put("messages", messagesArray);
                 jsonObject.put("stream", stream);
-                jsonObject.put("temperature", 0.4);
-                //jsonObject.put("max_tokens", 4096);
-                jsonObject.put("model", "gpt-3.5-turbo" + (Config.use16KModel ? "-16k" : ""));
+                jsonObject.put("temperature", 0.7);
+                // 1 token = 3-4 characters
+                // telegram message limit is 4096 characters
+                jsonObject.put("max_tokens", 1280);
+                jsonObject.put("model", modelOverride != null ? modelOverride : Config.getModel());
 
                 String jsonString = jsonObject.toString();
 
@@ -207,7 +211,7 @@ public class Client {
 
                     FileLog.e("GPT ERROR: " + errorMessage + " " + errorCode);
 
-                    if (fragment != null && testKey == null) {
+                    if (fragment != null && urlOverride == null && modelOverride == null && keyOverride == null) {
                         AndroidUtilities.runOnUIThread(() -> showErrorBulletin(errorCode, errorMessage.toLowerCase(Locale.ROOT)));
                     }
                 }
@@ -242,7 +246,7 @@ public class Client {
                 title = R.string.GPTError401;
                 subtitle = R.string.GPTError401Info;
                 button = LocaleController.getString("Open", R.string.Open);
-                onButtonClick = () -> fragment.presentFragment(new EditKeyActivity());
+                onButtonClick = () -> fragment.presentFragment(new EditEndpointConfigActivity());
             }
             case 429 -> {
                 // https://platform.openai.com/docs/guides/error-codes/api-errors
@@ -253,11 +257,11 @@ public class Client {
                 //    title = R.string.GPTError429Limit;
                 //    subtitle = R.string.GPTError429LimitInfo;
                 //} else {
-                    icon = 3;
-                    title = R.string.GPTError429Quota;
-                    subtitle = R.string.GPTError429QuotaInfo;
-                    button = LocaleController.getString("Open", R.string.Open);
-                    onButtonClick = () -> Browser.openUrl(fragment.getParentActivity(), "https://platform.openai.com/account/usage");
+                icon = 3;
+                title = R.string.GPTError429Quota;
+                subtitle = R.string.GPTError429QuotaInfo;
+                button = LocaleController.getString("Open", R.string.Open);
+                onButtonClick = () -> Browser.openUrl(fragment.getParentActivity(), "https://platform.openai.com/account/usage");
                 //}
             }
             case 503 -> {
@@ -296,9 +300,16 @@ public class Client {
         return null;
     }
 
+    public void setUrlOverride(String endpoint) {
+        urlOverride = endpoint;
+    }
 
-    public void setTestKey(String key) {
-        testKey = key;
+    public void setModelOverride(String endpoint) {
+        modelOverride = endpoint;
+    }
+
+    public void setKeyOverride(String key) {
+        keyOverride = key;
     }
 
     public void setTimeout(int time) {
@@ -350,8 +361,16 @@ public class Client {
 
         isGenerating = false;
 
-        if (testKey != null) {
-            testKey = null;
+        if (urlOverride != null) {
+            urlOverride = null;
+        }
+
+        if (modelOverride != null) {
+            modelOverride = null;
+        }
+
+        if (keyOverride != null) {
+            keyOverride = null;
         }
 
         AndroidUtilities.runOnUIThread(() -> {

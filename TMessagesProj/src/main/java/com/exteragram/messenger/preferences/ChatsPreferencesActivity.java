@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.gpt.core.Config;
-import com.exteragram.messenger.gpt.ui.EditKeyActivity;
+import com.exteragram.messenger.gpt.ui.EditEndpointConfigActivity;
 import com.exteragram.messenger.gpt.ui.SetupActivity;
 import com.exteragram.messenger.preferences.components.AltSeekbar;
 import com.exteragram.messenger.preferences.components.DoubleTapCell;
@@ -579,7 +579,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             }
             listAdapter.notifyItemChanged(messageMenuRow, payload);
         } else if (position == gptRow) {
-            presentFragment(Config.isApiKeySet() ? new SetupActivity() : new EditKeyActivity());
+            presentFragment(Config.isApiKeySet() ? new SetupActivity() : new EditEndpointConfigActivity());
         } else if (position == chatSettingsRow) {
             presentFragment(new ThemeActivity(0));
         }

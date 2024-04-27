@@ -223,8 +223,13 @@
     <!-- GPT -->
     <string name="ChatGPT" translatable="false">ChatGPT</string>
     <string name="ChatGPTInfo">Set up API Key, Roles and History</string>
+    <string name="Endpoint">Endpoint</string>
+    <string name="EndpointSetup">Endpoint Setup</string>
+    <string name="ApiUrl" translatable="false">URL</string>
     <string name="ApiKey">API Key</string>
-    <string name="ApiKeyInfo">This API Key will be used to send requests to OpenAI servers. To generate an API Key, you can use the *official website*.</string>
+    <string name="ApiKeyInfo">API Key will be used to send requests to **%1$s** using **%2$s**.</string>
+    <string name="ApiKeyInfoOpenAI">To generate an API Key, you can use the *official website*.</string>
+    <string name="Model">Model</string>
     <string name="Roles">Roles</string>
     <string name="RolesInfo">Create roles for your needs!</string>
     <string name="Suggestions">Suggestions</string>

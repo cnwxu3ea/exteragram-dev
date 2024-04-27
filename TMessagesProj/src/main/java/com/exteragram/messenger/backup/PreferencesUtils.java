@@ -200,6 +200,8 @@ public class PreferencesUtils {
             new BackupItem("voiceHintShowcases"),
 
             // gpt
+            new BackupItem("url", String.class),
+            new BackupItem("model", String.class),
             // new BackupItem("apiKey"),
             // new BackupItem("conversationHistory"),
             new BackupItem("roles", String.class),

@@ -21,6 +21,7 @@ import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -28,12 +29,9 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.core.content.ContextCompat;
-
 import com.exteragram.messenger.gpt.core.Client;
 import com.exteragram.messenger.gpt.core.Config;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -55,7 +53,7 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.util.ArrayList;
 
-public class EditKeyActivity extends BaseFragment {
+public class EditEndpointConfigActivity extends BaseFragment {
 
     private ClipboardManager clipboardManager;
     private final ClipboardManager.OnPrimaryClipChangedListener clipChangedListener = this::updateButtons;
@@ -65,6 +63,12 @@ public class EditKeyActivity extends BaseFragment {
     private TextView clearView;
     private TextView pasteView;
     private View separator;
+
+    private EditTextBoldCursor urlField;
+    private OutlineTextContainerView urlFieldContainer;
+
+    private EditTextBoldCursor modelField;
+    private OutlineTextContainerView modelFieldContainer;
 
     private EditTextBoldCursor keyField;
     private OutlineTextContainerView keyFieldContainer;
@@ -79,14 +83,14 @@ public class EditKeyActivity extends BaseFragment {
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle(LocaleController.getString(R.string.ApiKey));
+        actionBar.setTitle(LocaleController.getString(R.string.EndpointSetup));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
                     finishFragment();
                 } else if (id == done_button) {
-                    saveKey();
+                    saveConfig();
                 }
             }
         });
@@ -102,39 +106,49 @@ public class EditKeyActivity extends BaseFragment {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         fragmentView.setOnTouchListener((v, event) -> true);
 
-        keyFieldContainer = new OutlineTextContainerView(context);
-        keyFieldContainer.setText(LocaleController.getString(R.string.ApiKey));
-        linearLayout.addView(keyFieldContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 24, 24, 24, 0));
-
-        keyField = new EditTextBoldCursor(context);
-        keyField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        keyField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        keyField.setBackground(null);
-        keyField.setMaxLines(1);
-        keyField.setLines(1);
-        keyField.setSingleLine(true);
-        keyField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        keyField.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        keyField.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        keyField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated));
-        keyField.setCursorWidth(1.5f);
-        keyField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-        keyField.setOnFocusChangeListener((v, hasFocus) -> keyFieldContainer.animateSelection(hasFocus ? 1 : 0));
-        int padding = AndroidUtilities.dp(16);
-        keyField.setPadding(padding, padding, padding, padding);
-        keyField.setCursorSize(AndroidUtilities.dp(20));
-        keyFieldContainer.addView(keyField, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        keyFieldContainer.attachEditText(keyField);
-        keyField.setOnEditorActionListener((textView, i, keyEvent) -> {
+        InputFilter[] urlFilters = new InputFilter[1];
+        urlFilters[0] = new InputFilter.LengthFilter(100); // todo: maybe check somehow
+        var urlFieldPair = createField(context, LocaleController.getString(R.string.ApiUrl), urlFilters);
+        urlField = urlFieldPair.first;
+        urlField.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                updateHelpText();
+            }
+        });
+        urlField.setOnEditorActionListener((textView, i, keyEvent) -> {
+            updateHelpText();
             if (i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE) {
-                doneButton.performClick();
+                modelField.requestFocus();
+                AndroidUtilities.showKeyboard(keyField);
                 return true;
             }
             return false;
         });
+        urlFieldContainer = urlFieldPair.second;
+        linearLayout.addView(urlFieldContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 24, 24, 24, 0));
 
-        InputFilter[] inputFilters = new InputFilter[1];
-        inputFilters[0] = new ApiKeyInputFilter() {
+        InputFilter[] modelFieldFilters = new InputFilter[1];
+        modelFieldFilters[0] = new InputFilter.LengthFilter(32);
+        var modelFieldPair = createField(context, LocaleController.getString(R.string.Model), modelFieldFilters);
+        modelField = modelFieldPair.first;
+        modelField.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                updateHelpText();
+            }
+        });
+        modelField.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE) {
+                keyField.requestFocus();
+                AndroidUtilities.showKeyboard(keyField);
+                return true;
+            }
+            return false;
+        });
+        modelFieldContainer = modelFieldPair.second;
+        linearLayout.addView(modelFieldContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 24, 24, 24, 0));
+
+        InputFilter[] keyFieldFilters = new InputFilter[1];
+        keyFieldFilters[0] = new ApiKeyInputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                 if (source != null && source.length() > 0 && TextUtils.indexOf(source, '\n') == source.length() - 1) {
@@ -144,13 +158,15 @@ public class EditKeyActivity extends BaseFragment {
                 CharSequence result = super.filter(source, start, end, dest, dstart, dend);
                 if (result != null && source != null && result.length() != source.length()) {
                     keyFieldContainer.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    AndroidUtilities.shakeView(urlFieldContainer);
+                    AndroidUtilities.shakeView(modelFieldContainer);
                     AndroidUtilities.shakeView(keyFieldContainer);
                 }
                 return result;
             }
         };
-        keyField.setFilters(inputFilters);
-        keyField.setMinHeight(AndroidUtilities.dp(36));
+        var keyFieldPair = createField(context, LocaleController.getString(R.string.ApiKey), keyFieldFilters);
+        keyField = keyFieldPair.first;
         keyField.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE && doneButton != null) {
                 doneButton.performClick();
@@ -158,8 +174,8 @@ public class EditKeyActivity extends BaseFragment {
             }
             return false;
         });
-
-        keyFieldContainer.setText(LocaleController.getString(R.string.ApiKey));
+        keyFieldContainer = keyFieldPair.second;
+        linearLayout.addView(keyFieldContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 24, 24, 24, 0));
 
         buttons = new LinearLayout(context);
         buttons.setOrientation(LinearLayout.HORIZONTAL);
@@ -220,27 +236,91 @@ public class EditKeyActivity extends BaseFragment {
         helpTextView.setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
         helpTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
 
-        String text = LocaleController.getString(R.string.ApiKeyInfo);
-        SpannableStringBuilder spanned = new SpannableStringBuilder(text);
-        int index1 = text.indexOf('*');
-        int index2 = text.indexOf('*', index1 + 1);
-
-        if (index1 != -1 && index2 != -1 && index1 != index2) {
-            helpTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
-            spanned.replace(index2, index2 + 1, "");
-            spanned.replace(index1, index1 + 1, "");
-            spanned.setSpan(new URLSpanNoUnderline("https://platform.openai.com/account/api-keys"), index1, index2 - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        helpTextView.setText(spanned);
-
         linearLayout.addView(helpTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 24, 12, 24, 0));
 
-        keyField.setText(Config.getApiKey() != null ? Config.getApiKey() : "sk-");
+        urlField.setText(!TextUtils.isEmpty(Config.getUrl()) ? Config.getUrl() : "https://api.openai.com/v1");
+        urlField.setSelection(urlField.length());
+
+        modelField.setText(!TextUtils.isEmpty(Config.getModel()) ? Config.getModel() : "gpt-3.5-turbo");
+        modelField.setSelection(modelField.length());
+
+        keyField.setText(!TextUtils.isEmpty(Config.getApiKey()) ? Config.getApiKey() : "sk-");
         keyField.setSelection(keyField.length());
 
+        updateHelpText();
         updateButtons();
 
         return fragmentView;
+    }
+
+    private Pair<EditTextBoldCursor, OutlineTextContainerView> createField(Context context, String text, InputFilter[] inputFilters) {
+        var fieldContainer = new OutlineTextContainerView(context);
+        fieldContainer.setText(text);
+
+        var field = new EditTextBoldCursor(context);
+        field.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        field.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        field.setBackground(null);
+        field.setMaxLines(1);
+        field.setLines(1);
+        field.setSingleLine(true);
+        field.setInputType(InputType.TYPE_CLASS_TEXT);
+        field.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        field.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        field.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated));
+        field.setCursorWidth(1.5f);
+        field.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+        field.setOnFocusChangeListener((v, hasFocus) -> fieldContainer.animateSelection(hasFocus ? 1 : 0));
+        int padding = AndroidUtilities.dp(16);
+        field.setPadding(padding, padding, padding, padding);
+        field.setCursorSize(AndroidUtilities.dp(20));
+        fieldContainer.addView(field, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        fieldContainer.attachEditText(field);
+
+        field.setFilters(inputFilters);
+        field.setMinHeight(AndroidUtilities.dp(36));
+
+        fieldContainer.setText(text);
+
+        return new Pair<>(field, fieldContainer);
+    }
+
+    private void updateHelpText() {
+        String currentUrl = String.valueOf(urlField.getText());
+        String currentUrlClean = currentUrl
+                .replace("https://", "")
+                .replace("http://", "")
+                .replace("www.", "");
+        if (currentUrlClean.contains("/")) {
+            currentUrlClean = currentUrlClean.substring(0, currentUrlClean.indexOf("/"));
+        }
+
+        String model = String.valueOf(modelField.getText());
+
+        if (TextUtils.isEmpty(currentUrlClean) || TextUtils.isEmpty(model)) {
+            helpTextView.setText("");
+            return;
+        }
+
+        SpannableStringBuilder text = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ApiKeyInfo, currentUrlClean, model));
+
+        if (currentUrl.contains("openai.com")) {
+            var s = LocaleController.getString(R.string.ApiKeyInfoOpenAI);
+            SpannableStringBuilder spanned = new SpannableStringBuilder(s);
+            int index1 = s.indexOf('*');
+            int index2 = s.indexOf('*', index1 + 1);
+
+            if (index1 != -1 && index2 != -1 && index1 != index2) {
+                helpTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+                spanned.replace(index2, index2 + 1, "");
+                spanned.replace(index1, index1 + 1, "");
+                spanned.setSpan(new URLSpanNoUnderline("https://platform.openai.com/account/api-keys"), index1, index2 - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            text.append("\n").append(spanned);
+        }
+
+        helpTextView.setText(text);
     }
 
     @Override
@@ -262,19 +342,33 @@ public class EditKeyActivity extends BaseFragment {
         updateButtons();
     }
 
-    private void saveKey() {
+    private void saveConfig() {
+        String currentUrl = Config.getUrl();
+        //noinspection ConstantValue
+        if (currentUrl == null) {
+            currentUrl = "";
+        }
+        String currentModel = Config.getModel();
+        //noinspection ConstantValue
+        if (currentModel == null) {
+            currentModel = "";
+        }
         String currentKey = Config.getApiKey();
         if (currentKey == null) {
             currentKey = "";
         }
+        final String newUrl = urlField.getText().toString().replace("\n", "");
+        final String newModel = modelField.getText().toString().replace("\n", "");
         final String newKey = keyField.getText().toString().replace("\n", "");
-        if (!currentKey.equals(newKey)) {
+        if (!currentUrl.equals(newUrl) || !currentModel.equals(newModel) || !currentKey.equals(newKey)) {
             Client client = new Client(this);
             final AlertDialog progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
             progressDialog.setOnCancelListener(dialog -> client.stop());
             progressDialog.show();
-            client.setTestKey(newKey);
-            client.getResponse("Is this key working?", false, false, res -> {
+            client.setUrlOverride(newUrl);
+            client.setModelOverride(newModel);
+            client.setKeyOverride(newKey);
+            client.getResponse("Say 'hi'.", false, false, res -> {
                 if (progressDialog.isShowing()) {
                     try {
                         progressDialog.dismiss();
@@ -283,10 +377,14 @@ public class EditKeyActivity extends BaseFragment {
                     }
                 }
                 if (!TextUtils.isEmpty(res)) {
+                    Config.setUrl(newUrl);
+                    Config.setModel(newModel);
                     Config.setApiKey(newKey);
                     finishFragment();
                 } else {
                     keyFieldContainer.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    AndroidUtilities.shakeView(urlFieldContainer);
+                    AndroidUtilities.shakeView(modelFieldContainer);
                     AndroidUtilities.shakeView(keyFieldContainer);
                 }
             });
@@ -350,6 +448,11 @@ public class EditKeyActivity extends BaseFragment {
         themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_actionBarDefaultIcon));
         themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
         themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarDefaultSelector));
+
+        themeDescriptions.add(new ThemeDescription(urlField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(urlField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText));
+        themeDescriptions.add(new ThemeDescription(urlField, ThemeDescription.FLAG_BACKGROUNDFILTER, null, null, null, null, Theme.key_windowBackgroundWhiteInputField));
+        themeDescriptions.add(new ThemeDescription(urlField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_windowBackgroundWhiteInputFieldActivated));
 
         themeDescriptions.add(new ThemeDescription(keyField, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
         themeDescriptions.add(new ThemeDescription(keyField, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText));

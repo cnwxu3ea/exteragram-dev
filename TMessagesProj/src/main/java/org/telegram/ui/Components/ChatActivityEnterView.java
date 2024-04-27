@@ -63,7 +63,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
 import android.util.Property;
 import android.util.TypedValue;
@@ -114,7 +113,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.gpt.core.Config;
 import com.exteragram.messenger.gpt.core.Client;
-import com.exteragram.messenger.gpt.ui.EditKeyActivity;
+import com.exteragram.messenger.gpt.ui.EditEndpointConfigActivity;
 import com.exteragram.messenger.gpt.ui.SetupActivity;
 import com.exteragram.messenger.components.ChatActivityEnterViewStaticIconView;
 import com.exteragram.messenger.components.TranslateBeforeSendWrapper;
@@ -4430,7 +4429,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             sendPopupWindow.dismiss();
                             sendPopupLayout = null;
                         }
-                        parentFragment.presentFragment(new EditKeyActivity());
+                        parentFragment.presentFragment(new EditEndpointConfigActivity());
                     });
                     textView.setMaxWidth(AndroidUtilities.dp(260));
                     textView.setText(LocaleController.getString(R.string.TapToAddApiKey));

@@ -15,10 +15,8 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Base64;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import org.telegram.messenger.ApplicationLoader;
 
 import java.lang.reflect.Type;
@@ -34,13 +32,8 @@ public class Config {
     public static SharedPreferences.Editor editor;
 
     public static boolean saveHistory;
-    public static boolean use16KModel;
     public static boolean responseStreaming;
     public static boolean showResponseOnly;
-
-    public static float temperature; // 0 - 2
-    public static float presencePenalty; // -2 - 2
-    public static float frequencyPenalty; // -2 - 2
 
     static {
         loadConfig();
@@ -56,12 +49,27 @@ public class Config {
             editor = preferences.edit();
 
             saveHistory = preferences.getBoolean("saveHistory", true);
-            use16KModel = preferences.getBoolean("use16KModel", false);
             responseStreaming = preferences.getBoolean("responseStreaming", true);
             showResponseOnly = preferences.getBoolean("showResponseOnly", false);
 
             configLoaded = true;
         }
+    }
+
+    public static String getUrl() {
+        return preferences.getString("url", "https://api.openai.com/v1");
+    }
+
+    public static void setUrl(String url) {
+        editor.putString("url", url).apply();
+    }
+
+    public static String getModel() {
+        return preferences.getString("model", "gpt-3.5-turbo");
+    }
+
+    public static void setModel(String model) {
+        editor.putString("model", model).apply();
     }
 
     public static String encrypt(String text) {
@@ -95,7 +103,8 @@ public class Config {
     }
 
     public static ArrayList<Message> getConversationHistory() {
-        Type type = new TypeToken<ArrayList<Message>>() {}.getType();
+        Type type = new TypeToken<ArrayList<Message>>() {
+        }.getType();
         return (new Gson()).fromJson(preferences.getString("conversationHistory", null), type);
     }
 
@@ -108,7 +117,8 @@ public class Config {
     }
 
     public static ArrayList<Role> getRoles() {
-        Type type = new TypeToken<ArrayList<Role>>() {}.getType();
+        Type type = new TypeToken<ArrayList<Role>>() {
+        }.getType();
         return (new Gson()).fromJson(preferences.getString("roles", null), type);
     }
 

@@ -18,21 +18,17 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.exteragram.messenger.gpt.core.Config;
 import com.exteragram.messenger.preferences.BasePreferencesActivity;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -46,7 +42,8 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.StickerImageView;
-import org.telegram.ui.Components.TextStyleSpan;
+
+import java.net.URL;
 
 public class SetupActivity extends BasePreferencesActivity {
 
@@ -59,16 +56,14 @@ public class SetupActivity extends BasePreferencesActivity {
     private int headerDividerRow;
 
     private int historyHeaderRow;
-    private int keyRow;
+    private int endpointRow;
     private int roleRow;
     private int saveHistoryRow;
     private int historyDividerRow;
 
     private int otherHeaderRow;
-    private int use16KModelRow;
     private int responseStreamingRow;
     private int showResponseOnlyRow;
-    private int otherDividerRow;
 
     @Override
     public View createView(Context context) {
@@ -199,7 +194,7 @@ public class SetupActivity extends BasePreferencesActivity {
         headerDividerRow = newRow();
 
         historyHeaderRow = newRow();
-        keyRow = newRow();
+        endpointRow = newRow();
         roleRow = newRow();
         saveHistoryRow = newRow();
         historyDividerRow = newRow();
@@ -207,14 +202,12 @@ public class SetupActivity extends BasePreferencesActivity {
         otherHeaderRow = newRow();
         responseStreamingRow = newRow();
         showResponseOnlyRow = newRow();
-        use16KModelRow = newRow();
-        otherDividerRow = newRow();
     }
 
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
-        if (position == keyRow) {
-            presentFragment(new EditKeyActivity());
+        if (position == endpointRow) {
+            presentFragment(new EditEndpointConfigActivity());
         } else if (position == roleRow) {
             presentFragment(new RolesSetupActivity());
         } else if (position == saveHistoryRow) {
@@ -223,12 +216,6 @@ public class SetupActivity extends BasePreferencesActivity {
                 Config.clearConversationHistory();
             }
             ((TextCell) view).setChecked(Config.saveHistory);
-        } else if (position == use16KModelRow) {
-            Config.editor.putBoolean("use16KModel", Config.use16KModel ^= true).apply();
-            if (!Config.use16KModel) {
-                Config.clearConversationHistory();
-            }
-            ((TextCheckCell) view).setChecked(Config.use16KModel);
         } else if (position == responseStreamingRow) {
             Config.editor.putBoolean("responseStreaming", Config.responseStreaming ^= true).apply();
             ((TextCheckCell) view).setChecked(Config.responseStreaming);
@@ -240,7 +227,7 @@ public class SetupActivity extends BasePreferencesActivity {
 
     @Override
     protected String getTitle() {
-        return "ChatGPT";
+        return LocaleController.getString(R.string.ChatGPT);
     }
 
     @Override
@@ -277,22 +264,19 @@ public class SetupActivity extends BasePreferencesActivity {
                         holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 case 2 -> {
                     TextCell textCell = (TextCell) holder.itemView;
-                    if (position == keyRow) {
-                        String key = Config.getApiKey();
-                        SpannableStringBuilder spannable;
-                        if (!TextUtils.isEmpty(key) && key.length() > 16) {
-                            spannable = SpannableStringBuilder.valueOf(key);
-                            spannable.delete(8, spannable.length() - 6);
-                            TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-                            run.flags |= TextStyleSpan.FLAG_STYLE_SPOILER;
-                            run.start = 6;
-                            run.end = spannable.length() - 3;
-                            spannable.setSpan(new TextStyleSpan(run), run.start, run.end, 0);
-                        } else {
-                            spannable = SpannableStringBuilder.valueOf(LocaleController.getString("BlockedEmpty", R.string.BlockedEmpty));
+                    if (position == endpointRow) {
+                        String url = Config.getUrl();
+                        String cleanUrl;
+                        try {
+                            cleanUrl = new URL(url).getHost();
+                        } catch (Exception e) {
+                            cleanUrl = url;
+                        }
+                        if (TextUtils.isEmpty(cleanUrl)) {
+                            cleanUrl = LocaleController.getString("BlockedEmpty", R.string.BlockedEmpty);
                         }
                         textCell.setPrioritizeTitleOverValue(true);
-                        textCell.setTextAndSpoilersValueAndIcon(LocaleController.getString(R.string.ApiKey), spannable, R.drawable.msg_permissions, true);
+                        textCell.setTextAndSpoilersValueAndIcon(LocaleController.getString(R.string.Endpoint), cleanUrl, R.drawable.msg_language, true);
                     } else if (position == roleRow) {
                         textCell.setPrioritizeTitleOverValue(true);
                         textCell.setTextAndValueAndIcon(LocaleController.getString(R.string.Roles), Config.getSelectedRole(), R.drawable.msg_openprofile, true);
@@ -311,20 +295,16 @@ public class SetupActivity extends BasePreferencesActivity {
                 case 5 -> {
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     textCheckCell.setEnabled(true, null);
-                    if (position == use16KModelRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.Use16kModel), Config.use16KModel, false);
-                    } else if (position == responseStreamingRow) {
+                    if (position == responseStreamingRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString(R.string.ResponseStreaming), LocaleController.getString(R.string.ResponseStreamingInfo), Config.responseStreaming, true, true);
                     } else if (position == showResponseOnlyRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ShowResponseOnly), Config.showResponseOnly, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ShowResponseOnly), Config.showResponseOnly, false);
                     }
                 }
                 case 8 -> {
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == historyDividerRow) {
                         cell.setText(LocaleController.getString(R.string.HistoryInfo));
-                    } else if (position == otherDividerRow) {
-                        cell.setText(LocaleController.getString(R.string.Use16kModelInfo));
                     }
                 }
                 case 9 -> {
@@ -340,9 +320,9 @@ public class SetupActivity extends BasePreferencesActivity {
                 return 1;
             } else if (position == historyHeaderRow || position == otherHeaderRow) {
                 return 3;
-            } else if (position == use16KModelRow || position == responseStreamingRow || position == showResponseOnlyRow) {
+            } else if (position == responseStreamingRow || position == showResponseOnlyRow) {
                 return 5;
-            } else if (position == historyDividerRow || position == otherDividerRow) {
+            } else if (position == historyDividerRow) {
                 return 8;
             } else if (position == headerRow) {
                 return 9;
