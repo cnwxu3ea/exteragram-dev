@@ -1,0 +1,77 @@
+以前用于 exteraGram 应用程序的签名证书（keystore）
+
+storePassword *R2LaSUNZV7krhd8d*
+keyAlias *exteraGram*
+keyPassword *R2LaSUNZV7krhd8d*
+
+源代码位于 [main branch](https://github.com/cnwxu3ea/exteragram-dev/tree/main/)
+
+```
+Keystore type: PKCS12
+Keystore provider: SUN
+
+Your keystore contains 2 entries
+
+Alias name: exteragram
+Creation date: May 24, 2022
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: CN=Vladislav Opolev, OU=Owner, O=exteraSquad, L=Ufa, ST=Ufa, C=RU
+Issuer: CN=Vladislav Opolev, OU=Owner, O=exteraSquad, L=Ufa, ST=Ufa, C=RU
+Serial number: 392172b5
+Valid from: Tue May 24 04:29:45 CST 2022 until: Sat May 18 04:29:45 CST 2047
+Certificate fingerprints:
+	SHA1: 35:78:A1:09:13:49:32:22:89:9E:04:A6:DC:94:6F:03:6C:F0:DA:EB
+	SHA256: 47:67:70:40:05:A5:21:A5:14:1E:83:11:E8:1C:E0:E6:D3:0D:E9:3C:0A:F4:DC:AD:0B:40:D6:A3:BD:B0:DB:CA
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+	SubjectKeyIdentifier [
+		KeyIdentifier [
+		0000: 37 6C 45 6D 11 04 6F E5   3A EB 35 6B 36 7B 72 8B  7lEm..o.:.5k6.r.
+		0010: 18 76 97 7F                                        .v..
+	]
+]
+
+
+
+*******************************************
+*******************************************
+
+
+Alias name: playstore
+Creation date: May 24, 2022
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+	Owner: CN=Vladislav Opolev, OU=Owner, O=exteraSquad, L=Ufa, ST=Ufa, C=RU
+	Issuer: CN=Vladislav Opolev, OU=Owner, O=exteraSquad, L=Ufa, ST=Ufa, C=RU
+Serial number: 5dd83cec
+Valid from: Tue May 24 04:30:24 CST 2022 until: Sat May 18 04:30:24 CST 2047
+Certificate fingerprints:
+	SHA1: A7:C0:39:D9:E4:5F:7F:58:21:A3:C3:CE:C9:90:AB:9C:AF:DE:0B:F8
+	SHA256: 86:C6:2B:4C:F8:A2:0B:8E:93:02:40:87:35:83:05:C8:6F:15:AA:32:D3:B4:36:F6:88:44:BC:79:89:E5:E7:DF
+Signature algorithm name: SHA256withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+
+Extensions:
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+	KeyIdentifier [
+		0000: 0E 98 38 32 71 ED DF D9   C5 05 34 BF C6 3D B8 A3  ..82q.....4..=..
+		0010: 6D 26 E7 11                                        m&..
+	]
+]
+
+
+
+*******************************************
+*******************************************
+```
