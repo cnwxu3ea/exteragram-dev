@@ -470,6 +470,8 @@ public class Camera2Session {
                 captureRequestBuilder.set(CaptureRequest.CONTROL_SCENE_MODE, isFront ? CameraMetadata.CONTROL_SCENE_MODE_NIGHT_PORTRAIT : CameraMetadata.CONTROL_SCENE_MODE_NIGHT);
             }
 
+            captureRequestBuilder.set(CaptureRequest.FLASH_MODE, torchEnabled ? CaptureRequest.FLASH_MODE_TORCH : CaptureRequest.FLASH_MODE_OFF);
+
             if (sensorSize != null && Math.abs(currentZoom - 1f) >= 0.01f) {
                 final int centerX = sensorSize.width() / 2;
                 final int centerY = sensorSize.height() / 2;
@@ -573,15 +575,7 @@ public class Camera2Session {
         }
     }
 
-    public boolean isTorchEnabled() {
-        if (captureRequestBuilder != null) {
-            Integer flashMode = captureRequestBuilder.get(CaptureRequest.FLASH_MODE);
-            if (flashMode != null) {
-                return flashMode == CaptureRequest.FLASH_MODE_TORCH;
-            }
-        }
-        return false;
-    }
+    public boolean torchEnabled;
 
     public void setTorchEnabled(boolean enabled) {
         if (captureRequestBuilder != null) {
@@ -594,6 +588,7 @@ public class Camera2Session {
                     FileLog.e(e);
                 }
             }
+            torchEnabled = enabled;
         }
     }
 

@@ -4575,10 +4575,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             TLRPC.User user = getMessagesController().getUser(userId);
                             TLRPC.Chat chat = getMessagesController().getChat(chatId);
 
-                            if (chat == null) {
-                                chat = currentChat;
-                            }
-
                             if (chat != null && ChatObject.getProfileEmojiId(chat) > 0) {
                                 inputSet.add(ChatUtils.getSetFrom(chat));
                             } else if (user != null && UserObject.getProfileEmojiId(user) > 0) {
@@ -4991,7 +4987,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             waitCanSendStoryRequest = false;
             showBoostsAlert = !canSend;
             hideFloatingButton(false);
-            floatingButtonContainer.setVisibility(!canSend ? View.GONE : View.VISIBLE);
+            if (floatingButtonContainer != null) {
+                floatingButtonContainer.setVisibility(!canSend ? View.GONE : View.VISIBLE);
+            }
         }, false, resourcesProvider);
     }
 

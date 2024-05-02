@@ -924,6 +924,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             return;
         }
         stopProgressTimer();
+        disableTorch();
         if (videoPlayer != null) {
             videoPlayer.releasePlayer(true);
             videoPlayer = null;
@@ -936,7 +937,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (BuildVars.DEBUG_VERSION && !cameraFile.exists()) {
                 FileLog.e(new RuntimeException("file not found :( round video"));
             }
-            disableTorch();
             if (videoEditedInfo.needConvert()) {
                 file = null;
                 encryptedFile = null;
@@ -978,7 +978,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             } else {
                 reason = state == 3 ? 2 : 5;
             }
-            disableTorch();
             if (cameraThread != null) {
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.recordStopped, recordingGuid, reason);
                 int send;

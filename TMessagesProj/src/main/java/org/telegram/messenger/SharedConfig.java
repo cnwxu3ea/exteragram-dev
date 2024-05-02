@@ -659,7 +659,7 @@ public class SharedConfig {
             updateStickersOrderOnSend = preferences.getBoolean("updateStickersOrderOnSend", true);
             dayNightWallpaperSwitchHint = preferences.getInt("dayNightWallpaperSwitchHint", 0);
             bigCameraForRound = preferences.getBoolean("bigCameraForRound", false);
-            useCamera2 = preferences.getBoolean("useCamera2", BuildVars.DEBUG_VERSION);
+            useCamera2 = preferences.getBoolean("useCamera2", false);
             useSurfaceInStories = preferences.getBoolean("useSurfaceInStories", Build.VERSION.SDK_INT >= 30);
             payByInvoice = preferences.getBoolean("payByInvoice", false);
             photoViewerBlur = preferences.getBoolean("photoViewerBlur", true);

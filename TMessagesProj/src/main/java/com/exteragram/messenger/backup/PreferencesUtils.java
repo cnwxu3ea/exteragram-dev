@@ -224,6 +224,7 @@ public class PreferencesUtils {
             new BackupItem("record_via_sco"),
             new BackupItem("suggestAnimatedEmoji"),
             new BackupItem("suggestStickers"),
+            new BackupItem("useSystemEmoji"),
             new BackupItem("useThreeLinesLayout")
     };
 
@@ -331,7 +332,7 @@ public class PreferencesUtils {
                 config += UserConfig.selectedAccount;
             }
             JsonObject object = toJsonObject(getPreferences(config).getAll());
-            if (object.size() > 0) {
+            if (!object.isEmpty()) {
                 jsonPrefs.add(config, object);
             }
         }
@@ -518,7 +519,6 @@ public class PreferencesUtils {
                 Utilities.generateRandomString(4) +
                 ".extera";
     }
-
 
     public int getDiff(MessageObject messageObject) {
         return getDiff(
