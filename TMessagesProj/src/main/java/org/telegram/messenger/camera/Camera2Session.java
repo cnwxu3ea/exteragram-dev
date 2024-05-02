@@ -21,6 +21,8 @@ import android.media.ImageReader;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
+import android.util.Range;
 import android.util.Size;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -471,6 +473,11 @@ public class Camera2Session {
             }
 
             captureRequestBuilder.set(CaptureRequest.FLASH_MODE, torchEnabled ? CaptureRequest.FLASH_MODE_TORCH : CaptureRequest.FLASH_MODE_OFF);
+            
+            if (recordingVideo) {
+                captureRequestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, new Range<Integer>(30, 60));
+                captureRequestBuilder.set(CaptureRequest.CONTROL_CAPTURE_INTENT, CaptureRequest.CONTROL_CAPTURE_INTENT_VIDEO_RECORD);
+            }
 
             if (sensorSize != null && Math.abs(currentZoom - 1f) >= 0.01f) {
                 final int centerX = sensorSize.width() / 2;

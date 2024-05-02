@@ -236,7 +236,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                         String innerMessage;
                         if (message.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                             TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) message.messageOwner.media;
-                            innerMessage = String.format("\uD83D\uDCCA \u2068%s\u2069", mediaPoll.poll.question);
+                            innerMessage = String.format("\uD83D\uDCCA \u2068%s\u2069", mediaPoll.poll.question.text);
                         } else if (message.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
                             innerMessage = String.format("\uD83C\uDFAE \u2068%s\u2069", message.messageOwner.media.game.title);
                         } else if (message.type == MessageObject.TYPE_MUSIC) {
@@ -289,7 +289,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
                     } else {
                         if (message.messageOwner.media instanceof TLRPC.TL_messageMediaPoll) {
                             TLRPC.TL_messageMediaPoll mediaPoll = (TLRPC.TL_messageMediaPoll) message.messageOwner.media;
-                            messageString = "\uD83D\uDCCA " + mediaPoll.poll.question;
+                            messageString = "\uD83D\uDCCA " + mediaPoll.poll.question.text;
                         } else if (message.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
                             messageString = "\uD83C\uDFAE " + message.messageOwner.media.game.title;
                         } else if (message.type == MessageObject.TYPE_MUSIC) {

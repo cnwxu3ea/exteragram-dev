@@ -313,6 +313,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             peopleNearbyIcon = R.drawable.msg_nearby;
         }
         UserConfig me = UserConfig.getInstance(UserConfig.selectedAccount);
+        boolean showDivider = false;
+        items.add(new Item(16, LocaleController.getString(R.string.MyProfile), R.drawable.left_status_profile));
         if (me != null && me.isPremium() && ExteraConfig.changeStatus) {
             if (me.getEmojiStatus() != null) {
                 items.add(new Item(15, LocaleController.getString("ChangeEmojiStatus", R.string.ChangeEmojiStatus), R.drawable.msg_status_edit));
@@ -321,7 +323,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             }
         }
         if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled() && ExteraConfig.myStories) {
-            items.add(new Item(16, LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), R.drawable.msg_menu_stories));
+            items.add(new Item(18, LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), R.drawable.msg_menu_stories));
         }
         if (ExteraConfig.archivedChats && ChatUtils.getInstance().hasArchivedChats()) {
             items.add(new Item(14, LocaleController.getString("ArchivedChats", R.string.ArchivedChats), archiveIcon));

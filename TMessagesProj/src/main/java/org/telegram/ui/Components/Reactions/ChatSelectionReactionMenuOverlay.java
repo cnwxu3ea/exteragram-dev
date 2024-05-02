@@ -228,7 +228,7 @@ public class ChatSelectionReactionMenuOverlay extends FrameLayout {
                             reactionsContainerLayout.setVisibility(VISIBLE);
                             if (!messageSet) {
                                 messageSet = true;
-                                reactionsContainerLayout.setMessage(currentPrimaryObject, parentFragment.getCurrentChatInfo());
+                                reactionsContainerLayout.setMessage(currentPrimaryObject, parentFragment.getCurrentChatInfo(), true);
                             }
                         }
                     }
@@ -354,7 +354,7 @@ public class ChatSelectionReactionMenuOverlay extends FrameLayout {
 
                 if (reactionsContainerLayout.isEnabled()) {
                     messageSet = true;
-                    reactionsContainerLayout.setMessage(currentPrimaryObject, parentFragment.getCurrentChatInfo());
+                    reactionsContainerLayout.setMessage(currentPrimaryObject, parentFragment.getCurrentChatInfo(), true);
                     reactionsContainerLayout.startEnterAnimation(false);
                 } else {
                     messageSet = false;
