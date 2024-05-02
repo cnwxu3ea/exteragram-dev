@@ -35,6 +35,7 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.ScaleStateListAnimator;
 
 public class FabShapeCell extends LinearLayout {
 
@@ -134,6 +135,7 @@ public class FabShapeCell extends LinearLayout {
         for (int a = 0; a < 2; a++) {
             boolean square = a == 1;
             fabShape[a] = new FabShape(context, square);
+            ScaleStateListAnimator.apply(fabShape[a], 0.03f, 1.5f);
             addView(fabShape[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0.5f, 8, 0, 8, 0));
             fabShape[a].setOnClickListener(v -> {
                 for (int b = 0; b < 2; b++) {

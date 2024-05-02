@@ -42,6 +42,7 @@ import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.ScaleStateListAnimator;
 import org.telegram.ui.LauncherIconController;
 import org.telegram.ui.PremiumPreviewFragment;
 
@@ -84,6 +85,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
                 if (icon.hidden) {
                     return;
                 }
+                ScaleStateListAnimator.apply(holderView, 0.03f, 1.5f);
                 holderView.bind(icon);
                 holderView.iconView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(ICONS_ROUND_RADIUS), Color.TRANSPARENT, Theme.getColor(Theme.key_listSelector), Color.BLACK));
                 holderView.iconView.setForeground(icon.foreground);

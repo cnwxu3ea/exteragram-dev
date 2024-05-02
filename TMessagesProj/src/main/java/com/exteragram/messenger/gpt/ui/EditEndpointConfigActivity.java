@@ -49,6 +49,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.OutlineTextContainerView;
+import org.telegram.ui.Components.ScaleStateListAnimator;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.util.ArrayList;
@@ -110,11 +111,6 @@ public class EditEndpointConfigActivity extends BaseFragment {
         urlFilters[0] = new InputFilter.LengthFilter(100); // todo: maybe check somehow
         var urlFieldPair = createField(context, LocaleController.getString(R.string.ApiUrl), urlFilters);
         urlField = urlFieldPair.first;
-        urlField.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                updateHelpText();
-            }
-        });
         urlField.setOnEditorActionListener((textView, i, keyEvent) -> {
             updateHelpText();
             if (i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE) {
@@ -131,11 +127,6 @@ public class EditEndpointConfigActivity extends BaseFragment {
         modelFieldFilters[0] = new InputFilter.LengthFilter(32);
         var modelFieldPair = createField(context, LocaleController.getString(R.string.Model), modelFieldFilters);
         modelField = modelFieldPair.first;
-        modelField.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) {
-                updateHelpText();
-            }
-        });
         modelField.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE) {
                 keyField.requestFocus();
@@ -181,16 +172,17 @@ public class EditEndpointConfigActivity extends BaseFragment {
         buttons.setOrientation(LinearLayout.HORIZONTAL);
 
         pasteView = new TextView(context);
+        ScaleStateListAnimator.apply(pasteView, 0.02f, 1.5f);
         pasteView.setGravity(Gravity.CENTER_HORIZONTAL);
         pasteView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
-        pasteView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
+        pasteView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
         spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.msg_copy_filled)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(6)), 1, 2, 0);
         spannableStringBuilder.append(LocaleController.getString(android.R.string.paste));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(3)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
         pasteView.setText(spannableStringBuilder);
-        pasteView.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10));
+        pasteView.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(14), AndroidUtilities.dp(10), AndroidUtilities.dp(10));
         pasteView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         pasteView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         pasteView.setSingleLine(true);
@@ -207,16 +199,17 @@ public class EditEndpointConfigActivity extends BaseFragment {
         buttons.addView(separator, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 0.06f));
 
         clearView = new TextView(context);
+        ScaleStateListAnimator.apply(clearView, 0.02f, 1.5f);
         clearView.setGravity(Gravity.CENTER_HORIZONTAL);
         clearView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
-        clearView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
+        clearView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(8), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
         spannableStringBuilder = new SpannableStringBuilder();
         spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context, R.drawable.msg_delete_filled)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(6)), 1, 2, 0);
         spannableStringBuilder.append(LocaleController.getString("Clear", R.string.Clear));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(3)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
         clearView.setText(spannableStringBuilder);
-        clearView.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10), AndroidUtilities.dp(10));
+        clearView.setPadding(AndroidUtilities.dp(10), AndroidUtilities.dp(14), AndroidUtilities.dp(10), AndroidUtilities.dp(10));
         clearView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         clearView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         clearView.setSingleLine(true);
@@ -226,7 +219,7 @@ public class EditEndpointConfigActivity extends BaseFragment {
         });
         buttons.addView(clearView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1f));
 
-        linearLayout.addView(buttons, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 40, 24, 12, 24, 0));
+        linearLayout.addView(buttons, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 24, 18, 24, 0));
 
         helpTextView = new LinkSpanDrawable.LinksTextView(context);
         helpTextView.setFocusable(true);
@@ -236,14 +229,10 @@ public class EditEndpointConfigActivity extends BaseFragment {
         helpTextView.setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
         helpTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
 
-        linearLayout.addView(helpTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 24, 12, 24, 0));
+        linearLayout.addView(helpTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 24, 14, 24, 0));
 
         urlField.setText(!TextUtils.isEmpty(Config.getUrl()) ? Config.getUrl() : "https://api.openai.com/v1");
-        urlField.setSelection(urlField.length());
-
         modelField.setText(!TextUtils.isEmpty(Config.getModel()) ? Config.getModel() : "gpt-3.5-turbo");
-        modelField.setSelection(modelField.length());
-
         keyField.setText(!TextUtils.isEmpty(Config.getApiKey()) ? Config.getApiKey() : "sk-");
         keyField.setSelection(keyField.length());
 
@@ -270,11 +259,16 @@ public class EditEndpointConfigActivity extends BaseFragment {
         field.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated));
         field.setCursorWidth(1.5f);
         field.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
-        field.setOnFocusChangeListener((v, hasFocus) -> fieldContainer.animateSelection(hasFocus ? 1 : 0));
+        field.setOnFocusChangeListener((v, hasFocus) -> {
+            fieldContainer.animateSelection(hasFocus ? 1 : 0);
+            if (!hasFocus) {
+                updateHelpText();
+            }
+        });
         int padding = AndroidUtilities.dp(16);
-        field.setPadding(padding, padding, padding, padding);
+        field.setPadding(0, padding, 0, padding);
         field.setCursorSize(AndroidUtilities.dp(20));
-        fieldContainer.addView(field, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        fieldContainer.addView(field, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 16, 0, 16, 0));
         fieldContainer.attachEditText(field);
 
         field.setFilters(inputFilters);

@@ -482,13 +482,12 @@ public class Switch extends View {
             } else {
                 colorProgress = progress;
             }
-
             if (Theme.isCurrentThemeMonet() && ExteraConfig.newSwitchStyle && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (Theme.isCurrentThemeDark()) {
-                    color1 = MonetUtils.getColor("n1_800");
-                    color2 = MonetUtils.getColor("a1_800");
+                    color1 = processColor(MonetUtils.getColor("n1_800"));
+                    color2 = processColor(MonetUtils.getColor("a1_800"));
                 } else {
-                    color1 = color2 = Color.WHITE;
+                    color1 = color2 = processColor(Color.WHITE);
                 }
             } else {
                 color1 = processColor(Theme.getColor(thumbColorKey, resourcesProvider));

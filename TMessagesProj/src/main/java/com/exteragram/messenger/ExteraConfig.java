@@ -157,7 +157,8 @@ public class ExteraConfig {
             1773117711,
             5330087923L,
             666154369,
-            139303278
+            139303278,
+            668557709
     };
     public static String targetLang;
     public static int voiceHintShowcases;

@@ -148,12 +148,18 @@ public class IconSetsController {
         solar.put(R.drawable.media_settings, R.drawable.msg_photo_settings_solar);
         solar.put(R.drawable.media_share, R.drawable.msg_share_solar);
         solar.put(R.drawable.menu_devices, R.drawable.msg_devices_solar);
+        solar.put(R.drawable.menu_edit_appearance, R.drawable.menu_edit_appearance_solar);
         solar.put(R.drawable.menu_gift, R.drawable.msg_gift_premium_solar);
+        solar.put(R.drawable.menu_link_create, R.drawable.msg_link2_solar);
+        solar.put(R.drawable.menu_premium_clock, R.drawable.menu_premium_clock_solar);
+        solar.put(R.drawable.menu_premium_clock_add, R.drawable.menu_premium_clock_add_solar);
         solar.put(R.drawable.menu_quality_hd, R.drawable.menu_quality_hd_solar);
         solar.put(R.drawable.menu_quality_sd, R.drawable.menu_quality_sd_solar);
         solar.put(R.drawable.menu_quote_delete, R.drawable.menu_quote_delete_solar);
         solar.put(R.drawable.menu_quote_specific, R.drawable.menu_quote_solar);
         solar.put(R.drawable.menu_select_quote, R.drawable.menu_select_quote_solar);
+        solar.put(R.drawable.menu_shop, R.drawable.menu_shop_solar);
+        solar.put(R.drawable.menu_sticker_add, R.drawable.menu_sticker_add_solar);
         solar.put(R.drawable.menu_tag_delete, R.drawable.menu_tag_delete_solar);
         solar.put(R.drawable.menu_tag_edit, R.drawable.menu_tag_edit_solar);
         solar.put(R.drawable.menu_tag_filter, R.drawable.menu_tag_filter_solar);
@@ -314,6 +320,7 @@ public class IconSetsController {
         solar.put(R.drawable.msg_info, R.drawable.msg_info_solar);
         solar.put(R.drawable.msg_info_filled, R.drawable.msg_info_filled_solar);
         solar.put(R.drawable.msg_input_attach2, R.drawable.input_attach_solar);
+        solar.put(R.drawable.msg_input_gift, R.drawable.msg_gift_premium_solar);
         solar.put(R.drawable.msg_input_send_mini, R.drawable.attach_send_solar);
         solar.put(R.drawable.msg_instant, R.drawable.msg_instant_solar);
         solar.put(R.drawable.msg_instant_link, R.drawable.msg_instant_link_solar);

@@ -3913,7 +3913,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (ChatObject.isBoostSupported(currentChat) && (getUserConfig().isPremium() || ChatObject.isBoosted(chatInfo) || ChatObject.hasAdminRights(currentChat))) {
                 RLottieDrawable drawable = new RLottieDrawable(R.raw.boosts, "" + R.raw.boosts, dp(24), dp(24));
-                headerItem.lazilyAddSubItem(boost_group, drawable, TextCell.applyNewSpan(LocaleController.getString(ChatObject.isChannelAndNotMegaGroup(currentChat) ? R.string.BoostingBoostChannelMenu : R.string.BoostingBoostGroupMenu)));
+                headerItem.lazilyAddSubItem(boost_group, ExteraConfig.useSolarIcons ? ContextCompat.getDrawable(context, R.drawable.boosts_solar) : drawable, TextCell.applyNewSpan(LocaleController.getString(ChatObject.isChannelAndNotMegaGroup(currentChat) ? R.string.BoostingBoostChannelMenu : R.string.BoostingBoostGroupMenu)));
             }
             translateItem = headerItem.lazilyAddSubItem(translate, R.drawable.msg_translate, LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
             updateTranslateItemVisibility();
@@ -6656,7 +6656,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else {
                         String name = UserObject.getFirstName(user, false);
                         Spannable spannable = new SpannableString(name + (!user.bot && ExteraConfig.addCommaAfterMention ? ", " : " "));
-                        spannable.setSpan(new URLSpanUserMention(String.valueOf(user.id), 3), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        spannable.setSpan(new URLSpanUserMention(String.valueOf(user.id), 3), 0, name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         chatActivityEnterView.replaceWithText(start, len, spannable, false);
                     }
                 }
@@ -6788,7 +6788,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (!(searchingForUser && searchContainer.getVisibility() == View.VISIBLE)) {
                     String name = UserObject.getFirstName(user, false);
                     Spannable spannable = new SpannableString(name + (!user.bot && ExteraConfig.addCommaAfterMention ? ", " : " "));
-                    spannable.setSpan(new URLSpanUserMention(String.valueOf(user.id), 3), 0, spannable.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.setSpan(new URLSpanUserMention(String.valueOf(user.id), 3), 0, name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     chatActivityEnterView.replaceWithText(start, len, spannable, false);
                     return true;
                 }
@@ -34267,7 +34267,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     String name = UserObject.getFirstName(user, false);
                     Spannable spannable = new SpannableString(name + (ExteraConfig.addCommaAfterMention ? ", " : " "));
-                    spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     sb.append(spannable);
                 }
                 chatActivityEnterView.setFieldText(sb);

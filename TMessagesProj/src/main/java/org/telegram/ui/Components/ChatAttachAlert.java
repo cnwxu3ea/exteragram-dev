@@ -63,6 +63,7 @@ import android.widget.TextView;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.FloatValueHolder;
@@ -4622,7 +4623,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         attachButton.setTextAndIcon(5, LocaleController.getString("AttachContact", R.string.AttachContact), Theme.chat_attachButtonDrawables[3], Theme.key_chat_attachContactBackground, Theme.key_chat_attachContactText);
                         attachButton.setTag(5);
                     } else if (position == quickRepliesButton) {
-                        attachButton.setTextAndIcon(11, LocaleController.getString(R.string.AttachQuickReplies), getContext().getResources().getDrawable(R.drawable.ic_ab_reply).mutate(), Theme.key_chat_attachContactBackground, Theme.key_chat_attachContactText);
+                        Drawable arrow = ContextCompat.getDrawable(getContext(), R.drawable.ic_ab_reply);
+                        arrow.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_attachIcon), PorterDuff.Mode.MULTIPLY));
+                        attachButton.setTextAndIcon(11, LocaleController.getString(R.string.AttachQuickReplies), arrow, Theme.key_chat_attachContactBackground, Theme.key_chat_attachContactText);
                         attachButton.setTag(11);
                     }
                     break;

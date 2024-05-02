@@ -36,6 +36,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.ScaleStateListAnimator;
 
 public class StickerShapeCell extends LinearLayout {
 
@@ -139,6 +140,7 @@ public class StickerShapeCell extends LinearLayout {
             boolean rounded = a == 1;
             boolean roundedAsMsg = a == 2;
             stickerShape[a] = new StickerShape(context, rounded, roundedAsMsg);
+            ScaleStateListAnimator.apply(stickerShape[a], 0.03f, 1.5f);
             addView(stickerShape[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0.5f, 8, 0, 8, 0));
             stickerShape[a].setOnClickListener(v -> {
                 for (int b = 0; b < 3; b++) {

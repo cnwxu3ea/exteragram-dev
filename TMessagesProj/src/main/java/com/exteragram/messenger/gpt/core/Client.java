@@ -211,7 +211,7 @@ public class Client {
 
                     FileLog.e("GPT ERROR: " + errorMessage + " " + errorCode);
 
-                    if (fragment != null && urlOverride == null && modelOverride == null && keyOverride == null) {
+                    if (fragment != null) {
                         AndroidUtilities.runOnUIThread(() -> showErrorBulletin(errorCode, errorMessage.toLowerCase(Locale.ROOT)));
                     }
                 }
