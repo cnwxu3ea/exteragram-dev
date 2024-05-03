@@ -152,7 +152,7 @@ public class PreferencesUtils {
             new BackupItem("inAppVibration"),
             new BackupItem("membersShortcut"),
             new BackupItem("menuBots"),
-            new BackupItem("myStories"),
+            new BackupItem("myProfile"),
             new BackupItem("newChannel"),
             new BackupItem("newGroup"),
             new BackupItem("newSecretChat"),

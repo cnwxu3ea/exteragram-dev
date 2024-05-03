@@ -630,6 +630,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             int end = Math.min(getText().length(), getSelectionEnd());
             try {
                 AndroidUtilities.addToClipboard(getText().subSequence(start, end));
+                setSelection(end);
                 return true;
             } catch (Exception e) {
 

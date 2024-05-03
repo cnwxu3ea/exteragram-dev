@@ -69,7 +69,7 @@ public class ExteraConfig {
 
     public static int eventType;
     public static boolean immersiveDrawerAnimation;
-    public static boolean changeStatus, myStories, menuBots, newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr;
+    public static boolean changeStatus, myProfile, menuBots, newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr;
 
     // General
     public static boolean disableNumberRounding;
@@ -236,7 +236,7 @@ public class ExteraConfig {
             immersiveDrawerAnimation = preferences.getBoolean("immersiveDrawerAnimation", false);
 
             changeStatus = preferences.getBoolean("changeStatus", true);
-            myStories = preferences.getBoolean("myStories", true);
+            myProfile = preferences.getBoolean("myProfile", true);
             menuBots = preferences.getBoolean("menuBots", true);
             newGroup = preferences.getBoolean("newGroup", true);
             newSecretChat = preferences.getBoolean("newSecretChat", false);
@@ -385,7 +385,7 @@ public class ExteraConfig {
             case 8 -> editor.putBoolean("savedMessages", savedMessages ^= true).apply();
             case 9 -> editor.putBoolean("scanQr", scanQr ^= true).apply();
             case 10 -> editor.putBoolean("changeStatus", changeStatus ^= true).apply();
-            case 11 -> editor.putBoolean("myStories", myStories ^= true).apply();
+            case 11 -> editor.putBoolean("myProfile", myProfile ^= true).apply();
             case 12 -> editor.putBoolean("menuBots", menuBots ^= true).apply();
         }
         NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);

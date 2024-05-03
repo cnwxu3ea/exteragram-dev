@@ -144,7 +144,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
     private int drawerHeaderRow;
     private int statusRow;
-    private int myStoriesRow;
+    private int myProfileRow;
     private int menuBotsRow;
     private int newGroupRow;
     private int newSecretChatRow;
@@ -220,8 +220,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         drawerOptionsDividerRow = newRow();
 
         drawerHeaderRow = newRow();
+        myProfileRow = newRow();
         statusRow = getUserConfig().isPremium() ? newRow() : -1;
-        myStoriesRow = getMessagesController().storiesEnabled() ? newRow() : -1;
         archivedChatsRow = ChatUtils.getInstance().hasArchivedChats() ? newRow() : -1;
         menuBotsRow = ChatUtils.getInstance().hasBotsInSideMenu() ? newRow() : -1;
         newGroupRow = newRow();
@@ -335,9 +335,9 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         } else if (position == statusRow) {
             ExteraConfig.toggleDrawerElements(10);
             ((TextCell) view).setChecked(ExteraConfig.changeStatus);
-        } else if (position == myStoriesRow) {
+        } else if (position == myProfileRow) {
             ExteraConfig.toggleDrawerElements(11);
-            ((TextCell) view).setChecked(ExteraConfig.myStories);
+            ((TextCell) view).setChecked(ExteraConfig.myProfile);
         } else if (position == menuBotsRow) {
             ExteraConfig.toggleDrawerElements(12);
             ((TextCell) view).setChecked(ExteraConfig.menuBots);
@@ -579,8 +579,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     int[] icons = AppUtils.getDrawerIconPack();
                     if (position == statusRow) {
                         textCell.setTextAndCheckAndIcon(LocaleController.getString("ChangeEmojiStatus", R.string.ChangeEmojiStatus), ExteraConfig.changeStatus, R.drawable.msg_status_set, true);
-                    } else if (position == myStoriesRow) {
-                        textCell.setTextAndCheckAndIcon(LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), ExteraConfig.myStories, R.drawable.msg_menu_stories, true);
+                    } else if (position == myProfileRow) {
+                        textCell.setTextAndCheckAndIcon(LocaleController.getString("MyProfile", R.string.MyProfile), ExteraConfig.myProfile, R.drawable.left_status_profile, true);
                     } else if (position == menuBotsRow) {
                         textCell.setTextAndCheckAndIcon(LocaleController.getString("FilterBots", R.string.FilterBots), ExteraConfig.menuBots, R.drawable.msg_bot, true);
                     } else if (position == newGroupRow) {
@@ -673,7 +673,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         public int getItemViewType(int position) {
             if (position == drawerDividerRow || position == drawerOptionsDividerRow) {
                 return 1;
-            } else if (position == statusRow || position == myStoriesRow || position == menuBotsRow || position == archivedChatsRow || position >= newGroupRow && position <= scanQrRow) {
+            } else if (position == statusRow || position == myProfileRow || position == menuBotsRow || position == archivedChatsRow || position >= newGroupRow && position <= scanQrRow) {
                 return 2;
             } else if (position == appearanceHeaderRow || position == blurOptionsHeaderRow || position == drawerHeaderRow || position == drawerOptionsHeaderRow || position == solarIconsHeaderRow || position == foldersHeaderRow || position == chatListHeaderRow) {
                 return 3;

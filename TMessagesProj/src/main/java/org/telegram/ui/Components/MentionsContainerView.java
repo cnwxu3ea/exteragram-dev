@@ -633,7 +633,7 @@ public class MentionsContainerView extends BlurredFrameLayout implements Notific
                 } else {
                     String name = UserObject.getFirstName(user, false);
                     Spannable spannable = new SpannableString(name + (ExteraConfig.addCommaAfterMention ? ", " : " "));
-                    spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, name.length() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     delegate.replaceText(start, len, spannable, false);
                 }
             } else if (object instanceof String) {

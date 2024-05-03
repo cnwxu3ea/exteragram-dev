@@ -74,8 +74,8 @@ public class PollEditTextCell extends FrameLayout implements SuggestEmojiView.An
         this(context, false, TYPE_DEFAULT, onDelete, null);
     }
 
-    public PollEditTextCell(Context context, boolean caption, OnClickListener onDelete) {
-        this(context, caption, TYPE_DEFAULT, onDelete, null);
+    public PollEditTextCell(Context context, boolean caption, int type, OnClickListener onDelete) {
+        this(context, caption, type, onDelete, null);
     }
 
     public PollEditTextCell(Context context, boolean caption, OnClickListener onDelete, OnClickListener onChangeIcon) {

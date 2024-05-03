@@ -91,7 +91,7 @@ public class UpdaterBottomSheet extends BottomSheet {
         header.addView(timeView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, Gravity.LEFT, available ? 75 : 0, 35, 0, 0));
 
         TextCell version = new TextCell(context);
-        version.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 100, 0));
+        version.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), Theme.RIPPLE_MASK_ALL, 0));
         if (available) {
             version.setTextAndValueAndIcon(LocaleController.getString("Version", R.string.Version), update.version.replaceAll("v|-beta|-force", ""), R.drawable.msg_info, true);
         } else {
@@ -110,13 +110,13 @@ public class UpdaterBottomSheet extends BottomSheet {
 
         if (available) {
             TextCell size = new TextCell(context);
-            size.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 100, 0));
+            size.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), Theme.RIPPLE_MASK_ALL, 0));
             size.setTextAndValueAndIcon(LocaleController.getString("UpdateSize", R.string.UpdateSize), update.size, R.drawable.msg_sendfile, true);
             size.setOnClickListener(v -> copyText(size.getTextView().getText() + ": " + size.getValueTextView().getText()));
             linearLayout.addView(size);
 
             TextCell changelog = new TextCell(context);
-            changelog.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 100, 0));
+            changelog.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), Theme.RIPPLE_MASK_ALL, 0));
             changelog.setTextAndIcon(LocaleController.getString("Changelog", R.string.Changelog), R.drawable.msg_log, false);
             changelog.setOnClickListener(v -> copyText(changelog.getTextView().getText() + "\n"));
             linearLayout.addView(changelog);
@@ -162,14 +162,14 @@ public class UpdaterBottomSheet extends BottomSheet {
         } else {
             final String btype = BuildVars.isBetaApp() ? LocaleController.getString("BTBeta", R.string.BTBeta) : LocaleController.getString("BTRelease", R.string.BTRelease);
             TextCell buildType = new TextCell(context);
-            buildType.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 100, 0));
+            buildType.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), Theme.RIPPLE_MASK_ALL, 0));
             buildType.setTextAndValueAndIcon(LocaleController.getString("BuildType", R.string.BuildType), btype, R.drawable.msg_customize, true);
             buildType.setOnClickListener(v -> copyText(buildType.getTextView().getText() + ": " + buildType.getValueTextView().getText()));
             linearLayout.addView(buildType);
 
             TextCell checkOnLaunch = new TextCell(context);
             checkOnLaunch.setEnabled(true);
-            checkOnLaunch.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 100, 0));
+            checkOnLaunch.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), Theme.RIPPLE_MASK_ALL, 0));
             checkOnLaunch.setTextAndCheckAndIcon(LocaleController.getString("CheckOnLaunch", R.string.CheckOnLaunch), ExteraConfig.checkUpdatesOnLaunch, R.drawable.msg_recent, true);
             checkOnLaunch.setOnClickListener(v -> {
                 ExteraConfig.editor.putBoolean("checkUpdatesOnLaunch", ExteraConfig.checkUpdatesOnLaunch ^= true).apply();
@@ -178,7 +178,7 @@ public class UpdaterBottomSheet extends BottomSheet {
             linearLayout.addView(checkOnLaunch);
 
             TextCell clearUpdates = new TextCell(context);
-            clearUpdates.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 100, 0));
+            clearUpdates.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), Theme.RIPPLE_MASK_ALL, 0));
             clearUpdates.setTextAndIcon(LocaleController.getString("ClearUpdatesCache", R.string.ClearUpdatesCache), R.drawable.msg_clear, false);
             clearUpdates.setOnClickListener(v -> {
                 if (UpdaterUtils.getOtaDirSize().replaceAll("\\D+", "").equals("0")) {

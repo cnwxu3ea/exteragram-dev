@@ -1369,7 +1369,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         for (int a = 0; a < 2; a++) {
             undoView[a] = new UndoView(context);
             undoView[a].setAdditionalTranslationY(dp(10));
-            undoView[a].setTranslationZ(dp(5))
+            undoView[a].setTranslationZ(dp(5));
             mapViewClip.addView(undoView[a], LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
         }
 

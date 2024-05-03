@@ -422,9 +422,10 @@ public class ChatUtils {
             if (messageTextToTranslate == null && selectedObject.isPoll()) {
                 try {
                     TLRPC.Poll poll = ((TLRPC.TL_messageMediaPoll) selectedObject.messageOwner.media).poll;
-                    StringBuilder pollText = new StringBuilder(poll.question).append("\n");
-                    for (TLRPC.TL_pollAnswer answer : poll.answers)
-                        pollText.append("\n\uD83D\uDD18 ").append(answer.text);
+                    StringBuilder pollText;
+                    pollText = new StringBuilder(poll.question.text).append("\n");
+                    for (TLRPC.PollAnswer answer : poll.answers)
+                        pollText.append("\n\uD83D\uDD18 ").append(answer.text == null ? "" : answer.text.text);
                     messageTextToTranslate = pollText.toString();
                 } catch (Exception ignored) {
                 }

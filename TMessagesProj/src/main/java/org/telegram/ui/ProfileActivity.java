@@ -6419,9 +6419,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             popupWindow.showAtLocation(getFragmentView(), 0, (int) px, (int) py);
             popupWindow.dimBehind();
             return true;
-        } else if (position == bioRow) {
-            if (userInfo != null) {
-                presentFragment(new ChangeBioActivity());
+        } else if (position == channelInfoRow || position == userInfoRow || position == locationRow || position == bioRow) {
+            if (position == bioRow && (userInfo == null || TextUtils.isEmpty(userInfo.about))) {
+                return false;
             }
             if (editRow(view, position)) return true;
             if (view instanceof AboutLinkCell && ((AboutLinkCell) view).onClick()) {
@@ -13474,7 +13474,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             presentFragment(fragment);
         } else {
             String domain;
-            if (BuildVars.isHuaweiStoreApp()) {
+            if (false) {
                 domain = "mapapp://navigation";
             } else {
                 domain = "http://maps.google.com/maps";
@@ -13754,8 +13754,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private void updateEditColorIcon() {
         if (getContext() == null || editColorItem == null) return;
         if (getUserConfig().isPremium()) {
+            otherItem.showSubItem(edit_color);
             editColorItem.setIcon(R.drawable.menu_profile_colors);
         } else {
+            otherItem.hideSubItem(edit_color);
             Drawable icon = ContextCompat.getDrawable(getContext(), R.drawable.menu_profile_colors_locked);
             icon.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarDefaultSubmenuItemIcon), PorterDuff.Mode.SRC_IN));
             Drawable lockIcon = ContextCompat.getDrawable(getContext(), R.drawable.msg_gallery_locked2);

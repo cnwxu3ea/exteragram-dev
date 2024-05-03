@@ -664,13 +664,13 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 15) {
                     showSelectStatusDialog();
-                } else if (id == 16) {
+                } else if (id == 18) {
                     drawerLayoutContainer.closeDrawer(true);
                     Bundle args = new Bundle();
                     args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
                     args.putBoolean("my_profile", true);
                     presentFragment(new ProfileActivity(args, null));
-                } else if (id == 17) {
+                } else if (id == 100) {
                     drawerLayoutContainer.closeDrawer(true);
                     Bundle args = new Bundle();
                     args.putLong("dialog_id", UserConfig.getInstance(currentAccount).getClientUserId());
