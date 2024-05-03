@@ -578,7 +578,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             int count = linearLayout.getChildCount();
             for (int a = 0; a < count; a++) {
                 View child = linearLayout.getChildAt(a);
-                child.setBackground(Theme.createRadSelectorDrawable(color, a == 0 ? 6 : 0, a == count - 1 ? 6 : 0));
+                child.setBackground(Theme.createRadSelectorDrawable(color, a == 0 ? 10 : 0, a == count - 1 ? 10 : 0));
             }
         }
 

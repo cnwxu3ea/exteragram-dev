@@ -16,7 +16,7 @@ import android.util.SparseIntArray;
 import org.telegram.messenger.R;
 
 public class IconSetsController {
-    public static final SparseIntArray solar = new SparseIntArray();
+    public static final SparseIntArray solar = new SparseIntArray(), def = new SparseIntArray();
 
     static {
 
@@ -550,5 +550,10 @@ public class IconSetsController {
         solar.put(R.raw.photo_spoiler, R.raw.photo_spoiler_solar);
         solar.put(R.raw.msg_stories_saved, R.raw.msg_stories_saved_solar);
         solar.put(R.raw.msg_stories_archive, R.raw.msg_stories_archive_solar);
+
+        solar.put(R.drawable.popup_fixed_alert, R.drawable.popup_fixed_alert3);
+        solar.put(R.drawable.popup_fixed_alert2, R.drawable.popup_fixed_alert3);
+        def.put(R.drawable.popup_fixed_alert, R.drawable.popup_fixed_alert3);
+        def.put(R.drawable.popup_fixed_alert2, R.drawable.popup_fixed_alert3);
     }
 }

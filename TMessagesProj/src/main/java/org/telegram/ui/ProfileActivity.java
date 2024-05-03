@@ -4698,7 +4698,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 canvas.save();
                                 path.rewind();
                                 AndroidUtilities.rectTmp.set(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
-                                path.addRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Path.Direction.CW);
+                                path.addRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(10), AndroidUtilities.dp(10), Path.Direction.CW);
                                 canvas.clipPath(path);
                                 boolean draw = super.drawChild(canvas, child, drawingTime);
                                 canvas.restore();
@@ -6247,7 +6247,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     canvas.save();
                     path.rewind();
                     AndroidUtilities.rectTmp.set(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
-                    path.addRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Path.Direction.CW);
+                    path.addRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(10), AndroidUtilities.dp(10), Path.Direction.CW);
                     canvas.clipPath(path);
                     boolean draw = super.drawChild(canvas, child, drawingTime);
                     canvas.restore();
@@ -6461,7 +6461,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         canvas.save();
                         path.rewind();
                         AndroidUtilities.rectTmp.set(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
-                        path.addRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Path.Direction.CW);
+                        path.addRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(10), AndroidUtilities.dp(10), Path.Direction.CW);
                         canvas.clipPath(path);
                         boolean draw = super.drawChild(canvas, child, drawingTime);
                         canvas.restore();
@@ -6567,7 +6567,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     canvas.save();
                     path.rewind();
                     AndroidUtilities.rectTmp.set(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
-                    path.addRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Path.Direction.CW);
+                    path.addRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(10), AndroidUtilities.dp(10), Path.Direction.CW);
                     canvas.clipPath(path);
                     boolean draw = super.drawChild(canvas, child, drawingTime);
                     canvas.restore();

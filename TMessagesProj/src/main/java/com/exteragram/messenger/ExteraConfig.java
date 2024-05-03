@@ -20,7 +20,7 @@ import androidx.annotation.NonNull;
 
 import com.exteragram.messenger.backup.PreferencesUtils;
 import com.exteragram.messenger.icons.BaseIconSet;
-import com.exteragram.messenger.icons.EmptyIconSet;
+import com.exteragram.messenger.icons.DefaultIconSet;
 import com.exteragram.messenger.icons.SolarIconSet;
 import com.exteragram.messenger.utils.TranslatorUtils;
 
@@ -405,7 +405,7 @@ public class ExteraConfig {
     }
 
     public static BaseIconSet getIconPack() {
-        return useSolarIcons ? new SolarIconSet() : new EmptyIconSet();
+        return useSolarIcons ? new SolarIconSet() : new DefaultIconSet();
     }
 
     public static int getPhotosQuality() {

@@ -11,8 +11,8 @@
 
 package com.exteragram.messenger.icons;
 
-public class EmptyIconSet extends BaseIconSet {
-    public EmptyIconSet() {
-        iconPack.clear();
+public class DefaultIconSet extends BaseIconSet {
+    public DefaultIconSet() {
+        iconPack = IconSetsController.def;
     }
 }

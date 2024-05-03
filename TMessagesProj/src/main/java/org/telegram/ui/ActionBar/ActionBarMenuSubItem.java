@@ -34,7 +34,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
     private int iconColor;
     private int selectorColor;
 
-    int selectorRad = 6;
+    int selectorRad = 10;
     boolean top;
     boolean bottom;
 
