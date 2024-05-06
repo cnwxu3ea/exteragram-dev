@@ -182,8 +182,6 @@
     <string name="ResponseStreaming">持續回應</string>
     <string name="ResponseStreamingInfo">使後續的回應能夠更快、更順暢。</string>
     <string name="ShowResponseOnly">只顯示回應</string>
-    <string name="Use16kModel">使用 16k 模型</string>
-    <string name="Use16kModelInfo">16k 模型能支援到最多 16,384 個 token，相對於一般使用的模型最多只支援到 4,096 個。</string>
     <string name="TapToAddApiKey">輕觸此處新增 API 密鑰來使用 ChatGPT及相關功能。</string>
     <string name="Generate">生成</string>
     <string name="ClearConversationHistoryInfo">您確定要刪除**所有的** ChatGPT 對話紀錄嗎？</string>

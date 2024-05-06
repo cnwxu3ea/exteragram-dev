@@ -202,8 +202,6 @@
     <string name="ResponseStreaming">Transmissão de resposta</string>
     <string name="ResponseStreamingInfo">Garante uma exibição mais suave e rápida das respostas.</string>
     <string name="ShowResponseOnly">Mostrar apenas a resposta</string>
-    <string name="Use16kModel">Usar modelo 16k</string>
-    <string name="Use16kModelInfo">O modelo 16k é um modelo de linguagem com um limite máximo de tokens de 16.384. Por padrão, um modelo com tokens de 4.096 é usado.</string>
     <string name="TapToAddApiKey">Toque para adicionar uma chave de API para começar com as funcionalidades do ChatGPT.</string>
     <string name="Generate">Gerar</string>
     <string name="ClearConversationHistoryInfo">Você tem certeza que deseja limpar **todo** o histórico de conversas do ChatGPT?</string>

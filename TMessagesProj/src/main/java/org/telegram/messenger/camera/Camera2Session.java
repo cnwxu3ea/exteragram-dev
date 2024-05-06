@@ -29,6 +29,8 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -82,6 +84,11 @@ public class Camera2Session {
         final Context context = ApplicationLoader.applicationContext;
         final CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
 
+        if (ExteraConfig.cameraAspectRatio != 0) {
+            viewWidth = ExteraConfig.getSizeForRatio().first;
+            viewHeight = ExteraConfig.getSizeForRatio().second;
+        }
+
         float bestAspectRatio = 0;
         Size bestSize = null;
         String cameraId = null;
@@ -94,7 +101,12 @@ public class Camera2Session {
                 }
                 StreamConfigurationMap confMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                 Size pixelSize = characteristics.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE);
-                float cameraAspectRatio = pixelSize == null ? 0 : (float) pixelSize.getWidth() / pixelSize.getHeight();
+                float cameraAspectRatio;
+                if (ExteraConfig.cameraAspectRatio != 0) {
+                    cameraAspectRatio = (float) ExteraConfig.getCameraAspectRatio().mWidth / ExteraConfig.getCameraAspectRatio().mHeight;
+                } else {
+                    cameraAspectRatio = pixelSize == null ? 0 : (float) pixelSize.getWidth() / pixelSize.getHeight();
+                }
                 if ((viewWidth / (float) viewHeight >= 1f) != (cameraAspectRatio >= 1f)) {
                     cameraAspectRatio = 1f / cameraAspectRatio;
                 }

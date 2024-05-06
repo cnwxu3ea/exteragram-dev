@@ -182,8 +182,6 @@
     <string name="ResponseStreaming">Потокова передача відповідей</string>
     <string name="ResponseStreamingInfo">Забезпечує більш плавне та швидке зображення відповідей.</string>
     <string name="ShowResponseOnly">Показати лише відповідь</string>
-    <string name="Use16kModel">Використовувати 16k модель</string>
-    <string name="Use16kModelInfo">Модель 16k - це мовна модель з максимальним обмеженням кількості 16,384 токена. За замовчуванням використовується модель з 4,096 токенами.</string>
     <string name="TapToAddApiKey">Натисніть щоб додати ключ API, щоб почати роботу з функціями ChatGPT.</string>
     <string name="Generate">Згенерувати</string>
     <string name="ClearConversationHistoryInfo">Ви впевнені, що хочете очистити **всю** історію чатів ChatGPT?</string>

@@ -182,8 +182,6 @@
     <string name="ResponseStreaming">Патокавая перадача адказу</string>
     <string name="ResponseStreamingInfo">Забяспечвае больш плыўнае і хуткае адлюстраванне адказаў.</string>
     <string name="ShowResponseOnly">Паказваць толькі адказы</string>
-    <string name="Use16kModel">Выкарыстоўвайце мадэль 16K</string>
-    <string name="Use16kModelInfo">Мадэль 16K-гэта моўная мадэль з максімальным абмежаваннем у 16 384 токена. Па змаўчанні выкарыстоўваецца мадэль з 4096 токенаў.</string>
     <string name="TapToAddApiKey">Націсніце, каб дадаць ключ API, каб пачаць працу з функцыямі ChatGPT.</string>
     <string name="Generate">Генерыраваць</string>
     <string name="ClearConversationHistoryInfo">Вы ўпэўненыя, што хочаце ачысціць * * усю * * гісторыю размоў у чаце?</string>

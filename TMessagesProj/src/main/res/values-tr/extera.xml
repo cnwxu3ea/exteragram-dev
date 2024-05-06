@@ -182,8 +182,6 @@
     <string name="ResponseStreaming">Yanıt Akışı</string>
     <string name="ResponseStreamingInfo">Yanıtların daha düzgün ve hızlı görüntülenmesini sağlar.</string>
     <string name="ShowResponseOnly">Yalnızca Yanıtı Göster</string>
-    <string name="Use16kModel">16k Modelini Kullanın</string>
-    <string name="Use16kModelInfo">16k modeli, maksimum 16,384 token sınırına sahip bir dil modelidir. Varsayılan olarak 4,096 tokena sahip bir model kullanılır.</string>
     <string name="TapToAddApiKey">ChatGPT özelliklerini kullanmaya başlamak için bir API Anahtarı eklemek üzere dokunun.</string>
     <string name="Generate">Oluştur</string>
     <string name="ClearConversationHistoryInfo">ChatGPT konuşma geçmişinin **tümünü** temizlemek istediğinizden emin misiniz?</string>

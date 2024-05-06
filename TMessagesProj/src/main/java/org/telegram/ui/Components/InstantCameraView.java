@@ -70,6 +70,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.utils.SystemUtils;
 import com.google.android.exoplayer2.ExoPlayer;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -183,7 +184,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private Size aspectRatio = SharedConfig.roundCamera16to9 ? new Size(16, 9) : new Size(4, 3);
     private TextureView textureView;
     private BackupImageView textureOverlayView;
-    private final boolean useCamera2 = SharedConfig.isUsingCamera2(currentAccount);
+    private final boolean useCamera2 = ExteraConfig.useCamera2;
     private CameraSession cameraSession;
     private boolean bothCameras;
     private Camera2Session[] camera2Sessions = new Camera2Session[2];
@@ -738,7 +739,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (bothCameras) {
                 for (int a = 0; a < 2; ++a) {
                     if (camera2Sessions[a] == null) {
-                        camera2Sessions[a] = Camera2Session.create(a == 0, MessagesController.getInstance(UserConfig.selectedAccount).roundVideoSize, MessagesController.getInstance(UserConfig.selectedAccount).roundVideoSize);
+                        camera2Sessions[a] = Camera2Session.create(a == 0, SystemUtils.getCameraResolution(), SystemUtils.getCameraResolution());
                         if (camera2Sessions[a] != null) {
                             camera2Sessions[a].setRecordingVideo(true);
                             previewSize[a] = new Size(camera2Sessions[a].getPreviewWidth(), camera2Sessions[a].getPreviewHeight());
@@ -754,7 +755,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
                 if (camera2SessionCurrent == null) return;
             } else {
-                camera2SessionCurrent = camera2Sessions[isFrontface ? 0 : 1] = Camera2Session.create(isFrontface, MessagesController.getInstance(UserConfig.selectedAccount).roundVideoSize, MessagesController.getInstance(UserConfig.selectedAccount).roundVideoSize);
+                camera2SessionCurrent = camera2Sessions[isFrontface ? 0 : 1] = Camera2Session.create(isFrontface, SystemUtils.getCameraResolution(), SystemUtils.getCameraResolution());
                 if (camera2SessionCurrent == null) return;
                 camera2SessionCurrent.setRecordingVideo(true);
                 previewSize[0] = new Size(camera2SessionCurrent.getPreviewWidth(), camera2SessionCurrent.getPreviewHeight());
@@ -1110,7 +1111,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     camera2SessionCurrent = null;
                     camera2Sessions[isFrontface ? 1 : 0] = null;
                 }
-                camera2SessionCurrent = camera2Sessions[isFrontface ? 0 : 1] = Camera2Session.create(isFrontface, MessagesController.getInstance(UserConfig.selectedAccount).roundVideoSize, MessagesController.getInstance(UserConfig.selectedAccount).roundVideoSize);
+                camera2SessionCurrent = camera2Sessions[isFrontface ? 0 : 1] = Camera2Session.create(isFrontface, SystemUtils.getCameraResolution(), SystemUtils.getCameraResolution());
                 if (camera2SessionCurrent == null) return;
                 camera2SessionCurrent.setRecordingVideo(true);
                 previewSize[0] = new Size(camera2SessionCurrent.getPreviewWidth(), camera2SessionCurrent.getPreviewHeight());
@@ -1160,8 +1161,15 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         ArrayList<Size> previewSizes = selectedCamera.getPreviewSizes();
         ArrayList<Size> pictureSizes = selectedCamera.getPictureSizes();
-        previewSize[0] = chooseOptimalSize(previewSizes);
-        pictureSize = chooseOptimalSize(pictureSizes);
+
+        if (ExteraConfig.cameraAspectRatio != 0) {
+            previewSize[0] = CameraController.chooseOptimalSize(previewSizes, ExteraConfig.getSizeForRatio().first, ExteraConfig.getSizeForRatio().second, ExteraConfig.getCameraAspectRatio(), false);
+            pictureSize = CameraController.chooseOptimalSize(pictureSizes, ExteraConfig.getSizeForRatio().first, ExteraConfig.getSizeForRatio().second, ExteraConfig.getCameraAspectRatio(), false);
+        } else {
+            previewSize[0] = chooseOptimalSize(previewSizes);
+            pictureSize = chooseOptimalSize(pictureSizes);
+        }
+
         if (previewSize[0].mWidth != pictureSize.mWidth) {
             boolean found = false;
             for (int a = previewSizes.size() - 1; a >= 0; a--) {
@@ -2260,7 +2268,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
 
             started = true;
-            int resolution = MessagesController.getInstance(currentAccount).roundVideoSize;
+            int resolution = SystemUtils.getCameraResolution();
             int bitrate = MessagesController.getInstance(currentAccount).roundVideoBitrate * 1024;
             AndroidUtilities.runOnUIThread(() -> {
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.stopAllHeavyOperations, 512);
@@ -3493,7 +3501,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     private String createFragmentShader(Size previewSize) {
-        if (SharedConfig.deviceIsLow() || !allowBigSizeCamera() || previewSize != null && Math.max(previewSize.getHeight(), previewSize.getWidth()) * 0.7f < MessagesController.getInstance(currentAccount).roundVideoSize) {
+        if (SharedConfig.deviceIsLow() || !allowBigSizeCamera() || previewSize != null && Math.max(previewSize.getHeight(), previewSize.getWidth()) * 0.7f < SystemUtils.getCameraResolution()) {
             return "#extension GL_OES_EGL_image_external : require\n" +
                     "precision highp float;\n" +
                     "varying vec2 vTextureCoord;\n" +

@@ -182,8 +182,6 @@
     <string name="ResponseStreaming">回应同步</string>
     <string name="ResponseStreamingInfo">确保回应更加平滑且快速地显示。</string>
     <string name="ShowResponseOnly">仅显示回应</string>
-    <string name="Use16kModel">使用 16k 模型</string>
-    <string name="Use16kModelInfo">16k 模型是一个拥有 16384 条 token 上限的语言模型。默认情况下使用的则是 4096 条 token 上限的模型。</string>
     <string name="TapToAddApiKey">点击添加一个 API 密钥来开始使用 ChatGPT 功能。</string>
     <string name="Generate">生成</string>
     <string name="ClearConversationHistoryInfo">您确定要清除 **所有的** ChatGPT 对话历史吗？</string>

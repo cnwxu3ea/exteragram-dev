@@ -2035,6 +2035,7 @@ public class FilterCreateActivity extends BaseFragment {
 
         private boolean outline;
         private int color;
+        private String text = "NEW";
 
         public NewSpan(boolean outline) {
             this.outline = outline;
@@ -2046,9 +2047,7 @@ public class FilterCreateActivity extends BaseFragment {
                 textPaint.setTextSize(dp(10));
                 textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
                 textPaint.setStrokeWidth(dpf2(0.2f));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    textPaint.setLetterSpacing(.03f);
-                }
+                textPaint.setLetterSpacing(.03f);
             } else {
                 bgPaint.setStyle(Paint.Style.FILL);
                 textPaint.setTextSize(dp(12));
@@ -2066,9 +2065,13 @@ public class FilterCreateActivity extends BaseFragment {
             this.color = color;
         }
 
+        public void setText(String text) {
+            this.text = text;
+        }
+
         public StaticLayout makeLayout() {
             if (layout == null) {
-                layout = new StaticLayout("NEW"/*LocaleController.getString("New", R.string.New)*/, textPaint, AndroidUtilities.displaySize.x, Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
+                layout = new StaticLayout(text/*LocaleController.getString("New", R.string.New)*/, textPaint, AndroidUtilities.displaySize.x, Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
                 width = layout.getLineWidth(0);
                 height = layout.getHeight();
             }

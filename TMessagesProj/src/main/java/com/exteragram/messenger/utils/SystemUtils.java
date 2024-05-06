@@ -29,6 +29,9 @@ import androidx.core.content.FileProvider;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.BasePermissionsActivity;
 
 import java.io.File;
@@ -193,4 +196,10 @@ public class SystemUtils {
         }
     }
 
+    public static int getCameraResolution() {
+        if (SharedConfig.deviceIsLow()) {
+            return MessagesController.getInstance(UserConfig.selectedAccount).roundVideoSize;
+        }
+        return 630;
+    }
 }

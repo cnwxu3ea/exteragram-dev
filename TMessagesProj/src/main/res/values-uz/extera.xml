@@ -183,8 +183,6 @@
     <string name="ResponseStreaming">Response Streaming</string>
     <string name="ResponseStreamingInfo">Ensures smoother and faster display of responses.</string>
     <string name="ShowResponseOnly">Show Response only</string>
-    <string name="Use16kModel">Use 16k Model</string>
-    <string name="Use16kModelInfo">The 16k model is a language model with a maximum limit of 16,384 tokens. By default, a model with 4,096 tokens is used.</string>
     <string name="TapToAddApiKey">Tap to add an API Key to get started with ChatGPT features.</string>
     <string name="Generate">Generate</string>
     <string name="ClearConversationHistoryInfo">Are you sure you want to clear **all** ChatGPT conversation history?</string>

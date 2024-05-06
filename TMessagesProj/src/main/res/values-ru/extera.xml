@@ -152,6 +152,9 @@
     <string name="HideCameraTile">Скрыть плитку камеры в галерее</string>
     <string name="HideCameraTileInfo">Плитка камеры будет заменена плавающей кнопкой. При нажатии на кнопку запустится камера Telegram, при удержании - системная камера.</string>
 
+    <string name="UseCamera2">Использовать Camera2 API</string>
+    <string name="DualCamera">Двойная камера</string>
+    <string name="CameraAspectRatio">Соотношение сторон</string>
     <string name="StaticZoom">Статичный зум</string>
     <string name="StaticZoomInfo">Зум при записи видеосообщений не будет сбрасываться, если вы отпустите пальцы.</string>
     <string name="VideoMessagesCamera">Камера в видеосообщениях</string>
@@ -237,8 +240,6 @@
     <string name="ResponseStreaming">Потоковая передача ответа</string>
     <string name="ResponseStreamingInfo">Обеспечивает более плавное и быстрое отображение ответов.</string>
     <string name="ShowResponseOnly">Показывать только ответ</string>
-    <string name="Use16kModel">Использовать модель 16k</string>
-    <string name="Use16kModelInfo">Модель 16k - это языковая модель с максимальным ограничением в 16,384 токена. По умолчанию используется модель с 4,096 токенами.</string>
     <string name="TapToAddApiKey">Нажмите, чтобы добавить ключ API для начала работы с ChatGPT.</string>
     <string name="Generate">Генерировать</string>
     <string name="ClearConversationHistoryInfo">Вы точно хотите очистить **всю** историю сообщений ChatGPT?</string>

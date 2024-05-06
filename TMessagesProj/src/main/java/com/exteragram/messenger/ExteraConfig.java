@@ -15,6 +15,7 @@ import static org.telegram.messenger.AndroidUtilities.dp;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -30,6 +31,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.camera.Size;
 import org.telegram.tgnet.TLRPC;
 
 import java.util.Arrays;
@@ -104,7 +106,6 @@ public class ExteraConfig {
     public static int doubleTapAction;
     public static int doubleTapActionOutOwner;
 
-    public static int doubleTapSeekDuration;
     public static int bottomButton;
     public static boolean hideKeyboardOnScroll;
     public static boolean permissionsShortcut;
@@ -128,9 +129,13 @@ public class ExteraConfig {
     public static boolean hideCameraTile;
     public static boolean hidePhotoCounter;
 
+    public static boolean useCamera2;
+    public static int cameraAspectRatio;
     public static boolean staticZoom;
     public static int videoMessagesCamera; // front rear ask
     public static boolean rememberLastUsedCamera;
+
+    public static int doubleTapSeekDuration;
     public static boolean pauseOnMinimize;
     public static boolean disablePlayback;
 
@@ -288,6 +293,8 @@ public class ExteraConfig {
             hidePhotoCounter = preferences.getBoolean("hidePhotoCounter", false);
             hideCameraTile = preferences.getBoolean("hideCameraTile", false);
 
+            useCamera2 = preferences.getBoolean("useCamera2", false);
+            cameraAspectRatio = preferences.getInt("cameraAspectRatio", 0);
             staticZoom = preferences.getBoolean("staticZoom", false);
             videoMessagesCamera = preferences.getInt("videoMessagesCamera", 0);
             rememberLastUsedCamera = preferences.getBoolean("rememberLastUsedCamera", false);
@@ -426,5 +433,21 @@ public class ExteraConfig {
     public static void reloadConfig() {
         configLoaded = false;
         loadConfig();
+    }
+
+    public static Size getCameraAspectRatio() {
+        return switch (cameraAspectRatio) {
+            case 1 -> new Size(1, 1);
+            case 2 -> new Size(4, 3);
+            default -> new Size(16, 9);
+        };
+    }
+
+    public static Pair<Integer, Integer> getSizeForRatio() {
+        return switch (cameraAspectRatio) {
+            case 1 -> new Pair<>(960, 960);
+            case 2 -> new Pair<>(1280, 960);
+            default -> new Pair<>(1280, 720);
+        };
     }
 }
