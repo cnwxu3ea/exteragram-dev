@@ -1377,6 +1377,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 NotificationCenter.getInstance(a).removeObserver(this, NotificationCenter.historyImportProgressChanged);
             }
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.messagePlayingSpeedChanged);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didStartedCall);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndCall);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.webRtcSpeakerAmplitudeEvent);

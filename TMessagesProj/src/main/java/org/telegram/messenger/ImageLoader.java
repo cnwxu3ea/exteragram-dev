@@ -1434,13 +1434,6 @@ public class ImageLoader {
                     }
                 } else {
                     try {
-                        int delay = 20;
-                        if (mediaId != null) {
-                            delay = 0;
-                        }
-                        if (delay != 0 && lastCacheOutTime != 0 && lastCacheOutTime > SystemClock.elapsedRealtime() - delay) {
-                            Thread.sleep(delay);
-                        }
                         lastCacheOutTime = SystemClock.elapsedRealtime();
                         synchronized (sync) {
                             if (isCancelled) {
