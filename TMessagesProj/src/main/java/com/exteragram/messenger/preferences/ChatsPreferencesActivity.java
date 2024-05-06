@@ -162,6 +162,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private int videoMessagesHeaderRow;
     private int useCamera2Row;
     private int dualCameraRow;
+    private int extendedFramesPerSecondRow;
     private int cameraAspectRatioRow;
     private int videoMessagesCameraRow;
     private int rememberLastUsedCameraRow;
@@ -370,7 +371,13 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
         videoMessagesHeaderRow = newRow();
         useCamera2Row = newRow();
-        dualCameraRow = ExteraConfig.useCamera2 ? newRow() : -1;
+        if (ExteraConfig.useCamera2) {
+            dualCameraRow = newRow();
+            extendedFramesPerSecondRow = newRow();
+        } else {
+            dualCameraRow = -1;
+            extendedFramesPerSecondRow = -1;
+        }
         cameraAspectRatioRow = newRow();
         videoMessagesCameraRow = newRow();
         rememberLastUsedCameraRow = ExteraConfig.videoMessagesCamera != 2 ? newRow() : -1;
@@ -436,11 +443,14 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             ((TextCheckCell) view).setChecked(ExteraConfig.useCamera2);
             if (ExteraConfig.useCamera2) {
                 updateRowsId();
-                listAdapter.notifyItemInserted(dualCameraRow);
+                listAdapter.notifyItemRangeInserted(useCamera2Row + 1, 2);
             } else {
-                listAdapter.notifyItemRemoved(dualCameraRow);
+                listAdapter.notifyItemRangeRemoved(useCamera2Row + 1, 2);
                 updateRowsId();
             }
+        } else if (position == extendedFramesPerSecondRow) {
+            ExteraConfig.editor.putBoolean("extendedFramesPerSecond", ExteraConfig.extendedFramesPerSecond ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.extendedFramesPerSecond);
         } else if (position == dualCameraRow) {
             boolean enabled = DualCameraView.roundDualAvailableStatic(getContext());
             MessagesController.getGlobalMainSettings().edit().putBoolean("rounddual_available", !enabled).apply();
@@ -857,7 +867,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     } else if (position == useCamera2Row) {
                         textCheckCell.setTextAndCheck(LocaleUtils.applyBetaSpan(LocaleController.getString(R.string.UseCamera2)), ExteraConfig.useCamera2, true);
                     } else if (position == dualCameraRow) {
-                        textCheckCell.setTextAndCheck(LocaleUtils.applyBetaSpan(LocaleController.getString(R.string.DualCamera)), DualCameraView.roundDualAvailableStatic(getContext()), true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.DualCamera), DualCameraView.roundDualAvailableStatic(getContext()), true);
+                    } else if (position == extendedFramesPerSecondRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ExtendedFramesPerSecond), ExteraConfig.extendedFramesPerSecond, true);
                     } else if (position == staticZoomRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.StaticZoom), ExteraConfig.staticZoom, false);
                     } else if (position == rememberLastUsedCameraRow) {

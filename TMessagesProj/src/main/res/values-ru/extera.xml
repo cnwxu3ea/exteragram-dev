@@ -153,6 +153,7 @@
     <string name="HideCameraTileInfo">Плитка камеры будет заменена плавающей кнопкой. При нажатии на кнопку запустится камера Telegram, при удержании - системная камера.</string>
 
     <string name="UseCamera2">Использовать Camera2 API</string>
+    <string name="ExtendedFramesPerSecond">Расширенный диапазон FPS</string>
     <string name="DualCamera">Двойная камера</string>
     <string name="CameraAspectRatio">Соотношение сторон</string>
     <string name="StaticZoom">Статичный зум</string>

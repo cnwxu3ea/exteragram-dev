@@ -156,6 +156,7 @@
     <string name="HideCameraTileInfo">The camera tile will be replaced by a floating button. Pressing the button will launch the Telegram camera, holding it down will launch the system camera.</string>
 
     <string name="UseCamera2">Use Camera2 API</string>
+    <string name="ExtendedFramesPerSecond">Extended FPS Range</string>
     <string name="DualCamera">Dual Camera</string>
     <string name="CameraAspectRatio">Aspect Ratio</string>
     <string name="StaticZoom">Static Zoom</string>
