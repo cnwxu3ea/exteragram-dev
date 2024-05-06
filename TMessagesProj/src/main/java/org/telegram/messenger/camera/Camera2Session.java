@@ -489,6 +489,9 @@ public class Camera2Session {
             if (recordingVideo && ExteraConfig.extendedFramesPerSecond) {
                 captureRequestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, new Range<>(30, 90));
                 captureRequestBuilder.set(CaptureRequest.CONTROL_CAPTURE_INTENT, CaptureRequest.CONTROL_CAPTURE_INTENT_VIDEO_RECORD);
+
+                chooseStabilizationMode(captureRequestBuilder);
+                chooseFocusMode(captureRequestBuilder);
             }
 
             if (sensorSize != null && Math.abs(currentZoom - 1f) >= 0.01f) {
@@ -560,6 +563,51 @@ public class Camera2Session {
             FileLog.e("Camera2Sessions takePicture error", e);
             return false;
         }
+    }
+
+    private void chooseStabilizationMode(CaptureRequest.Builder captureRequestBuilder) {
+        final int[] availableOpticalStabilization = cameraCharacteristics.get(
+                CameraCharacteristics.LENS_INFO_AVAILABLE_OPTICAL_STABILIZATION);
+        if (availableOpticalStabilization != null) {
+            for (int mode : availableOpticalStabilization) {
+                if (mode == CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON) {
+                    captureRequestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE,
+                            CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_ON);
+                    captureRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE,
+                            CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_OFF);
+                    FileLog.d("Using optical stabilization.");
+                    return;
+                }
+            }
+        }
+        // If no optical mode is available, try software.
+        final int[] availableVideoStabilization = cameraCharacteristics.get(
+                CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES);
+        for (int mode : availableVideoStabilization) {
+            if (mode == CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON) {
+                captureRequestBuilder.set(CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE,
+                        CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE_ON);
+                captureRequestBuilder.set(CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE,
+                        CaptureRequest.LENS_OPTICAL_STABILIZATION_MODE_OFF);
+                FileLog.d("Using video stabilization.");
+                return;
+            }
+        }
+        FileLog.d("Stabilization not available.");
+    }
+
+    private void chooseFocusMode(CaptureRequest.Builder captureRequestBuilder) {
+        final int[] availableFocusModes =
+                cameraCharacteristics.get(CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES);
+        for (int mode : availableFocusModes) {
+            if (mode == CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO) {
+                captureRequestBuilder.set(
+                        CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_VIDEO);
+                FileLog.d("Using continuous video auto-focus.");
+                return;
+            }
+        }
+        FileLog.d("Auto-focus is not available.");
     }
 
 
