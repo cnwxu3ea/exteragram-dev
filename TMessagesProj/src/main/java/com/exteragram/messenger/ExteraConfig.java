@@ -137,6 +137,7 @@ public class ExteraConfig {
     public static boolean rememberLastUsedCamera;
 
     public static int doubleTapSeekDuration;
+    public static boolean swipeToPip;
     public static boolean pauseOnMinimize;
     public static boolean disablePlayback;
 
@@ -302,6 +303,7 @@ public class ExteraConfig {
             rememberLastUsedCamera = preferences.getBoolean("rememberLastUsedCamera", false);
             pauseOnMinimize = preferences.getBoolean("pauseOnMinimize", true);
             doubleTapSeekDuration = preferences.getInt("doubleTapSeekDuration", 1);
+            swipeToPip = preferences.getBoolean("swipeToPip", false);
             disablePlayback = preferences.getBoolean("disablePlayback", true);
 
             // Updates

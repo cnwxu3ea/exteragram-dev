@@ -41,7 +41,6 @@ import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
-import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
@@ -57,7 +56,6 @@ import android.media.AudioManager;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -80,7 +78,6 @@ import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.transition.TransitionValues;
 import android.util.FloatProperty;
-import android.util.Log;
 import android.util.Pair;
 import android.util.Property;
 import android.util.Range;
@@ -191,7 +188,6 @@ import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.WebFile;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.camera.Size;
-import org.telegram.messenger.video.MediaCodecVideoConvertor;
 import org.telegram.messenger.video.VideoPlayerRewinder;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -19140,13 +19136,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private boolean enableSwipeToPiP() {
-        // TODO: swipe to pip
-        return false;
-//        if (!BuildVars.DEBUG_PRIVATE_VERSION) {
-//            return false;
-//        }
-//        boolean permissionsEnabled = Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(parentActivity);
-//        return pipAvailable && textureUploaded && videoPlayer != null && videoPlayer.getRepeatCount() == 0 && permissionsEnabled && !(changingTextureView || switchingInlineMode || isInline);
+        return ExteraConfig.swipeToPip && pipAvailable && textureUploaded && videoPlayer != null && videoPlayer.getRepeatCount() == 0 && checkInlinePermissions() && !(changingTextureView || switchingInlineMode || isInline);
     }
 
     @Override

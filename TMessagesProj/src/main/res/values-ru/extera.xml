@@ -170,6 +170,7 @@
     <string name="RememberLastUsedCameraInfo">При записи видеосообщений будет использоваться последняя выбранная камера.</string>
     <string name="PauseOnMinimize">Авто-пауза</string>
     <string name="PauseOnMinimizeInfo">Останавливает видео, когда девайс блокируется или приложение сворачивается.</string>
+    <string name="SwipeToPip">"Картинка-в-картинке по свайпу</string>
     <string name="DisablePlayback">Отключить авто-проигрывание</string>
     <string name="DisablePlaybackInfo">Отключает автоматическое проигрывание видео при нажатии на кнопку громкости.</string>
 

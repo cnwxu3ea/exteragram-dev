@@ -178,6 +178,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private int pauseOnMinimizeRow;
     private int disablePlaybackRow;
     private int doubleTapSeekDurationRow;
+    private int swipeToPipRow;
     private int videosDividerRow;
 
     private boolean replyElementsExpanded;
@@ -384,6 +385,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
         videosHeaderRow = newRow();
         doubleTapSeekDurationRow = newRow();
+        swipeToPipRow = newRow();
         pauseOnMinimizeRow = newRow();
         disablePlaybackRow = newRow();
         videosDividerRow = newRow();
@@ -482,6 +484,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         } else if (position == pauseOnMinimizeRow) {
             ExteraConfig.editor.putBoolean("pauseOnMinimize", ExteraConfig.pauseOnMinimize ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.pauseOnMinimize);
+        } else if (position == swipeToPipRow) {
+            ExteraConfig.editor.putBoolean("swipeToPip", ExteraConfig.swipeToPip ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.swipeToPip);
         } else if (position == disablePlaybackRow) {
             ExteraConfig.editor.putBoolean("disablePlayback", ExteraConfig.disablePlayback ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.disablePlayback);
@@ -863,6 +868,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("PauseOnMinimize", R.string.PauseOnMinimize), LocaleController.getString("PauseOnMinimizeInfo", R.string.PauseOnMinimizeInfo), ExteraConfig.pauseOnMinimize, true, true);
                     } else if (position == disablePlaybackRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DisablePlayback", R.string.DisablePlayback), ExteraConfig.disablePlayback, false);
+                    } else if (position == swipeToPipRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.SwipeToPip), ExteraConfig.swipeToPip, true);
                     } else if (position == hideCounterRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("HidePhotoCounter", R.string.HidePhotoCounter), LocaleController.getString("HidePhotoCounterInfo", R.string.HidePhotoCounterInfo), ExteraConfig.hidePhotoCounter, true, true);
                     }
