@@ -435,7 +435,9 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
     public ActionBarLayout(Context context) {
         super(context);
         parentActivity = (Activity) context;
-        scrimPaint = new Paint();
+        if (scrimPaint == null) {
+            scrimPaint = new Paint();
+        }
     }
 
     @Override
@@ -735,7 +737,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             if (previewMenu == null) {
                 int width = AndroidUtilities.dp(32), height = width / 2;
                 int x = (getMeasuredWidth() - width) / 2;
-                int y = (int) (view.getTop() + containerView.getTranslationY() - AndroidUtilities.dp(12 + 0));
+                int y = (int) (view.getTop() + containerView.getTranslationY() - AndroidUtilities.dp(12));
                 Theme.moveUpDrawable.setBounds(x, y, x + width, y + height);
                 Theme.moveUpDrawable.draw(canvas);
             }
