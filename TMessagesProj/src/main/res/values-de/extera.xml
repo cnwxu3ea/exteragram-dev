@@ -81,7 +81,6 @@
     <string name="DoubleTapOutgoing">Ausgehende Nachrichten</string>
     <string name="DoubleTapInfo">Einige Aktionen erfordern Administratorrechte im Chat oder Kanal.</string>
     <string name="HideKeyboardOnScroll">Tastatur beim Scrollen ausblenden</string>
-    <string name="DisableJumpToNextChannel">\"Zum nächsten Kanal springen\" deaktivieren</string>
     <string name="ShowActionTimestamps">Zeitstempel für Aktionen anzeigen</string>
     <string name="HideShareButton">\"%1$s\"-Knopf ausblenden</string>
     <string name="AddCommaAfterMention">Komma nach Erwähnung hinzufügen</string>

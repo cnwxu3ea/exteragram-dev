@@ -111,7 +111,6 @@
     <string name="BottomButton">Нижня кнопка</string>
     <string name="AdminShortcuts">Швидкі адмін-дії</string>
     <string name="HideKeyboardOnScroll">Приховати клавіатуру на прокрутці чату</string>
-    <string name="DisableJumpToNextChannel">Вимкнути \"Перейти до наступного каналу\"</string>
     <string name="ShowActionTimestamps">Показувати час для дій</string>
     <string name="HideShareButton">Приховати бокову кнопку %1$s</string>
     <string name="MessageMenu">Меню повідомлення</string>

@@ -111,7 +111,6 @@
     <string name="BottomButton">Aşağı düymə</string>
     <string name="AdminShortcuts">Sürətli Admin Qısayolları</string>
     <string name="HideKeyboardOnScroll">Sürüşdürərkən klaviaturanı gizlət</string>
-    <string name="DisableJumpToNextChannel">\"Növbəti Kanala Keç\"i deaktiv et</string>
     <string name="ShowActionTimestamps">Fəaliyyətlər üçün vaxt möhürlərini göstərin</string>
     <string name="HideShareButton">Yan \"%1$s\" Düyməsini Gizlət</string>
     <string name="MessageMenu">Mesaj menyusu</string>

@@ -111,7 +111,6 @@
     <string name="BottomButton">Pulsante inferiore</string>
     <string name="AdminShortcuts">Scorciatoie rapide</string>
     <string name="HideKeyboardOnScroll">Nascondi tastiera mentre scorri</string>
-    <string name="DisableJumpToNextChannel">Disattiva \"Passa al canale successivo\"</string>
     <string name="ShowActionTimestamps">Mostra timestamp per le azioni</string>
     <string name="HideShareButton">Nascondi il pulsante \"%1$s\"</string>
     <string name="MessageMenu">Menu contestuale</string>

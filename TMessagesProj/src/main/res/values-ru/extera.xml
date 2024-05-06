@@ -137,8 +137,8 @@
 
     <string name="BottomButton">Нижняя кнопка</string>
     <string name="HideKeyboardOnScroll">Скрывать клавиатуру при скролле</string>
+    <string name="QuickTransitions">Быстрый переход свайпом</string>
     <string name="AdminShortcuts">Быстрые админ-действия</string>
-    <string name="DisableJumpToNextChannel">Отключить \"Перейти в новый канал\"</string>
     <string name="ShowActionTimestamps">Показывать время у действий</string>
     <string name="HideShareButton">Скрыть боковую кнопку \"%1$s\"</string>
     <string name="ReplaceEditedWithIcon">Заменить \"%1$s\" иконкой</string>

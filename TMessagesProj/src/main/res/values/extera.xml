@@ -139,9 +139,9 @@
     <string name="DoubleTapInfo">Some actions require administrator rights in the chat or channel.</string>
 
     <string name="BottomButton">Bottom Button</string>
+    <string name="QuickTransitions">Quick Swipe Transition</string>
     <string name="AdminShortcuts">Quick Admin Shortcuts</string>
     <string name="HideKeyboardOnScroll">Hide Keyboard on Scroll</string>
-    <string name="DisableJumpToNextChannel">Disable \"Jump to the Next Channel\"</string>
     <string name="ShowActionTimestamps">Show Timestamps for Actions</string>
     <string name="HideShareButton">Hide Side \"%1$s\" Button</string>
     <string name="ReplaceEditedWithIcon">Replace \"%1$s\" with Icon</string>

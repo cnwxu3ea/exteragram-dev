@@ -112,7 +112,6 @@
     <string name="BottomButton">Pastki tugma</string>
     <string name="AdminShortcuts">Tezkor admin yorliqlari</string>
     <string name="HideKeyboardOnScroll">Aylantirishda klaviaturani berkitish</string>
-    <string name="DisableJumpToNextChannel">\"Keyingi kanalga o‘tish\" o‘chirish</string>
     <string name="ShowActionTimestamps">Amallar uchun vaqt belgilarini ko‘rsatish</string>
     <string name="HideShareButton">Yon tomon \"%1$s\" berkitish tugmasi</string>
     <string name="MessageMenu">Xabar menyusi</string>

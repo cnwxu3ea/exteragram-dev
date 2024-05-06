@@ -112,7 +112,8 @@ public class ExteraConfig {
     public static boolean administratorsShortcut;
     public static boolean membersShortcut;
     public static boolean recentActionsShortcut;
-    public static boolean disableJumpToNextChannel;
+    public static boolean quickTransitionForChannels;
+    public static boolean quickTransitionForTopics;
     public static boolean showActionTimestamps;
     public static boolean hideShareButton;
     public static boolean replaceEditedWithIcon;
@@ -275,7 +276,8 @@ public class ExteraConfig {
             administratorsShortcut = preferences.getBoolean("administratorsShortcut", false);
             membersShortcut = preferences.getBoolean("membersShortcut", false);
             recentActionsShortcut = preferences.getBoolean("recentActionsShortcut", true);
-            disableJumpToNextChannel = preferences.getBoolean("disableJumpToNextChannel", false);
+            quickTransitionForChannels = preferences.getBoolean("quickTransitionForChannels", true);
+            quickTransitionForTopics = preferences.getBoolean("quickTransitionForTopics", true);
             showActionTimestamps = preferences.getBoolean("showActionTimestamps", true);
             hideShareButton = preferences.getBoolean("hideShareButton", true);
             replaceEditedWithIcon = preferences.getBoolean("replaceEditedWithIcon", true);

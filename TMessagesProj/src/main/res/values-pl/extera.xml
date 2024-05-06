@@ -81,7 +81,6 @@
     <string name="DoubleTapOutgoing">Wiadomości wychodzące</string>
     <string name="DoubleTapInfo">Niektóre działania wymagają uprawnień administratora w czacie lub kanale.</string>
     <string name="HideKeyboardOnScroll">Ukryj klawiaturę podczas przewijania</string>
-    <string name="DisableJumpToNextChannel">Wyłącz „Przejdź do następnego kanału”</string>
     <string name="ShowActionTimestamps">Pokaż czas na działaniach</string>
     <string name="HideShareButton">Ukryj boczny przycisk „%1$s”</string>
     <string name="AddCommaAfterMention">Dodaj przecinek po wzmiance</string>

@@ -111,7 +111,6 @@
     <string name="BottomButton">Alt Düğme</string>
     <string name="AdminShortcuts">Hızlı Yönetici Kısayolları</string>
     <string name="HideKeyboardOnScroll">Kaydırırken klavyeyi gizle</string>
-    <string name="DisableJumpToNextChannel">\"Sonraki Kanala Atla\"yı devre dışı bırak</string>
     <string name="ShowActionTimestamps">Eylemler için zaman damgalarını göster</string>
     <string name="HideShareButton">Mesajların yanındaki \"%1$s\" Düğmesini gizle</string>
     <string name="MessageMenu">Mesaj Menüsü</string>

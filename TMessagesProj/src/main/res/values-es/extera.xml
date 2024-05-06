@@ -95,7 +95,6 @@
     <string name="BottomButton">Botón inferior</string>
     <string name="AdminShortcuts">Atajos rápidos del administrador</string>
     <string name="HideKeyboardOnScroll">Ocultar teclado al desplazarse</string>
-    <string name="DisableJumpToNextChannel">Deshabilitar \"Saltar al siguiente canal\"</string>
     <string name="ShowActionTimestamps">Mostrar marcas de tiempo para acciones</string>
     <string name="HideShareButton">Ocultar botón \"%1$s\"</string>
     <string name="MessageMenu">Menú del mensaje</string>

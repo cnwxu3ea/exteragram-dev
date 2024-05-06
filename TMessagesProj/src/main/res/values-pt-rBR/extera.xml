@@ -115,7 +115,6 @@
     <string name="BottomButton">Botão inferior</string>
     <string name="AdminShortcuts">Atalhos rápidos do Admin</string>
     <string name="HideKeyboardOnScroll">Ocultar teclado ao rolar a conversa</string>
-    <string name="DisableJumpToNextChannel">Desativar \"Ir para o próximo canal\"</string>
     <string name="ShowActionTimestamps">Mostrar data e hora de ações</string>
     <string name="HideShareButton">Ocultar botão \"%1$s\"</string>
     <string name="ReplaceEditedWithIcon">Substituir \"%1$s\" pelo ícone</string>

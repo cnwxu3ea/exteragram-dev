@@ -111,7 +111,6 @@
     <string name="BottomButton">الزر السفلي</string>
     <string name="AdminShortcuts">اختصارات المشرف السريعة</string>
     <string name="HideKeyboardOnScroll">إخفاء لوحة المفاتيح عند التمرير</string>
-    <string name="DisableJumpToNextChannel">تعطيل \"الانتقال إلى القناة التالية\"</string>
     <string name="ShowActionTimestamps">عرض الطوابع الزمنية للإجراءات</string>
     <string name="HideShareButton">إخفاء الزر%1$s\" الجانبي</string>
     <string name="MessageMenu">قائمة الرسائل</string>

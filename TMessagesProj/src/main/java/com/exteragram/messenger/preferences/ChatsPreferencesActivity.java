@@ -132,7 +132,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
     private int chatsHeaderRow;
     private int bottomButtonRow;
-    private int disableJumpToNextChannelRow;
+    private int quickTransitionsRow;
+    private int quickTransitionForChannelsRow;
+    private int quickTransitionForTopicsRow;
     private int hideKeyboardOnScrollRow;
     private int adminShortcutsRow;
     private int permissionsRow;
@@ -181,6 +183,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private boolean replyElementsExpanded;
     private boolean adminShortcutsExpanded;
     private boolean messageMenuExpanded;
+    private boolean quickTransitionsExpanded;
 
     private final int startStickerSize = 4, endStickerSize = 20;
 
@@ -327,7 +330,14 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             membersRow = -1;
             recentActionsRow = -1;
         }
-        disableJumpToNextChannelRow = newRow();
+        quickTransitionsRow = newRow();
+        if (quickTransitionsExpanded) {
+            quickTransitionForChannelsRow = newRow();
+            quickTransitionForTopicsRow = newRow();
+        } else {
+            quickTransitionForChannelsRow = -1;
+            quickTransitionForTopicsRow = -1;
+        }
         hideKeyboardOnScrollRow = newRow();
         addCommaAfterMentionRow = newRow();
         hideSendAsPeerRow = newRow();
@@ -414,10 +424,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                 ExteraConfig.editor.putInt("bottomButton", ExteraConfig.bottomButton = which).apply();
                 listAdapter.notifyItemChanged(bottomButtonRow, payload);
             });
-        } else if (position == disableJumpToNextChannelRow) {
-            ExteraConfig.editor.putBoolean("disableJumpToNextChannel", ExteraConfig.disableJumpToNextChannel ^= true).apply();
-            ((TextCheckCell) view).setChecked(ExteraConfig.disableJumpToNextChannel);
-            parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == showActionTimestampsRow) {
             ExteraConfig.editor.putBoolean("showActionTimestamps", ExteraConfig.showActionTimestamps ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.showActionTimestamps);
@@ -556,6 +562,15 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             } else {
                 listAdapter.notifyItemRangeRemoved(adminShortcutsRow + 1, 4);
             }
+        } else if (position == quickTransitionsRow) {
+            quickTransitionsExpanded ^= true;
+            updateRowsId();
+            listAdapter.notifyItemChanged(quickTransitionsRow, payload);
+            if (quickTransitionsExpanded) {
+                listAdapter.notifyItemRangeInserted(quickTransitionsRow + 1, 2);
+            } else {
+                listAdapter.notifyItemRangeRemoved(quickTransitionsRow + 1, 2);
+            }
         } else if (position == messageMenuRow) {
             messageMenuExpanded ^= true;
             updateRowsId();
@@ -594,6 +609,15 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                 listAdapter.notifyItemChanged(recentActionsRow, payload);
             }
             listAdapter.notifyItemChanged(adminShortcutsRow, payload);
+        } else if (position == quickTransitionForChannelsRow || position == quickTransitionForTopicsRow) {
+            if (position == quickTransitionForChannelsRow) {
+                ExteraConfig.editor.putBoolean("quickTransitionForChannels", ExteraConfig.quickTransitionForChannels ^= true).apply();
+                listAdapter.notifyItemChanged(quickTransitionForChannelsRow, payload);
+            } else {
+                ExteraConfig.editor.putBoolean("quickTransitionForTopics", ExteraConfig.quickTransitionForTopics ^= true).apply();
+                listAdapter.notifyItemChanged(quickTransitionForTopicsRow, payload);
+            }
+            listAdapter.notifyItemChanged(quickTransitionsRow, payload);
         } else if (position >= copyPhotoRow && position <= detailsRow) {
             if (position == copyPhotoRow) {
                 ExteraConfig.editor.putBoolean("showCopyPhotoButton", ExteraConfig.showCopyPhotoButton ^= true).apply();
@@ -670,6 +694,21 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         if (ExteraConfig.membersShortcut)
             i++;
         if (ExteraConfig.recentActionsShortcut)
+            i++;
+        return i;
+    }
+
+    private void setTransitionsEnabled(boolean enabled) {
+        ExteraConfig.editor.putBoolean("quickTransitionForChannels", ExteraConfig.quickTransitionForChannels = enabled).apply();
+        ExteraConfig.editor.putBoolean("quickTransitionForTopics", ExteraConfig.quickTransitionForTopics = enabled).apply();
+        AndroidUtilities.updateVisibleRows(listView);
+    }
+
+    private int getTransitionsSelectedCount() {
+        int i = 0;
+        if (ExteraConfig.quickTransitionForChannels)
+            i++;
+        if (ExteraConfig.quickTransitionForTopics)
             i++;
         return i;
     }
@@ -808,8 +847,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         textCheckCell.setTextAndCheck(LocaleController.formatString("HideShareButton", R.string.HideShareButton, LocaleController.getString("ShareFile", R.string.ShareFile)), ExteraConfig.hideShareButton, true);
                     } else if (position == replaceEditedWithIcon) {
                         textCheckCell.setTextAndCheck(LocaleController.formatString("ReplaceEditedWithIcon", R.string.ReplaceEditedWithIcon, LocaleController.getString("EditedMessage", R.string.EditedMessage)), ExteraConfig.replaceEditedWithIcon, true);
-                    } else if (position == disableJumpToNextChannelRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("DisableJumpToNextChannel", R.string.DisableJumpToNextChannel), ExteraConfig.disableJumpToNextChannel, true);
                     } else if (position == showActionTimestampsRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ShowActionTimestamps", R.string.ShowActionTimestamps), ExteraConfig.showActionTimestamps, false);
                     } else if (position == useCamera2Row) {
@@ -896,6 +933,14 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                             checkCell.setChecked(checked);
                             setShortcutsEnabled(checked);
                         });
+                    } else if (position == quickTransitionsRow) {
+                        int transitionsSelectedCount = getTransitionsSelectedCount();
+                        checkCell.setTextAndCheck(LocaleController.getString(R.string.QuickTransitions), transitionsSelectedCount > 0, true, true);
+                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/2", transitionsSelectedCount), !quickTransitionsExpanded, () -> {
+                            boolean checked = !checkCell.isChecked();
+                            checkCell.setChecked(checked);
+                            setTransitionsEnabled(checked);
+                        });
                     } else if (position == messageMenuRow) {
                         int messageMenuSelectedCount = getMessageMenuSelectedCount();
                         checkCell.setTextAndCheck(LocaleController.getString("MessageMenu", R.string.MessageMenu), messageMenuSelectedCount > 0, true, true);
@@ -938,6 +983,10 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         checkBoxCell.setText(LocaleController.getString(R.string.Generate), "", ExteraConfig.showGenerateButton, true, true);
                     } else if (position == detailsRow) {
                         checkBoxCell.setText(LocaleController.getString("Details", R.string.Details), "", ExteraConfig.showDetailsButton, true, true);
+                    } else if (position == quickTransitionForChannelsRow) {
+                        checkBoxCell.setText(LocaleController.getString("FilterChannels", R.string.FilterChannels), "", ExteraConfig.quickTransitionForChannels, true, true);
+                    } else if (position == quickTransitionForTopicsRow) {
+                        checkBoxCell.setText(LocaleController.getString("Topics", R.string.Topics), "", ExteraConfig.quickTransitionForTopics, true, true);
                     }
                     checkBoxCell.setPad(1);
                 }
@@ -967,9 +1016,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                 return 15;
             } else if (position == doubleTapReactionRow) {
                 return 16;
-            } else if (position == adminShortcutsRow || position == messageMenuRow || position == replyElementsRow) {
+            } else if (position == adminShortcutsRow || position == messageMenuRow || position == replyElementsRow || position == quickTransitionsRow) {
                 return 18;
-            } else if (position >= replyColorsRow && position <= replyBackgroundRow || position >= permissionsRow && position <= recentActionsRow || position >= copyPhotoRow && position <= detailsRow) {
+            } else if (position >= replyColorsRow && position <= replyBackgroundRow || position >= permissionsRow && position <= recentActionsRow || position >= copyPhotoRow && position <= detailsRow || position == quickTransitionForChannelsRow || position == quickTransitionForTopicsRow) {
                 return 19;
             }
             return 5;

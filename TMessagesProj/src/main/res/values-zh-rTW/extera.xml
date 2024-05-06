@@ -111,7 +111,6 @@
     <string name="BottomButton">底部按鈕</string>
     <string name="AdminShortcuts">管理員捷徑</string>
     <string name="HideKeyboardOnScroll">捲動時隱藏鍵盤</string>
-    <string name="DisableJumpToNextChannel">停用「跳轉至下一個頻道」</string>
     <string name="ShowActionTimestamps">顯示動作時間戳記</string>
     <string name="HideShareButton">隱藏側邊「%1$s」按鈕</string>
     <string name="MessageMenu">訊息選單</string>

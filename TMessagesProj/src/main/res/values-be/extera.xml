@@ -111,7 +111,6 @@
     <string name="BottomButton">Кнопкі ўнізе</string>
     <string name="AdminShortcuts">Хуткія ярлыкі адміністратара</string>
     <string name="HideKeyboardOnScroll">Схаваць клавіятуру падчас пракруткі</string>
-    <string name="DisableJumpToNextChannel">Адключыць \"Перайсці да наступнага каналу\"</string>
     <string name="ShowActionTimestamps">Паказваць таймштампы для дзеянняў</string>
     <string name="HideShareButton">Схаваць \"%1$s\" кнопку</string>
     <string name="MessageMenu">Меню паведамленняў</string>
