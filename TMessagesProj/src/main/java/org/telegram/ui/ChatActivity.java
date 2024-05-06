@@ -28647,7 +28647,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (selectedObject == null) {
                             continue;
                         }
-                        MessageDetailsPopupWrapper messageDetailsPopup = new MessageDetailsPopupWrapper(this, popupLayout.getSwipeBack(), selectedObject, getResourceProvider()) {
+                        MessageDetailsPopupWrapper messageDetailsPopup = new MessageDetailsPopupWrapper(ChatActivity.this, popupLayout.getSwipeBack(), selectedObject, getResourceProvider()) {
                             @Override
                             protected void copy(String text) {
                                 if (AndroidUtilities.addToClipboard(text)) {

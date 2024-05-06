@@ -14,16 +14,14 @@ package com.exteragram.messenger.components;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
-
 import androidx.core.content.FileProvider;
-
 import com.exteragram.messenger.utils.ChatUtils;
 import com.google.zxing.Dimension;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
@@ -139,17 +137,21 @@ public class MessageDetailsPopupWrapper {
         }
         if (!TextUtils.isEmpty(filePath)) {
             items.add(new Item(FILE_PATH, R.drawable.msg_map, LocaleController.getString(R.string.FilePath), LocaleController.getString("Open", R.string.Open)));
-            if (messageObject.isPhoto() || messageObject.isSticker() || messageObject.isVideoSticker() || messageObject.isVideo() || messageObject.isGif()) {
-                try {
-                    Dimension resolution = messageObject.isVideo() || messageObject.isVideoSticker() || messageObject.isGif() ? getVideoResolution(filePath) : getPhotoResolution(filePath);
-                    items.add(new Item(R.drawable.msg_photo_crop, LocaleController.getString(R.string.Resolution), resolution.toString()));
-                } catch (Exception ignored) {}
+        }
+
+        var isAudio = messageObject.isVoice() || messageObject.isMusic();
+        var isVideo = messageObject.isVideo() || messageObject.isRoundVideo() || messageObject.isVideoSticker() || messageObject.isGif();
+        var isPhoto = messageObject.isPhoto() || messageObject.isSticker() || isPhotoAsDocument(messageObject);
+        if (isVideo || isPhoto) {
+            Dimension resolution = isVideo ? getVideoResolution(messageObject, filePath) : getPhotoResolution(messageObject, filePath);
+            if (resolution != null) {
+                items.add(new Item(R.drawable.msg_photo_crop, LocaleController.getString(R.string.Resolution), resolution.toString()));
             }
-            if (messageObject.isMusic() || messageObject.isVoice() || messageObject.isRoundVideo() || messageObject.isVideo() || messageObject.isGif()) {
-                int bitrate = getBitrate(filePath);
-                if (bitrate > 0) {
-                    items.add(new Item(R.drawable.msg_noise_on, LocaleController.getString(R.string.Bitrate), bitrate + " Kbps"));
-                }
+        }
+        if (isVideo || isAudio) {
+            int bitrate = getBitrate(messageObject, filePath);
+            if (bitrate > 0) {
+                items.add(new Item(R.drawable.msg_noise_on, LocaleController.getString(R.string.Bitrate), bitrate + " Kbps"));
             }
         }
 
@@ -200,9 +202,17 @@ public class MessageDetailsPopupWrapper {
             }
             item.setTag(i);
             item.setOnClickListener(view -> {
-                if (i.id == FILE_PATH && filePath != null) {
+                if (i.id == FILE_PATH && !TextUtils.isEmpty(filePath)) {
                     Intent intent = new Intent(Intent.ACTION_SEND);
-                    var uri = FileProvider.getUriForFile(context, ApplicationLoader.getApplicationId() + ".provider", new File(filePath));
+
+                    Uri uri;
+                    try {
+                        uri = FileProvider.getUriForFile(context, ApplicationLoader.getApplicationId() + ".provider", new File(filePath));
+                    } catch (IllegalArgumentException e) {
+                        // java.lang.IllegalArgumentException: Failed to find configured root that contains /data/data/.../cache/...
+                        FileLog.e(e);
+                        return;
+                    }
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.putExtra(Intent.EXTRA_STREAM, uri);
                     intent.setDataAndType(uri, messageObject.getMimeType());
@@ -222,7 +232,7 @@ public class MessageDetailsPopupWrapper {
             });
             item.setOnLongClickListener(view -> {
                 String text;
-                if (i.id == FILE_PATH && filePath != null) {
+                if (i.id == FILE_PATH && !TextUtils.isEmpty(filePath)) {
                     text = filePath;
                 } else if (i.id == SET_OWNER) {
                     text = ChatUtils.getOwnerIds(stickerSetId);
@@ -233,6 +243,21 @@ public class MessageDetailsPopupWrapper {
                 return true;
             });
         }
+    }
+
+    private boolean isPhotoAsDocument(MessageObject message) {
+        try {
+            if (MessageObject.getMedia(message.messageOwner) != null && MessageObject.getMedia(message.messageOwner).document != null) {
+                for (var attribute : MessageObject.getMedia(message.messageOwner).document.attributes) {
+                    if (attribute instanceof TLRPC.TL_documentAttributeImageSize && attribute.w > 0 && attribute.h > 0) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return false;
     }
 
     private static class Item {
@@ -274,7 +299,28 @@ public class MessageDetailsPopupWrapper {
         return gap;
     }
 
-    public static int getBitrate(String filePath) {
+    public static int getBitrate(MessageObject message, String filePath) {
+        int bitrate = -1;
+        if (!TextUtils.isEmpty(filePath)) {
+            try {
+                bitrate = getBitrateFromPath(filePath);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+
+        if (bitrate == -1) {
+            try {
+                bitrate = getBitrateFromAttributes(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+
+        return bitrate;
+    }
+
+    public static int getBitrateFromPath(String filePath) {
         int bitrate = -1;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
@@ -291,14 +337,101 @@ public class MessageDetailsPopupWrapper {
         return bitrate;
     }
 
-    public static Dimension getPhotoResolution(String filePath) {
+    public static int getBitrateFromAttributes(MessageObject message) {
+        long size = MessageObject.getMessageSize(message.messageOwner);
+        if (size <= 0) {
+            return -1;
+        }
+
+        int bitrate = -1;
+        if (MessageObject.getMedia(message.messageOwner) != null && MessageObject.getMedia(message.messageOwner).document != null) {
+            for (var attribute : MessageObject.getMedia(message.messageOwner).document.attributes) {
+                if (attribute instanceof TLRPC.TL_documentAttributeAudio && attribute.duration > 0) {
+                    bitrate = (int) (size / attribute.duration * 8 / 1000);
+                    break;
+                }
+            }
+        }
+        return bitrate;
+    }
+
+    public static Dimension getPhotoResolution(MessageObject message, String filePath) {
+        Dimension res = null;
+
+        if (!TextUtils.isEmpty(filePath)) {
+            try {
+                res = getPhotoResolutionFromPath(filePath);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+
+        if (res == null) {
+            try {
+                res = getPhotoResolutionFromAttributes(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+
+        return res;
+    }
+
+    public static Dimension getPhotoResolutionFromPath(String filePath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, options);
         return new Dimension(options.outWidth, options.outHeight);
     }
 
-    public static Dimension getVideoResolution(String filePath) {
+    public static Dimension getPhotoResolutionFromAttributes(MessageObject message) {
+        Dimension res = null;
+        if (MessageObject.getMedia(message.messageOwner) != null && MessageObject.getMedia(message.messageOwner).photo != null) {
+            var size = FileLoader.getClosestPhotoSizeWithSize(MessageObject.getMedia(message.messageOwner).photo.sizes, AndroidUtilities.getPhotoSize(), false, null, true);
+            if (size != null && size.w > 0 && size.h > 0) {
+                res = new Dimension(size.w, size.h);
+            }
+
+            if (res == null) {
+                var videoSize = FileLoader.getClosestVideoSizeWithSize(MessageObject.getMedia(message.messageOwner).photo.video_sizes, AndroidUtilities.getPhotoSize(), false, true);
+                if (videoSize != null && videoSize.w > 0 && videoSize.h > 0) {
+                    res = new Dimension(videoSize.w, videoSize.h);
+                }
+            }
+        } else if (MessageObject.getMedia(message.messageOwner) != null && MessageObject.getMedia(message.messageOwner).document != null) {
+            for (var attribute : MessageObject.getMedia(message.messageOwner).document.attributes) {
+                if (attribute instanceof TLRPC.TL_documentAttributeImageSize && attribute.w > 0 && attribute.h > 0) {
+                    res = new Dimension(attribute.w, attribute.h);
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+
+    public static Dimension getVideoResolution(MessageObject message, String filePath) {
+        Dimension res = null;
+
+        if (!TextUtils.isEmpty(filePath)) {
+            try {
+                res = getVideoResolutionFromPath(filePath);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+
+        if (res == null) {
+            try {
+                res = getVideoResolutionFromAttributes(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+
+        return res;
+    }
+
+    public static Dimension getVideoResolutionFromPath(String filePath) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         int width = 0, height = 0;
         try {
@@ -314,6 +447,19 @@ public class MessageDetailsPopupWrapper {
             FileLog.e(throwable);
         }
         return new Dimension(width, height);
+    }
+
+    public static Dimension getVideoResolutionFromAttributes(MessageObject message) {
+        Dimension res = null;
+        if (MessageObject.getMedia(message.messageOwner) != null && MessageObject.getMedia(message.messageOwner).document != null) {
+            for (var attribute : MessageObject.getMedia(message.messageOwner).document.attributes) {
+                if (attribute instanceof TLRPC.TL_documentAttributeVideo && attribute.w > 0 && attribute.h > 0) {
+                    res = new Dimension(attribute.w, attribute.h);
+                    break;
+                }
+            }
+        }
+        return res;
     }
 
     protected void copy(String text) {
