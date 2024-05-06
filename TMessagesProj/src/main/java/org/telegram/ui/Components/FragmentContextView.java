@@ -546,7 +546,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
         if (!isLocation) {
             createPlaybackSpeedButton();
-            // updateButtonsVisibility(false);
         }
 
         avatars = new AvatarsImageView(context, false);

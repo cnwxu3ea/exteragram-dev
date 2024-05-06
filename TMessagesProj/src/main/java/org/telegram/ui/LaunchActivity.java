@@ -997,7 +997,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         }
 
         if (ExteraConfig.checkUpdatesOnLaunch)
-            UpdaterUtils.checkUpdates(actionBarLayout.getFragmentStack().size() > 0 ? actionBarLayout.getFragmentStack().get(0) : layersActionBarLayout.getFragmentStack().get(0), false);
+            UpdaterUtils.checkUpdates(!actionBarLayout.getFragmentStack().isEmpty() ? actionBarLayout.getFragmentStack().get(0) : layersActionBarLayout.getFragmentStack().get(0), false);
 
         BackupAgent.requestBackup(this);
 

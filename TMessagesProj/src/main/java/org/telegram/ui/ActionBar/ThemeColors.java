@@ -7,8 +7,6 @@ import android.util.SparseArray;
 
 import androidx.core.graphics.ColorUtils;
 
-import com.exteragram.messenger.ExteraConfig;
-
 import java.util.HashMap;
 
 public class ThemeColors {

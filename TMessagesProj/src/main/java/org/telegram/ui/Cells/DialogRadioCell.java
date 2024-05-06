@@ -29,8 +29,6 @@ import org.telegram.ui.Components.RadioButton;
 
 import java.util.ArrayList;
 
-import com.exteragram.messenger.ExteraConfig;
-
 public class DialogRadioCell extends FrameLayout {
 
     public int itemId;

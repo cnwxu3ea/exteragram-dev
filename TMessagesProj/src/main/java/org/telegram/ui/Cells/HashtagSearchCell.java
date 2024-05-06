@@ -17,8 +17,6 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
-import com.exteragram.messenger.ExteraConfig;
-
 public class HashtagSearchCell extends TextView {
 
     private boolean needDivider;

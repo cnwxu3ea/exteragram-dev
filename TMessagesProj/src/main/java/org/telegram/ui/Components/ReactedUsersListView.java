@@ -34,8 +34,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
-import com.exteragram.messenger.ExteraConfig;
-
 public class ReactedUsersListView extends FrameLayout {
 
     public final static int VISIBLE_ITEMS = 6;

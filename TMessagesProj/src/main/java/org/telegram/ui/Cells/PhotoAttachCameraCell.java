@@ -18,8 +18,6 @@ import android.graphics.drawable.Drawable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import androidx.core.graphics.ColorUtils;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.R;
@@ -27,8 +25,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.io.File;
-
-import com.exteragram.messenger.ExteraConfig;
 
 @SuppressLint("NewApi")
 public class PhotoAttachCameraCell extends FrameLayout {
@@ -91,7 +87,6 @@ public class PhotoAttachCameraCell extends FrameLayout {
             backgroundView.setImageBitmap(bitmap);
         } else {
             backgroundView.setImageResource(R.drawable.icplaceholder);
-            //backgroundView.setBackgroundColor(ColorUtils.setAlphaComponent(getThemedColor(Theme.key_sheet_scrollUp),0x1F));
         }
     }
 

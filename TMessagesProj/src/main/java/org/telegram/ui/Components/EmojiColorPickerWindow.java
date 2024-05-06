@@ -17,7 +17,6 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
-import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.zxing.common.detector.MathUtils;
 
 import org.telegram.messenger.AndroidUtilities;

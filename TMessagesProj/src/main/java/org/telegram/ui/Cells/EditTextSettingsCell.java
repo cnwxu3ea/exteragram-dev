@@ -26,8 +26,6 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
-import com.exteragram.messenger.ExteraConfig;
-
 public class EditTextSettingsCell extends FrameLayout {
 
     private EditTextBoldCursor textView;

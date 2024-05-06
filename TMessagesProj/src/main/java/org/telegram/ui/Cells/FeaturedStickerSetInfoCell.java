@@ -41,8 +41,6 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.List;
 
-import com.exteragram.messenger.ExteraConfig;
-
 public class FeaturedStickerSetInfoCell extends FrameLayout {
 
     private boolean canAddRemove;

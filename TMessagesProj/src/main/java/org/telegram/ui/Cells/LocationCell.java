@@ -44,8 +44,6 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 
-import com.exteragram.messenger.ExteraConfig;
-
 public class LocationCell extends FrameLayout {
 
     private AnimatedTextView nameTextView;

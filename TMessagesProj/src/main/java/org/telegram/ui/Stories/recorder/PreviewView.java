@@ -41,7 +41,6 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import com.exteragram.messenger.utils.VibratorUtils;
 import com.google.android.exoplayer2.C;
 import com.google.zxing.common.detector.MathUtils;
 

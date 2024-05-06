@@ -231,15 +231,13 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     public void cancelCurrentAnimation() {
-        if (currentAnimation != null || currentSpringAnimation != null) {
-            if (currentAnimation != null) {
-                currentAnimation.cancel();
-                currentAnimation = null;
-            }
-            if (currentSpringAnimation != null) {
-                currentSpringAnimation.cancel();
-                currentSpringAnimation = null;
-            }
+        if (currentAnimation != null) {
+            currentAnimation.cancel();
+            currentAnimation = null;
+        }
+        if (currentSpringAnimation != null) {
+            currentSpringAnimation.cancel();
+            currentSpringAnimation = null;
         }
     }
 
@@ -312,6 +310,8 @@ public class DrawerLayoutContainer extends FrameLayout {
                     .setStiffness(fast ? 1000f : 1200f));
             springAnimation.addEndListener((dynamicAnimation, canceled, value, velocity) -> onDrawerAnimationEnd(false));
             springAnimation.animateToFinalPosition(0);
+
+            currentSpringAnimation = springAnimation;
         } else {
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(

@@ -16,12 +16,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 
-import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
-
-import com.exteragram.messenger.ExteraConfig;
 
 public class SlideChooseView extends View {
 

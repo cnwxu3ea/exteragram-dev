@@ -29,7 +29,6 @@ import android.view.View;
 
 import androidx.core.graphics.ColorUtils;
 
-import com.exteragram.messenger.utils.VibratorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;

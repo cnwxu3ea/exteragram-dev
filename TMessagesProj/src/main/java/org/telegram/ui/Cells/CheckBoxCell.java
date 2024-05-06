@@ -50,8 +50,6 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkSpanDrawable;
 
-import com.exteragram.messenger.ExteraConfig;
-
 public class CheckBoxCell extends FrameLayout {
 
     public final static int

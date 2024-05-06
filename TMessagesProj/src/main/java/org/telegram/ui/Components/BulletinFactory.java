@@ -5,7 +5,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -26,7 +25,6 @@ import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
@@ -44,7 +42,6 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ChatActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
 import org.telegram.ui.Stories.recorder.HintView2;
@@ -736,15 +733,6 @@ public final class BulletinFactory {
             layout.setIconPaddingBottom(fileType.icon.paddingBottom);
         }
         return create(layout, Bulletin.DURATION_SHORT);
-    }
-
-    public Bulletin createStaticBulletin(CharSequence message, int resId, Theme.ResourcesProvider resourcesProvider) {
-        Bulletin.LottieLayout layout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
-        layout.imageView.setImageResource(resId);
-        layout.textView.setText(AndroidUtilities.replaceTags(message.toString()));
-        layout.textView.setSingleLine(false);
-        layout.textView.setMaxLines(2);
-        return create(layout, Bulletin.DURATION_LONG);
     }
 
     public Bulletin createErrorBulletin(CharSequence errorMessage) {
