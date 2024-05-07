@@ -1243,7 +1243,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 } else {
                     text = AnimatedEmojiSpan.cloneSpans(messageObject.messageText);
                     if (currentMessageObject.messageOwner != null && ExteraConfig.showActionTimestamps) {
-                        if (currentMessageObject.currentEvent != null || currentMessageObject.messageOwner.action != null) {
+                        if (currentMessageObject.currentEvent != null || currentMessageObject.messageOwner.action != null && !TextUtils.isEmpty(text)) {
                             boolean d = text.charAt(text.length() - 1) == ':';
                             long date = currentMessageObject.messageOwner.date;
                             SpannableStringBuilder ssb = new SpannableStringBuilder(text);
