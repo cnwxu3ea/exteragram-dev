@@ -132,6 +132,8 @@ public class ExteraConfig {
 
     public static boolean useCamera2;
     public static boolean extendedFramesPerSecond;
+    public static boolean cameraStabilization;
+    public static boolean cameraAutofocus;
     public static int cameraAspectRatio;
     public static boolean staticZoom;
     public static int videoMessagesCamera; // front rear ask
@@ -299,6 +301,8 @@ public class ExteraConfig {
 
             useCamera2 = preferences.getBoolean("useCamera2", false);
             extendedFramesPerSecond = preferences.getBoolean("extendedFramesPerSecond", true);
+            cameraStabilization = preferences.getBoolean("cameraStabilization", false);
+            cameraAutofocus = preferences.getBoolean("cameraAutofocus", false);
             cameraAspectRatio = preferences.getInt("cameraAspectRatio", 0);
             staticZoom = preferences.getBoolean("staticZoom", false);
             videoMessagesCamera = preferences.getInt("videoMessagesCamera", 0);

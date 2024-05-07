@@ -117,6 +117,8 @@ public class PreferencesUtils {
             new BackupItem("bottomButton"),
             new BackupItem("calls"),
             new BackupItem("cameraAspectRatio"),
+            new BackupItem("cameraAutofocus"),
+            new BackupItem("cameraStabilization"),
             new BackupItem("centerTitle"),
             new BackupItem("changeStatus"),
             new BackupItem("channelToSave", Long.class),

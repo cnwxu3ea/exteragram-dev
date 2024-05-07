@@ -156,8 +156,11 @@
     <string name="HideCameraTileInfo">The camera tile will be replaced by a floating button. Pressing the button will launch the Telegram camera, holding it down will launch the system camera.</string>
 
     <string name="UseCamera2">Use Camera2 API</string>
+    <string name="ExtendedSettings">Extended Settings</string>
+    <string name="SeamlessSwitching">Seamless Switching</string>
     <string name="ExtendedFramesPerSecond">Extended FPS Range</string>
-    <string name="DualCamera">Dual Camera</string>
+    <string name="CameraStabilization">Stabilization</string>
+    <string name="CameraAutofocus">Autofocus</string>
     <string name="CameraAspectRatio">Aspect Ratio</string>
     <string name="StaticZoom">Static Zoom</string>
     <string name="StaticZoomInfo">When recording video messages, the zoom will not reset if you release your fingers.</string>
@@ -258,7 +261,7 @@
     <string name="GPTError429Limit">Rate limit reached for requests</string>
     <string name="GPTError429LimitInfo">You\'re sending requests too fast. Try again later.</string>
     <string name="GPTError429Quota">You exceeded your current quota</string>
-    <string name="GPTError429QuotaInfo">You have hit your maximum monthly spend. Сheck your plan and billing details.</string>
+    <string name="GPTError429QuotaInfo">You have hit your maximum monthly spend. Check your plan and billing details.</string>
     <string name="GPTError503">The engine is currently overloaded</string>
     <string name="GPTError503Info">Retry your request after a short wait.</string>
     <string name="GPTError">The server had an error while processing your request</string>

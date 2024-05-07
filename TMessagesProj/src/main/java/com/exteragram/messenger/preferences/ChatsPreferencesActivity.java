@@ -161,8 +161,11 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
     private int videoMessagesHeaderRow;
     private int useCamera2Row;
+    private int cameraSettingsRow;
     private int dualCameraRow;
     private int extendedFramesPerSecondRow;
+    private int cameraStabilizationRow;
+    private int cameraAutofocusRow;
     private int cameraAspectRatioRow;
     private int videoMessagesCameraRow;
     private int rememberLastUsedCameraRow;
@@ -184,8 +187,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
     private boolean replyElementsExpanded;
     private boolean adminShortcutsExpanded;
-    private boolean messageMenuExpanded;
     private boolean quickTransitionsExpanded;
+    private boolean messageMenuExpanded;
+    private boolean cameraSettingsExpanded;
 
     private final int startStickerSize = 4, endStickerSize = 20;
 
@@ -371,12 +375,17 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
         videoMessagesHeaderRow = newRow();
         useCamera2Row = newRow();
-        if (ExteraConfig.useCamera2) {
+        cameraSettingsRow = ExteraConfig.useCamera2 ? newRow() : -1;
+        if (ExteraConfig.useCamera2 && cameraSettingsExpanded) {
             dualCameraRow = newRow();
             extendedFramesPerSecondRow = newRow();
+            cameraStabilizationRow = newRow();
+            cameraAutofocusRow = newRow();
         } else {
             dualCameraRow = -1;
             extendedFramesPerSecondRow = -1;
+            cameraStabilizationRow = -1;
+            cameraAutofocusRow = -1;
         }
         cameraAspectRatioRow = newRow();
         videoMessagesCameraRow = newRow();
@@ -443,18 +452,11 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             ((TextCheckCell) view).setChecked(ExteraConfig.useCamera2);
             if (ExteraConfig.useCamera2) {
                 updateRowsId();
-                listAdapter.notifyItemRangeInserted(useCamera2Row + 1, 2);
+                listAdapter.notifyItemRangeInserted(useCamera2Row + 1, cameraSettingsExpanded ? 5 : 1);
             } else {
-                listAdapter.notifyItemRangeRemoved(useCamera2Row + 1, 2);
+                listAdapter.notifyItemRangeRemoved(useCamera2Row + 1, cameraSettingsExpanded ? 5 : 1);
                 updateRowsId();
             }
-        } else if (position == extendedFramesPerSecondRow) {
-            ExteraConfig.editor.putBoolean("extendedFramesPerSecond", ExteraConfig.extendedFramesPerSecond ^= true).apply();
-            ((TextCheckCell) view).setChecked(ExteraConfig.extendedFramesPerSecond);
-        } else if (position == dualCameraRow) {
-            boolean enabled = DualCameraView.roundDualAvailableStatic(getContext());
-            MessagesController.getGlobalMainSettings().edit().putBoolean("rounddual_available", !enabled).apply();
-            ((TextCheckCell) view).setChecked(!enabled);
         } else if (position == staticZoomRow) {
             ExteraConfig.editor.putBoolean("staticZoom", ExteraConfig.staticZoom ^= true).apply();
             ((TextCheckCell) view).setChecked(ExteraConfig.staticZoom);
@@ -596,67 +598,77 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             } else {
                 listAdapter.notifyItemRangeRemoved(messageMenuRow + 1, itemCount);
             }
+        } else if (position == cameraSettingsRow) {
+            cameraSettingsExpanded ^= true;
+            updateRowsId();
+            listAdapter.notifyItemChanged(cameraSettingsRow, payload);
+            if (cameraSettingsExpanded) {
+                listAdapter.notifyItemRangeInserted(cameraSettingsRow + 1, 4);
+            } else {
+                listAdapter.notifyItemRangeRemoved(cameraSettingsRow + 1, 4);
+            }
         } else if (position >= replyColorsRow && position <= replyBackgroundRow) {
             if (position == replyColorsRow) {
                 ExteraConfig.editor.putBoolean("replyColors", ExteraConfig.replyColors ^= true).apply();
-                listAdapter.notifyItemChanged(replyColorsRow, payload);
             } else if (position == replyEmojiRow) {
                 ExteraConfig.editor.putBoolean("replyEmoji", ExteraConfig.replyEmoji ^= true).apply();
-                listAdapter.notifyItemChanged(replyEmojiRow, payload);
             } else if (position == replyBackgroundRow) {
                 ExteraConfig.editor.putBoolean("replyBackground", ExteraConfig.replyBackground ^= true).apply();
-                listAdapter.notifyItemChanged(replyBackgroundRow, payload);
             }
+            listAdapter.notifyItemChanged(position, payload);
             stickerSizeCell.invalidate();
             listAdapter.notifyItemChanged(replyElementsRow, payload);
         } else if (position >= permissionsRow && position <= recentActionsRow) {
             if (position == permissionsRow) {
                 ExteraConfig.editor.putBoolean("permissionsShortcut", ExteraConfig.permissionsShortcut ^= true).apply();
-                listAdapter.notifyItemChanged(permissionsRow, payload);
             } else if (position == administratorsRow) {
                 ExteraConfig.editor.putBoolean("administratorsShortcut", ExteraConfig.administratorsShortcut ^= true).apply();
-                listAdapter.notifyItemChanged(administratorsRow, payload);
             } else if (position == membersRow) {
                 ExteraConfig.editor.putBoolean("membersShortcut", ExteraConfig.membersShortcut ^= true).apply();
-                listAdapter.notifyItemChanged(membersRow, payload);
             } else if (position == recentActionsRow) {
                 ExteraConfig.editor.putBoolean("recentActionsShortcut", ExteraConfig.recentActionsShortcut ^= true).apply();
-                listAdapter.notifyItemChanged(recentActionsRow, payload);
             }
+            listAdapter.notifyItemChanged(position, payload);
             listAdapter.notifyItemChanged(adminShortcutsRow, payload);
         } else if (position == quickTransitionForChannelsRow || position == quickTransitionForTopicsRow) {
             if (position == quickTransitionForChannelsRow) {
                 ExteraConfig.editor.putBoolean("quickTransitionForChannels", ExteraConfig.quickTransitionForChannels ^= true).apply();
-                listAdapter.notifyItemChanged(quickTransitionForChannelsRow, payload);
             } else {
                 ExteraConfig.editor.putBoolean("quickTransitionForTopics", ExteraConfig.quickTransitionForTopics ^= true).apply();
-                listAdapter.notifyItemChanged(quickTransitionForTopicsRow, payload);
             }
+            listAdapter.notifyItemChanged(position, payload);
             listAdapter.notifyItemChanged(quickTransitionsRow, payload);
         } else if (position >= copyPhotoRow && position <= detailsRow) {
             if (position == copyPhotoRow) {
                 ExteraConfig.editor.putBoolean("showCopyPhotoButton", ExteraConfig.showCopyPhotoButton ^= true).apply();
-                listAdapter.notifyItemChanged(copyPhotoRow, payload);
             } else if (position == clearRow) {
                 ExteraConfig.editor.putBoolean("showClearButton", ExteraConfig.showClearButton ^= true).apply();
-                listAdapter.notifyItemChanged(clearRow, payload);
             } else if (position == saveRow) {
                 ExteraConfig.editor.putBoolean("showSaveMessageButton", ExteraConfig.showSaveMessageButton ^= true).apply();
-                listAdapter.notifyItemChanged(saveRow, payload);
             } else if (position == reportRow) {
                 ExteraConfig.editor.putBoolean("showReportButton", ExteraConfig.showReportButton ^= true).apply();
-                listAdapter.notifyItemChanged(reportRow, payload);
             } else if (position == historyRow) {
                 ExteraConfig.editor.putBoolean("showHistoryButton", ExteraConfig.showHistoryButton ^= true).apply();
-                listAdapter.notifyItemChanged(historyRow, payload);
             } else if (position == generateRow) {
                 ExteraConfig.editor.putBoolean("showGenerateButton", ExteraConfig.showGenerateButton ^= true).apply();
-                listAdapter.notifyItemChanged(generateRow, payload);
             } else if (position == detailsRow) {
                 ExteraConfig.editor.putBoolean("showDetailsButton", ExteraConfig.showDetailsButton ^= true).apply();
-                listAdapter.notifyItemChanged(detailsRow, payload);
             }
+            listAdapter.notifyItemChanged(position, payload);
             listAdapter.notifyItemChanged(messageMenuRow, payload);
+        } else if (position >= dualCameraRow && position <= cameraAutofocusRow) {
+            if (position == dualCameraRow) {
+                boolean enabled = DualCameraView.roundDualAvailableStatic(getContext());
+                MessagesController.getGlobalMainSettings().edit().putBoolean("rounddual_available", !enabled).apply();
+            } else if (position == extendedFramesPerSecondRow) {
+                ExteraConfig.editor.putBoolean("extendedFramesPerSecond", ExteraConfig.extendedFramesPerSecond ^= true).apply();
+            } else if (position == cameraStabilizationRow) {
+                ExteraConfig.editor.putBoolean("cameraStabilization", ExteraConfig.cameraStabilization ^= true).apply();
+            } else if (position == cameraAutofocusRow) {
+                ExteraConfig.editor.putBoolean("cameraAutofocus", ExteraConfig.cameraAutofocus ^= true).apply();
+            }
+            listAdapter.notifyItemChanged(position, payload);
+            listAdapter.notifyItemChanged(cameraSettingsRow, payload);
         } else if (position == gptRow) {
             presentFragment(Config.isApiKeySet() ? new SetupActivity() : new EditEndpointConfigActivity());
         } else if (position == chatSettingsRow) {
@@ -756,6 +768,27 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         if (Config.isApiKeySet() && ExteraConfig.showGenerateButton)
             i++;
         if (ExteraConfig.showDetailsButton)
+            i++;
+        return i;
+    }
+
+    private void setCameraSettingsEnabled(boolean enabled) {
+        MessagesController.getGlobalMainSettings().edit().putBoolean("rounddual_available", enabled).apply();
+        ExteraConfig.editor.putBoolean("extendedFramesPerSecond", ExteraConfig.extendedFramesPerSecond = enabled).apply();
+        ExteraConfig.editor.putBoolean("cameraStabilization", ExteraConfig.cameraStabilization = enabled).apply();
+        ExteraConfig.editor.putBoolean("cameraAutofocus", ExteraConfig.cameraAutofocus = enabled).apply();
+        AndroidUtilities.updateVisibleRows(listView);
+    }
+
+    private int getCameraSettingsSelectedCount() {
+        int i = 0;
+        if (DualCameraView.roundDualAvailableStatic(getContext()))
+            i++;
+        if (ExteraConfig.extendedFramesPerSecond)
+            i++;
+        if (ExteraConfig.cameraStabilization)
+            i++;
+        if (ExteraConfig.cameraAutofocus)
             i++;
         return i;
     }
@@ -866,10 +899,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         textCheckCell.setTextAndCheck(LocaleController.getString("ShowActionTimestamps", R.string.ShowActionTimestamps), ExteraConfig.showActionTimestamps, false);
                     } else if (position == useCamera2Row) {
                         textCheckCell.setTextAndCheck(LocaleUtils.applyBetaSpan(LocaleController.getString(R.string.UseCamera2)), ExteraConfig.useCamera2, true);
-                    } else if (position == dualCameraRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.DualCamera), DualCameraView.roundDualAvailableStatic(getContext()), true);
-                    } else if (position == extendedFramesPerSecondRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ExtendedFramesPerSecond), ExteraConfig.extendedFramesPerSecond, true);
                     } else if (position == staticZoomRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.StaticZoom), ExteraConfig.staticZoom, false);
                     } else if (position == rememberLastUsedCameraRow) {
@@ -968,6 +997,14 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                             checkCell.setChecked(checked);
                             setMessageMenuEnabled(checked);
                         });
+                    } else if (position == cameraSettingsRow) {
+                        int cameraSettingsSelectedCount = getCameraSettingsSelectedCount();
+                        checkCell.setTextAndCheck(LocaleController.getString("ExtendedSettings", R.string.ExtendedSettings), cameraSettingsSelectedCount > 0, true, true);
+                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/4", cameraSettingsSelectedCount), !cameraSettingsExpanded, () -> {
+                            boolean checked = !checkCell.isChecked();
+                            checkCell.setChecked(checked);
+                            setCameraSettingsEnabled(checked);
+                        });
                     }
                     checkCell.getCheckBox().setColors(Theme.key_switchTrack, Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
                     checkCell.getCheckBox().setDrawIconType(0);
@@ -1006,6 +1043,14 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         checkBoxCell.setText(LocaleController.getString("FilterChannels", R.string.FilterChannels), "", ExteraConfig.quickTransitionForChannels, true, true);
                     } else if (position == quickTransitionForTopicsRow) {
                         checkBoxCell.setText(LocaleController.getString("Topics", R.string.Topics), "", ExteraConfig.quickTransitionForTopics, true, true);
+                    } else if (position == dualCameraRow) {
+                        checkBoxCell.setText(LocaleController.getString("SeamlessSwitching", R.string.SeamlessSwitching), "", DualCameraView.roundDualAvailableStatic(getContext()), true, true);
+                    } else if (position == extendedFramesPerSecondRow) {
+                        checkBoxCell.setText(LocaleController.getString("ExtendedFramesPerSecond", R.string.ExtendedFramesPerSecond), "", ExteraConfig.extendedFramesPerSecond, true, true);
+                    } else if (position == cameraStabilizationRow) {
+                        checkBoxCell.setText(LocaleController.getString("CameraStabilization", R.string.CameraStabilization), "", ExteraConfig.cameraStabilization, true, true);
+                    } else if (position == cameraAutofocusRow) {
+                        checkBoxCell.setText(LocaleController.getString("CameraAutofocus", R.string.CameraAutofocus), "", ExteraConfig.cameraAutofocus, true, true);
                     }
                     checkBoxCell.setPad(1);
                 }
@@ -1035,9 +1080,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                 return 15;
             } else if (position == doubleTapReactionRow) {
                 return 16;
-            } else if (position == adminShortcutsRow || position == messageMenuRow || position == replyElementsRow || position == quickTransitionsRow) {
+            } else if (position == adminShortcutsRow || position == messageMenuRow || position == replyElementsRow || position == quickTransitionsRow || position == cameraSettingsRow) {
                 return 18;
-            } else if (position >= replyColorsRow && position <= replyBackgroundRow || position >= permissionsRow && position <= recentActionsRow || position >= copyPhotoRow && position <= detailsRow || position == quickTransitionForChannelsRow || position == quickTransitionForTopicsRow) {
+            } else if (position >= replyColorsRow && position <= replyBackgroundRow || position >= permissionsRow && position <= recentActionsRow || position >= copyPhotoRow && position <= detailsRow || position == quickTransitionForChannelsRow || position == quickTransitionForTopicsRow || position >= dualCameraRow && position <= cameraAutofocusRow) {
                 return 19;
             }
             return 5;
