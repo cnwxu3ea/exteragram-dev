@@ -8144,7 +8144,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         List<BaseFragment> rightFragments = launchActivity.getRightActionBarLayout().getFragmentStack();
                         if (!rightFragments.isEmpty()) {
                             if (rightFragments.size() == 1 && rightFragments.get(rightFragments.size() - 1) instanceof ChatActivity) {
-                                ((ChatActivity) rightFragments.get(rightFragments.size() - 1)).onPageDownClicked();
+                                ((ChatActivity) rightFragments.get(rightFragments.size() - 1)).onPageDownClicked(false);
                             } else if (rightFragments.size() == 2) {
                                 launchActivity.getRightActionBarLayout().closeLastFragment();
                             } else if (getParentActivity() instanceof LaunchActivity) {

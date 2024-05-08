@@ -271,6 +271,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -788,7 +789,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private int startFromVideoTimestamp = -1;
     private int startFromVideoMessageId;
     private boolean needSelectFromMessageId;
-    private int returnToMessageId;
+    private final Stack<Integer> returnToMessageIdStack = new Stack<>();
     private int returnToLoadIndex;
     private int createUnreadMessageAfterId;
     private boolean createUnreadMessageAfterIdLoading;
@@ -6343,7 +6344,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         pagedownButton = new FrameLayout(context);
         pagedownButton.setVisibility(View.INVISIBLE);
         contentView.addView(pagedownButton, LayoutHelper.createFrame(66, 61, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, -3, 5));
-        pagedownButton.setOnClickListener(view -> onPageDownClicked());
+        pagedownButton.setOnClickListener(view -> onPageDownClicked(false));
+        pagedownButton.setOnLongClickListener(view -> {
+            onPageDownClicked(true);
+            return true;
+        });
         ScaleStateListAnimator.apply(pagedownButton, .13f, 2f);
 
         searchUpButton = new FrameLayout(context);
@@ -9404,7 +9409,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }).setDuration(170).start();
     }
 
-    public void onPageDownClicked() {
+    public void onPageDownClicked(boolean clearStack) {
         wasManualScroll = true;
         textSelectionHelper.cancelTextSelectionRunnable();
         Runnable inCaseLoading = () -> {
@@ -9412,8 +9417,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         };
         if (createUnreadMessageAfterId != 0) {
             scrollToMessageId(createUnreadMessageAfterId, 0, false, returnToLoadIndex, true, 0, inCaseLoading);
-        } else if (returnToMessageId > 0) {
-            scrollToMessageId(returnToMessageId, 0, true, returnToLoadIndex, true, 0, inCaseLoading);
+        } else if (!clearStack && !returnToMessageIdStack.empty()) {
+            scrollToMessageId(returnToMessageIdStack.pop(), 0, true, returnToLoadIndex, true, 0, inCaseLoading);
         } else {
             scrollToLastMessage(false, true, inCaseLoading);
             if (!pinnedMessageIds.isEmpty()) {
@@ -14953,7 +14958,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 showFloatingDateView(false);
             }
         }
-        returnToMessageId = fromMessageId;
+        if (fromMessageId > 0) returnToMessageIdStack.push(fromMessageId);
         returnToLoadIndex = loadIndex;
         needSelectFromMessageId = select;
     }
@@ -15017,7 +15022,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         } else {
-            returnToMessageId = 0;
+            returnToMessageIdStack.clear();
             newUnreadMessageCount = 0;
             if (pagedownButton.getTag() != null) {
                 pagedownButton.setTag(null);
@@ -15087,7 +15092,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         } else {
-            returnToMessageId = 0;
+            returnToMessageIdStack.clear();
             if (searchUpButton.getTag() != null) {
                 searchUpButton.setTag(null);
                 if (searchUpButtonAnimation != null) {
@@ -15155,7 +15160,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         } else {
-            returnToMessageId = 0;
+            returnToMessageIdStack.clear();
             if (mentiondownButton.getTag() != null) {
                 mentiondownButton.setTag(null);
                 if (mentiondownButtonAnimation != null) {
