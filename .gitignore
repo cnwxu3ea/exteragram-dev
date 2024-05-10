@@ -19,3 +19,5 @@ TMessagesProj/jniLibs/
 TMessagesProj/jniRes/
 **/.DS_Store
 TMessagesProj/afat/
+
+Tools/registration_dates.bin
