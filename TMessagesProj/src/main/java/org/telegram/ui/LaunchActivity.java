@@ -6376,7 +6376,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 currentConnectionState = state;
                 updateCurrentConnectionState();
             }
-        } else if (id == NotificationCenter.mainUserInfoChanged || id == NotificationCenter.dialogsNeedReload) {
+        } else if (id == NotificationCenter.mainUserInfoChanged) {
             drawerLayoutAdapter.notifyDataSetChanged();
         } else if (id == NotificationCenter.attachMenuBotsDidLoad) {
             drawerLayoutAdapter.notifyDataSetChanged();

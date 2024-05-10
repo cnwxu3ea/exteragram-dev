@@ -278,6 +278,12 @@
     <string name="ProfileUsesEmojiPacks">В качестве фона профиля используется эмодзи из набора %s.</string>
     <string name="ReplyUsesEmojiPacks">В качестве фона ответа используется эмодзи из набора %s.</string>
 
+    <string name="CreationDateUserApproximately">Пользователь **%s** создал свой аккаунт примерно **%s**.</string>
+    <string name="CreationDateUserEarlier">Пользователь **%s** создал свой аккаунт раньше **%s**.</string>
+    <string name="CreationDateUserLater">Пользователь **%s** создал свой аккаунт позже **%s**.</string>
+    <string name="CreationDateChat">**%s** был создан **%s**.</string>
+    <string name="JoinDateChat">Вы зашли в **%s** **%s**.</string>
+
     <string name="MutualContactInfo">Этот контакт является взаимным.</string>
     <string name="ToBeginning">В начало</string>
     <string name="MessageHistory">История сообщений</string>

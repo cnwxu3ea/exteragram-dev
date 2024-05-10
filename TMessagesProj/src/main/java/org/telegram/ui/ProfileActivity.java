@@ -70,7 +70,6 @@ import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.util.Property;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -261,7 +260,6 @@ import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.SharedMediaLayout;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickerEmptyView;
-import org.telegram.ui.Components.Text;
 import org.telegram.ui.Components.TimerDrawable;
 import org.telegram.ui.Components.TranslateAlert2;
 import org.telegram.ui.Components.TypefaceSpan;
@@ -274,6 +272,7 @@ import org.telegram.ui.Stories.StoriesListPlaceProvider;
 import org.telegram.ui.Stories.StoryViewer;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 import org.telegram.ui.Stories.recorder.DualCameraView;
+import org.telegram.ui.Stories.recorder.HintView2;
 import org.telegram.ui.Stories.recorder.StoryRecorder;
 import org.telegram.ui.bots.BotBiometry;
 
@@ -420,6 +419,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private boolean isTopic;
     private boolean openSimilar;
     private boolean myProfile;
+
+    private HintView2 creationDateHint;
 
     private boolean scrolling;
 
@@ -2119,6 +2120,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     return;
                 }
                 if (id == -1) {
+                    if (creationDateHint != null && creationDateHint.isShown()) {
+                        creationDateHint.hide();
+                    }
+
                     finishFragment();
                 } else if (id == block_contact) {
                     TLRPC.User user = getMessagesController().getUser(userId);
@@ -4976,6 +4981,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 checkListViewScroll();
                 if (participantsMap != null && !usersEndReached && layoutManager.findLastVisibleItemPosition() > membersEndRow - 8) {
                     getChannelParticipants(false);
+                }
+                if (creationDateHint != null && creationDateHint.isShown()) {
+                    creationDateHint.setTranslationY(Math.max(0, creationDateHint.getTranslationY() - dy));
+                    creationDateHint.hide();
                 }
                 sharedMediaLayout.setPinnedToTop(sharedMediaLayout.getY() <= 0);
                 updateBottomButtonY();
@@ -11069,6 +11078,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 case VIEW_TYPE_TEXT_DETAIL_MULTILINE:
                 case VIEW_TYPE_TEXT_DETAIL:
                     TextDetailCell detailCell = (TextDetailCell) holder.itemView;
+                    boolean containsRegistrationDate = false;
                     boolean containsQr = false;
                     boolean containsGift = false;
                     if (position == birthdayRow) {
@@ -11135,6 +11145,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             dc = ChatUtils.getDC(chat);
                         }
                         detailCell.setTextAndValue(id + "", dc == null ? "ID" : dc, true);
+                        containsRegistrationDate = userId != getUserConfig().getClientUserId() && !isBot && !UserObject.isService(userId);
                     } else if (position == usernameRow) {
                         String username = null;
                         CharSequence text;
@@ -11249,6 +11260,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         Drawable drawable = ContextCompat.getDrawable(detailCell.getContext(), R.drawable.msg_qr_mini);
                         drawable.setColorFilter(new PorterDuffColorFilter(applyPeerColor(getThemedColor(Theme.key_switch2TrackChecked), false), PorterDuff.Mode.MULTIPLY));
                         detailCell.setImage(drawable, LocaleController.getString("GetQRCode", R.string.GetQRCode));
+                        detailCell.setImageClickListener(ProfileActivity.this::onTextDetailCellImageClicked);
+                    } else if (containsRegistrationDate) {
+                        Drawable drawable = ContextCompat.getDrawable(detailCell.getContext(), R.drawable.msg_calendar2);
+                        drawable.setColorFilter(new PorterDuffColorFilter(applyPeerColor(getThemedColor(Theme.key_switch2TrackChecked), false), PorterDuff.Mode.MULTIPLY));
+                        detailCell.setImage(drawable, "Registration Date");
                         detailCell.setImageClickListener(ProfileActivity.this::onTextDetailCellImageClicked);
                     } else {
                         detailCell.setImage(null);
@@ -12868,6 +12884,39 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else {
                 showDialog(new GiftPremiumBottomSheet(this, user));
             }
+        } else if (parent.getTag() != null && ((int) parent.getTag()) == idDcRow) {
+            if (creationDateHint != null) {
+                var hint = creationDateHint;
+                hint.setOnHiddenListener(() -> contentView.removeView(hint));
+                hint.hide();
+                creationDateHint = null;
+            }
+            creationDateHint = new HintView2(getContext(), HintView2.DIRECTION_TOP)
+                    .setMultilineText(true)
+                    .setDuration(2500);
+
+            String s;
+            if (userId != 0) {
+                s = ChatUtils.getUserRegistrationDate(userId);
+            } else if (currentChat != null && (!ChatObject.isMegagroup(currentChat) && !ChatObject.isChannel(currentChat) || !ChatObject.isInChat(currentChat))) {
+                s = LocaleController.formatString("CreationDateChat", R.string.CreationDateChat, ContactsController.formatName(currentChat), LocaleController.formatDateChat(currentChat.date));
+            } else if (ChatObject.isMegagroup(currentChat) || ChatObject.isChannel(currentChat)) {
+                s = LocaleController.formatString("JoinDateChat", R.string.JoinDateChat, ContactsController.formatName(currentChat), LocaleController.formatDateChat(currentChat.date));
+            } else {
+                return;
+            }
+
+            creationDateHint.setText(AndroidUtilities.replaceTags(s));
+            creationDateHint.setRounding(12);
+            creationDateHint.setMaxWidthPx(HintView2.cutInFancyHalf(creationDateHint.getText(), creationDateHint.getTextPaint()));
+            contentView.addView(creationDateHint, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 120, Gravity.TOP | Gravity.FILL_HORIZONTAL, 16, 0, 16, 0));
+            contentView.post(() -> {
+                var loc = new int[2];
+                view.getLocationInWindow(loc);
+                creationDateHint.setTranslationY(loc[1] + view.getHeight());
+                creationDateHint.setJointPx(0, -dp(16) + loc[0] + view.getWidth() / 2f);
+                creationDateHint.show();
+            });
         }
     }
 

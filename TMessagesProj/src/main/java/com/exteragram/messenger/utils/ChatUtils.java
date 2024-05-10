@@ -20,12 +20,13 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Base64;
 import com.exteragram.messenger.ExteraConfig;
-
+import com.exteragram.messenger.backup.InvisibleEncryptor;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
@@ -65,7 +66,9 @@ import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ChatUtils {
 
@@ -612,4 +615,79 @@ public class ChatUtils {
         return null;
     }
 
+    private static Long[] regIds;
+    private static Long[] regDates;
+
+    private static void initializeRegIds() {
+        if (regIds != null) {
+            return;
+        }
+
+        byte[] buffer;
+        InputStream stream;
+        try {
+            stream = ApplicationLoader.applicationContext.getAssets().open("extera/registration_dates.bin");
+            buffer = new byte[stream.available()];
+            stream.read(buffer);
+            stream.close();
+        } catch (IOException e) {
+            FileLog.e(e);
+            return;
+        }
+
+        var s = new String(buffer, StandardCharsets.UTF_8);
+        var data = InvisibleEncryptor.decode(s);
+        var json = new Gson().fromJson(data, JsonObject.class);
+
+        var set = json.entrySet();
+
+        regIds = new Long[set.size()];
+        regDates = new Long[set.size()];
+
+        int i = 0;
+        for (var entry : set) {
+            regIds[i] = Long.valueOf(entry.getKey());
+            regDates[i] = entry.getValue().getAsLong();
+            i++;
+        }
+    }
+
+    private static Long findUserRegistrationDate(Long userId) {
+        initializeRegIds();
+        if (userId < regIds[0]) {
+            return regDates[0];
+        }
+        if (userId > regIds[regIds.length - 1]) {
+            return regDates[regIds.length - 1];
+        }
+
+        var idx = Arrays.binarySearch(regIds, userId);
+        if (idx >= 0) {
+            return regDates[idx];
+        }
+
+        var from = -idx - 2;
+        var to = -idx - 1;
+
+        var fromId = regIds[from];
+        var toId = regIds[to];
+        var fromDate = regDates[from];
+        var toDate = regDates[to];
+
+        var ratio = (userId - fromId) / (double) (toId - fromId);
+        return (long) (fromDate + (toDate - fromDate) * ratio);
+    }
+
+    public static String getUserRegistrationDate(long userId) {
+        var timestamp = findUserRegistrationDate(userId);
+        var date = LocaleController.formatDateChat(timestamp);
+        var name = ContactsController.formatName(getMessagesController().getUser(userId));
+
+        if (Objects.equals(timestamp, regDates[0])) {
+            return LocaleController.formatString("CreationDateUserEarlier", R.string.CreationDateUserEarlier, name, date);
+        } else if (Objects.equals(timestamp, regDates[regDates.length - 1])) {
+            return LocaleController.formatString("CreationDateUserLater", R.string.CreationDateUserLater, name, date);
+        }
+        return LocaleController.formatString("CreationDateUserApproximately", R.string.CreationDateUserApproximately, name, date);
+    }
 }

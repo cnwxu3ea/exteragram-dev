@@ -282,6 +282,12 @@
     <string name="ProfileUsesEmojiPacks">This profile uses emoji from %s pack for background.</string>
     <string name="ReplyUsesEmojiPacks">This reply uses emoji from %s pack for background.</string>
 
+    <string name="CreationDateUserApproximately">**%s** created their account approximately on **%s**.</string>
+    <string name="CreationDateUserEarlier">**%s** created their account earlier than **%s**.</string>
+    <string name="CreationDateUserLater">**%s** created their account later than **%s**.</string>
+    <string name="CreationDateChat">**%s** was created on **%s**.</string>
+    <string name="JoinDateChat">You joined **%s** on **%s**.</string>
+
     <string name="MutualContactInfo">This contact is mutual.</string>
     <string name="ToBeginning">To Beginning</string>
     <string name="MessageHistory">History</string>
