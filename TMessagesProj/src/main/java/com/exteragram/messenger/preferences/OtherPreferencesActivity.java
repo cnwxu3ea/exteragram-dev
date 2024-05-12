@@ -43,6 +43,14 @@ import java.util.Locale;
 
 public class OtherPreferencesActivity extends BasePreferencesActivity {
 
+    private int donateHeaderRow;
+    private int walletTONRow;
+    private int walletBTCRow;
+    private int walletUSDTRow;
+    private int mastercardRow;
+    private int mirRow;
+    private int donateDividerRow;
+
     private int analyticsHeaderRow;
     private int crashlyticsRow;
     private int analyticsRow;
@@ -56,6 +64,14 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
     @Override
     protected void updateRowsId() {
         super.updateRowsId();
+
+        donateHeaderRow = newRow();
+        walletTONRow = newRow();
+        walletBTCRow = newRow();
+        walletUSDTRow = newRow();
+        mastercardRow = newRow();
+        mirRow = newRow();
+        donateDividerRow = newRow();
 
         analyticsHeaderRow = newRow();
         crashlyticsRow = newRow();
@@ -106,6 +122,9 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
             if (button != null) {
                 button.setTextColor(Theme.getColor(Theme.key_text_RedBold));
             }
+        } else if (position >= walletTONRow && position <= mirRow) {
+            TextCell textCell = (TextCell) view;
+            AndroidUtilities.addToClipboard(textCell.subtitleView.getText().toString().replaceAll(" ", ""));
         } else if (position == deleteAccountRow) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
@@ -200,12 +219,36 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
                         textCell.setTextAndIcon(LocaleController.getString("ResetSettings", R.string.ResetSettings), R.drawable.msg_reset, true);
                     } else if (position == exportSettingsRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.ExportSettings), R.drawable.msg_settings, true);
+                    } else if (position >= walletTONRow && position <= mirRow) {
+                        textCell.setColors(Theme.key_dialogIcon, Theme.key_windowBackgroundWhiteBlackText);
+                        textCell.offsetFromImage = 64;
+                        textCell.heightDp = 60;
+                        textCell.imageLeft = 20;
+                        textCell.imageView.setTranslationY(AndroidUtilities.dp(2));
+                        if (position == mastercardRow) {
+                            textCell.setTextAndIcon("MASTERCARD", R.drawable.mastercard_icon, true);
+                            textCell.setSubtitle("5536 9139 7145 7292");
+                        } else if (position == mirRow) {
+                            textCell.setTextAndIcon("MIR", R.drawable.mir_icon, false);
+                            textCell.setSubtitle("2200 7010 6008 1889");
+                        } else if (position == walletTONRow) {
+                            textCell.setTextAndIcon("TON", R.drawable.ton_icon, true);
+                            textCell.setSubtitle("UQBsiuL8oz9k4-GlcWS1Uhmyqt-QKQP_AiTUhD9swGlsOHGv");
+                        } else if (position == walletBTCRow) {
+                            textCell.setTextAndIcon("BTC", R.drawable.btc_icon, true);
+                            textCell.setSubtitle("19SET23z5cZcYLWTiG1ixhuojHtwyNjP4W");
+                        } else if (position == walletUSDTRow) {
+                            textCell.setTextAndIcon("USDT TRC20", R.drawable.usdt_icon, true);
+                            textCell.setSubtitle("TUDRK3Dv1cNRR8Y4FKx1igdmSf8Jreyozp");
+                        }
                     }
                 }
                 case 3 -> {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == analyticsHeaderRow) {
                         headerCell.setText("Google");
+                    } else if (position == donateHeaderRow) {
+                        headerCell.setText(LocaleController.getString(R.string.Support));
                     }
                 }
                 case 8 -> {
@@ -219,9 +262,9 @@ public class OtherPreferencesActivity extends BasePreferencesActivity {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == deleteAccountDividerRow) {
+            if (position == deleteAccountDividerRow || position == donateDividerRow) {
                 return 1;
-            } else if (position == analyticsHeaderRow) {
+            } else if (position == analyticsHeaderRow || position == donateHeaderRow) {
                 return 3;
             } else if (position == analyticsDividerRow) {
                 return 8;

@@ -280,18 +280,16 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         } else if (position >= blurActionBarRow && position <= blurDialogsRow) {
             if (position == blurActionBarRow) {
                 ExteraConfig.editor.putBoolean("blurActionBar", ExteraConfig.blurActionBar ^= true).apply();
-                listAdapter.notifyItemChanged(blurActionBarRow, payload);
             } else if (position == blurBottomBarRow) {
                 ExteraConfig.editor.putBoolean("blurBottomPanel", ExteraConfig.blurBottomPanel ^= true).apply();
-                listAdapter.notifyItemChanged(blurBottomBarRow, payload);
             } else if (position == blurDialogsRow) {
                 ExteraConfig.editor.putBoolean("blurDialogs", ExteraConfig.blurDialogs ^= true).apply();
-                listAdapter.notifyItemChanged(blurDialogsRow, payload);
             }
             if (!SharedConfig.chatBlurEnabled() && (ExteraConfig.blurActionBar || ExteraConfig.blurBottomPanel || ExteraConfig.blurDialogs) ||
                     SharedConfig.chatBlurEnabled() && !ExteraConfig.blurActionBar && !ExteraConfig.blurBottomPanel && !ExteraConfig.blurDialogs) {
                 SharedConfig.toggleChatBlur();
             }
+            listAdapter.notifyItemChanged(position, payload);
             listAdapter.notifyItemChanged(blurElementsRow, payload);
         } else if (position == immersiveAnimationRow) {
             ExteraConfig.editor.putBoolean("immersiveDrawerAnimation", ExteraConfig.immersiveDrawerAnimation ^= true).apply();
