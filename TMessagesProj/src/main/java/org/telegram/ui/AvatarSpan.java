@@ -12,8 +12,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.AvatarDrawable;
 
@@ -44,7 +45,7 @@ public class AvatarSpan extends ReplacementSpan {
     }
 
     public void setSize(float sz) {
-        imageReceiver.setRoundRadius(dp(sz));
+        imageReceiver.setRoundRadius(ExteraConfig.getAvatarCorners(sz));
         this.sz = sz;
     }
 
@@ -68,8 +69,7 @@ public class AvatarSpan extends ReplacementSpan {
 
     public static void checkSpansParent(CharSequence cs, View parent) {
         if (cs == null) return;
-        if (!(cs instanceof Spannable)) return;
-        Spannable spannable = (Spannable) cs;
+        if (!(cs instanceof Spannable spannable)) return;
         AvatarSpan[] spans = spannable.getSpans(0, spannable.length(), AvatarSpan.class);
         for (AvatarSpan span : spans) {
             span.setParent(parent);
@@ -111,7 +111,8 @@ public class AvatarSpan extends ReplacementSpan {
 
     @Override
     public void draw(@NonNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, @NonNull Paint paint) {
-        canvas.drawCircle(translateX + x + dp(sz) / 2f, translateY + (top + bottom) / 2f, dp(sz) / 2f, shadowPaint);
+        //canvas.drawCircle(translateX + x + dp(sz) / 2f, translateY + (top + bottom) / 2f, dp(sz) / 2f, shadowPaint);
+        canvas.drawRoundRect(translateX + x, translateY + (top + bottom) / 2f - dp(sz) / 2f, translateX + x + dp(sz), translateY + (top + bottom) / 2f - dp(sz) / 2f + dp(sz), ExteraConfig.getAvatarCorners(sz), ExteraConfig.getAvatarCorners(sz), shadowPaint);
         imageReceiver.setImageCoords(translateX + x, translateY + (top + bottom) / 2f - dp(sz) / 2f, dp(sz), dp(sz));
         imageReceiver.draw(canvas);
     }

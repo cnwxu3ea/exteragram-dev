@@ -10600,9 +10600,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
             if (currentMessageObject.isAnyKindOfSticker()) {
                 if (!currentMessageObject.isOutOwner()) {
-                    timeX -= AndroidUtilities.dp(8f);
+                    timeX -= AndroidUtilities.dp(7f);
                 } else {
-                    timeX -= AndroidUtilities.dp(0.5f);
+                    timeX += AndroidUtilities.dp(0.5f);
                 }
             }
             timeX -= getExtraTimeX();

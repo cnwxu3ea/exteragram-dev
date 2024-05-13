@@ -29,7 +29,8 @@ public class ApiKeyInputFilter implements InputFilter {
         StringBuilder filteredStringBuilder = new StringBuilder();
         for (int i = start; i < end; i++) {
             char ch = source.charAt(i);
-            if (pattern.matcher(String.valueOf(ch)).matches()) {
+            // due to custom endpoints
+            if (true || pattern.matcher(String.valueOf(ch)).matches()) {
                 filteredStringBuilder.append(ch);
             }
         }
@@ -37,7 +38,7 @@ public class ApiKeyInputFilter implements InputFilter {
 
         String newSource = dest.subSequence(0, dstart) + source.subSequence(start, end).toString() + dest.subSequence(dend, dest.length());
 
-        if (!allCharactersValid || newSource.length() > 0 && (newSource.length() == 1 && !newSource.startsWith("s") || newSource.length() == 2 && !newSource.startsWith("sk") || newSource.length() == 3 && !newSource.startsWith("sk-"))) {
+        if (!allCharactersValid || !newSource.isEmpty() && (newSource.length() == 1 && !newSource.startsWith("s") || newSource.length() == 2 && !newSource.startsWith("sk") || newSource.length() == 3 && !newSource.startsWith("sk-"))) {
             return "";
         }
         return null;

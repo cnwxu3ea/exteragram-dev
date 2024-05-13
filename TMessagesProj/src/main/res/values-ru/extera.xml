@@ -231,6 +231,7 @@
     <string name="ChatGPTInfo">API-Ключ, роли и история сообщений</string>
     <string name="Endpoint">Сервис</string>
     <string name="EndpointSetup">Настройка сервиса</string>
+    <string name="ApiKey">API-Ключ</string>
     <string name="ApiKeyInfo">Этот API-ключ будет использоваться для отправки запросов на **%1$s**, используя **%2$s**.</string>
     <string name="ApiKeyInfoOpenAI">Для генерации ключа API можно воспользоваться *официальным сайтом*.</string>
     <string name="Model">Модель</string>
@@ -278,9 +279,9 @@
     <string name="ProfileUsesEmojiPacks">В качестве фона профиля используется эмодзи из набора %s.</string>
     <string name="ReplyUsesEmojiPacks">В качестве фона ответа используется эмодзи из набора %s.</string>
 
-    <string name="CreationDateUserApproximately">Пользователь **%s** создал свой аккаунт примерно **%s**.</string>
-    <string name="CreationDateUserEarlier">Пользователь **%s** создал свой аккаунт раньше **%s**.</string>
-    <string name="CreationDateUserLater">Пользователь **%s** создал свой аккаунт позже **%s**.</string>
+    <string name="CreationDateUserApproximately">Пользователь **%s** создал(а) свой аккаунт примерно **%s**.</string>
+    <string name="CreationDateUserEarlier">Пользователь **%s** создал(а) свой аккаунт раньше **%s**.</string>
+    <string name="CreationDateUserLater">Пользователь **%s** создал(а) свой аккаунт позже **%s**.</string>
     <string name="CreationDateChat">**%s** был создан **%s**.</string>
     <string name="JoinDateChat">Вы зашли в **%s** **%s**.</string>
 

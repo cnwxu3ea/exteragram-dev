@@ -2120,10 +2120,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     return;
                 }
                 if (id == -1) {
-                    if (creationDateHint != null && creationDateHint.isShown()) {
-                        creationDateHint.hide();
-                    }
-
                     finishFragment();
                 } else if (id == block_contact) {
                     TLRPC.User user = getMessagesController().getUser(userId);
@@ -3547,6 +3543,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return;
             }
             listView.stopScroll();
+            if (creationDateHint != null && creationDateHint.isShown()) {
+                creationDateHint.hide();
+            }
             if (position == notificationsSimpleRow) {
                 boolean muted = getMessagesController().isDialogMuted(did, topicId);
                 getNotificationsController().muteDialog(did, topicId, !muted);
@@ -3931,6 +3930,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             @Override
             public boolean onItemClick(View view, int position) {
+                if (creationDateHint != null && creationDateHint.isShown()) {
+                    creationDateHint.hide();
+                }
                 if (position == versionRow) {
                     pressCount++;
                     if (pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
@@ -8020,6 +8022,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (undoView != null) {
             undoView.hide(true, 0);
         }
+        if (creationDateHint != null && creationDateHint.isShown()) {
+            creationDateHint.hide();
+        }
         if (imageUpdater != null) {
             imageUpdater.onPause();
         }
@@ -8079,6 +8084,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     public void onBecomeFullyHidden() {
         if (undoView != null) {
             undoView.hide(true, 0);
+        }
+        if (creationDateHint != null && creationDateHint.isShown()) {
+            creationDateHint.hide();
         }
         super.onBecomeFullyHidden();
         fullyVisible = false;
@@ -8458,6 +8466,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 animatorSet.playTogether(animators);
                 if (birthdayEffect != null) {
                     birthdayEffect.hide();
+                }
+                if (creationDateHint != null && creationDateHint.isShown()) {
+                    creationDateHint.hide();
                 }
             }
             profileTransitionInProgress = true;
@@ -11145,7 +11156,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             dc = ChatUtils.getDC(chat);
                         }
                         detailCell.setTextAndValue(id + "", dc == null ? "ID" : dc, true);
-                        containsRegistrationDate = userId != getUserConfig().getClientUserId() && !isBot && !UserObject.isService(userId);
+                        containsRegistrationDate = (userId != getUserConfig().getClientUserId() || myProfile) && !isBot && !UserObject.isService(userId);
                     } else if (position == usernameRow) {
                         String username = null;
                         CharSequence text;
@@ -11257,7 +11268,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         detailCell.setImage(drawable, LocaleController.getString(R.string.GiftPremium));
                         detailCell.setImageClickListener(ProfileActivity.this::onTextDetailCellImageClicked);
                     } else if (containsQr) {
-                        Drawable drawable = ContextCompat.getDrawable(detailCell.getContext(), R.drawable.msg_qr_mini);
+                        Drawable drawable = ContextCompat.getDrawable(detailCell.getContext(), R.drawable.msg_qrcode);
                         drawable.setColorFilter(new PorterDuffColorFilter(applyPeerColor(getThemedColor(Theme.key_switch2TrackChecked), false), PorterDuff.Mode.MULTIPLY));
                         detailCell.setImage(drawable, LocaleController.getString("GetQRCode", R.string.GetQRCode));
                         detailCell.setImageClickListener(ProfileActivity.this::onTextDetailCellImageClicked);
@@ -12893,15 +12904,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             creationDateHint = new HintView2(getContext(), HintView2.DIRECTION_TOP)
                     .setMultilineText(true)
-                    .setDuration(2500);
+                    .setDuration(3000);
 
             String s;
             if (userId != 0) {
                 s = ChatUtils.getUserRegistrationDate(userId);
             } else if (currentChat != null && (!ChatObject.isMegagroup(currentChat) && !ChatObject.isChannel(currentChat) || !ChatObject.isInChat(currentChat))) {
-                s = LocaleController.formatString("CreationDateChat", R.string.CreationDateChat, ContactsController.formatName(currentChat), LocaleController.formatDateChat(currentChat.date));
+                s = LocaleController.formatString(R.string.CreationDateChat, ContactsController.formatName(currentChat), LocaleController.formatDateChat(currentChat.date));
             } else if (ChatObject.isMegagroup(currentChat) || ChatObject.isChannel(currentChat)) {
-                s = LocaleController.formatString("JoinDateChat", R.string.JoinDateChat, ContactsController.formatName(currentChat), LocaleController.formatDateChat(currentChat.date));
+                s = LocaleController.formatString(R.string.JoinDateChat, ContactsController.formatName(currentChat), LocaleController.formatDateChat(currentChat.date));
             } else {
                 return;
             }
@@ -13818,5 +13829,4 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             editColorItem.setIcon(combinedDrawable);
         }
     }
-
 }

@@ -2969,10 +2969,9 @@ public class ContactsController extends BaseController {
     }
 
     public static String formatName(TLObject object) {
-        if (object instanceof TLRPC.User) {
-            return formatName((TLRPC.User) object);
-        } else if (object instanceof TLRPC.Chat) {
-            TLRPC.Chat chat = (TLRPC.Chat) object;
+        if (object instanceof TLRPC.User user) {
+            return formatName(user);
+        } else if (object instanceof TLRPC.Chat chat) {
             return chat.title;
         } else {
             return "DELETED";

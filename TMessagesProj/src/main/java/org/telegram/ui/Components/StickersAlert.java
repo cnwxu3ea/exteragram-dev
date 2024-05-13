@@ -1222,6 +1222,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
         boolean notInstalled = stickerSet == null || !mediaDataController.isStickerPackInstalled(stickerSet.set.id);
         if (stickerSet != null && stickerSet.set != null && stickerSet.set.creator && deleteItem == null && !DISABLE_STICKER_EDITOR) {
+            if (optionsButton.hasSubItem(3)) {
+                optionsButton.hideSubItem(3);
+            }
             optionsButton.addSubItem(4, R.drawable.tabs_reorder, LocaleController.getString(R.string.StickersReorder));
             optionsButton.addSubItem(5, R.drawable.msg_edit, LocaleController.getString(R.string.EditName));
             if (notInstalled) {

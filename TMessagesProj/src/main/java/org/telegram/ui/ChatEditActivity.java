@@ -1852,7 +1852,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                     if (ChatObject.isChannel(currentChat)) {
                         membersCell.setTextAndValueAndIcon(getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", info.participants_count), R.drawable.msg_groups, true);
                     } else {
-                        membersCell.setTextAndValueAndIcon(getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", info.participants.participants.size()), R.drawable.msg_groups, memberRequestsCell.getVisibility() == View.VISIBLE);
+                        membersCell.setTextAndValueAndIcon(getString("ChannelMembers", R.string.ChannelMembers), String.format("%d", info.participants.participants.size()), R.drawable.msg_groups, memberRequestsCell != null && memberRequestsCell.getVisibility() == View.VISIBLE);
                     }
                     if (currentChat.gigagroup) {
                         blockCell.setTextAndValueAndIcon(getString("ChannelBlacklist", R.string.ChannelBlacklist), String.format("%d", Math.max(info.banned_count, info.kicked_count)), R.drawable.msg_user_remove, logCell != null && logCell.getVisibility() == View.VISIBLE);
